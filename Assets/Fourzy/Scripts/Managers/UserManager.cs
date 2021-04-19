@@ -356,6 +356,15 @@ namespace Fourzy
             }
         }
 
+        public int MyComplexityPercent() => GetComplexityPercent(totalPlayfabGames, lastCachedRating);
+
+        public static int GetComplexityPercent(int games, int rating)
+        {
+            return (int)UnityEngine.Random.Range(
+                Mathf.Min(20 + games / 4, 50),
+                50 + (rating / 2000f) * 50);
+        }
+
         public static void AddHints(int number, string ticket = "")
         {
             if (number > 0)

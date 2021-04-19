@@ -219,19 +219,36 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 switch (GameManager.Instance.ExpectedGameType)
                 {
                     case GameTypeLocal.REALTIME_BOT_GAME:
+                        int percent = UserManager.Instance.MyComplexityPercent();
+                        Area _area = (Area)PlayerPrefsWrapper.GetCurrentArea();
+
+                        Tuple<int, int> minMax = BoardFactory.NormalizeComplexity(
+                            (Area)PlayerPrefsWrapper.GetCurrentArea(),
+                            percent);
+
+                        BoardGenerationPreferences preferences =
+                            new BoardGenerationPreferences();
+                        preferences.TargetComplexityLow = minMax.Item1;
+                        preferences.TargetComplexityHigh = minMax.Item2;
+
                         //load realtime game
                         game = new ClientFourzyGame(
                             (Area)PlayerPrefsWrapper.GetCurrentArea(),
                             UserManager.Instance.meAsPlayer,
                             GameManager.Instance.Bot,
-                            UnityEngine.Random.value > .5f ? 1 : 2)
+                            UnityEngine.Random.value > .5f ? 1 : 2,
+                            null,
+                            preferences)
                         {
                             _Type = GameType.REALTIME
                         };
                         GameManager.Instance.botGameType = GameManager.BotGameType.REGULAR;
                         if (Debug.isDebugBuild)
                         {
-                            Debug.Log($"Starting {GameManager.Instance.botGameType} bot game");
+                            Debug.Log($"Starting {GameManager.Instance.botGameType} bot " +
+                                $"game: MinMax: {preferences.TargetComplexityLow}-" +
+                                $"{preferences.TargetComplexityHigh}, precent: " +
+                                $"{percent}");
                         }
 
                         break;
@@ -265,6 +282,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: " +
                 $"{GameManager.Instance.ExpectedGameType} Opponent: {game.opponent.Profile}");
+
         }
 
         public void LoadGame(IClientFourzy _game)
@@ -310,6 +328,34 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //only continue if master
             if (PhotonNetwork.IsMasterClient)
             {
+                Area _area = FourzyPhotonManager.GetRoomProperty(
+                    Constants.REALTIME_ROOM_AREA, 
+                    InternalSettings.Current.DEFAULT_AREA);
+
+                //get percent
+                int myPercent = UserManager.Instance.MyComplexityPercent();
+                int opponentPercent = UserManager.GetComplexityPercent(
+                    FourzyPhotonManager.GetOpponentTotalGames(),
+                    FourzyPhotonManager.GetOpponentProperty(
+                        Constants.REALTIME_RATING_KEY, 
+                        UserManager.Instance.lastCachedRating));
+
+                //get complexity scores
+                Tuple<int, int> myMinMax = BoardFactory.NormalizeComplexity(
+                    _area,
+                    myPercent);
+                Tuple<int, int> oppMinMax = BoardFactory.NormalizeComplexity(
+                    _area,
+                    opponentPercent);
+
+                (int, int) actualMinMax = (
+                    Mathf.Min(myMinMax.Item1, oppMinMax.Item1), 
+                    Mathf.Min(myMinMax.Item2, oppMinMax.Item2));
+
+                BoardGenerationPreferences preferences = new BoardGenerationPreferences();
+                preferences.TargetComplexityLow = actualMinMax.Item1;
+                preferences.TargetComplexityHigh = actualMinMax.Item2;
+
                 //ready opponent
                 Player opponen =
                     new Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
@@ -324,11 +370,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(
-                    FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_AREA, Constants.DEFAULT_AREA),
+                    _area, 
                     me,
-                    opponen,
-                    UnityEngine.Random.value > .5f ? 1 : 2)
-                { _Type = GameType.REALTIME };
+                    opponen, 
+                    UnityEngine.Random.value > .5f ? 1 : 2,
+                    null,
+                    preferences)
+                {
+                    _Type = GameType.REALTIME
+                };
+
+                if (Application.isEditor || Debug.isDebugBuild)
+                {
+                    Debug.Log($"Realtime game created: min/max: " +
+                        $"{actualMinMax.Item1}/{actualMinMax.Item2}");
+                }
 
                 RealtimeGameStateData gameStateData = _game.toGameStateData;
                 gameStateData.createdEpoch = Utils.EpochMilliseconds();

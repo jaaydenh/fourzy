@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 namespace Fourzy
 {
@@ -84,6 +83,22 @@ namespace Fourzy
             LoadAreasProgression();
             LoadMiscBoards();
             LoadPassAndPlayBoards();
+        }
+
+        protected void Update()
+        {
+            if (!Application.isEditor) return;
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                Debug.Log("complete predefined bot boards");
+
+                int from = PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed();
+                for (int _index = from; _index < realtimeBotBoards.Count; _index++)
+                {
+                    PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
+                }
+            }
         }
 
         public GameBoardDefinition GetMiscBoard(string boardID) => miscBoards.Find(board => board.ID == boardID);

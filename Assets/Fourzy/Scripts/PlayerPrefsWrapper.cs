@@ -34,7 +34,7 @@ namespace Fourzy
             PlayerPrefs.SetInt("currentTheme_", area);
 
         public static int GetCurrentArea() =>
-            PlayerPrefs.GetInt("currentTheme_", (int)Constants.DEFAULT_AREA);
+            PlayerPrefs.GetInt("currentTheme_", (int)InternalSettings.Current.DEFAULT_AREA);
 
         public static bool GetAreaUnlocked(int area) => GetBool("themeUnlocked_" + area);
 

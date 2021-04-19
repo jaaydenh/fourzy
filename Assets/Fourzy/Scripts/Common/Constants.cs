@@ -12,7 +12,7 @@ namespace Fourzy
 
         public const int DEFAULT_PLACEMENT_STYLE_TOUCH = (int)GameManager.PlacementStyle.EDGE_TAP;
         public const int DEFAULT_PLACEMENT_STYLE_POINTER = (int)GameManager.PlacementStyle.EDGE_TAP;
-        public const Area DEFAULT_AREA = Area.ICE_PALACE;
+        public const Area DEFAULT_AREA = Area.TRAINING_GARDEN;
         public const int DEFAULT_STANDALONE_CPU_DIFFICULTY = 1; //0-3
         public static Area[] UNLOCKED_AREAS = { Area.TRAINING_GARDEN, Area.ENCHANTED_FOREST };
         public static BotGameSettings BOT_SETTINGS = new BotGameSettings()
@@ -29,6 +29,8 @@ namespace Fourzy
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
         public const int REALTIME_COUNTDOWN_SECONDS = 4;
+        public const int MIN_COMPLECXITY_SCORE = 200;
+        public const int MAX_COMPLECXITY_SCORE = 20000;
 
         /// <summary>
         /// This value is only used when bot match wait time is < 0f, so it will time out
