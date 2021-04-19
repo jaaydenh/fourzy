@@ -300,6 +300,9 @@ MonoBehaviour:
   areasDataHolder: {fileID: 11400000, guid: a7bbdce1503d5d14c893c6261d179c4c, type: 2}
   miscGameDataHolder: {fileID: 11400000, guid: 723c3267438074b4f980f63958882dfb, type: 2}
   typedPrefabs:
+  - type: REWARDS_XP
+    prefab: {fileID: 2179086365048087834, guid: 5d3321b1899bff44f903a69b179c22e5,
+      type: 3}
   - type: REWARDS_COIN
     prefab: {fileID: 3213377190150069673, guid: ddd299213fea9c64a96b21741feeeec9,
       type: 3}
@@ -317,9 +320,6 @@ MonoBehaviour:
   - type: REWARDS_RARE_PORTAL_POINTS
     prefab: {fileID: 7041523958711570062, guid: f1826d03060738344a301ca7170ba785,
       type: 3}
-  - type: REWARDS_XP
-    prefab: {fileID: 2179086365048087834, guid: 5d3321b1899bff44f903a69b179c22e5,
-      type: 3}
   - type: REWARDS_PACK_COMPLETE
     prefab: {fileID: 5842573211701814948, guid: 6d2fb3544e72ae64084606c59cf8638e,
       type: 3}
@@ -331,12 +331,9 @@ MonoBehaviour:
       type: 3}
   - type: REWARDS_HINTS
     prefab: {fileID: 2480191876416953368, guid: 338e3b32fc5fa864598347f494ad2be8,
-      type: 3}
+      type: 3}e
   - type: BOARD_HINT_BOX
     prefab: {fileID: 1489538643966412, guid: a3c24ed961027314abdb0cbec1278049, type: 3}
-  - type: GAME_PIECE_LANDSCAPE
-    prefab: {fileID: 2811702351793752031, guid: 0735ca95e50fa9c4084566d206f3dfef,
-      type: 3}
   - type: GAME_PIECE_SMALL
     prefab: {fileID: 1576871843195750, guid: de95eca9ce249a54280efd878a486b52, type: 3}
   - type: GAME_PIECE_MEDIUM

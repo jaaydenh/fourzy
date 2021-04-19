@@ -341,13 +341,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.OPEN_GAME:
-                        //wait for game to load
-                        yield return GameManager.Instance.StartGame(
-                            new ClientFourzyGame(
+                        ClientFourzyGame _game = new ClientFourzyGame(
                                 GameContentManager.Instance.GetMiscBoard(currentTask.stringValue),
                                 UserManager.Instance.meAsPlayer,
                                 new Player(2, "Player Two"))
-                            { _Type = (GameType)currentTask.intValue }, GameTypeLocal.LOCAL_GAME);
+                        { _Type = (GameType)currentTask.intValue };
+                        _game.UpdateFirstState();
+
+                        //wait for game to load
+                        yield return GameManager.Instance.StartGame(_game, GameTypeLocal.LOCAL_GAME);
 
                         break;
 

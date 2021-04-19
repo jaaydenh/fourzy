@@ -65,6 +65,7 @@ namespace Fourzy._Updates.UI.Widgets
                     widgetSmall.SetData(GameContentManager.Instance.piecesDataHolder
                         .GetGamePieceData(reward.asGamePieceReward.gamePieceID));
 
+
                     widgetSmall.ResetAnchors();
                     widgetSmall.transform.localScale = Vector3.one * .55f;
 
@@ -181,6 +182,7 @@ namespace Fourzy._Updates.UI.Widgets
                     {
                         //check if puzzle was complete and reward wasnt assigned yet
                         if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && 
+
                             !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
                         {
                             PersistantMenuController.Instance

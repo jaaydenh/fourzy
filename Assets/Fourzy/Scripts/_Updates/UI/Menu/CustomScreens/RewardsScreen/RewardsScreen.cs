@@ -84,9 +84,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game.draw || !game.isOver) return false;
 
             if (game.puzzleData && game.puzzleData.pack)
-                return game.puzzleData.pack.complete && !PlayerPrefsWrapper.GetRewardRewarded(game.puzzleData.pack.packId);
+            {
+                return
+                    game.puzzleData.pack.complete &&
+                    !PlayerPrefsWrapper.GetRewardRewarded(game.puzzleData.pack.packId);
+            }
             else
+            {
                 return !PlayerPrefsWrapper.GetGameRewarded(game.BoardID);
+            }
         }
 
         public void SetData(IClientFourzy game, bool addTimerRoutine = true)
@@ -154,9 +160,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     xpTabAlphaTween.AtProgress(1f);
                     int xpWidgetsCount = xpWidgets.Count;
                     for (int index = xpWidgetsCount; index < xpRewards.Count; index++)
-                        xpWidgets.Add(
-                            AddWidget(xpRewards[index], 
+                    {
+                        xpWidgets.Add(AddWidget(xpRewards[index],
                             GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_XP"), xpTab));
+                    }
 
                     previousXP = UserManager.Instance.xp;
                     xpWidget.SetTo(UserManager.Instance.xp, false);
@@ -187,6 +194,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     RewardType.PORTAL_POINTS,
                                     "Total"),
                                 GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"),
+
                                 portalKeysTab));
                         }
 
@@ -324,6 +332,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 portalKeysWidgets.Add(AddWidget(
                     reward, 
                     GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"),
+
                     portalKeysTab));
 
                 scrollRect.normalizedPosition = Vector2.zero;
@@ -340,6 +349,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     RewardType.PORTAL_POINTS, 
                     "Total"), 
                 GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"),
+
                 portalKeysTab));
 
             scrollRect.normalizedPosition = Vector2.zero;

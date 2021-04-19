@@ -58,7 +58,10 @@ namespace Fourzy.Testing
 
         protected void Start()
         {
-            game = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("201"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+            game = new ClientFourzyGame(
+                GameContentManager.Instance.GetMiscBoard("201"), 
+                UserManager.Instance.meAsPlayer, 
+                new Player(2, "Player Two"));
 
             gameboard.Initialize(game);
             gameboard.onDraw += OnDraw;

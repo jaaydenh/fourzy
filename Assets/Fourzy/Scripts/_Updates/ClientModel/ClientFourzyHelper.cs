@@ -188,5 +188,95 @@ namespace Fourzy._Updates.ClientModel
                 game._State.Players[2] :
                 game._State.Players[1];
         }
+
+        //constructors
+        public static ClientFourzyGame CreateTwoPlayerGame(
+            Area Area, 
+            Player Player1, 
+            Player Player2, 
+            int FirstPlayerId = 1, 
+            GameOptions Options = null, 
+            BoardGenerationPreferences BoardPreferences = null)
+        {
+            FourzyGame _game = FourzyGameFactory.CreateTwoPlayerGame(
+                Area,
+                Player1,
+                Player2,
+                FirstPlayerId,
+                Options,
+                BoardPreferences);
+
+            ClientFourzyGame game = new ClientFourzyGame(_game.State);
+            
+            if (Player1.Profile == AIProfile.Player && Player2.Profile == AIProfile.Player)
+            {
+                game._Type = GameType.PASSANDPLAY;
+            }
+            else
+            {
+                game._Type = GameType.AI;
+            }
+            game.UpdateFirstState();
+
+            return game;
+        }
+
+        public static ClientFourzyGame CreateAIGame(
+            Area Area, 
+            AIProfile Profile, 
+            Player Human, 
+            Player AI = null, 
+            int FirstPlayerId = 1, 
+            GameOptions Options = null, 
+            BoardGenerationPreferences Preferences = null)
+        {
+            FourzyGame _game = FourzyGameFactory.CreateAIGame(
+                Area,
+                Profile,
+                Human,
+                AI,
+                FirstPlayerId,
+                Options,
+                Preferences);
+
+            ClientFourzyGame game = new ClientFourzyGame(_game.State);
+
+            if (Human.Profile == AIProfile.Player && AI != null && AI.Profile == AIProfile.Player)
+            {
+                game._Type = GameType.PASSANDPLAY;
+            }
+            else
+            {
+                game._Type = GameType.AI;
+            }
+            game.UpdateFirstState();
+
+            return game;
+        }
+
+        public static ClientFourzyGame CreateAIGame(
+            GameBoard Board, 
+            AIProfile Profile, 
+            Player Human, 
+            Player AI = null,
+            int FirstPlayerId = 1, 
+            GameOptions Options = null)
+        {
+            FourzyGame _game = FourzyGameFactory.CreateAIGame(Board, Profile, Human, AI, FirstPlayerId, Options);
+
+            ClientFourzyGame game = new ClientFourzyGame(_game.State);
+
+            if (Human.Profile == AIProfile.Player && AI != null && AI.Profile == AIProfile.Player)
+            {
+                game._Type = GameType.PASSANDPLAY;
+            }
+            else
+            {
+                game._Type = GameType.AI;
+            }
+            game.UpdateFirstState();
+
+            return game;
+        }
     }
-}
+} 

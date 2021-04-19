@@ -190,7 +190,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //loop initial moves
             while (isOpened)
             {
-                ClientFourzyGame game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two") { HerdId = "1"});
+                ClientFourzyGame game = new ClientFourzyGame(
+                    gameboardDefinition, 
+                    UserManager.Instance.meAsPlayer, 
+                    new Player(2, "Player Two")
+                    { HerdId = "1"});
+
                 gameboard.Initialize(game, false);
 
                 //wait a bit for screen to fade in

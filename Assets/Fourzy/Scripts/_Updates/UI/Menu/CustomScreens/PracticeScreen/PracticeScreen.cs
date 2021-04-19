@@ -248,6 +248,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 };
             }
 
+            game.UpdateFirstState();
             GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
 

@@ -215,12 +215,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //if active game is empty, load random pass&play board
             if (_game == null)
             {
-                ClientFourzyGame newGame = null;
+                ClientFourzyGame game = null;
                 switch (GameManager.Instance.ExpectedGameType)
                 {
                     case GameTypeLocal.REALTIME_BOT_GAME:
                         //load realtime game
-                        newGame = new ClientFourzyGame(
+                        game = new ClientFourzyGame(
                             (Area)PlayerPrefsWrapper.GetCurrentArea(),
                             UserManager.Instance.meAsPlayer,
                             GameManager.Instance.Bot,
@@ -237,17 +237,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         break;
 
                     case GameTypeLocal.LOCAL_GAME:
-                        newGame = new ClientFourzyGame(
+                        game = new ClientFourzyGame(
                             GameContentManager.Instance.GetMiscBoard("20"),
                             UserManager.Instance.meAsPlayer,
-                            new Player(2, "Player Two"));
-                        newGame._Type = GameType.PASSANDPLAY;
+                            new Player(2, "Player Two"))
+                        {
+                            _Type = GameType.PASSANDPLAY
+                        };
 
                         break;
                 }
-                newGame.UpdateFirstState();
+                game.UpdateFirstState();
 
-                GameManager.Instance.activeGame = newGame;
+                GameManager.Instance.activeGame = game;
             }
             else if (_game != GameManager.Instance.activeGame)
             {

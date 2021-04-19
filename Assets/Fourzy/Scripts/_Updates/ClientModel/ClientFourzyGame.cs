@@ -289,8 +289,12 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public ClientFourzyGame(Player Player1, Player Player2, GameOptions Options = null)
-            : base(Player1, Player2, Options)
+        public ClientFourzyGame(
+            Player Player1,
+            Player Player2,
+            GameOptions Options = null,
+            BoardGenerationPreferences Preferences = null)
+            : base(Player1, Player2, Options, Preferences)
         {
             Initialize();
 
@@ -302,7 +306,9 @@ namespace Fourzy._Updates.ClientModel
             Player Player1,
             Player Player2,
             int FirstPlayerId,
-            GameOptions Options = null) : base(Area, Player1, Player2, FirstPlayerId, Options)
+            GameOptions Options = null,
+            BoardGenerationPreferences Preferences = null)
+            : base(Area, Player1, Player2, FirstPlayerId, Options, Preferences)
         {
             Initialize();
 
@@ -480,14 +486,17 @@ namespace Fourzy._Updates.ClientModel
                     {
                         _gameBoardDefinition = GameContentManager.Instance.passAndPlayBoards[0];
                     }
-
-                    return new ClientFourzyGame(
+                    ClientFourzyGame game = new ClientFourzyGame(
                         _gameBoardDefinition,
                         UserManager.Instance.meAsPlayer,
                         new Player(2, "Player Two"))
                     {
                         _Type = Fourzy.GameType.PASSANDPLAY
                     };
+
+                    game.UpdateFirstState();
+
+                    return game;
             }
 
             return null;
