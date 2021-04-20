@@ -230,8 +230,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -2165,8 +2167,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -9779,8 +9783,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -13389,7 +13395,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 44
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -15133,8 +15139,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -16068,8 +16076,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -16752,8 +16762,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -17298,8 +17310,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -18205,8 +18219,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -18904,7 +18920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.3529412}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.627451}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -18995,8 +19011,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -19870,8 +19888,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -20149,8 +20169,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -21713,8 +21735,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -24289,8 +24313,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -29803,8 +29829,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -30033,8 +30061,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
