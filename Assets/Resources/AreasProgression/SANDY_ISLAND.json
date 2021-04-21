@@ -1,1 +1,19 @@
-{"progression":[{"gamesNumber":3,"unlockType":"token","id":"Arrow"},{"gamesNumber":5,"unlockType":"token","id":"Goop"},{"gamesNumber":10,"unlockType":"gamePiece","id":"5"}]}
+{
+    "progression": [
+        {
+            "gamesNumber": 3,
+            "unlockType": "token",
+            "id": "Arrow"
+        },
+        {
+            "gamesNumber": 5,
+            "unlockType": "token",
+            "id": "Goop"
+        },
+        {
+            "gamesNumber": 10,
+            "unlockType": "gamePiece",
+            "id": "5"
+        }
+    ]
+}

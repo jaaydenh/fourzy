@@ -138,7 +138,7 @@
     },
     {
       "key": "exit",
-      "value": "Exit Game"
+      "value": "Ok"
     },
     {
       "key": "failed",
@@ -546,7 +546,7 @@
     },
     {
       "key": "tap_to_place",
-      "value": "Tap to move\nyour piece"
+      "value": "Tap to move your piece"
     },
     {
       "key": "tap_to_start",

@@ -1,1 +1,286 @@
-{"boardSpaceData":[{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]}],"initialMoves":[],"rows":8,"columns":8,"area":2,"id":"fd562ef3-bf3e-4030-bd0a-37a9fe1246cc","boardName":"BlockParty","enabled":true,"enabledGallery":true,"enabledRealtime":true, "aiProfile":27}
+{
+    "boardSpaceData": [
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        }
+    ],
+    "initialMoves": [],
+    "rows": 8,
+    "columns": 8,
+    "area": 2,
+    "id": "fd562ef3-bf3e-4030-bd0a-37a9fe1246cc",
+    "boardName": "BlockParty",
+    "enabled": true,
+    "enabledGallery": true,
+    "enabledRealtime": true,
+    "aiProfile": 15
+}

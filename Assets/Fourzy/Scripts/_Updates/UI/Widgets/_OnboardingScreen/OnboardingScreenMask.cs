@@ -36,7 +36,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (clear) Clear();
 
-            bg.color = new Color(0f, 0f, 0f, .3f);
+            bg.color = new Color(0f, 0f, 0f, .75f);
 
             Rect[] toUse = task.areas;
             if (task.areasByPlacement.ContainsKey(GameManager.Instance.placementStyle)) toUse = new Rect[] { task.areasByPlacement[GameManager.Instance.placementStyle] };
@@ -63,7 +63,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             Show();
 
-            bg.color = new Color(0f, 0f, 0f, showBG ? .3f : 0f);
+            bg.color = new Color(0f, 0f, 0f, showBG ? .75f : 0f);
 
             if (clear) Clear();
 
@@ -78,7 +78,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             Show();
 
-            bg.color = new Color(0f, 0f, 0f, showBG ? .3f : 0f);
+            bg.color = new Color(0f, 0f, 0f, showBG ? .75f : 0f);
 
             if (clear) Clear();
 
