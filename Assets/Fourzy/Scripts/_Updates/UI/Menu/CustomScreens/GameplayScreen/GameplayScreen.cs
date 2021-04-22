@@ -231,7 +231,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.REALTIME:
                     player1Widget.SetRating(
                         UserManager.Instance.lastCachedRating,
-                        UserManager.Instance.totalPlayfabGames);
+                        UserManager.Instance.totalRatedGames);
 
                     break;
 

@@ -5,6 +5,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
+using FourzyGameModel.Model;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -40,11 +41,26 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public override bool isCurrent => base.isCurrent;
 
-        protected List<GamePieceWidgetMedium> gamePieceWidgets = new List<GamePieceWidgetMedium>();
+        protected List<GamePieceWidgetMedium> gamePieces = new List<GamePieceWidgetMedium>();
+        protected List<TokenWidget> tokens = new List<TokenWidget>();
 
         protected bool unlockedExpanded = true;
         protected bool foundExpanded = true;
         protected bool lockedExpanded = true;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            InternalSettings.onNewDefaultTokens += OnNewDefaultTokens;
+            UserManager.onTokenUnlocked += OnTokenUnlocked;
+        }
+
+        protected void OnDestroy()
+        {
+            InternalSettings.onNewDefaultTokens -= OnNewDefaultTokens;
+            UserManager.onTokenUnlocked -= OnTokenUnlocked;
+        }
 
         protected void Update()
         {
@@ -53,7 +69,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (Input.GetKeyDown(KeyCode.U))
             {
                 //give game pieces
-                foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
+                foreach (GamePieceWidgetMedium widget in gamePieces)
                 {
                     widget.data.AddPieces(Random.Range(1, 5));
                     widget._Update();
@@ -65,7 +81,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (Input.GetKeyDown(KeyCode.J))
             {
                 //give game pieces
-                foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
+                foreach (GamePieceWidgetMedium widget in gamePieces)
                 {
                     widget.data.AddPieces(-3);
                     widget._Update();
@@ -83,7 +99,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             PlaceGamepieceWidgets();
 
             //highlight selected one
-            gamePieceWidgets.ForEach(widget => widget.SetSelectedState(
+            gamePieces.ForEach(widget => widget.SetSelectedState(
                 widget.data.Id == UserManager.Instance.gamePieceID));
         }
 
@@ -159,18 +175,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 widget.SetData(prefabData);
 
                 widgets.Add(widget);
-                gamePieceWidgets.Add(widget);
+                gamePieces.Add(widget);
             }
         }
 
         private void CreateTokens()
         {
-            //load tokens
-            foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.enabledTokens)
+            while (tokens.Count > 0)
             {
-                widgets
-                    .Add(GameContentManager.InstantiatePrefab<TokenWidget>("TOKEN_SMALL", tokensParent)
-                    .SetData(data));
+                Destroy(tokens[0].gameObject);
+                widgets.Remove(tokens[0]);
+                tokens.RemoveAt(0);
+            }
+
+            //load tokens
+            foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.unlockedTokensData)
+            {
+                TokenWidget _tokenWidget = GameContentManager
+                    .InstantiatePrefab<TokenWidget>("TOKEN_SMALL", tokensParent);
+                _tokenWidget.SetData(data);
+
+                tokens.Add(_tokenWidget);
+                widgets.Add(_tokenWidget);
             }
         }
 
@@ -180,7 +206,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             List<GamePieceWidgetMedium> found = new List<GamePieceWidgetMedium>();
             List<GamePieceWidgetMedium> locked = new List<GamePieceWidgetMedium>();
 
-            foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
+            foreach (GamePieceWidgetMedium widget in gamePieces)
             {
                 switch (widget.data.State)
                 {
@@ -249,6 +275,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CreateTokens();
 
             SetPiecesActive();
+        }
+
+        private void OnNewDefaultTokens(TokenType[] obj)
+        {
+            CreateTokens();
+        }
+
+        private void OnTokenUnlocked(IEnumerable<TokenType> newTokens, TokenUnlockType unlockType)
+        {
+            CreateTokens();
         }
     }
 }

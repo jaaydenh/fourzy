@@ -13,6 +13,42 @@ MonoBehaviour:
   m_Name: ResourceDB
   m_EditorClassIdentifier: 
   items:
+  - name: Groupbox1Background_Hellmade
+    ext: psd
+    path: 
+    type: 2
+    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: eazyNetchecker-Header_Hellmade
+    ext: png
+    path: 
+    type: 2
+    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Header1NetCheckerBackground_Hellmade
+    ext: psd
+    path: 
+    type: 2
+    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: AchievementDisplay
+    ext: prefab
+    path: 
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: MMDebugOnScreenConsole
+    ext: prefab
+    path: 
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: MMNVPathDefinition
+    ext: asset
+    path: 
+    type: 2
+    objectTypeName: MoreMountains.NiceVibrations.MMNVPath, MoreMountains.NiceVibrations,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - name: PhotonServerSettings
     ext: asset
     path: 
@@ -2947,6 +2983,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 449
+  m_FileCount: 455
   m_FolderCount: 48
   UpdateAutomatically: 0

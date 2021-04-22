@@ -1,8 +1,13 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates;
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
-using System;
+using FourzyGameModel.Model;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy
@@ -17,7 +22,7 @@ namespace Fourzy
 
         public static bool GetPuzzleChallengeComplete(string ID) => GetBool("puzzleChallenge_" + ID);
 
-        public static void SetPuzzleChallengeComplete(string ID, bool state) => 
+        public static void SetPuzzleChallengeComplete(string ID, bool state) =>
             SetBool("puzzleChallenge_" + ID, state);
 
         public static bool PuzzlePackOpened(string ID) => GetBool("puzzleChallenge_" + ID + "_opened");
@@ -27,7 +32,7 @@ namespace Fourzy
 
         public static bool PuzzlePackUnlocked(string ID) => GetBool("puzzleChallenge_" + ID + "_unlocked");
 
-        public static void SetPuzzlePackUnlocked(string ID, bool state) => 
+        public static void SetPuzzlePackUnlocked(string ID, bool state) =>
             SetBool("puzzleChallenge_" + ID + "_unlocked", state);
 
         public static void SetCurrentArea(int area) =>
@@ -48,12 +53,70 @@ namespace Fourzy
 
         public static bool GetTutorialOpened(string name) => GetBool("tutorialOpened_" + name);
 
-        public static void AddAdventurePuzzlesFailedTimes() => 
+        public static void AddUnlockedToken(TokenType token, TokenUnlockType unlockType)
+        {
+            HashSet<(TokenType tokenType, TokenUnlockType unlockType)> unlocked =
+                new HashSet<(TokenType tokenType, TokenUnlockType unlockType)>(GetUnlockedTokens());
+
+            unlocked.Add((token, unlockType));
+            PlayerPrefs.SetString("unlockedTokens", JsonConvert.SerializeObject(unlocked));
+        }
+
+        public static void AddUnlockedTokens(IEnumerable<TokenType> tokens, TokenUnlockType unlockType)
+        {
+            HashSet<(TokenType tokenType, TokenUnlockType unlockType)> unlocked = 
+                new HashSet<(TokenType tokenType, TokenUnlockType unlockType)>(GetUnlockedTokens());
+
+            foreach (TokenType type in tokens)
+            {
+                unlocked.Add((type, unlockType));
+            }
+            PlayerPrefs.SetString("unlockedTokens", JsonConvert.SerializeObject(unlocked));
+        }
+
+        public static (TokenType tokenType, TokenUnlockType unlockType)[] GetUnlockedTokens()
+        {
+            return JsonConvert.DeserializeObject<(TokenType tokenType, TokenUnlockType unlockType)[]>(
+                PlayerPrefs.GetString("unlockedTokens", "[]"));
+        }
+
+        public static bool IsDefaultTokensSet() => 
+            PlayerPrefs.GetString("unlockedTokens", "[]")
+                .Contains("\"Item2\":0");
+
+        public static void SetDefaultTokens(IEnumerable<TokenType> tokens)
+        {
+            HashSet<(TokenType tokenType, TokenUnlockType unlockType)> unlocked =
+                   new HashSet<(TokenType tokenType, TokenUnlockType unlockType)>(GetUnlockedTokens());
+
+            //remove previous default tokens
+            unlocked.RemoveWhere(_data => _data.unlockType == TokenUnlockType.DEFAULT);
+            
+            foreach (TokenType _newDefault in tokens)
+            {
+                unlocked.Add((_newDefault, TokenUnlockType.DEFAULT));
+            }
+
+            PlayerPrefs.SetString("unlockedTokens", JsonConvert.SerializeObject(unlocked));
+        }
+
+        public static void RemoveAllButDefault()
+        {
+            HashSet<(TokenType tokenType, TokenUnlockType unlockType)> unlocked =
+                   new HashSet<(TokenType tokenType, TokenUnlockType unlockType)>(GetUnlockedTokens());
+
+            //remove previous default tokens
+            unlocked.RemoveWhere(_data => _data.unlockType != TokenUnlockType.DEFAULT);
+
+            PlayerPrefs.SetString("unlockedTokens", JsonConvert.SerializeObject(unlocked));
+        }
+
+        public static void AddAdventurePuzzlesFailedTimes() =>
             PlayerPrefs.SetInt("puzzles_failed", GetAdventurePuzzleFailedTimes() + 1);
 
         public static int GetAdventurePuzzleFailedTimes() => PlayerPrefs.GetInt("puzzles_failed", 0);
 
-        public static void AddAdventurePuzzlesResets() => 
+        public static void AddAdventurePuzzlesResets() =>
             PlayerPrefs.SetInt("puzzles_resets", GetAdventurePuzzleResets() + 1);
 
         public static int GetAdventurePuzzleResets() => PlayerPrefs.GetInt("puzzles_resets", 0);
@@ -92,14 +155,14 @@ namespace Fourzy
         public static void AddTutorialRealtimeBotGamePlayed() =>
             PlayerPrefs.SetInt("realtime_tutorial_bot_games_played", GetTutorialRealtimeBotGamesPlayed() + 1);
 
-        public static int GetTutorialRealtimeBotGamesPlayed() => 
+        public static int GetTutorialRealtimeBotGamesPlayed() =>
             PlayerPrefs.GetInt("realtime_tutorial_bot_games_played", 0);
 
         public static void SetAppOpenedTime() =>
             PlayerPrefs.SetString("app_opened_last_time", Utils.EpochSeconds().ToString());
 
         public static long GetSecondsSinceLastOpen() =>
-            Utils.EpochSeconds() - 
+            Utils.EpochSeconds() -
             long.Parse(PlayerPrefs.GetString("app_opened_last_time", Utils.EpochSeconds().ToString()));
 
         public static void AddDaysPlayed(float value) =>

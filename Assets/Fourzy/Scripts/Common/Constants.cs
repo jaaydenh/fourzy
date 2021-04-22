@@ -13,14 +13,19 @@ namespace Fourzy
         public const int DEFAULT_PLACEMENT_STYLE_TOUCH = (int)GameManager.PlacementStyle.EDGE_TAP;
         public const int DEFAULT_PLACEMENT_STYLE_POINTER = (int)GameManager.PlacementStyle.EDGE_TAP;
         public const Area DEFAULT_AREA = Area.TRAINING_GARDEN;
+        public static Area[] UNLOCKED_AREAS = { Area.TRAINING_GARDEN };
         public const int DEFAULT_STANDALONE_CPU_DIFFICULTY = 1; //0-3
-        public static Area[] UNLOCKED_AREAS = { Area.TRAINING_GARDEN, Area.ENCHANTED_FOREST };
         public static BotGameSettings BOT_SETTINGS = new BotGameSettings()
         {
             botMatchAfter = new float[] { 10f, 15f },
             turnDelayTime = new float[] { 1.2f, 2.5f },
             rematchAcceptTime = new float[] { 3f, 6f },
             maxRematchTimes = new int[] { 2, 4 },
+        };
+        public static TokenType[] DEFAULT_UNLOCKED_TOKENS =
+        {
+            TokenType.BLOCKER,
+            TokenType.STICKY,
         };
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;

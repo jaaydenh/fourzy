@@ -17,7 +17,6 @@ MonoBehaviour:
   tokens:
   - tokenType: 1
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_blocker
@@ -39,7 +38,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 5
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_arrow
@@ -51,7 +49,6 @@ MonoBehaviour:
       tokenPrefab: {fileID: 464145574, guid: 930375cbcd3711845a3679ba993543c6, type: 3}
   - tokenType: 2
     tokenIcon: {fileID: 21300000, guid: 9daaa4893d4e27b4bbc1dd74873d6d70, type: 3}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_sticky
@@ -64,7 +61,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 4
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_ghost
@@ -77,7 +73,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 12
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_pit
@@ -90,7 +85,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 8
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_ice
@@ -103,7 +97,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 10
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_sand
@@ -116,7 +109,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 19
     tokenIcon: {fileID: 21300000, guid: e00d767c04b95427d9ce87938b0c5df4, type: 3}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_fruit
@@ -129,7 +121,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 3
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_water
@@ -142,7 +133,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 13
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_circle_bomb
@@ -155,7 +145,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 6
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_fourway_arrow
@@ -168,7 +157,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 55
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_fruit_tree
@@ -181,7 +169,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 9
     tokenIcon: {fileID: 21300000, guid: 71c6951ce3a2ccf46a54f1c12bff57da, type: 3}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_ice_block
@@ -194,7 +181,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 18
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_snow
@@ -207,7 +193,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 33
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 1
     spellID: 0
     description: token_desc_hex
@@ -220,7 +205,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 49
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_moving_ghost
@@ -233,7 +217,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 27
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_rotating_arrow
@@ -246,7 +229,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 20
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 1
     spellID: 12
     description: token_desc_lure
@@ -259,7 +241,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 61
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_move_blocker
@@ -272,7 +253,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 14
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 0
     spellID: 0
     description: token_desc_cross_bomb
@@ -285,7 +265,6 @@ MonoBehaviour:
         type: 3}
   - tokenType: 64
     tokenIcon: {fileID: 0}
-    enabled: 1
     isSpell: 1
     spellID: 3
     description: token_desc_darkness

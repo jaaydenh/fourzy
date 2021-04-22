@@ -15,8 +15,8 @@ using PlayFab.ProfilesModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using static Fourzy._Updates.Serialized.TokensDataHolder;
 
 namespace Fourzy
 {
@@ -521,6 +521,10 @@ namespace Fourzy
 
         private void OnUserInventoryFetched(GetUserInventoryResult inventoryRequestResult)
         {
+            //clear all tokens exept default
+            PlayerPrefsWrapper.RemoveAllButDefault();
+            List<TokenType> inventoryTokens = new List<TokenType>();
+
             foreach (ItemInstance itemInstance in inventoryRequestResult.Inventory)
             {
                 switch (itemInstance.ItemClass)
@@ -546,10 +550,29 @@ namespace Fourzy
                         break;
 
                     case Constants.PLAYFAB_TOKEN_CLASS:
-                        //TokenData tokenData = GameContentManager.Instance.tokensDataHolder.GetTokenData(itemInstance.ItemId)
+                        TokenType _token = (TokenType)Enum.Parse(typeof(TokenType), itemInstance.ItemId);
+
+                        if (_token == TokenType.NONE)
+                        {
+                            if (Application.isEditor || Debug.isDebugBuild)
+                            {
+                                string message = $"Token {itemInstance.ItemId} not found";
+                                Debug.LogWarning(message);
+                                GameManager.Instance.ReportPlayFabError(message);
+                            }
+                        }
+                        else
+                        {
+                            inventoryTokens.Add(_token);
+                        }
 
                         break;
                 }
+            }
+
+            if (inventoryTokens.Count > 0)
+            {
+                UserManager.Instance.UnlockTokens(inventoryTokens, _Updates.Serialized.TokenUnlockType.AREA_PROGRESS);
             }
 
             foreach (var currentcyData in inventoryRequestResult.VirtualCurrency)

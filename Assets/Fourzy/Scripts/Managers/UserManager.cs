@@ -1,6 +1,7 @@
 ﻿//modded
 
 using Fourzy._Updates;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy
@@ -18,6 +20,7 @@ namespace Fourzy
     {
         public static Action onDisplayNameChanged;
         public static Action<string> onDisplayNameChangeFailed;
+        public static Action<IEnumerable<TokenType>, TokenUnlockType> onTokenUnlocked;
 
         public static Action<CurrencyType> onCurrencyUpdate;
         public static Action<int, string> onHintsUpdate;
@@ -173,7 +176,7 @@ namespace Fourzy
         /// </summary>
         public uint totalSpentUSD { get; set; }
 
-        public bool ratingAssigned => totalPlayfabGames >= InternalSettings.Current.GAMES_BEFORE_RATING_USED;
+        public bool ratingAssigned => totalRatedGames >= InternalSettings.Current.GAMES_BEFORE_RATING_USED;
 
         public int playfabWinsCount
         {
@@ -217,7 +220,7 @@ namespace Fourzy
             }
         }
 
-        public int totalPlayfabGames
+        public int totalRatedGames
         {
             get
             {
@@ -250,6 +253,22 @@ namespace Fourzy
 
             userId = SystemInfo.deviceUniqueIdentifier;
             GameManager.onNetworkAccess += OnNetworkAccess;
+        }
+
+        public void UnlockToken(TokenType tokenType, TokenUnlockType unlockType)
+        {
+            PlayerPrefsWrapper.AddUnlockedToken(tokenType, unlockType);
+
+            onTokenUnlocked?.Invoke(
+                new TokenType[]{ tokenType }, 
+                unlockType);
+        }
+
+        public void UnlockTokens(IEnumerable<TokenType> tokens, TokenUnlockType unlockType)
+        {
+            PlayerPrefsWrapper.AddUnlockedTokens(tokens, unlockType);
+
+            onTokenUnlocked?.Invoke(tokens, unlockType);
         }
 
         /// <summary>
@@ -356,7 +375,7 @@ namespace Fourzy
             }
         }
 
-        public int MyComplexityPercent() => GetComplexityPercent(totalPlayfabGames, lastCachedRating);
+        public int MyComplexityPercent() => GetComplexityPercent(totalRatedGames, lastCachedRating);
 
         public static int GetComplexityPercent(int games, int rating)
         {

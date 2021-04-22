@@ -50,9 +50,17 @@ namespace Fourzy
 
         internal List<TokensDataHolder.TokenData> tokens => tokensDataHolder.tokens;
 
-        internal List<TokensDataHolder.TokenData> enabledTokens => tokensDataHolder.tokens
-            .Where(token => token.enabled)
-            .ToList();
+        internal IEnumerable<TokensDataHolder.TokenData> unlockedTokensData
+        {
+            get
+            {
+                var unlockedTokens = PlayerPrefsWrapper.GetUnlockedTokens().Select(_data => _data.tokenType);
+
+                return tokensDataHolder.tokens.Where(_tokenData => unlockedTokens.Contains(_tokenData.tokenType));
+            }
+        }
+
+        internal Dictionary<Area, AreaProgression> defaultAreaProgression;
 
         internal int finishedFastPuzzlesCount =>
             fastPuzzles.Keys.Where(id => PlayerPrefsWrapper.GetFastPuzzleComplete(id)).Count();
@@ -98,6 +106,10 @@ namespace Fourzy
                 {
                     PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
                 }
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                UserManager.Instance.UnlockToken(TokenType.FRUIT_TREE, TokenUnlockType.DEFAULT);
             }
         }
 
@@ -272,15 +284,17 @@ namespace Fourzy
 
         private void LoadAreasProgression()
         {
-            //foreach (ResourceItem resourceItem in ResourceDB
-            //    .GetFolder(Constants.AREAS_PROGRESSION_FOLDER)
-            //    .GetChilds("", ResourceItem.Type.Asset))
-            //{
-            ////record them
-            //PlayerPrefs.SetString(
-            //    InternalSettings.PREFIX + resourceItem.Name, 
-            //    resourceItem.Load<TextAsset>().text);
-            //}
+            defaultAreaProgression = new Dictionary<Area, AreaProgression>();
+
+            foreach (ResourceItem resourceItem in ResourceDB
+                .GetFolder(Constants.AREAS_PROGRESSION_FOLDER)
+                .GetChilds("", ResourceItem.Type.Asset)
+                .Where(_file => _file.Ext == "json"))
+            {
+                defaultAreaProgression.Add(
+                    (Area)Enum.Parse(typeof(Area), resourceItem.Name), 
+                    AreaProgression.FromJsonString(resourceItem.Load<TextAsset>().text));
+            }
         }
 
         private void LoadMiscBoards()

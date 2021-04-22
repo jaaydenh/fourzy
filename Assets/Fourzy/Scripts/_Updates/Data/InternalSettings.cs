@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using System;
@@ -13,6 +14,8 @@ namespace Fourzy._Updates
 {
     internal class InternalSettings
     {
+        internal static Action<TokenType[]> onNewDefaultTokens;
+
         internal static InternalSettings Current
         {
             get
@@ -29,7 +32,7 @@ namespace Fourzy._Updates
 
         internal const string PREFIX = "InternalSettings_";
 
-        internal int DEFAULT_PLACEMENT_STYLE_POINTER { get; private set; } = 
+        internal int DEFAULT_PLACEMENT_STYLE_POINTER { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "DEFAULT_PLACEMENT_STYLE_POINTER", Constants.DEFAULT_PLACEMENT_STYLE_POINTER);
         internal int DEFAULT_PLACEMENT_STYLE_TOUCH { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "DEFAULT_PLACEMENT_STYLE_TOUCH", Constants.DEFAULT_PLACEMENT_STYLE_TOUCH);
@@ -53,7 +56,7 @@ namespace Fourzy._Updates
             AreasFromString(PlayerPrefs.GetString(PREFIX + "UNLOCKED_AREAS", "")) ??
             Constants.UNLOCKED_AREAS;
         internal BotGameSettings BOT_SETTINGS { get; private set; } =
-            BotSettingsFromString(PlayerPrefs.GetString(PREFIX + "BOT_SETTINGS", "")) ?? 
+            BotSettingsFromString(PlayerPrefs.GetString(PREFIX + "BOT_SETTINGS", "")) ??
             Constants.BOT_SETTINGS;
 
         internal int GAUNTLET_DEFAULT_MOVES_COUNT { get; private set; } =
@@ -76,9 +79,31 @@ namespace Fourzy._Updates
         internal bool LOSE_ON_EMPTY_TIMER { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "LOSE_ON_EMPTY_TIMER", Constants.LOSE_ON_EMPTY_TIMER ? 1 : 0) == 1;
 
-        internal Dictionary<Area, AreaProgression> areaProgressions; 
+        internal AreaProgression ENCHANTED_FOREST { get; private set; } =
+            GetAreaProgressionPlayerPrefs(Area.ENCHANTED_FOREST) ??
+            GameContentManager.Instance.defaultAreaProgression[Area.ENCHANTED_FOREST];
 
-        internal void Update(object data, bool saveNewValues = true, bool debugData = true)
+        internal AreaProgression TRAINING_GARDEN { get; private set; } =
+            GetAreaProgressionPlayerPrefs(Area.TRAINING_GARDEN) ??
+            GameContentManager.Instance.defaultAreaProgression[Area.TRAINING_GARDEN];
+
+        internal AreaProgression SANDY_ISLAND { get; private set; } =
+            GetAreaProgressionPlayerPrefs(Area.SANDY_ISLAND) ??
+            GameContentManager.Instance.defaultAreaProgression[Area.SANDY_ISLAND];
+
+        internal AreaProgression ICE_PALACE { get; private set; } =
+            GetAreaProgressionPlayerPrefs(Area.ICE_PALACE) ??
+            GameContentManager.Instance.defaultAreaProgression[Area.ICE_PALACE];
+
+        internal TokenType[] DEFAULT_TOKENS { get; private set; } = PlayerPrefsWrapper.IsDefaultTokensSet() ? 
+            PlayerPrefsWrapper.GetUnlockedTokens()
+                .Where(_data => _data.unlockType == TokenUnlockType.DEFAULT)
+                .Select(_data => _data.tokenType)
+                .ToArray() : 
+            Constants.DEFAULT_UNLOCKED_TOKENS;
+
+
+        internal void Update(object data, bool debugData = true)
         {
             Dictionary<string, string> _data = data as Dictionary<string, string>;
             Dictionary<string, string> newValues = new Dictionary<string, string>();
@@ -106,16 +131,13 @@ namespace Fourzy._Updates
                         {
                             case "bot":
                                 if (PlayerPrefs.GetString(
-                                    PREFIX + "BOT_SETTINGS", 
+                                    PREFIX + "BOT_SETTINGS",
                                     JsonConvert.SerializeObject(BOT_SETTINGS)) != kvPair.Value)
                                 {
                                     newValues.Add(keyPieces[1], kvPair.Value);
                                     BOT_SETTINGS = BotSettingsFromString(kvPair.Value);
 
-                                    if (saveNewValues)
-                                    {
-                                        PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
-                                    }
+                                    PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
                                 }
 
                                 break;
@@ -142,32 +164,60 @@ namespace Fourzy._Updates
                                     newValues.Add(keyPieces[1], kvPair.Value);
                                     UNLOCKED_AREAS = areas;
 
-                                    if (saveNewValues)
-                                    {
-                                        PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
-                                    }
+                                    PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
                                 }
 
                                 break;
 
                             case "areaProgression":
-                                //if (PlayerPrefs.GetString(PREFIX))
+                                PropertyInfo propertyInfo = properties[keyPieces[1]];
+
+                                if (propertyInfo != null)
+                                {
+                                    AreaProgression _progression = (AreaProgression)propertyInfo.GetValue(this);
+
+                                    if (_progression.jsonString != kvPair.Value)
+                                    {
+                                        PlayerPrefs.SetString(PREFIX + "_" + keyPieces[1], kvPair.Value);
+                                        newValues.Add(keyPieces[1], kvPair.Value);
+                                    }
+                                }
+                                else
+                                {
+                                    if (Application.isEditor || Debug.isDebugBuild)
+                                    {
+                                        Debug.LogWarning($"Unrecognized property in settings {keyPieces[1]} " +
+                                            $"found while receiving area progression from server.");
+                                    }
+                                }
+
+                                break;
+
+                            case "defaultTokens":
+                                TokenType[] _tokensFromServer = TokensFromString(kvPair.Value);
+
+                                var _unlocked = DEFAULT_TOKENS;
+
+                                if (_tokensFromServer.Length != _unlocked.Length || _tokensFromServer.Any(_fromServer => !_unlocked.Contains(_fromServer)))
+                                {
+                                    newValues.Add(keyPieces[1], kvPair.Value);
+                                    PlayerPrefsWrapper.SetDefaultTokens(_tokensFromServer);
+
+                                    onNewDefaultTokens?.Invoke(_tokensFromServer);
+                                }
 
                                 break;
 
                             case "b":
                                 bool boolValue = bool.Parse(kvPair.Value);
 
-                                if((bool)properties[keyPieces[1]].GetValue(this) != boolValue)
+                                if ((bool)properties[keyPieces[1]].GetValue(this) != boolValue)
                                 {
                                     newValues.Add(keyPieces[1], boolValue.ToString());
                                     properties[keyPieces[1]].SetValue(this, boolValue);
 
-                                    if (saveNewValues)
-                                    {
-                                        PlayerPrefs.SetInt(PREFIX + keyPieces[1], boolValue ? 1 : 0);
-                                    }
-                                } 
+                                    PlayerPrefs.SetInt(PREFIX + keyPieces[1], boolValue ? 1 : 0);
+                                }
 
                                 break;
 
@@ -179,10 +229,7 @@ namespace Fourzy._Updates
                                     newValues.Add(keyPieces[1], floatValue.ToString());
                                     properties[keyPieces[1]].SetValue(this, floatValue);
 
-                                    if (saveNewValues)
-                                    {
-                                        PlayerPrefs.SetFloat(PREFIX + keyPieces[1], floatValue);
-                                    }
+                                    PlayerPrefs.SetFloat(PREFIX + keyPieces[1], floatValue);
                                 }
 
                                 break;
@@ -195,10 +242,7 @@ namespace Fourzy._Updates
                                     newValues.Add(keyPieces[1], intValue.ToString());
                                     properties[keyPieces[1]].SetValue(this, intValue);
 
-                                    if (saveNewValues)
-                                    {
-                                        PlayerPrefs.SetInt(PREFIX + keyPieces[1], intValue);
-                                    }
+                                    PlayerPrefs.SetInt(PREFIX + keyPieces[1], intValue);
                                 }
 
                                 break;
@@ -209,10 +253,7 @@ namespace Fourzy._Updates
                                     newValues.Add(keyPieces[1], kvPair.Value);
                                     properties[keyPieces[1]].SetValue(this, kvPair.Value);
 
-                                    if (saveNewValues)
-                                    {
-                                        PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
-                                    }
+                                    PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
                                 }
 
                                 break;
@@ -260,9 +301,24 @@ namespace Fourzy._Updates
             try
             {
                 return JsonConvert.DeserializeObject<string[]>(value)
-                                .Select(_area => (Area)Enum.Parse(typeof(Area), _area, true))
-                                .ToArray();
-            } catch (Exception)
+                    .Select(_area => (Area)Enum.Parse(typeof(Area), _area, true))
+                    .ToArray();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static TokenType[] TokensFromString(string value)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<string[]>(value)
+                    .Select(_token => (TokenType)Enum.Parse(typeof(TokenType), _token, true))
+                    .ToArray();
+            }
+            catch (Exception)
             {
                 return null;
             }
@@ -279,6 +335,9 @@ namespace Fourzy._Updates
                 return null;
             }
         }
+
+        private static AreaProgression GetAreaProgressionPlayerPrefs(Area area) =>
+            AreaProgression.FromJsonString(PlayerPrefs.GetString(PREFIX + "_" + area.ToString(), ""));
     }
 
     [Serializable]
@@ -304,7 +363,7 @@ namespace Fourzy._Updates
         [JsonIgnore]
         public int randomRematchTimes => UnityEngine.Random.Range(maxRematchTimes[0], maxRematchTimes[1]);
     }
-    
+
     [Serializable]
     public class BotSettings
     {

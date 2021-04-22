@@ -1,7 +1,6 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using System.Collections;

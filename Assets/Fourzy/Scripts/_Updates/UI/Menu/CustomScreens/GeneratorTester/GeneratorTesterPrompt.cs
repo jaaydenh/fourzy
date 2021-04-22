@@ -232,7 +232,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             tokenViews = new List<GeneratorTesterTokenView>();
             //tokens
-            foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.enabledTokens)
+            foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.tokens)
             {
                 tokenViews.Add(Instantiate(generatorTesterTokenView, tokensParent)
                     .SetData(data.tokenType));
