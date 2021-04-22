@@ -1473,7 +1473,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     int diff =
                         InternalSettings.Current.GAMES_BEFORE_RATING_USED -
-                        UserManager.Instance.totalPlayfabGames;
+                        UserManager.Instance.totalRatedGames;
                     string message;
                     if (diff > 0)
                     {

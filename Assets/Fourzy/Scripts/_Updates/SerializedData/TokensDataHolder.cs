@@ -92,23 +92,15 @@ namespace Fourzy._Updates.Serialized
         {
             public TokenType tokenType;
             public Sprite tokenIcon;
-            public bool enabled = true;
-            /// <summary>
-            /// Just for some UI features
-            /// </summary>
             public bool isSpell = false;
-            [ShowIf("@enabled && isSpell")]
+            [ShowIf("isSpell")]
             public SpellId spellID;
 
-            [ShowIf("enabled")]
             public string description;
-            [ShowIf("enabled")]
             public bool showBackground;
-            [ShowIf("@enabled && showBackground")]
+            [ShowIf("showBackground")]
             public Color backgroundTileColor;
-            [ShowIf("enabled")]
             public string gameboardInstructionID;
-            [ShowIf("enabled")]
             public List<ThemeTokenPrefabPair> themesTokens;
 
             public string name
@@ -189,5 +181,12 @@ namespace Fourzy._Updates.Serialized
             public Area theme;
             public TokenView tokenPrefab;
         }
+    }
+
+    public enum TokenUnlockType
+    {
+        DEFAULT,
+        AREA_PROGRESS,
+
     }
 }

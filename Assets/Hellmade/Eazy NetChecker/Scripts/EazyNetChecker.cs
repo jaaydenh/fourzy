@@ -269,7 +269,7 @@ namespace Hellmade.Net
         [SerializeField]
         private float checkIntervalOnNoConnection = 5;
         [SerializeField]
-        private bool showDebug = true;
+        private bool showDebug = false;
 
         private static bool destroyed = false;
 

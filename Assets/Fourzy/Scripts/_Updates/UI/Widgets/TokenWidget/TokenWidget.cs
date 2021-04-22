@@ -18,6 +18,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public WidgetBase SetData(TokensDataHolder.TokenData tokenData)
         {
+            Initialize();
+
             this.tokenData = tokenData;
 
             button.SetLabel(LocalizationManager.Value(tokenData.name));

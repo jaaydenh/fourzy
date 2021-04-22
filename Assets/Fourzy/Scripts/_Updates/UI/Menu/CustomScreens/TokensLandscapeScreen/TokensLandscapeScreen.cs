@@ -31,7 +31,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gridRectTransform = tokensParent.GetComponent<RectTransform>();
 
             Vector2 spacing = tokensParent.spacing;
-            List<TokensDataHolder.TokenData> allTokens = GameContentManager.Instance.enabledTokens;
+            List<TokensDataHolder.TokenData> allTokens = GameContentManager.Instance.tokens;
             TokenWidget prefab = GameContentManager.GetPrefab<TokenWidget>("TOKEN_SMALL");
 
             Vector2 size = tokensParent.cellSize;

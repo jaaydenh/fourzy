@@ -626,7 +626,7 @@ namespace Fourzy
                 [Constants.REALTIME_ROOM_RATING_KEY] =
                     UserManager.Instance.lastCachedRating,
                 [Constants.REALTIME_ROOM_GAMES_TOTAL_KEY] =
-                    UserManager.Instance.totalPlayfabGames,
+                    UserManager.Instance.totalRatedGames,
             };
             string roomName;
             List<string> lobbyProperties = new List<string>() { 
