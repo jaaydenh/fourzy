@@ -29,6 +29,7 @@ namespace FourzyGameModel.Model
             this.MinPixels = MinPixels;
             this.MaxPixels = MaxPixels;
             this.Pattern = Pattern;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
         }
 
 

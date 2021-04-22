@@ -11,8 +11,8 @@ namespace FourzyGameModel.Model
         public override Area Area { get { return Area.ICE_PALACE; } }
         //Recipes contains a list of potential Recipes for Building out the Garden.
         public override string Name { get { return "Ice Palace"; } }
-        public override int MinComplexity { get { return 450; } }
-        public override int MaxComplexity { get { return 1650; } }
+        public override int MinComplexity { get { return 4000; } }
+        public override int MaxComplexity { get { return 20000; } }
 
         public IcePalaceRandomGenerator(GameOptions Options = null, BoardGenerationPreferences Preferences = null)
         {
@@ -62,10 +62,10 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(IceRiver4(), 40);
             this.Recipes.Add(IceRiver5(), 40);
             
-            foreach (BoardRecipe r in this.Recipes.Keys)
-            {
-                r.Ingredients.Add(new PossibilityOfGhostsFeature(10, 2));
-            }
+            //foreach (BoardRecipe r in this.Recipes.Keys)
+            //{
+            //    r.Ingredients.Add(new PossibilityOfGhostsFeature(10, 2));
+            //}
         }
 
 

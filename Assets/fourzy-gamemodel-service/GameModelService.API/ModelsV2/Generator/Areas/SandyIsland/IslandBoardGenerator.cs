@@ -12,8 +12,8 @@ namespace FourzyGameModel.Model
         
         public override string Name { get { return "Sandy Island"; } }
 
-        public override int MinComplexity { get { return 476; } }
-        public override int MaxComplexity { get { return 1500; } }
+        public override int MinComplexity { get { return 4000; } }
+        public override int MaxComplexity { get { return 21000; } }
 
 
         public IslandRandomGenerator(GameOptions Options = null, BoardGenerationPreferences Preferences = null)
@@ -62,10 +62,10 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(SandPivot3(), 25);
        
 
-            foreach (BoardRecipe r in this.Recipes.Keys)
-            {
-                r.Ingredients.Add(new PossibilityOfGhostsFeature(10, 2));
-            }
+            //foreach (BoardRecipe r in this.Recipes.Keys)
+            //{
+            //    r.Ingredients.Add(new PossibilityOfGhostsFeature(10, 2));
+            //}
 
         }
 

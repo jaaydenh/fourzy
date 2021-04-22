@@ -314,6 +314,12 @@ namespace FourzyGameModel.Model
             return RandomArea(intersect);
         }
 
+        public static List<TokenType> GetAllowedTokens(Area TargetArea)
+        {
+            BoardGenerator Gen = BoardGeneratorFactory.CreateGenerator(TargetArea);
+
+            return Gen.GetAllowedTokens();
+        }
 
         public static Area RandomArea(List<Area> Areas)
         {
@@ -341,7 +347,7 @@ namespace FourzyGameModel.Model
             RandomTools r = new RandomTools();
 
             int MinComplexity = Math.Max(20, GamesPlayed / 4);
-            int MaxComplexity = Math.Min(50, (2000 - Rating) / 2000);
+            int MaxComplexity = Math.Max(MinComplexity+10, Rating / 20);
 
             return r.RandomInteger(MinComplexity, MaxComplexity);
         }
