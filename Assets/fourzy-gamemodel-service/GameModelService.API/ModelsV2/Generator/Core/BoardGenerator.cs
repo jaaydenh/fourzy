@@ -77,6 +77,7 @@ namespace FourzyGameModel.Model
             if (Recipes.Count == 0) return null;
 
             string RequestedRecipeName = "";
+            if (Preferences.RequestedRecipe is null) Preferences.RequestedRecipe = "";
             if (Preferences.RequestedRecipe.Length > 0) RequestedRecipeName = Preferences.RequestedRecipe;
             if (RequestedRecipeName.Length > 0)
             {
@@ -94,6 +95,7 @@ namespace FourzyGameModel.Model
                 //1. Eliminate bad recipes.
                 foreach (BoardRecipe r in Recipes.Keys)
                 {
+                    bool useRecipe = true;
                     if (
                         (Preferences.TargetComplexityLow > 0 && r.ComplexityLowThreshold > 0 && r.ComplexityLowThreshold > Preferences.TargetComplexityHigh)
                         || (Preferences.TargetComplexityHigh > 0 && r.ComplexityHighThreshold > 0 && r.ComplexityHighThreshold < Preferences.TargetComplexityLow)
@@ -103,21 +105,25 @@ namespace FourzyGameModel.Model
                         continue;
                     }
 
+                    if (Preferences.RequiredTokens.Count > 0)
+                        foreach (TokenType t in Preferences.RequiredTokens)
+                        {
+                            if (!r.Tokens.Contains(t)) { useRecipe = false; }
+                        }
+
                     if (Preferences.AllowedTokens.Count > 0)
                         foreach (TokenType t in r.Tokens)
                         {
-                            if (!Preferences.AllowedTokens.Contains(t)) { continue; }
+                            if (!Preferences.AllowedTokens.Contains(t)) { useRecipe = false; }
                         }
 
                     if (Preferences.ForbiddenTokens.Count > 0)
                         foreach (TokenType t in r.Tokens)
                         {
-                            if (Preferences.ForbiddenTokens.Contains(t)) { continue; }
+                            if (Preferences.ForbiddenTokens.Contains(t)) { useRecipe = false; }
                         }
-                    SortingHat.Add(r, Recipes[r]);
+                    if (useRecipe) SortingHat.Add(r, Recipes[r]);
                 }
-
-                CurrentRecipe = NewBoard.Random.RandomWeightedRecipe(SortingHat);
             }
 
             foreach (IBoardIngredient Ingredient in CurrentRecipe.Ingredients)
@@ -181,6 +187,22 @@ namespace FourzyGameModel.Model
 
             return RecipeList;
         }
+
+        public virtual List<TokenType> GetAllowedTokens()
+        {
+            List<TokenType> TokenList = new List<TokenType>();
+
+            foreach (BoardRecipe r in Recipes.Keys)
+            {
+                foreach (TokenType t in r.Tokens)
+                {
+                    if (!TokenList.Contains(t)) { TokenList.Add(t); }
+                }
+            }
+
+            return TokenList;
+        }
+
 
         public virtual List<BoardRecipe> GetRecipes(BoardGenerationPreferences Preferences)
         {

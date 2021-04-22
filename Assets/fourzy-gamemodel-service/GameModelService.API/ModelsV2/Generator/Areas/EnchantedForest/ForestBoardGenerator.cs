@@ -8,8 +8,8 @@ namespace FourzyGameModel.Model
     {
         public override Area Area { get { return Area.ENCHANTED_FOREST; } }
         public override string Name { get { return "Enchanted Forest"; } }
-        public override int MinComplexity { get { return 270; } }
-        public override int MaxComplexity { get { return 1200; } }
+        public override int MinComplexity { get { return 2000; } }
+        public override int MaxComplexity { get { return 20000; } }
 
         public ForestRandomGenerator(GameOptions Options=null, BoardGenerationPreferences Preferences=null)
         {

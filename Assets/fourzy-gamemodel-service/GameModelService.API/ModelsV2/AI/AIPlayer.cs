@@ -35,6 +35,8 @@ namespace FourzyGameModel.Model
                 //This bot will make a good move, but will not win unless last resort.
                 case AIProfile.UnevenBotAI:
                     return new UnevenBotAI(State);
+                case AIProfile.WelcomeBot:
+                    return new WelcomeBotAI(State);
 
                 //The following AIs have a preference on direction.
 
@@ -113,14 +115,14 @@ namespace FourzyGameModel.Model
             switch (Difficulty)
             {
                 case AIDifficulty.Pushover:
-                    Personality = Random.RandomInteger(0, 0);
+                    Personality = Random.RandomInteger(0, 1);
                     switch (Personality)
                     {
                         case 0:
                             return AIProfile.BadBot;
                         case 1:
-                            return AIProfile.WaitBot;
-                    
+                            return AIProfile.WelcomeBot;
+
                     }
                     break;
 

@@ -19,8 +19,8 @@ namespace FourzyGameModel.Model
 
         public List<TokenType> AllowedTokens = new List<TokenType>() { };
         public List<TokenType> ForbiddenTokens = new List<TokenType>() { };
+        public List<TokenType> RequiredTokens = new List<TokenType>() { };
 
-        //public List<TokenType> ForbiddenTokens = new List<TokenType>() { };
         public bool IncludesRandomTokens = true;
         public bool IncludesDynamicTokens = true;
         public BoardGenerationPreferences(Area TargetArea = Area.NONE, int Percentage = -1)
