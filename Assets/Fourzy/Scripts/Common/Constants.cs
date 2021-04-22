@@ -22,11 +22,7 @@ namespace Fourzy
             rematchAcceptTime = new float[] { 3f, 6f },
             maxRematchTimes = new int[] { 2, 4 },
         };
-        public static TokenType[] DEFAULT_UNLOCKED_TOKENS =
-        {
-            TokenType.BLOCKER,
-            TokenType.STICKY,
-        };
+        public static TokenType[] DEFAULT_UNLOCKED_TOKENS = { };
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
         public const float EXTRA_DELAY_BETWEEN_TURNS = 0.1f;

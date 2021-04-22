@@ -539,12 +539,14 @@ namespace Fourzy
                         }
                         else
                         {
+                            string message = $"Gamepiece id {itemInstance.ItemId} not found";
+
                             if (Application.isEditor || Debug.isDebugBuild)
                             {
-                                string message = $"Gamepiece id {itemInstance.ItemId} not found";
                                 Debug.LogWarning(message);
-                                GameManager.Instance.ReportPlayFabError(message);
                             }
+
+                            GameManager.Instance.ReportPlayFabError(message);
                         }
 
                         break;
@@ -554,12 +556,14 @@ namespace Fourzy
 
                         if (_token == TokenType.NONE)
                         {
+                            string message = $"Token {itemInstance.ItemId} not found";
+
                             if (Application.isEditor || Debug.isDebugBuild)
                             {
-                                string message = $"Token {itemInstance.ItemId} not found";
                                 Debug.LogWarning(message);
-                                GameManager.Instance.ReportPlayFabError(message);
                             }
+
+                            GameManager.Instance.ReportPlayFabError(message);
                         }
                         else
                         {
