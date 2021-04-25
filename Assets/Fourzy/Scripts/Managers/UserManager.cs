@@ -232,6 +232,14 @@ namespace Fourzy
             }
         }
 
+        public int totalRealtimeGamesCompleteTrainingGarden { get; set; }
+
+        public int totalRealtimeGamesCompleteEnchantedForest { get; set; }
+
+        public int totalRealtimeGamesCompleteSandyIsland { get; set; }
+
+        public int totalRealtimeGamesCompleteIcePalace { get; set; }
+
         public int level => GetLevel(xp);
 
         public int xpLeft => GetLevelXPLeft(xp);
@@ -513,6 +521,11 @@ namespace Fourzy
                 Instance.playfabLosesCount = data.loses;
                 Instance.playfabDrawsCount = data.drawGames;
 
+                Instance.totalRealtimeGamesCompleteTrainingGarden = data.totalRealtimeGamesCompleteTrainingGarden;
+                Instance.totalRealtimeGamesCompleteEnchantedForest = data.totalRealtimeGamesCompleteEnchantedForest;
+                Instance.totalRealtimeGamesCompleteSandyIsland = data.totalRealtimeGamesCompleteSandyIsland;
+                Instance.totalRealtimeGamesCompleteIcePalace = data.totalRealtimeGamesCompleteIcePalace;
+
                 Instance.lastCachedRating = data.rating;
 
                 Debug.Log($"Stats received: wins {data.wins} loses {data.loses} draws {data.drawGames} rating {data.rating}");
@@ -613,6 +626,10 @@ namespace Fourzy
             public int wins;
             public int loses;
             public int drawGames;
+            public int totalRealtimeGamesCompleteTrainingGarden;
+            public int totalRealtimeGamesCompleteEnchantedForest;
+            public int totalRealtimeGamesCompleteSandyIsland;
+            public int totalRealtimeGamesCompleteIcePalace;
             public string displayName;
             public string fourzy;
         }

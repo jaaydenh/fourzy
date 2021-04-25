@@ -10,6 +10,8 @@ using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
+using PlayFab;
+using PlayFab.ClientModels;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -49,6 +51,10 @@ namespace Fourzy
             areasDataHolder.areas.Where(theme => theme.enabled).ToList();
 
         internal List<TokensDataHolder.TokenData> tokens => tokensDataHolder.tokens;
+
+        internal List<string> bundlesInPlayerInventory { get; set; } = new List<string>();
+
+        internal Dictionary<string, BundleInfo> allBundlesInfo;
 
         internal IEnumerable<TokensDataHolder.TokenData> unlockedTokensData
         {
@@ -95,22 +101,50 @@ namespace Fourzy
 
         protected void Update()
         {
-            if (!Application.isEditor) return;
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Application.isEditor || Debug.isDebugBuild)
             {
-                Debug.Log("complete predefined bot boards");
-
-                int from = PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed();
-                for (int _index = from; _index < realtimeBotBoards.Count; _index++)
+                if (Input.GetKeyDown(KeyCode.Z))
                 {
-                    PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
+                    int boardsComplete = PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed();
+
+                    if (boardsComplete < realtimeBotBoards.Count)
+                    {
+                        PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
+                        Debug.Log($"FTUE boards complete {PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed()}");
+                    }
+                    else
+                    {
+                        Debug.Log($"All FTUE boards complete");
+                    }
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
+        }
+
+        public void GetBundlesInfo()
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                UserManager.Instance.UnlockToken(TokenType.FRUIT_TREE, TokenUnlockType.DEFAULT);
-            }
+                FunctionName = "getBundlesData",
+                GeneratePlayStreamEvent = true,
+            },
+            result =>
+            {
+                allBundlesInfo = new Dictionary<string, BundleInfo>();
+
+                foreach (BundleInfo info in JsonConvert.DeserializeObject<BundleInfo[]>(result.FunctionResult.ToString()))
+                {
+                    allBundlesInfo.Add(info.BundleId, info);
+                }
+
+                if (Application.isEditor || Debug.isDebugBuild)
+                {
+                    Debug.Log($"Pulled {allBundlesInfo.Count} bundles from server");
+                }
+            },
+            error =>
+            {
+                GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+            });
         }
 
         public GameBoardDefinition GetMiscBoard(string boardID) => miscBoards.Find(board => board.ID == boardID);
@@ -292,7 +326,7 @@ namespace Fourzy
                 .Where(_file => _file.Ext == "json"))
             {
                 defaultAreaProgression.Add(
-                    (Area)Enum.Parse(typeof(Area), resourceItem.Name), 
+                    (Area)Enum.Parse(typeof(Area), resourceItem.Name),
                     AreaProgression.FromJsonString(resourceItem.Load<TextAsset>().text));
             }
         }
@@ -384,6 +418,26 @@ namespace Fourzy
             public string type;
             public GameObject prefab;
         }
+    }
+
+    /// <summary>
+    /// Playdfab bundles info
+    /// </summary>
+    [Serializable]
+    public class BundleInfo
+    {
+        public string BundleId;
+        public (string ItemId, string ItemClass)[] Items;
+    }
+
+    /// <summary>
+    /// As result of GameManager.ReportAreaProgression call
+    /// </summary>
+    [Serializable]
+    public class ProgressionReward
+    {
+        public string itemId;
+        public string itemClass;
     }
 }
 

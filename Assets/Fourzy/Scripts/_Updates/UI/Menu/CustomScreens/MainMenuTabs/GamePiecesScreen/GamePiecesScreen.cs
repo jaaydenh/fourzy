@@ -7,6 +7,7 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -189,7 +190,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //load tokens
-            foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.unlockedTokensData)
+            foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.tokens)
             {
                 TokenWidget _tokenWidget = GameContentManager
                     .InstantiatePrefab<TokenWidget>("TOKEN_SMALL", tokensParent);
@@ -197,6 +198,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 tokens.Add(_tokenWidget);
                 widgets.Add(_tokenWidget);
+            }
+        }
+
+        private void UpdateTokens()
+        {
+            var unlockedTokens = PlayerPrefsWrapper.GetUnlockedTokens().Select(_data => _data.tokenType);
+
+            foreach (TokenWidget tokenWidget in tokens)
+            {
+                bool state = unlockedTokens.Contains(tokenWidget.tokenData.tokenType);
+
+                tokenWidget.SetState(state);
+
+                //sort
+                if (state)
+                {
+                    tokenWidget.transform.SetAsFirstSibling();
+                }
             }
         }
 
@@ -273,18 +292,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             CreateGamePieces();
             CreateTokens();
+            UpdateTokens();
 
             SetPiecesActive();
         }
 
         private void OnNewDefaultTokens(TokenType[] obj)
         {
-            CreateTokens();
+            UpdateTokens();
         }
 
         private void OnTokenUnlocked(IEnumerable<TokenType> newTokens, TokenUnlockType unlockType)
         {
-            CreateTokens();
+            UpdateTokens();
         }
     }
 }

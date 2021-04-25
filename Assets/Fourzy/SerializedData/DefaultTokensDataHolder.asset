@@ -27,15 +27,23 @@ MonoBehaviour:
     - theme: 2
       tokenPrefab: {fileID: 8161124261732225480, guid: 9eb9e7ed3168fcd439d9042ae6488d40,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: b0f4f646877e88e4db0840ae7f745ba1, type: 3}
     - theme: 4
       tokenPrefab: {fileID: 8161124261732225480, guid: b421a3be3a1174ff1a0daaf24e06497d,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: b0f4f646877e88e4db0840ae7f745ba1, type: 3}
     - theme: 8
       tokenPrefab: {fileID: 7472852831271248198, guid: bdc89dc2a465198448d8d9fd375f5aba,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: b78f2bc7d2b025c47bb537db208f6a50, type: 3}
     - theme: 16
       tokenPrefab: {fileID: 6689411739723457888, guid: c46aa3eab9c502a43b661c4cd72dfaac,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 745307ef58b57ab41bc5cfd36bcae9b8, type: 3}
   - tokenType: 5
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -47,6 +55,8 @@ MonoBehaviour:
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 464145574, guid: 930375cbcd3711845a3679ba993543c6, type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: bfa0bf42d2bc3ad4c908acd62dd251e2, type: 3}
   - tokenType: 2
     tokenIcon: {fileID: 21300000, guid: 9daaa4893d4e27b4bbc1dd74873d6d70, type: 3}
     isSpell: 0
@@ -59,6 +69,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 2280211995192375417, guid: c42eeb486cb8dbe4aa2aff416a2e2119,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 090ecd917ea32a94c809db6786946e9d, type: 3}
   - tokenType: 4
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -71,6 +83,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 7767669712648440324, guid: 5498a25b5418c7a4b942f04bba394774,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 65a418b85c995124fb3529ba2ee56f23, type: 3}
   - tokenType: 12
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -83,6 +97,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 8540056239470390242, guid: bf28af94637c81343b3ec7aa7881e520,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 98fc7cb9c6a66f0488e2b9294c88cf50, type: 3}
   - tokenType: 8
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -95,6 +111,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 8766325973168727599, guid: f0ce173f3e315674b8cc3349c2adf111,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 7049d2ec64c0afe4e967933549474d93, type: 3}
   - tokenType: 10
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -107,6 +125,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 1922302832650764088, guid: 87aeb43e86023ca4eb5daec14f9a4a34,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: dbc2281c16df0df4a82dfeef55d800ac, type: 3}
   - tokenType: 19
     tokenIcon: {fileID: 21300000, guid: e00d767c04b95427d9ce87938b0c5df4, type: 3}
     isSpell: 0
@@ -119,6 +139,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 6842218752336031025, guid: 53f97e1f4d129544895c6e44cb48894a,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: f0608149fef0222408904d8b2d326de9, type: 3}
   - tokenType: 3
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -131,6 +153,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 6678527419331126617, guid: 57e499ac1c032be4592d8767b4286b0b,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: e094f0e9ba53ed241b014551c4121af5, type: 3}
   - tokenType: 13
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -143,6 +167,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 2522670947061249452, guid: 236e5f00ab9a0084cb3f6deac1f6d3c8,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 4e289b1fca8a6b940ac95cbf9b427ef5, type: 3}
   - tokenType: 6
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -155,6 +181,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 5820384164536987221, guid: e4616dae8ba481c47816ccbb12b5d32a,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 4f2063d83fd50fe49a8fa277d2f77383, type: 3}
   - tokenType: 55
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -167,6 +195,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 5355287401105794246, guid: 09a7348c89d97004c94d76e3ec02f228,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 4ef48c66478d0df44ac3a1b4e438c29e, type: 3}
   - tokenType: 9
     tokenIcon: {fileID: 21300000, guid: 71c6951ce3a2ccf46a54f1c12bff57da, type: 3}
     isSpell: 0
@@ -179,6 +209,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 1799370101569748514, guid: e9f45406d89dd5a42bb3faef0ff7b144,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: f589a8fb7223ba8488190b3bca66df4b, type: 3}
   - tokenType: 18
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -191,6 +223,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 5537000560462396341, guid: 888dc4e93d2d5334db936a8bab6a4ec9,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 66f6ab76d37eff44c939e89c85e0c837, type: 3}
   - tokenType: 33
     tokenIcon: {fileID: 0}
     isSpell: 1
@@ -203,6 +237,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 1133006369650618612, guid: d86264c1a8d1be543afef2f92022e503,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 501b70ea6b7afb843b946c7d5f84f84a, type: 3}
   - tokenType: 49
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -215,6 +251,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 5308922800023532423, guid: 90b5ae3199dbbe44b86a228afba8d913,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: b52886d167da7984082a498fcfad3e5c, type: 3}
   - tokenType: 27
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -227,6 +265,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 3680899984073978911, guid: fbe0d6f479fc8664bb18b1f6b67662d8,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: bfa0bf42d2bc3ad4c908acd62dd251e2, type: 3}
   - tokenType: 20
     tokenIcon: {fileID: 0}
     isSpell: 1
@@ -239,6 +279,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 2164785177806317529, guid: e3dbb6a79e8c6f54e8795e4c05ea6457,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 84b86c464f0731b42a13241fe6eebcf1, type: 3}
   - tokenType: 61
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -251,6 +293,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 1676863309525611611, guid: a3ffea0d48aaabd49b6daa2e2f47ec8d,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 841b5e7899341194e94776486635daa1, type: 3}
   - tokenType: 14
     tokenIcon: {fileID: 0}
     isSpell: 0
@@ -263,6 +307,8 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 5202903507806380162, guid: 2c12f4e84bd8e3446a7991d7a1971736,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 400939cf78b860f4fb368a975c59ee4e, type: 3}
   - tokenType: 64
     tokenIcon: {fileID: 0}
     isSpell: 1
@@ -275,3 +321,5 @@ MonoBehaviour:
     - theme: 127
       tokenPrefab: {fileID: 3223135564173513793, guid: 315ed889bb96a1149985c708584fb06a,
         type: 3}
+      tokenIcons:
+      - {fileID: 21300000, guid: 841b5e7899341194e94776486635daa1, type: 3}
