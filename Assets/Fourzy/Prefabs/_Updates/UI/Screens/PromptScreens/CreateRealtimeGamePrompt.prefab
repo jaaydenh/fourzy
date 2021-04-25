@@ -448,8 +448,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -519,7 +521,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  onBackSfx: 3
+  onBackSfx: menu_back
   closePreviousWhenOpened: 0
   default: 0
   isOpened: 0
@@ -768,8 +770,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -1488,8 +1492,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -1774,8 +1780,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -2291,8 +2299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: SETTINGS_MAGIC_ON
-      type: 12
+    - type: 12
       targetText: 
       updateOnStart: 1
       events:
@@ -2383,8 +2390,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: SETTINGS_MAGIC_OFF
-      type: 13
+    - type: 13
       targetText: 
       updateOnStart: 0
       events:
@@ -2589,8 +2595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: SETTINGS_REALTIME_TIMER_ON
-      type: 14
+    - type: 14
       targetText: 
       updateOnStart: 1
       events:
@@ -2681,8 +2686,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: SETTINGS_REALTIME_TIMER_OFF
-      type: 15
+    - type: 15
       targetText: 
       updateOnStart: 0
       events:
@@ -3297,8 +3301,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -3958,8 +3964,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []

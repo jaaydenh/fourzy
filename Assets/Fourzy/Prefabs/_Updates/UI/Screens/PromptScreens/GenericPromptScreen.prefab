@@ -156,6 +156,8 @@ MonoBehaviour:
       calls: []
   clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -665,6 +667,8 @@ MonoBehaviour:
       calls: []
   clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -871,6 +875,8 @@ MonoBehaviour:
       calls: []
   clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -982,7 +988,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  onBackSfx: 3
+  onBackSfx: menu_back
   closePreviousWhenOpened: 0
   default: 0
   isOpened: 0
@@ -1631,6 +1637,8 @@ MonoBehaviour:
       calls: []
   clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
