@@ -58,6 +58,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SetLanguageThai() => LocalizationManager.Instance.SetCurrentLanguage(SystemLanguage.Thai);
 
+        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_MAGIC);
+
         //public void OpenGrid()
         //{
         //    menuController.OpenScreen<PuzzleSelectionScreen>(true);

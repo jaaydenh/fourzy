@@ -144,8 +144,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -864,8 +866,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -997,7 +1001,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  onBackSfx: 3
+  onBackSfx: menu_back
   closePreviousWhenOpened: 1
   default: 0
   isOpened: 0

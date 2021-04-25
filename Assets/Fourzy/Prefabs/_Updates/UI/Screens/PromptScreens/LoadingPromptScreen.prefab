@@ -549,7 +549,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  onBackSfx: 3
+  onBackSfx: menu_back
   closePreviousWhenOpened: 0
   default: 0
   isOpened: 0

@@ -27,7 +27,7 @@ namespace Fourzy._Updates.Managers
         public const bool DEFAULT_SFX = true;
         public const bool DEFAULT_AUDIO = true;
         public const bool DEFAULT_DEMO_MODE = false;
-        public const bool DEFAULT_MAGIC = true;
+        public const bool DEFAULT_MAGIC = false;
         public const bool DEFAULT_LOCAL_TIMER = true;
         public const bool DEFAULT_REALTIME_TIMER = true;
 
