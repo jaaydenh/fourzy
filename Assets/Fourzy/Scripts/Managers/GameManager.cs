@@ -286,6 +286,9 @@ namespace Fourzy
                 else if (Input.GetKeyDown(KeyCode.M))
                 {
                     //unlock all tokens, only for client, tokens will be reset after client restart
+                    UserManager.Instance.UnlockTokens(
+                        GameContentManager.Instance.tokens.Select(_tokenData => _tokenData.tokenType), 
+                        TokenUnlockType.AREA_PROGRESS);
                 }
             }
         }
