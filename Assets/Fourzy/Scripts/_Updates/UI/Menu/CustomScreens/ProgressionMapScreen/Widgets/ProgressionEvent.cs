@@ -306,14 +306,14 @@ namespace Fourzy._Updates.UI.Widgets
             //unlock next events
             unlockWhenComplete.ForEach(@event =>
             {
-                if (@event.gameObject.activeInHierarchy)
+                if (@event.gameObject.activeSelf)
                 {
                     @event.Unlock(animate);
                 }
             });
             lines.ForEach(line =>
             {
-                if (line.gameObject.activeInHierarchy)
+                if (line.gameObject.activeSelf)
                 {
                     line.SetColorUnlocked();
                 }
