@@ -28,22 +28,22 @@ namespace Fourzy.Testing
 
         protected void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A)) CancelRoutine("r1");
+            //if (Input.GetKeyDown(KeyCode.A)) CancelRoutine("r1");
 
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                //create turn based game
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "createTurnBased",
+            //if (Input.GetKeyDown(KeyCode.Q))
+            //{
+            //    //create turn based game
+            //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            //    {
+            //        FunctionName = "createTurnBased",
 
-                }, OnResult, OnError);
-            }
+            //    }, OnResult, OnError);
+            //}
 
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                print(target.GetAnchoredPosition(root, Vector3.zero));
-            }
+            //if (Input.GetKeyDown(KeyCode.W))
+            //{
+            //    print(target.GetAnchoredPosition(root, Vector3.zero));
+            //}
         }
 
         private void OnResult(ExecuteCloudScriptResult result)

@@ -11,7 +11,6 @@ using Fourzy._Updates.Threading;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
-using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using Hellmade.Net;
 using MoreMountains.NiceVibrations;
@@ -183,9 +182,9 @@ namespace Fourzy
 
             Instance = this;
 
-// #if UNITY_IOS
-//             MMVibrationManager.iOSInitializeHaptics();
-// #endif
+            // #if UNITY_IOS
+            //             MMVibrationManager.iOSInitializeHaptics();
+            // #endif
 
             ExecutePerVersion.TryExecute();
             ThreadsQueuer.Initialize();
@@ -249,6 +248,49 @@ namespace Fourzy
             //force demo game
             //if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
 
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    Debug.Log($"Reset games counter on all areas for player.");
+
+                    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                    {
+                        FunctionName = "resetAreaProgression",
+                        GeneratePlayStreamEvent = true,
+                    },
+                    null,
+                    (error) =>
+                    {
+                        Debug.LogError(error.ErrorMessage);
+
+                        ReportPlayFabError(error.ErrorMessage);
+                    });
+                }
+                else if (Input.GetKeyDown(KeyCode.C))
+                {
+                    ReportAreaProgression(Area.TRAINING_GARDEN);
+                }
+                else if (Input.GetKeyDown(KeyCode.V))
+                {
+                    ReportAreaProgression(Area.ENCHANTED_FOREST);
+                }
+                else if (Input.GetKeyDown(KeyCode.B))
+                {
+                    ReportAreaProgression(Area.ICE_PALACE);
+                }
+                else if (Input.GetKeyDown(KeyCode.N))
+                {
+                    ReportAreaProgression(Area.SANDY_ISLAND);
+                }
+                else if (Input.GetKeyDown(KeyCode.M))
+                {
+                    //unlock all tokens, only for client, tokens will be reset after client restart
+                    UserManager.Instance.UnlockTokens(
+                        GameContentManager.Instance.tokens.Select(_tokenData => _tokenData.tokenType), 
+                        TokenUnlockType.AREA_PROGRESS);
+                }
+            }
         }
 
         protected void OnDestroy()
@@ -263,9 +305,9 @@ namespace Fourzy
 
             //NetworkAccess.onNetworkAccess -= OnNetworkAccess;
 
-// #if UNITY_IOS
-//             MMVibrationManager.iOSReleaseHaptics();
-// #endif
+            // #if UNITY_IOS
+            //             MMVibrationManager.iOSReleaseHaptics();
+            // #endif
         }
 
         protected void OnApplicationQuit()
@@ -516,6 +558,99 @@ namespace Fourzy
             });
         }
 
+        public void ReportAreaProgression(Area _area)
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "reportAreaProgression",
+                FunctionParameter = new
+                {
+                    area = _area.ToString(),
+                },
+                GeneratePlayStreamEvent = true,
+            },
+            (result) =>
+            {
+                if (result.FunctionResult != null)
+                {
+                    ProgressionReward[] newItems =
+                        JsonConvert.DeserializeObject<ProgressionReward[]>(result.FunctionResult.ToString());
+
+                    foreach (var item in newItems)
+                    {
+                        switch (item.itemClass)
+                        {
+                            case Constants.PLAYFAB_BUNDLE_CLASS:
+                                if (!GameContentManager.Instance.bundlesInPlayerInventory.Any(_bundle => _bundle == item.itemId))
+                                {
+                                    //new bundle added to player
+                                    GameContentManager.Instance.bundlesInPlayerInventory.Add(item.itemId);
+                                }
+
+                                if (Application.isEditor || Debug.isDebugBuild)
+                                {
+                                    Debug.Log($"New bundle granted BY server {item.itemId}");
+                                    Debug.Log($"Player bundles {string.Join(", ", GameContentManager.Instance.bundlesInPlayerInventory)}");
+                                }
+
+                                break;
+
+                            case Constants.PLAYFAB_TOKEN_CLASS:
+                                //unlock token
+                                TokenType _token = (TokenType)Enum.Parse(typeof(TokenType), item.itemId);
+                                UserManager.Instance.UnlockToken(_token, TokenUnlockType.AREA_PROGRESS);
+
+                                if (Application.isEditor || Debug.isDebugBuild)
+                                {
+                                    Debug.Log($"Token unlocked {item.itemId}");
+                                }
+
+                                break;
+                        }
+                    }
+                }
+
+                int value = 0;
+                switch (_area)
+                {
+                    case Area.TRAINING_GARDEN:
+                        UserManager.Instance.totalRealtimeGamesCompleteTrainingGarden++;
+                        value = UserManager.Instance.totalRealtimeGamesCompleteTrainingGarden;
+
+                        break;
+
+                    case Area.ENCHANTED_FOREST:
+                        UserManager.Instance.totalRealtimeGamesCompleteEnchantedForest++;
+                        value = UserManager.Instance.totalRealtimeGamesCompleteEnchantedForest;
+
+                        break;
+
+                    case Area.ICE_PALACE:
+                        UserManager.Instance.totalRealtimeGamesCompleteIcePalace++;
+                        value = UserManager.Instance.totalRealtimeGamesCompleteIcePalace;
+
+                        break;
+
+                    case Area.SANDY_ISLAND:
+                        UserManager.Instance.totalRealtimeGamesCompleteSandyIsland++;
+                        value = UserManager.Instance.totalRealtimeGamesCompleteSandyIsland;
+
+                        break;
+                }
+
+                if (Application.isEditor || Debug.isDebugBuild)
+                {
+                    Debug.Log($"Games in {_area} {value}");
+                }
+            },
+            (error) =>
+            {
+                Debug.LogError(error.ErrorMessage);
+
+                ReportPlayFabError(error.ErrorMessage);
+            });
+        }
+
         public void LogGameComplete(IClientFourzy game)
         {
             if (game._Type == GameType.ONBOARDING) return;
@@ -530,10 +665,10 @@ namespace Fourzy
                 if (GamePlayManager.Instance.gameplayScreen.timersEnabled)
                 {
                     float player1TimeLeft = isPlayer1 ?
-                        GamePlayManager.Instance.gameplayScreen.myTimerLeft : 
+                        GamePlayManager.Instance.gameplayScreen.myTimerLeft :
                         GamePlayManager.Instance.gameplayScreen.opponentTimerLeft;
-                    float player2TimeLeft = isPlayer1 ? 
-                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft : 
+                    float player2TimeLeft = isPlayer1 ?
+                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft :
                         GamePlayManager.Instance.gameplayScreen.myTimerLeft;
 
                     if (player1TimeLeft <= 0f)

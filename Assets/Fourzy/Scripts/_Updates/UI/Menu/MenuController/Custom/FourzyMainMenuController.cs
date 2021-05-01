@@ -79,6 +79,11 @@ namespace Fourzy._Updates.UI.Menu
             //}
         }
 
+        public void AddUnlockedTokenToQueue(string tokenId)
+        {
+
+        }
+
         private void OnResult(ExecuteCloudScriptResult result)
         {
             print("good: " + result.ToJson());

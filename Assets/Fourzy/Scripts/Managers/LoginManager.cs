@@ -35,6 +35,7 @@ namespace Fourzy
         private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
 
         public bool languageChecked { get; private set; } = false;
+        public bool inventoryLoaded { get; private set; } = false;
 
         protected override void Awake()
         {
@@ -517,6 +518,9 @@ namespace Fourzy
                 new GetUserInventoryRequest(),
                 OnUserInventoryFetched,
                 OnPlayFabError);
+
+            //get catalog items
+            GameContentManager.Instance.GetBundlesInfo();
         }
 
         private void OnUserInventoryFetched(GetUserInventoryResult inventoryRequestResult)
@@ -571,6 +575,11 @@ namespace Fourzy
                         }
 
                         break;
+
+                    case Constants.PLAYFAB_BUNDLE_CLASS:
+                        GameContentManager.Instance.bundlesInPlayerInventory.Add(itemInstance.ItemId);
+
+                        break;
                 }
             }
 
@@ -589,6 +598,8 @@ namespace Fourzy
                         break;
                 }
             }
+
+            inventoryLoaded = true;
         }
 
         private void OnPlayerProfile(GetPlayerProfileResult playerProfile)

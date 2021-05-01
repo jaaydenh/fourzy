@@ -3,7 +3,6 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using System.Collections;
@@ -19,13 +18,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Badge locationBadge;
         public Badge priceBadge;
         public TMP_Text extra;
-        public RectTransform tokenParent;
-        public Image tileBGImage;
+        public Image tokenImage;
         public TokensDataHolder.TokenData data { get; private set; }
 
         private GameboardView gameboard;
         private GameBoardDefinition gameboardDefinition;
-        private TokenView currentView;
 
         protected override void Awake()
         {
@@ -38,17 +35,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.data = data;
 
-            ClearPrevious();
-
-            currentView = Instantiate(GameContentManager.Instance.GetTokenPrefab(data.tokenType), tokenParent).SetData(TokenFactory.Create(data.tokenType.TokenTypeToString()));
-            currentView.transform.localPosition = Vector3.zero;
-
-            tileBGImage.enabled = data.showBackground;
-            tileBGImage.color = data.backgroundTileColor;
-
             gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
 
-            List<AreasDataHolder.GameArea> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
+            InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
+        }
+
+        public virtual void Prompt(TokenView tokenView)
+        {
+            data = GameContentManager.Instance.tokensDataHolder.GetTokenData(tokenView.tokenType);
+
+            InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
+        }
+
+        public override void Close(bool animate = true)
+        {
+            base.Close(animate);
+
+            CancelRoutine("tokenInstructions");
+        }
+
+        private void InitPrompt(List<AreasDataHolder.GameArea> themes)
+        {
+            gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
+            tokenImage.sprite = data.GetTokenSprite();
 
             //badges
             if (data.isSpell)
@@ -56,7 +65,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 locationBadge.SetState(false);
                 priceBadge.SetValue(data.price);
 
-                if (themes.Count > 0) priceBadge.SetColor(themes[0].areaColor);
+                if (themes.Count > 0)
+                {
+                    priceBadge.SetColor(themes[0].areaColor);
+                }
             }
             else
             {
@@ -86,112 +98,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //play instructions
             CancelRoutine("tokenInstructions");
             StartRoutine("tokenInstructions", InstructionRoutine(), gameboard.StopBoardUpdates);
-        }
-
-        public virtual void Prompt(TokenView tokenView)
-        {
-            data = GameContentManager.Instance.tokensDataHolder.GetTokenData(tokenView.tokenType);
-
-            ClearPrevious();
-
-            currentView = Instantiate(tokenView, tokenParent);
-            currentView.transform.localPosition = Vector3.zero;
-
-            tileBGImage.enabled = data.showBackground;
-            tileBGImage.color = data.backgroundTileColor;
-
-            gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
-
-            List<AreasDataHolder.GameArea> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
-
-            //badges
-            if (data.isSpell)
-            {
-                locationBadge.SetState(false);
-                priceBadge.SetValue(data.price);
-
-                if (themes.Count > 0) priceBadge.SetColor(themes[0].areaColor);
-            }
-            else
-            {
-                List<string> locations = GameContentManager.Instance.GetTokenAreaNames(data.tokenType);
-
-                if (locations.Count == 6) locationBadge.SetValue("All");
-                else locationBadge.SetValue(string.Join(", ", locations));
-
-                if (themes.Count > 0) locationBadge.SetColor(themes[0].areaColor);
-
-                priceBadge.SetState(false);
-            }
-
-            extra.text = LocalizationManager.Value(data.description);
-
-            Prompt(LocalizationManager.Value(data.name), "");
-
-            //play instructions
-            CancelRoutine("tokenInstructions");
-            StartRoutine("tokenInstructions", InstructionRoutine(), () => gameboard.StopBoardUpdates());
-        }
-
-        public override void Close(bool animate = true)
-        {
-            base.Close(animate);
-
-            CancelRoutine("tokenInstructions");
-        }
-
-        public override PromptScreen Prompt()
-        {
-            base.Prompt();
-
-            //StartCoroutine(AdjustOverflow());
-
-            return this;
-        }
-
-        //private IEnumerator AdjustOverflow()
-        //{
-        //    yield return new WaitForEndOfFrame();
-
-        //    string extraText = "";
-        //    int charIndex = 0;
-        //    float height = 0f;
-        //    bool overflow = false;
-
-        //    foreach (TMP_LineInfo line in promptText.textInfo.lineInfo)
-        //    {
-        //        height += line.lineHeight;
-
-        //        if (height > promptText.rectTransform.sizeDelta.y)
-        //        {
-        //            overflow = true;
-        //            extraText += promptText.text.Substring(charIndex, line.characterCount);
-        //        }
-
-        //        charIndex += line.characterCount;
-        //    }
-
-        //    if (overflow)
-        //    {
-        //        promptText.text = promptText.text.Substring(0, promptText.text.Length - extraText.Length);
-        //        promptText.alignment = TextAlignmentOptions.TopFlush;
-
-        //        extra.text = extraText;
-        //    }
-        //    else
-        //    {
-        //        promptText.alignment = TextAlignmentOptions.TopJustified;
-
-        //        extra.text = "";
-        //    }
-        //}
-
-        private void ClearPrevious()
-        {
-            if (currentView)
-            {
-                currentView._Destroy();
-            }
         }
 
         private IEnumerator InstructionRoutine()

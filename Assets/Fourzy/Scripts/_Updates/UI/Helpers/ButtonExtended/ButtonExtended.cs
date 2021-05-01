@@ -152,6 +152,10 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void SetGreyscaleMaterial() => SetMaterial(GREYSCALE_MATERIAL);
 
+        /// <summary>
+        /// Grayed out or not
+        /// </summary>
+        /// <param name="state"></param>
         public void SetState(bool state)
         {
             interactable = state;

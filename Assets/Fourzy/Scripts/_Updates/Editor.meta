@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Fourzy/Scripts/_Updates/Editor.meta
 guid: eaf5c5a7097ce9d479595174744c0e20
+=======
+guid: c84bdb1d8a78e4a4199c698642cf3914
+>>>>>>> master:Assets/Fourzy/Scripts/_Updates/UI/Menu/CustomScreens/UnlockedTokenScreen.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

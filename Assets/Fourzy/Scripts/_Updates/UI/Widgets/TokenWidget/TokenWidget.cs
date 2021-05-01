@@ -14,7 +14,8 @@ namespace Fourzy._Updates.UI.Widgets
         public TokensDataHolder.TokenData tokenData;
 
         public Image tokenImage;
-        public Image tileBGImage;
+
+        public bool IsGrayedOut { get; private set; }
 
         public WidgetBase SetData(TokensDataHolder.TokenData tokenData)
         {
@@ -25,12 +26,23 @@ namespace Fourzy._Updates.UI.Widgets
             button.SetLabel(LocalizationManager.Value(tokenData.name));
             tokenImage.sprite = GameContentManager.Instance.tokensDataHolder.GetTokenSprite(tokenData);
 
-            tileBGImage.enabled = tokenData.showBackground;
-            tileBGImage.color = tokenData.backgroundTileColor;
-
             return this;
         }
 
+        /// <summary>
+        /// Invoked from button
+        /// </summary>
         public void OnTap() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(tokenData);
+
+        /// <summary>
+        /// Either grayed out or normal
+        /// </summary>
+        public void SetState(bool state)
+        {
+            IsGrayedOut = !state;
+
+            button.SetState(state);
+            button.interactable = true;
+        }
     }
 }

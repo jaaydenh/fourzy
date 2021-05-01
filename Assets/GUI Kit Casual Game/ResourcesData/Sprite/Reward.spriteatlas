@@ -45,7 +45,7 @@ SpriteAtlas:
     packables:
     - {fileID: 102900000, guid: 6b20be28215e542c2a71007fbfefd0ba, type: 3}
     totalSpriteSurfaceArea: 763989
-    bindAsDefault: 1
+    bindAsDefault: 0
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
