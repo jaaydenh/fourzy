@@ -14,9 +14,9 @@ class FourzyPreBuld : IPreprocessBuildWithReport
     {
         ResourceDB _instance = ResourceDB.Instance;
 
-        Debug.Log($"Before update: files, {_instance.FileCount} folders {_instance.FolderCount}");
+        Debug.Log($"---- Before update: files, {_instance.FileCount} folders {_instance.FolderCount}");
         ResourceDB.Instance.UpdateDB();
-        Debug.Log("---- Resource DB updated");
+        Debug.Log($"---- Resource DB updated: files, {_instance.FileCount} folders {_instance.FolderCount}");
     }
 }
 
