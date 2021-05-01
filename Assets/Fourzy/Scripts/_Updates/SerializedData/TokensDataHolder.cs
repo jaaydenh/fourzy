@@ -53,6 +53,7 @@ namespace Fourzy._Updates.Serialized
         public TokenData GetTokenData(SpellId spellID) => 
             tokens.Find(_data => _data.isSpell && _data.spellID == spellID);
 
+#if UNITY_EDITOR
         public Dictionary<TokenType, Sprite> GetTokensSprites()
         {
             Dictionary<TokenType, Sprite> tokensSprites = new Dictionary<TokenType, Sprite>();
@@ -65,6 +66,7 @@ namespace Fourzy._Updates.Serialized
 
             return tokensSprites;
         }
+#endif
 
         public Sprite GetTokenSprite(TokenType tokenType) => 
             GetTokenSprite(GetTokenData(tokenType));
@@ -91,15 +93,11 @@ namespace Fourzy._Updates.Serialized
         public class TokenData
         {
             public TokenType tokenType;
-            public Sprite tokenIcon;
             public bool isSpell = false;
             [ShowIf("isSpell")]
             public SpellId spellID;
 
             public string description;
-            public bool showBackground;
-            [ShowIf("showBackground")]
-            public Color backgroundTileColor;
             public string gameboardInstructionID;
             public List<ThemeTokenPrefabPair> themesTokens;
 
@@ -155,22 +153,14 @@ namespace Fourzy._Updates.Serialized
 
             public Sprite GetTokenSprite()
             {
-                if (tokenIcon == null)
-                {
-                    SpriteRenderer tokenSpriteRenderer =
-                        themesTokens[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
+                //SpriteRenderer tokenSpriteRenderer =
+                //    themesTokens[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
 
-                    if (tokenSpriteRenderer)
-                    {
-                        return tokenSpriteRenderer.sprite;
-                    }
-                }
-                else
-                {
-                    return tokenIcon;
-                }
-
-                return null;
+                //if (tokenSpriteRenderer)
+                //{
+                //    return tokenSpriteRenderer.sprite;
+                //}
+                return themesTokens[0].tokenIcons[0];
             }
         }
 
@@ -180,6 +170,7 @@ namespace Fourzy._Updates.Serialized
             [StackableDecorator.EnumMaskPopup]
             public Area theme;
             public TokenView tokenPrefab;
+            public Sprite[] tokenIcons;
         }
     }
 

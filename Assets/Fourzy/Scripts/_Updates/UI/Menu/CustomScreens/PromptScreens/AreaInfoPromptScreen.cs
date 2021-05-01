@@ -115,14 +115,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 TokensDataHolder.TokenData tokenData = GameContentManager.Instance.GetTokenData(tokenType);
 
-                Image bg = tokenHolderInstance.GetComponentInChildren<Image>(true);
-                bg.gameObject.SetActive(tokenData.showBackground);
-                bg.color = tokenData.backgroundTileColor;
-
                 TokenView tokenInstance = Instantiate(
                     GameContentManager.Instance.GetTokenPrefab(tokenType, themeData.areaID), 
                     tokenHolderInstance.transform);
-                tokenInstance.transform.localScale = Vector3.one * (tokenData.showBackground ? 55f : 70f);
 
                 tokens.Add(tokenHolderInstance);
             }

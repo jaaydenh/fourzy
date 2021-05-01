@@ -29,6 +29,7 @@ namespace Fourzy._Updates
             }
         }
         private static InternalSettings current;
+        internal static bool latestLoaded { get; private set; } = false;
 
         internal const string PREFIX = "InternalSettings_";
 
@@ -101,7 +102,6 @@ namespace Fourzy._Updates
                 .Select(_data => _data.tokenType)
                 .ToArray() : 
             Constants.DEFAULT_UNLOCKED_TOKENS;
-
 
         internal void Update(object data, bool debugData = true)
         {
@@ -294,6 +294,8 @@ namespace Fourzy._Updates
                 }
                 Debug.Log("-------------------------------------------------------------");
             }
+
+            latestLoaded = true;
         }
 
         private static Area[] AreasFromString(string value)

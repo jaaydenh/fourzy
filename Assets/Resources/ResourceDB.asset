@@ -268,103 +268,121 @@ MonoBehaviour:
     path: 
     type: 1
     objectTypeName: 
-  - name: 1 - OneBlocker
+  - name: 1 - EmptyBoard
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 10 - UpwardForce
+  - name: 10 - Outward Spiral
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 11 - GoopSpot
+  - name: 11 - Board Arrows
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 12 - A Bit Of Goop
+  - name: 12 - Arrow Cross
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 13 - FourCornerGoop
+  - name: 13 - Upward Force
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 14 - 4GoopSpots
+  - name: 14 - Goop Spot
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 2 - BlockPattern
+  - name: 15 - A Bit Of Goop
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 20 - GoopSurrounded
+  - name: 16 - Four Corner Goop
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 21 - GoopArms
+  - name: 17 - 4 x 4 Square Goop
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 22 - GoopCorners
+  - name: 18 - Diagonal Lines Goop
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 3 - BlockParty
+  - name: 19 - Checkers
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 4 - PartiallyBlocked
+  - name: 20 - Surrounded By Goop
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 5 - BlockHalves
+  - name: 21 - Goop Arms
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 6 - PassingArrows
+  - name: 22 - Goop Corners
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 7 - ArrowsInTheMiddle
+  - name: 4 - BlockPattern
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 8 - CenterOutwardSpiral
+  - name: 5 - Block Party
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 9 - ArrowCross
+  - name: 6 - Partially Blocked
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 7 - Block Halves
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 8 - Passing Arrows
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 9 - Arrows In The Middle
     ext: json
     path: FTUE_ProgressionBoards
     type: 2
@@ -2983,6 +3001,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 455
+  m_FileCount: 458
   m_FolderCount: 48
   UpdateAutomatically: 0

@@ -12,6 +12,8 @@ using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Photon.Pun;
+using PlayFab;
+using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -186,6 +188,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     Amplitude.Instance.setUserProperty(
                         "totalRealtimeGamesAbandoned",
                         PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
+
                     break;
             }
         }
@@ -1272,6 +1275,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                                 PlayerPrefsWrapper.GetRealtimeGamesLost());
                         }
                     }
+
+                    GameManager.Instance.ReportAreaProgression((Area)PlayerPrefsWrapper.GetCurrentArea());
 
                     break;
             }
