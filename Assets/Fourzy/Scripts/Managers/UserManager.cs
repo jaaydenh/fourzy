@@ -10,7 +10,6 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Fourzy
@@ -21,6 +20,9 @@ namespace Fourzy
         public static Action onDisplayNameChanged;
         public static Action<string> onDisplayNameChangeFailed;
         public static Action<IEnumerable<TokenType>, TokenUnlockType> onTokenUnlocked;
+        public static Action<Area, int> onAreaProgression;
+
+        public static Action onPlayfabValuesLoaded;
 
         public static Action<CurrencyType> onCurrencyUpdate;
         public static Action<int, string> onHintsUpdate;
@@ -232,14 +234,6 @@ namespace Fourzy
             }
         }
 
-        public int totalRealtimeGamesCompleteTrainingGarden { get; set; }
-
-        public int totalRealtimeGamesCompleteEnchantedForest { get; set; }
-
-        public int totalRealtimeGamesCompleteSandyIsland { get; set; }
-
-        public int totalRealtimeGamesCompleteIcePalace { get; set; }
-
         public int level => GetLevel(xp);
 
         public int xpLeft => GetLevelXPLeft(xp);
@@ -252,6 +246,14 @@ namespace Fourzy
         private int _lastCachedWins = 0;
         private int _lastCachedLoses = 0;
         private int _lastCachedDraws = 0;
+        private PlayfabValuesLoaded _playfabValueLoaded;
+        private Dictionary<Area, int> _areaProgression = new Dictionary<Area, int>()
+        {
+            [Area.TRAINING_GARDEN] = 0,
+            [Area.ENCHANTED_FOREST] = 0,
+            [Area.SANDY_ISLAND] = 0,
+            [Area.ICE_PALACE] = 0
+        };
 
         protected override void Awake()
         {
@@ -268,7 +270,7 @@ namespace Fourzy
             PlayerPrefsWrapper.AddUnlockedToken(tokenType, unlockType);
 
             onTokenUnlocked?.Invoke(
-                new TokenType[]{ tokenType }, 
+                new TokenType[] { tokenType },
                 unlockType);
         }
 
@@ -277,6 +279,37 @@ namespace Fourzy
             PlayerPrefsWrapper.AddUnlockedTokens(tokens, unlockType);
 
             onTokenUnlocked?.Invoke(tokens, unlockType);
+        }
+
+        public int GetAreaProgression(Area area)
+        {
+            return _areaProgression[area];
+        }
+
+        public void SetAreaProgression(Area area, int value)
+        {
+            _areaProgression[area] = value;
+            onAreaProgression?.Invoke(area, value);
+        }
+
+        public void AddPlayfabValueLoaded(PlayfabValuesLoaded playfabValue)
+        {
+            _playfabValueLoaded |= playfabValue;
+
+            onPlayfabValuesLoaded?.Invoke();
+        }
+
+        public bool IsPlayfabValueLoaded(params PlayfabValuesLoaded[] values)
+        {
+            foreach (PlayfabValuesLoaded value in values)
+            {
+                if (!_playfabValueLoaded.HasFlag(value))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -521,14 +554,16 @@ namespace Fourzy
                 Instance.playfabLosesCount = data.loses;
                 Instance.playfabDrawsCount = data.drawGames;
 
-                Instance.totalRealtimeGamesCompleteTrainingGarden = data.totalRealtimeGamesCompleteTrainingGarden;
-                Instance.totalRealtimeGamesCompleteEnchantedForest = data.totalRealtimeGamesCompleteEnchantedForest;
-                Instance.totalRealtimeGamesCompleteSandyIsland = data.totalRealtimeGamesCompleteSandyIsland;
-                Instance.totalRealtimeGamesCompleteIcePalace = data.totalRealtimeGamesCompleteIcePalace;
+                Instance.SetAreaProgression(Area.TRAINING_GARDEN, data.totalRealtimeGamesCompleteTrainingGarden);
+                Instance.SetAreaProgression(Area.ENCHANTED_FOREST, data.totalRealtimeGamesCompleteEnchantedForest);
+                Instance.SetAreaProgression(Area.SANDY_ISLAND, data.totalRealtimeGamesCompleteSandyIsland);
+                Instance.SetAreaProgression(Area.ICE_PALACE, data.totalRealtimeGamesCompleteIcePalace);
 
                 Instance.lastCachedRating = data.rating;
 
                 Debug.Log($"Stats received: wins {data.wins} loses {data.loses} draws {data.drawGames} rating {data.rating}");
+
+                UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.PLAYER_STATS_RECEIVED);
             }, onFailed);
         }
 
@@ -633,5 +668,20 @@ namespace Fourzy
             public string displayName;
             public string fourzy;
         }
+    }
+
+    [Flags]
+    public enum PlayfabValuesLoaded
+    {
+        NONE = 0,
+        LOGGED_IN = 1 << 1,
+        ACCOUNT_INFO_RECEIVED = 1 << 2,
+        PLAYER_STATS_RECEIVED = 1 << 3,
+        TITLE_DATA_RECEIVED = 1 << 4,
+        PLAYER_PROFILE_RECEIVED = 1 << 5,
+        LANGUAGE_CHECKED = 1 << 6,
+        USER_INVENTORY_RECEIVED = 1 << 7,
+        BUNDLES_INFO_RECEIVED = 1 << 8,
+        NEWS_CHECKED = 1 << 9,
     }
 }

@@ -53,13 +53,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Awake();
 
-            InternalSettings.onNewDefaultTokens += OnNewDefaultTokens;
+            InternalSettings.onLoaded += OnInternalSettingsLoaded;
             UserManager.onTokenUnlocked += OnTokenUnlocked;
         }
 
         protected void OnDestroy()
         {
-            InternalSettings.onNewDefaultTokens -= OnNewDefaultTokens;
+            InternalSettings.onLoaded -= OnInternalSettingsLoaded;
             UserManager.onTokenUnlocked -= OnTokenUnlocked;
         }
 
@@ -297,7 +297,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetPiecesActive();
         }
 
-        private void OnNewDefaultTokens(TokenType[] obj)
+        private void OnInternalSettingsLoaded()
         {
             UpdateTokens();
         }

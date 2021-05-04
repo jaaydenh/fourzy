@@ -78,7 +78,7 @@
     },
     {
       "key": "coming_soon",
-      "value": "Próximamente"
+      "value": "Próximamente estad atentos..."
     },
     {
       "key": "complete",
@@ -213,6 +213,10 @@
       "value": "Gemas"
     },
     {
+      "key": "games_played",
+      "value": "Juegos jugados"
+    },
+    {
       "key": "get_4_to_win",
       "value": "Conecta 4 piezas para ganar"
     },
@@ -231,6 +235,10 @@
     {
       "key": "hints",
       "value": "Pistas"
+    },
+    {
+      "key": "home",
+      "value": "Casa"
     },
     {
       "key": "human",
@@ -418,6 +426,10 @@
     {
       "key": "previous",
       "value": "Anterior"
+    },
+    {
+      "key": "private_match",
+      "value": "Partido privado"
     },
     {
       "key": "puzzle",

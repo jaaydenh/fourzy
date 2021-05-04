@@ -1,8 +1,11 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates._Tutorial;
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -10,31 +13,45 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         private const string kLobbyScreenOpened = "lobbyScreenOpened";
 
+        public ButtonExtended discordButton;
         public RectTransform body;
-        public RectTransform portalsHolder;
-        public ButtonExtended fastPuzzleButton;
-        public ButtonExtended gauntletGameButton;
+        public RectTransform pieceParent;
 
-        private MatchmakingScreen matchmakingScreen;
+        public TMP_Text playerNameLabel;
+        public TMP_Text pieceNameLabel;
+        public TMP_Text ratingLabel;
+
+        public TMP_Text winsLabel;
+        public TMP_Text losesLabel;
+        public TMP_Text drawsLabel;
+
         private OnIPhoneX onIPhoneX;
+        private GamePieceView currentGamepiece;
 
         private bool fastPuzzlesUnlocked;
         private bool gauntletGameUnlocked;
 
-        public override void Open()
+        protected override void Start()
         {
-            base.Open();
+            base.Start();
 
-            fastPuzzlesUnlocked = 
-                PlayerPrefsWrapper.GetRewardRewarded("unlock_fast_puzzles_mode") || 
-                GameManager.Instance.defaultPuzzlesState;
-            fastPuzzleButton.GetBadge("locked").badge.SetState(!fastPuzzlesUnlocked);
+            UserManager.onRatingUpdate += OnRatingUpate;
+            UserManager.onDisplayNameChanged += OnUpdateUserInfo;
+            UserManager.OnUpdateUserGamePieceID += OnUpdateUserGamePieceID;
+            UserManager.onWinsUpdate += OnWinsUpdate;
+            UserManager.onLosesUpdate += OnLosesUpdate;
+            UserManager.onDrawsUpdate += OnDrawsUpdate;
 
-            gauntletGameUnlocked = 
-                PlayerPrefsWrapper.GetRewardRewarded("unlock_gauntlet_mode") || 
-                GameManager.Instance.defaultGauntletState;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
 
-            gauntletGameButton.GetBadge("locked").badge.SetState(!gauntletGameUnlocked);
+        protected void OnDestroy()
+        {
+            UserManager.onRatingUpdate -= OnRatingUpate;
+            UserManager.onDisplayNameChanged -= OnUpdateUserInfo;
+            UserManager.OnUpdateUserGamePieceID -= OnUpdateUserGamePieceID;
+
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         public override void OnBack()
@@ -67,10 +84,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
+        public void StartPrivateMatch()
+        {
+
+        }
+
         public void ResetTutorial() =>
             PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>()
-                .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? 
-                    "OnboardingLandscape" : 
+                .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ?
+                    "OnboardingLandscape" :
                     "Onboarding")));
 
         public void OpenFastPuzzleScreen()
@@ -93,7 +115,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenNews() => menuController.GetOrAddScreen<NewsPromptScreen>()._Prompt();
 
-        public void OpenDiscord() => GameManager.Instance.OpenDiscordPage();
+        public void OpenDiscord()
+        {
+            discordButton.GetBadge("attention").badge.Hide();
+            PlayerPrefs.SetInt("discord_button_pressed", 1);
+            GameManager.Instance.OpenDiscordPage();
+        }
 
         public void OpenOnlineLobby()
         {
@@ -111,11 +138,73 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartRealtimeQuickmatch() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
 
+        public void ChangeName() =>
+            menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
+
+        private void OnUpdateUserInfo()
+        {
+            playerNameLabel.text = UserManager.Instance.userName;
+        }
+
+        private void OnRatingUpate(int rating)
+        {
+            if (UserManager.Instance.lastCachedRating == -1)
+            {
+
+                ratingLabel.text = $"{LocalizationManager.Value("rating")}: ...";
+            }
+            else
+            {
+                ratingLabel.text = $"{LocalizationManager.Value("rating")}: {UserManager.Instance.lastCachedRatingFiltered}";
+            }
+        }
+
+        private void OnUpdateUserGamePieceID(string gamePieceID)
+        {
+            if (currentGamepiece)
+            {
+                Destroy(currentGamepiece.gameObject);
+            }
+
+            GamePieceData _data = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(gamePieceID);
+            currentGamepiece = Instantiate(_data.player1Prefab, pieceParent);
+
+            currentGamepiece.transform.localPosition = Vector3.zero;
+            currentGamepiece.StartBlinking();
+
+            pieceNameLabel.text = _data.name;
+        }
+
+        private void OnWinsUpdate(int wins)
+        {
+            winsLabel.text = wins + "";
+        }
+
+        private void OnLosesUpdate(int loses)
+        {
+            losesLabel.text = loses + "";
+        }
+
+        private void OnDrawsUpdate(int draw)
+        {
+            drawsLabel.text = draw + "";
+        }
+
+        private void OnSceneUnloaded(Scene scene)
+        {
+            switch (scene.name)
+            {
+                case Constants.GAMEPLAY_SCENE_NAME:
+                    ratingLabel.text = $"{LocalizationManager.Value("rating")}: ...";
+
+                    break;
+            }
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
-            matchmakingScreen = menuController.GetOrAddScreen<MatchmakingScreen>();
             if (body)
             {
                 onIPhoneX = body.GetComponent<OnIPhoneX>();
@@ -130,6 +219,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 Open();
             }
+
+            discordButton
+                .GetBadge("attention")
+                .badge
+                .SetState(PlayerPrefs.GetInt("discord_button_pressed", 0) == 0);
+
+            UserManager user = UserManager.Instance;
+            OnUpdateUserGamePieceID(user.gamePieceID);
+            OnUpdateUserInfo();
+
+            winsLabel.text = "000";
+            losesLabel.text = "000";
+            drawsLabel.text = "000";
         }
     }
 }
