@@ -905,6 +905,18 @@ namespace FourzyGameModel.Model
 
         }
 
+        public SimpleMove GetRandomTopAvailableMove(int NumberMoves = 1)
+        {
+            TurnEvaluator TE = new TurnEvaluator(EvalState);
+            Dictionary<SimpleMove, int> WeightedMoves = ScoreMoves(AvailableSimpleMoves, true);
+            if (NumberMoves < 2)
+                return WeightedMoves.Keys.First();
+
+            if (WeightedMoves == null || WeightedMoves.Count == 0) return null;
+            return WeightedMoves.ElementAt(Evaluator.EvalState.Random.RandomInteger(0, WeightedMoves.Keys.Count - 1)).Key;
+        }
+
+
         public Dictionary<SimpleMove, int> ScoreMoves()
         {
             return ScoreMoves(AvailableSimpleMoves);
