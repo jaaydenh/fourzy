@@ -162,7 +162,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     //first get stats
                     UserManager.GetPlayerRating(rating =>
                     {
-                        messageLabel.text = "Searching for opponent...";
+                        messageLabel.text = LocalizationManager.Value("searching_for_opponent");
 
                         roomCreatedTime = Time.time;
                         FourzyPhotonManager.JoinRandomRoom();
@@ -182,7 +182,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 case MatchmakingScreenState.TURNBASED:
-                    messageLabel.text = "Searching for opponent...";
+                    messageLabel.text = LocalizationManager.Value("searching_for_opponent");
 
                     Area selectedArea = GameContentManager.Instance.currentArea.areaID;
                     Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentArea.areaID);
@@ -209,7 +209,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
-            messageLabel.text = "Searching for opponent...";
+            messageLabel.text = LocalizationManager.Value("searching_for_opponent");
 
             //unblock input
             SetInteractable(true);

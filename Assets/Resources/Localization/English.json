@@ -875,6 +875,10 @@
     {
       "key": "cancel",
       "value": "Cancel"
+    },
+    {
+      "key": "searching_for_opponent",
+      "value": "Looking for opponent... "
     }
   ]
 }

@@ -11,9 +11,9 @@ namespace FourzyGameModel.Model
     public class WelcomeBotAI : AIPlayer
     {
         private GameState EvalState { get; set; }
-        private int NumberOfMovesToConsider = 4;
-        private int NumberTurnsBeforeWinning = 16;
-
+        private int NumberOfMovesToConsider = 6;
+        private int NumberOfMovesBeforeStopBlocking = 6;
+        private int NumberTurnsBeforeWinning = 30;
 
         public WelcomeBotAI(GameState State)
         {
@@ -44,8 +44,11 @@ namespace FourzyGameModel.Model
 
             SimpleMove Move = null;
 
-            //Get the top four remaining moves, and choose one of them randomly.
-            Move = AI.GetRandomOkMove(NumberOfMovesToConsider);
+            //Only make blocking moves for a couple of turns, but eventually make a mistake.
+            if (EvalState.TurnCount > NumberOfMovesBeforeStopBlocking)
+                Move = AI.GetRandomTopAvailableMove(NumberOfMovesToConsider);
+            else
+                Move = AI.GetRandomOkMove(NumberOfMovesToConsider);
 
             //If there are no ok moves, then make the best move possible.
             if (Move == null) return new PlayerTurn(AI.GetBestLostCauseMove());
