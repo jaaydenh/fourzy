@@ -38,7 +38,7 @@
     },
     {
       "key": "back",
-      "value": "Espalda"
+      "value": "Volver"
     },
     {
       "key": "back_to_menu",
@@ -450,7 +450,7 @@
     },
     {
       "key": "random",
-      "value": "Al azar"
+      "value": "Aleatorio"
     },
     {
       "key": "rankings",
@@ -542,7 +542,7 @@
     },
     {
       "key": "suggest_hint_use",
-      "value": "Toca el mago para obtener ayuda."
+      "value": "Presiona el mago para obtener ayuda."
     },
     {
       "key": "survive_goal",
@@ -554,7 +554,7 @@
     },
     {
       "key": "tap_edge_rule",
-      "value": "Desliza para mover tu Fourzy."
+      "value": "Presiona para mover tu Fourzy."
     },
     {
       "key": "tap_to_continue",
@@ -566,7 +566,7 @@
     },
     {
       "key": "tap_to_play_first_game",
-      "value": "Tap to start your first game"
+      "value": "Presiona para comenzar tu primer juego"
     },
     {
       "key": "tap_to_place",
@@ -574,7 +574,7 @@
     },
     {
       "key": "tap_to_start",
-      "value": "Toca para comenzar"
+      "value": "Presiona para comenzar"
     },
     {
       "key": "tap_to_start_playing",
@@ -862,7 +862,7 @@
     },
     {
       "key": "win_goal_one",
-      "value": "¡GANA en 1 MOVE!"
+      "value": "¡GANA en 1 MOVIMIENTO!"
     },
     {
       "key": "win_horizontal_rule",
@@ -890,7 +890,7 @@
     },
     {
       "key": "cancel",
-      "value": "Cancel"
+      "value": "Cancelar"
     },
     {
       "key": "searching_for_opponent",
