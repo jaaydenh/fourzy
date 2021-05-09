@@ -138,7 +138,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     menuController
                         .GetOrAddScreen<PromptScreen>()
                         .Prompt(
-                            "Leaderboard",
+                            LocalizationManager.Value("leaderboard"),
                             string.Format(
                                 LocalizationManager.Value("complete_games_to_see_rating"), 
                                 InternalSettings.Current.GAMES_BEFORE_RATING_USED),
