@@ -1,24 +1,16 @@
 {
-    "progression": [
-      {
-        "gamesNumber": 1,
-        "unlockType": "token",
-        "id": "Blocker"
-      },
-      {
-        "gamesNumber": 5,
-        "unlockType": "token",
-        "id": "Arrow"
-      },
-      {
-        "gamesNumber": 8,
-        "unlockType": "gamePiece",
-        "id": "5"
-      },
-      {
-        "gamesNumber": 11,
-        "unlockType": "token",
-        "id": "Goop"
-      }
-    ]
-  }
+  "progression": [
+    {
+      "gamesNumber": 1,
+      "id": "TRAINING_GARDEN_tier_1"
+    },
+    {
+      "gamesNumber": 5,
+      "id": "TRAINING_GARDEN_tier_2"
+    },
+    {
+      "gamesNumber": 11,
+      "id": "TRAINING_GARDEN_tier_3"
+    }
+  ]
+}

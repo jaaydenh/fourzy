@@ -91,7 +91,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnAreaProgression(Area area, int value)
         {
-            if (!pbInitialized || area != currentArea || gamesPlayed == value) return;
+            // if (!pbInitialized || area != currentArea || gamesPlayed == value) return;
+            if (!pbInitialized || area != currentArea || (gamesPlayed > 0 && gamesPlayed == value)) return;
 
             if (!visible)
             {
