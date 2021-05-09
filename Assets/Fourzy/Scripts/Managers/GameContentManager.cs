@@ -23,6 +23,8 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
+        public static Action onBundlesLoaded;
+
         public List<Camera3dItemProgressionMap> progressionMaps;
         public GamePiecesDataHolder piecesDataHolder;
         public AIPlayersDataHolder aiPlayersDataHolder;
@@ -140,6 +142,10 @@ namespace Fourzy
                 {
                     Debug.Log($"Pulled {allBundlesInfo.Count} bundles from server");
                 }
+
+                onBundlesLoaded?.Invoke();
+
+                UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.BUNDLES_INFO_RECEIVED);
             },
             error =>
             {
@@ -427,7 +433,19 @@ namespace Fourzy
     public class BundleInfo
     {
         public string BundleId;
-        public (string ItemId, string ItemClass)[] Items;
+
+        public BundleItem[] Items;
+
+        public BundleItem GetFirstItem() => Items.First(
+            _item => _item.ItemClass == Constants.PLAYFAB_GAMEPIECE_CLASS ||
+            _item.ItemClass == Constants.PLAYFAB_TOKEN_CLASS);
+    }
+
+    [Serializable]
+    public class BundleItem
+    {
+        public string ItemId;
+        public string ItemClass;
     }
 
     /// <summary>

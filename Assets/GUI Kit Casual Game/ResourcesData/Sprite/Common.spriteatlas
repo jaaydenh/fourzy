@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: b4f9e0db43d5a41e59519d800d7434ba, type: 3}
-    totalSpriteSurfaceArea: 4096391
+    totalSpriteSurfaceArea: 4094225
     bindAsDefault: 0
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -125,7 +125,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 681db73f19fb24efe843aad713eccb43, type: 3}
   - {fileID: 21300000, guid: 22bb5f5f739154e0581b8f1b535d6774, type: 3}
   - {fileID: 21300000, guid: 96274b6f4982041558dfdc5471747076, type: 3}
-  - {fileID: 21300000, guid: 1c003fff2a78f4a4fa6e0a7be1fb3cbd, type: 3}
   m_PackedSpriteNamesToIndex:
   - common_dimed_light
   - top_btn_right
@@ -202,7 +201,6 @@ SpriteAtlas:
   - button_red
   - reward_icon_energy
   - common_bg
-  - user_level_bar_bg
   m_RenderDataMap: {}
   m_Tag: Common
   m_IsVariant: 0

@@ -198,7 +198,28 @@ namespace Fourzy._Updates.UI.Menu
 
         public virtual bool IsWidgetVisible(WidgetBase widget)
         {
-            return widget.gameObject.activeInHierarchy && widget.canvasGroup && widget.canvasGroup.alpha > 0f;
+            if (widget.gameObject.activeInHierarchy)
+            {
+                if (widget.canvasGroup)
+                {
+                    if (widget.canvasGroup.alpha > 0f)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public virtual void BlockInput()

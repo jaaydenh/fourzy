@@ -18,7 +18,7 @@
     },
     {
       "key": "area_garden",
-      "value": "Training Garden"
+      "value": "Gardens of Fourzy"
     },
     {
       "key": "area_island",
@@ -78,7 +78,7 @@
     },
     {
       "key": "coming_soon",
-      "value": "Coming Soon"
+      "value": "Coming Soon..."
     },
     {
       "key": "complete",
@@ -181,6 +181,10 @@
       "value": "Games"
     },
     {
+      "key": "games_played",
+      "value": "Games Played"
+    },
+    {
       "key": "gauntlet",
       "value": "Gauntlet"
     },
@@ -227,6 +231,10 @@
     {
       "key": "hints",
       "value": "Hints"
+    },
+    {
+      "key": "home",
+      "value": "Home"
     },
     {
       "key": "human",
@@ -415,6 +423,10 @@
     {
       "key": "previous",
       "value": "Previous"
+    },
+    {
+      "key": "private_match",
+      "value": "Private Match"
     },
     {
       "key": "puzzle",

@@ -34,9 +34,6 @@ namespace Fourzy
 
         private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
 
-        public bool languageChecked { get; private set; } = false;
-        public bool inventoryLoaded { get; private set; } = false;
-
         protected override void Awake()
         {
             base.Awake();
@@ -415,6 +412,8 @@ namespace Fourzy
 
             Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
 
+            UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.LOGGED_IN);
+
             PlayFabClientAPI.GetAccountInfo(
                 new GetAccountInfoRequest()
                 {
@@ -484,8 +483,15 @@ namespace Fourzy
             playerTitleId = result.AccountInfo.TitleInfo.TitlePlayerAccount.Id;
             masterAccountId = result.AccountInfo.PlayFabId;
 
+            UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.ACCOUNT_INFO_RECEIVED);
+
             UserManager.GetMyStats();
-            GameManager.GetTitleData(data => InternalSettings.Current.Update(data), null);
+            GameManager.GetTitleData(data =>
+            {
+                InternalSettings.Current.Update(data);
+                UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.TITLE_DATA_RECEIVED);
+            }, 
+            null);
 
             //get player profile to see total spent
             PlayFabClientAPI.GetPlayerProfile(
@@ -599,12 +605,14 @@ namespace Fourzy
                 }
             }
 
-            inventoryLoaded = true;
+            UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.USER_INVENTORY_RECEIVED);
         }
 
         private void OnPlayerProfile(GetPlayerProfileResult playerProfile)
         {
             UserManager.Instance.totalSpentUSD = playerProfile.PlayerProfile.TotalValueToDateInUSD ?? 0;
+
+            UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.PLAYER_PROFILE_RECEIVED);
         }
 
         private void OnPlayFabError(PlayFabError error)
@@ -634,7 +642,7 @@ namespace Fourzy
             }
             else
             {
-                languageChecked = true;
+                UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.LANGUAGE_CHECKED);
                 GameManager.Instance.CheckNews();
             }
         }
@@ -643,7 +651,7 @@ namespace Fourzy
         {
             Debug.Log("Language updated");
 
-            languageChecked = true;
+            UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.LANGUAGE_CHECKED);
             GameManager.Instance.CheckNews();
         }
 

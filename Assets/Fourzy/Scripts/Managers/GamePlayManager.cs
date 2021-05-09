@@ -173,11 +173,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             case GameManager.BotGameType.FTUE_RATED:
                             case GameManager.BotGameType.REGULAR:
-                                GameManager.Instance.ReportBotGameFinished(game);
+                                GameManager.Instance.ReportBotGameFinished(game, true);
+
+                                //will get logged, but not with up to date rating values
+                                GameManager.Instance.LogGameComplete(game);
 
                                 break;
 
                             case GameManager.BotGameType.FTUE_NOT_RATED:
+                                GameManager.Instance.ReportBotGameFinished(game, false);
+
+                                //will get logged, but not with up to date rating values
                                 GameManager.Instance.LogGameComplete(game);
 
                                 break;
@@ -1344,12 +1350,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             case GameManager.BotGameType.FTUE_RATED:
                             case GameManager.BotGameType.REGULAR:
-                                GameManager.Instance.ReportBotGameFinished(game);
+                                GameManager.Instance.ReportBotGameFinished(game, true);
 
                                 break;
 
                             case GameManager.BotGameType.FTUE_NOT_RATED:
-                                GameManager.Instance.LogGameComplete(game);
+                                GameManager.Instance.ReportBotGameFinished(game, false);
 
                                 break;
                         }
@@ -1496,7 +1502,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
                     else if (gameWinLoseScreen.isOpened)
                     {
-                        gameWinLoseScreen.SetInfoLabel(message);
+                        if (player.ratingChange != 0)
+                        {
+                            gameWinLoseScreen.SetInfoLabel(message);
+                        }
                     }
                 }
             }

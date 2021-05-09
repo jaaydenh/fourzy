@@ -511,7 +511,7 @@ namespace Fourzy
             ratingDataReceived?.Invoke(data);
         }
 
-        public void ReportBotGameFinished(IClientFourzy game)
+        public void ReportBotGameFinished(IClientFourzy game, bool updateRating)
         {
             if (game == null) return;
             if (string.IsNullOrEmpty(RealtimeOpponent.Id)) return;
@@ -525,7 +525,8 @@ namespace Fourzy
                 {
                     playerId = LoginManager.playfabId,
                     winner,
-                    botId = game.opponent.Profile.ToString()
+                    botId = game.opponent.Profile.ToString(),
+                    updateRating 
                 },
                 GeneratePlayStreamEvent = true,
             },
@@ -542,7 +543,11 @@ namespace Fourzy
                     {
                         if (playerData.playfabID == "bot")
                         {
-                            RealtimeOpponent.SetExternalRating(playerData.rating);
+                            if (updateRating)
+                            {
+                                RealtimeOpponent.SetExternalRating(playerData.rating);
+                            }
+
                             RealtimeOpponent.TotalGames += 1;
                         }
                     }
@@ -610,37 +615,11 @@ namespace Fourzy
                     }
                 }
 
-                int value = 0;
-                switch (_area)
-                {
-                    case Area.TRAINING_GARDEN:
-                        UserManager.Instance.totalRealtimeGamesCompleteTrainingGarden++;
-                        value = UserManager.Instance.totalRealtimeGamesCompleteTrainingGarden;
-
-                        break;
-
-                    case Area.ENCHANTED_FOREST:
-                        UserManager.Instance.totalRealtimeGamesCompleteEnchantedForest++;
-                        value = UserManager.Instance.totalRealtimeGamesCompleteEnchantedForest;
-
-                        break;
-
-                    case Area.ICE_PALACE:
-                        UserManager.Instance.totalRealtimeGamesCompleteIcePalace++;
-                        value = UserManager.Instance.totalRealtimeGamesCompleteIcePalace;
-
-                        break;
-
-                    case Area.SANDY_ISLAND:
-                        UserManager.Instance.totalRealtimeGamesCompleteSandyIsland++;
-                        value = UserManager.Instance.totalRealtimeGamesCompleteSandyIsland;
-
-                        break;
-                }
+                UserManager.Instance.SetAreaProgression(_area, UserManager.Instance.GetAreaProgression(_area) + 1);
 
                 if (Application.isEditor || Debug.isDebugBuild)
                 {
-                    Debug.Log($"Games in {_area} {value}");
+                    Debug.Log($"Games in {_area} {UserManager.Instance.GetAreaProgression(_area)}");
                 }
             },
             (error) =>
@@ -797,7 +776,21 @@ namespace Fourzy
             if (!NetworkAccess) return;
             Debug.Log("Fetching news..");
 
-            StartRoutine("fetching_news", FetchingNews());
+            PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(),
+            result =>
+            {
+                Debug.Log("News fetched " + result.News.Count);
+                latestNews = result.News;
+
+                UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.NEWS_CHECKED);
+
+                onNewsFetched?.Invoke();
+            },
+            error =>
+            {
+                Debug.LogError(error.GenerateErrorReport());
+                ReportPlayFabError(error.ErrorMessage);
+            });
         }
 
         public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
@@ -1066,28 +1059,6 @@ namespace Fourzy
 
                     break;
             }
-        }
-
-        private IEnumerator FetchingNews()
-        {
-            while (!LoginManager.Instance.languageChecked) yield return null;
-
-            try
-            {
-                PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(),
-                    result =>
-                    {
-                        Debug.Log("News fetched " + result.News.Count);
-                        latestNews = result.News;
-                        onNewsFetched?.Invoke();
-                    },
-                    error =>
-                    {
-                        Debug.LogError(error.GenerateErrorReport());
-                        ReportPlayFabError(error.ErrorMessage);
-                    });
-            }
-            catch (Exception) { }
         }
 
         private IEnumerator StartingGameRoutine()

@@ -14,7 +14,7 @@ namespace Fourzy._Updates
 {
     internal class InternalSettings
     {
-        internal static Action<TokenType[]> onNewDefaultTokens;
+        internal static Action onLoaded;
 
         internal static InternalSettings Current
         {
@@ -29,7 +29,6 @@ namespace Fourzy._Updates
             }
         }
         private static InternalSettings current;
-        internal static bool latestLoaded { get; private set; } = false;
 
         internal const string PREFIX = "InternalSettings_";
 
@@ -202,8 +201,6 @@ namespace Fourzy._Updates
                                 {
                                     newValues.Add(keyPieces[1], kvPair.Value);
                                     PlayerPrefsWrapper.SetDefaultTokens(_tokensFromServer);
-
-                                    onNewDefaultTokens?.Invoke(_tokensFromServer);
                                 }
 
                                 break;
@@ -295,7 +292,7 @@ namespace Fourzy._Updates
                 Debug.Log("-------------------------------------------------------------");
             }
 
-            latestLoaded = true;
+            onLoaded?.Invoke();
         }
 
         private static Area[] AreasFromString(string value)
