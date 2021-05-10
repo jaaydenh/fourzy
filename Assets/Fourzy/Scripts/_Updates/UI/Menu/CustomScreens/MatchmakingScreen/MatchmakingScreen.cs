@@ -194,105 +194,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             StartRoutine("randomText", ShowRandomTextRoutine());
         }
 
-        #region Photon callbacks
 
-        private void OnJoinRandomFailed()
-        {
-            if (!isOpened) return;
-
-            Debug.Log("Failed to join random room, creating new one...");
-
-            FourzyPhotonManager.CreateRoom(RoomType.QUICKMATCH);
-        }
-
-        private void OnRoomCreated(string roomName)
-        {
-            if (!isOpened) return;
-
-            messageLabel.text = LocalizationManager.Value("searching_for_opponent");
-
-            //unblock input
-            SetInteractable(true);
-            backButton.SetActive(true);
-
-            useBotMatch = InternalSettings.Current.BOT_SETTINGS.randomMatchAfter > 0f;
-
-            //start timeout timer
-            StartRoutine(
-                "botMatch",
-                useBotMatch ?
-                    InternalSettings.Current.BOT_SETTINGS.randomMatchAfter :
-                    Constants.REALTIME_OPPONENT_WAIT_TIME,
-                StartBotMatch,
-                null);
-        }
-
-        private void OnCreateRoomFailed(string error)
-        {
-            if (!isOpened) return;
-
-            messageLabel.text = $"Failed to create new room. {error}";
-
-            ReadyToClose();
-        }
-
-        private void ReadyToClose()
-        {
-            //unblock input
-            SetInteractable(true);
-            backButton.SetActive(true);
-
-            StopRoutine("randomText", false);
-            timerLabel.text = string.Empty;
-        }
-
-        private void OnPlayerEnteredRoom(Photon.Realtime.Player otherPlayer)
-        {
-            if (!isOpened) return;
-
-            GameManager.Instance.RealtimeOpponent = new OpponentData(otherPlayer);
-            //other player connected, switch to gameplay scene
-            StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
-        }
-
-        private void OnRoomJoined(string roomName)
-        {
-            if (!isOpened) return;
-
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            {
-                GameManager.Instance.RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
-
-                //open gameplay scene
-                StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
-            }
-        }
-
-        private void OnRoomLeft()
-        {
-            if (state != MatchmakingScreenState.WAITTING_ROOM_LEFT) return;
-
-            if (_prompt.isOpened)
-            {
-                _prompt.Decline();
-            }
-
-            OpenRealtime();
-        }
-
-        #endregion
-
-        private void StartMatch(GameTypeLocal type)
-        {
-            state = MatchmakingScreenState.NONE;
-            AudioHolder.instance.PlaySelfSfxOneShotTracked("game_found");
-            GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
-            timerLabel.text = "Match Found";
-
-            GameManager.Instance.StartGame(type);
-        }
-
-        private void StartBotMatch()
+        internal void StartBotMatch()
         {
             if (useBotMatch)
             {
@@ -345,10 +248,108 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     LocalizationManager.Value("timed_out_title"),
                     LocalizationManager.Value("timed_out_text"),
                     null,
-                    LocalizationManager.Value("back"), 
+                    LocalizationManager.Value("back"),
                     null,
                     null);
             }
+        }
+
+        #region Photon callbacks
+
+        private void OnJoinRandomFailed()
+        {
+            if (!isOpened) return;
+
+            Debug.Log("Failed to join random room, creating new one...");
+
+            FourzyPhotonManager.CreateRoom(RoomType.QUICKMATCH);
+        }
+
+        private void OnRoomCreated(string roomName)
+        {
+            if (!isOpened) return;
+
+            messageLabel.text = LocalizationManager.Value("searching_for_opponent");
+
+            //unblock input
+            SetInteractable(true);
+            backButton.SetActive(true);
+
+            useBotMatch = InternalSettings.Current.BOT_SETTINGS.randomMatchAfter > 0f;
+
+            //start timeout timer
+            StartRoutine(
+                "botMatch",
+                useBotMatch ?
+                    InternalSettings.Current.BOT_SETTINGS.randomMatchAfter :
+                    Constants.REALTIME_OPPONENT_WAIT_TIME,
+                StartBotMatch,
+                null);
+        }
+
+        private void OnCreateRoomFailed(string error)
+        {
+            if (!isOpened) return;
+
+            messageLabel.text = $"Failed to create new room. {error}";
+
+            ReadyToClose();
+        }
+
+        private void OnPlayerEnteredRoom(Photon.Realtime.Player otherPlayer)
+        {
+            if (!isOpened) return;
+
+            GameManager.Instance.RealtimeOpponent = new OpponentData(otherPlayer);
+            //other player connected, switch to gameplay scene
+            StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
+        }
+
+        private void OnRoomJoined(string roomName)
+        {
+            if (!isOpened) return;
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            {
+                GameManager.Instance.RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
+
+                //open gameplay scene
+                StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
+            }
+        }
+
+        private void OnRoomLeft()
+        {
+            if (state != MatchmakingScreenState.WAITTING_ROOM_LEFT) return;
+
+            if (_prompt.isOpened)
+            {
+                _prompt.Decline();
+            }
+
+            OpenRealtime();
+        }
+
+        #endregion
+
+        private void ReadyToClose()
+        {
+            //unblock input
+            SetInteractable(true);
+            backButton.SetActive(true);
+
+            StopRoutine("randomText", false);
+            timerLabel.text = string.Empty;
+        }
+
+        private void StartMatch(GameTypeLocal type)
+        {
+            state = MatchmakingScreenState.NONE;
+            AudioHolder.instance.PlaySelfSfxOneShotTracked("game_found");
+            GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
+            timerLabel.text = "Match Found";
+
+            GameManager.Instance.StartGame(type);
         }
 
         private void OnConnectionTimeOut()
