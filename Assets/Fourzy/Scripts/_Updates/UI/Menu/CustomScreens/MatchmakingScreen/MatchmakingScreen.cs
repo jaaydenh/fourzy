@@ -191,7 +191,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
             }
 
-            StartRoutine("randomText", ShowRandomTextRoutine());
+            //Show interesting random text before match starts.
+            if (useBotMatch) StartRoutine("randomText", ShowRandomTextRoutine(1.0f));
+            else ShowRandomTextRoutine(3.5f);
         }
 
         #region Photon callbacks
@@ -369,9 +371,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 null);
         }
 
-        private IEnumerator ShowRandomTextRoutine()
+        private IEnumerator ShowRandomTextRoutine(float timeToShow = 3.5f)
         {
-            const float timeToShow = 3.5f;
+//            const float timeToShow = 3.5f;
 
             int elementIndex = 0;
             while (true)
