@@ -27,7 +27,7 @@ SpriteAtlas:
       m_ResizeAlgorithm: 0
       m_TextureFormat: -1
       m_TextureCompression: 2
-      m_CompressionQuality: 90
+      m_CompressionQuality: 100
       m_CrunchedCompression: 1
       m_AllowsAlphaSplitting: 0
       m_Overridden: 0
@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: be044a4a46a3d1a4794d948d7e6d087b, type: 3}
-    totalSpriteSurfaceArea: 18527471
+    totalSpriteSurfaceArea: 18570573
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -222,11 +222,11 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 81948ff814a118c4b9d714ca4c0cefc7, type: 3}
   - {fileID: 21300000, guid: d939f7197123a78439a678427dfff744, type: 3}
   - {fileID: 21300000, guid: 2209cc194f01746e59ba25d22b0831ce, type: 3}
-  - {fileID: 21300000, guid: 9b8f4729613b4a5468c9ec9247262c68, type: 3}
   - {fileID: 21300000, guid: fdae0f29cd364ff4193474e02c7daf2d, type: 3}
   - {fileID: 21300000, guid: 45838539ed69e42d9858a4a07c4a410b, type: 3}
   - {fileID: 21300000, guid: fc4715491529447bda05a490a7c8c817, type: 3}
   - {fileID: 21300000, guid: 89b7d0598dd7143a7b23900ff8c8a00f, type: 3}
+  - {fileID: 21300000, guid: aa1a0169d4ddf46b5a1de8ee29f73950, type: 3}
   - {fileID: 21300000, guid: 99b63669856844ae5a263091a70e67dd, type: 3}
   - {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
   - {fileID: 21300000, guid: a99f7e79eb33c8041b05e7bd9ed1b439, type: 3}
@@ -527,11 +527,11 @@ SpriteAtlas:
   - HorizontalBar-Lose
   - ReadyToPlay-On (noText)
   - buttonPrimary2x
-  - star_new
   - mm-gradiaent
   - TokenBackground
   - CrownIcon
   - buttonPink
+  - Star
   - iconRandomYellow
   - PuzzlePack
   - Selector-P2B
