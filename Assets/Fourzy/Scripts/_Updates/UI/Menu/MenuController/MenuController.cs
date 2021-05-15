@@ -113,7 +113,10 @@ namespace Fourzy._Updates.UI.Menu
         {
             StandaloneInputModuleExtended.onBackPressed -= OnBack;
 
-            if (menus.ContainsKey(gameObject.name)) menus.Remove(gameObject.name);
+            if (menus.ContainsKey(gameObject.name))
+            {
+                menus.Remove(gameObject.name);
+            }
         }
 
         public void SetCurrentScreen(int index)
@@ -331,12 +334,18 @@ namespace Fourzy._Updates.UI.Menu
             if (state)
             {
                 activeMenu = this;
-                if (currentScreen) currentScreen.Open();
+                if (currentScreen)
+                {
+                    currentScreen.Open();
+                }
 
                 ExecuteMenuEvents();
             }
 
-            if (_camera) _camera.gameObject.SetActive(state);
+            if (_camera)
+            {
+                _camera.gameObject.SetActive(state);
+            }
         }
 
         public void ExecuteMenuEvents()
@@ -351,8 +360,8 @@ namespace Fourzy._Updates.UI.Menu
         protected virtual void OnBack()
         {
             if (PersistantMenuController.Instance.screensStack.Count > 0 ||
-                !state
-                || !StandaloneInputModuleExtended.BackEventAvailable) return;
+                !state || 
+                !StandaloneInputModuleExtended.BackEventAvailable) return;
 
             if (screensStack.Count > 0)
             {
