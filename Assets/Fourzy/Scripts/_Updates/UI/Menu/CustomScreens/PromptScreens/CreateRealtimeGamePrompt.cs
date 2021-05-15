@@ -124,12 +124,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
 
-            void SetAreaWidget(PracticeScreenAreaSelectWidget widget)
+            void SetAreaWidget(PracticeScreenAreaSelectWidget PracticeWidget)
             {
-                currentAreaWidget = widget;
+                currentAreaWidget = PracticeWidget;
                 currentAreaWidget.Select();
 
-                PlayerPrefsWrapper.SetCurrentArea((int)widget.area);
+                PlayerPrefsWrapper.SetCurrentArea((int)PracticeWidget.area);
             }
         }
 

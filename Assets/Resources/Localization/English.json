@@ -879,6 +879,10 @@
     {
       "key": "searching_for_opponent",
       "value": "Looking for opponent... "
+    },
+    {
+      "key": "leaderboard",
+      "value": "Leaderboard"
     }
   ]
 }
