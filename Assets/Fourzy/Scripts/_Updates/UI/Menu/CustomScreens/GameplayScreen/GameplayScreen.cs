@@ -675,35 +675,51 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         timerWidgets.ForEach(_widget => _widget.Deactivate());
 
-                        if (game.isMyTurn)
+                        switch (GameManager.Instance.ExpectedGameType)
                         {
-                            Debug.Log("telling other client that im done");
-                            //set other as winner
-                            game._State.WinnerId = game.opponent.PlayerId;
+                            case GameTypeLocal.REALTIME_BOT_GAME:
+                                //set other as winner
+                                game._State.WinnerId = game.isMyTurn ? game.opponent.PlayerId : game.me.PlayerId;
+                                gameplayManager.OnGameFinished(game);
 
-                            gameplayManager.OnGameFinished(game);
+                                break;
 
-                            //tell other client that X lost
-                            if (PhotonNetwork.CurrentRoom != null)
-                            {
-                                var eventOptions = new Photon.Realtime.RaiseEventOptions();
-                                eventOptions.Flags.HttpForward = true;
-                                eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                            case GameTypeLocal.REALTIME_LOBBY_GAME:
+                            case GameTypeLocal.REALTIME_QUICKMATCH:
+                                if (game.isMyTurn)
+                                {
+                                    //set other as winner
+                                    game._State.WinnerId = game.opponent.PlayerId;
+                                    gameplayManager.OnGameFinished(game);
 
-                                var photonEventResult = PhotonNetwork.RaiseEvent(
-                                    Constants.RATING_GAME_OTHER_LOST,
-                                    null,
-                                    eventOptions,
-                                    SendOptions.SendReliable);
-                            }
+                                    Debug.Log("Tell other client that game's over");
+                                    if (PhotonNetwork.CurrentRoom != null)
+                                    {
+                                        var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                                        eventOptions.Flags.HttpForward = true;
+                                        eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+
+                                        var photonEventResult = PhotonNetwork.RaiseEvent(
+                                            Constants.RATING_GAME_OTHER_LOST,
+                                            null,
+                                            eventOptions,
+                                            SendOptions.SendReliable);
+                                    }
+                                }
+
+                                break;
                         }
                     }
                     else
                     {
-                        //only take turn if its my turn
                         if (game.isMyTurn)
                         {
                             gameplayManager.board.TakeAITurn();
+                        }
+                        else if (game.opponent.Profile != AIProfile.Player)
+                        {
+                            game._State.WinnerId = game.me.PlayerId;
+                            gameplayManager.OnGameFinished(game);
                         }
                     }
 

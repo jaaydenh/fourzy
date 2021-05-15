@@ -23,7 +23,7 @@ namespace Fourzy._Updates.UI.Widgets
         public ValueTween sliderValueTween;
         public Image rewardParent;
 
-        private bool pbInitialized = false;
+        private bool isPlayFabInitialized = false;
         private GameObject currentRewardItem;
         private int cachedValue = 0;
 
@@ -92,7 +92,7 @@ namespace Fourzy._Updates.UI.Widgets
         private void OnAreaProgression(Area area, int value)
         {
             // if (!pbInitialized || area != currentArea || gamesPlayed == value) return;
-            if (!pbInitialized || area != currentArea || (gamesPlayed > 0 && gamesPlayed == value)) return;
+            if (!isPlayFabInitialized || area != currentArea || (gamesPlayed > 0 && gamesPlayed == value)) return;
 
             if (!visible)
             {
@@ -113,7 +113,7 @@ namespace Fourzy._Updates.UI.Widgets
         private void OnPlayfabValueLoaded()
         {
             //ini slider
-            if (!pbInitialized && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.TITLE_DATA_RECEIVED, PlayfabValuesLoaded.PLAYER_STATS_RECEIVED, PlayfabValuesLoaded.BUNDLES_INFO_RECEIVED))
+            if (!isPlayFabInitialized && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.TITLE_DATA_RECEIVED, PlayfabValuesLoaded.PLAYER_STATS_RECEIVED, PlayfabValuesLoaded.BUNDLES_INFO_RECEIVED))
             {
                 switch (currentArea)
                 {
@@ -138,7 +138,7 @@ namespace Fourzy._Updates.UI.Widgets
                         break;
                 }
 
-                pbInitialized = true;
+                isPlayFabInitialized = true;
                 OnAreaProgression(currentArea, UserManager.Instance.GetAreaProgression(currentArea));
             }
         }

@@ -79,7 +79,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
         public bool isBoardReady { get; private set; }
-        public bool replayingLastTurn { get; private set; }
+        //public bool replayingLastTurn { get; private set; }
         public bool gameStarted { get; private set; }
         public GameState gameState { get; private set; }
         private bool realtimeGameToBeRatedCondition
@@ -1423,10 +1423,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (startTurn) return;
 
-            if (replayingLastTurn)
-            {
-                replayingLastTurn = false;
-            }
+            //if (replayingLastTurn)
+            //{
+            //    replayingLastTurn = false;
+            //}
 
             UpdatePlayerTurn();
 
