@@ -180,25 +180,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
-                case MatchmakingScreenState.TURNBASED:
-                    messageLabel.text = LocalizationManager.Value("searching_for_opponent");
+                //case MatchmakingScreenState.TURNBASED:
+                //    messageLabel.text = LocalizationManager.Value("searching_for_opponent");
 
-                    Area selectedArea = GameContentManager.Instance.currentArea.areaID;
-                    Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentArea.areaID);
-                    // ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
+                //    Area selectedArea = GameContentManager.Instance.currentArea.areaID;
+                //    Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentArea.areaID);
+                //    // ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
 
-                    break;
+                //    break;
             }
 
-            //Show interesting random text before match starts.
-            if (useBotMatch)
-            {
-                StartRoutine("randomText", ShowRandomTextRoutine(1.0f));
-            }
-            else
-            {
-                ShowRandomTextRoutine(3.5f);
-            }
+            StartRoutine("randomText", ShowRandomTextRoutine(3.5f));
         }
 
 
