@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
@@ -192,8 +191,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //Show interesting random text before match starts.
-            if (useBotMatch) StartRoutine("randomText", ShowRandomTextRoutine(1.0f));
-            else ShowRandomTextRoutine(3.5f);
+            if (useBotMatch)
+            {
+                StartRoutine("randomText", ShowRandomTextRoutine(1.0f));
+            }
+            else
+            {
+                ShowRandomTextRoutine(3.5f);
+            }
         }
 
 
@@ -365,17 +370,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //open prompt screen
             PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
                 LocalizationManager.Value("no_connection"),
-                "", 
+                "",
                 null,
-                LocalizationManager.Value("back"), 
-                null, 
+                LocalizationManager.Value("back"),
+                null,
                 null);
         }
 
         private IEnumerator ShowRandomTextRoutine(float timeToShow = 3.5f)
         {
-//            const float timeToShow = 3.5f;
-
             int elementIndex = 0;
             while (true)
             {

@@ -501,7 +501,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         case GameTypeLocal.REALTIME_BOT_GAME:
                             if (!game.isOver && !game.isMyTurn)
                             {
-                                //board.TakeAITurn(InternalSettings.Current.BOT_SETTINGS.randomTurnDelay);
+                                board.TakeAITurn(InternalSettings.Current.BOT_SETTINGS.randomTurnDelay);
                             }
 
                             break;
