@@ -60,6 +60,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -98,7 +100,7 @@ RectTransform:
   m_GameObject: {fileID: 1183159963305140096}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 205, y: 205, z: 1}
+  m_LocalScale: {x: 102, y: 102, z: 1}
   m_Children: []
   m_Father: {fileID: 5829349641338325483}
   m_RootOrder: 0
@@ -168,6 +170,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -244,6 +248,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &2811702351793752031
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,18 +304,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    ID: 
     name: 
+    player1Prefab: {fileID: 0}
+    player2Prefab: {fileID: 0}
+    Id: 
     enabled: 0
-    rarity: 30
-    outlineColor: {r: 0, g: 0, b: 1, a: 1}
-    borderColor: {r: 0, g: 1, b: 0, a: 1}
+    startingMagic: 100
     piecesToUnlock: 40
+    pieces: 0
     profilePicture: {fileID: 0}
     profilePictureOffset: {x: 0, y: 0}
-    piecesProgression:
-      list: 5000000096000000f00000002c01000026020000
-    pieces: 0
+    outlineColor: {r: 0, g: 0, b: 1, a: 1}
+    borderColor: {r: 0, g: 1, b: 0, a: 1}
   gamePieceParent: {fileID: 277804850831549247}
   player1Marker: {fileID: 7059523993646234908}
   player2Marker: {fileID: 3821430393657928187}
@@ -363,6 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 0
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -404,8 +410,10 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -491,6 +499,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -564,6 +574,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -637,6 +649,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -710,6 +724,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -789,6 +805,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

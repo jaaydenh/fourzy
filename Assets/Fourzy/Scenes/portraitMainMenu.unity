@@ -1164,7 +1164,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 5
-          selectedMember: 16
+          selectedMember: 15
           isDynamic: 0
         target: {fileID: 169684871}
         memberName: CloseCurrentScreen
@@ -47205,7 +47205,7 @@ RectTransform:
   m_GameObject: {fileID: 1296083882}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 130, y: 130, z: 1}
+  m_LocalScale: {x: 65, y: 65, z: 1}
   m_Children: []
   m_Father: {fileID: 643957432}
   m_RootOrder: 0

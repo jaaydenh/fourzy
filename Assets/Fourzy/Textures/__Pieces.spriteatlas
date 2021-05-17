@@ -56,7 +56,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: f5103557fc46648308a6e9cb92d22df4, type: 3}
-    totalSpriteSurfaceArea: 3809248
+    totalSpriteSurfaceArea: 7287238
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -73,7 +73,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: c70e0860abb685342b5427db93451a6a, type: 3}
   - {fileID: 21300000, guid: 5bc9ec6015f63974fb725b3179e58c2a, type: 3}
   - {fileID: 21300000, guid: 2d4b747060e4525418d5292d3a69691b, type: 3}
-  - {fileID: 21300000, guid: 0a59997031853b944ad8fc70a4f79e2c, type: 3}
   - {fileID: 21300000, guid: bbb3ca70616d386488b98b1570859d1c, type: 3}
   - {fileID: 21300000, guid: ac23e38009a61b743a21ac9fea41e168, type: 3}
   - {fileID: 21300000, guid: d0b800902a11bc344b1a79c1db0e7f1a, type: 3}
@@ -103,7 +102,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a46165d1f80b2af4a8e405cd58246c15, type: 3}
   - {fileID: 21300000, guid: 46d989e1ff24c0a42aff5622f1195185, type: 3}
   - {fileID: 21300000, guid: 110b5de177ee87244af5dc2714aa51fe, type: 3}
-  - {fileID: 21300000, guid: c21608f1cbc91214d814a0c413ae6424, type: 3}
   - {fileID: 21300000, guid: f058ebf171de3024bb0dd799032bbb2d, type: 3}
   - {fileID: 21300000, guid: af3b6712cfda5894e806c7bf05c5b167, type: 3}
   - {fileID: 21300000, guid: 8c3c7e1201236e647a1153fda16e8605, type: 3}
@@ -129,7 +127,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 229484c272777394db12080b567abd7e, type: 3}
   - {fileID: 21300000, guid: 4b9807c2145284b47b12295810d15d39, type: 3}
   - {fileID: 21300000, guid: 1997c8d2ab273194b8086a59e48d340f, type: 3}
-  - {fileID: 21300000, guid: 2e6acfd23445ecd43aca28ca7e518024, type: 3}
   - {fileID: 21300000, guid: ac8848f2f3e95424886954081d10563c, type: 3}
   - {fileID: 21300000, guid: 4973dcf218ded0647b8e9c25298a24bd, type: 3}
   - {fileID: 21300000, guid: 4312631390f2fce4f8e2d0b60b08cd0a, type: 3}
@@ -157,6 +154,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7edc4b543808e874fbdc455afd34748d, type: 3}
   - {fileID: 21300000, guid: 646f6d54fff8548439776fef8428fcd5, type: 3}
   - {fileID: 21300000, guid: d9fe9064de5e00b44a5a577ced9f06fd, type: 3}
+  - {fileID: 21300000, guid: c5470a7413da04addb4bfeab1059a2fc, type: 3}
   - {fileID: 21300000, guid: 7725ed74e1b3d854bb01283d0cfce46d, type: 3}
   - {fileID: 21300000, guid: 16abbb84ab9c367469a8de329afad14d, type: 3}
   - {fileID: 21300000, guid: b1fe98944134d514394b5759aca35d04, type: 3}
@@ -336,6 +334,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 96e5a8bc191dbb846b1507715024b2c9, type: 3}
   - {fileID: 21300000, guid: 571d0fccca8dcea498957fed994836ea, type: 3}
   - {fileID: 21300000, guid: b88a90dcdd08aa94ba2e9f4c06edad03, type: 3}
+  - {fileID: 21300000, guid: 9d2471dce2e5348ae9b149e8b37c51f2, type: 3}
   - {fileID: 21300000, guid: 7eaf73dcc757419478db79a0cfe8547e, type: 3}
   - {fileID: 21300000, guid: c54a61ec953be82478c66c91d1559013, type: 3}
   - {fileID: 21300000, guid: 0c5653ec324138e46a89b6890ebecdae, type: 3}
@@ -408,7 +407,6 @@ SpriteAtlas:
   - Fourzy07_Eyes-open
   - Fourzy16b_Mouth-closed
   - wisp-3
-  - Fourzy23_Body_
   - Fourzy16b_Eyes-win
   - Fourzy09b_Eyes-win
   - Fourzy45_Eyes-open
@@ -438,7 +436,6 @@ SpriteAtlas:
   - Fourzy16_Eyes-closed
   - Fourzy23b_Eyes-closed
   - Fourzy16b_Eyes-open
-  - Fourzy23_Eyes-win_
   - Fourzy17b_Eyes-open
   - Fourzy36b_Mouth-open
   - Fourzy19b_Body
@@ -464,7 +461,6 @@ SpriteAtlas:
   - Fourzy38b_Eyes-win
   - Fourzy16_Eyes-win
   - wisp-17
-  - Fourzy23b_Body_
   - wisp-19
   - wisp-21
   - Fourzy04b_Body
@@ -492,6 +488,7 @@ SpriteAtlas:
   - Fourzy08b_Eyes-closed
   - Fourzy36_Body
   - wisp-6
+  - Fourzy23_Body
   - Fourzy01_Body
   - Fourzy14_Body
   - Fourzy05b_Mouth-closed
@@ -671,6 +668,7 @@ SpriteAtlas:
   - Fourzy18_Mouth-closed
   - Fourzy09b_Mouth-closed
   - Fourzy01_Mouth-open
+  - Fourzy23b_Body
   - Fourzy13_Mouth-open
   - Fourzy17b_Eyes-win
   - Fourzy08_Eyes-closed
@@ -709,7 +707,7 @@ SpriteAtlas:
   - Fourzy12b_Mouth-open
   - Fourzy13_Eyes-closed
   - Fourzy15b_Eyes-win
-  - Fourzy02b_Body
+  - Fourzy02B_Body
   - Fourzy18b_Mouth-open
   - Fourzy05_Eyes-open
   - Fourzy03_Eyes-win
