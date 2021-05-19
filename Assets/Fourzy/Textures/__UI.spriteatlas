@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: be044a4a46a3d1a4794d948d7e6d087b, type: 3}
-    totalSpriteSurfaceArea: 18570573
+    totalSpriteSurfaceArea: 18573901
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -222,6 +222,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 81948ff814a118c4b9d714ca4c0cefc7, type: 3}
   - {fileID: 21300000, guid: d939f7197123a78439a678427dfff744, type: 3}
   - {fileID: 21300000, guid: 2209cc194f01746e59ba25d22b0831ce, type: 3}
+  - {fileID: 21300000, guid: 5a2a3e19bc51c4e698c404c925815039, type: 3}
   - {fileID: 21300000, guid: fdae0f29cd364ff4193474e02c7daf2d, type: 3}
   - {fileID: 21300000, guid: 45838539ed69e42d9858a4a07c4a410b, type: 3}
   - {fileID: 21300000, guid: fc4715491529447bda05a490a7c8c817, type: 3}
@@ -527,6 +528,7 @@ SpriteAtlas:
   - HorizontalBar-Lose
   - ReadyToPlay-On (noText)
   - buttonPrimary2x
+  - popup_bg
   - mm-gradiaent
   - TokenBackground
   - CrownIcon
