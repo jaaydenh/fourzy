@@ -49,18 +49,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected bool foundExpanded = true;
         protected bool lockedExpanded = true;
 
+        private bool userInventoryLoaded = false;
+
         protected override void Awake()
         {
             base.Awake();
 
             InternalSettings.onLoaded += OnInternalSettingsLoaded;
             UserManager.onTokenUnlocked += OnTokenUnlocked;
+            UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
         }
 
         protected void OnDestroy()
         {
             InternalSettings.onLoaded -= OnInternalSettingsLoaded;
             UserManager.onTokenUnlocked -= OnTokenUnlocked;
+            UserManager.onPlayfabValuesLoaded -= OnPlayfabValueLoaded;
         }
 
         protected void Update()
@@ -305,6 +309,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void OnTokenUnlocked(IEnumerable<TokenType> newTokens, TokenUnlockType unlockType)
         {
             UpdateTokens();
+        }
+
+        private void OnPlayfabValueLoaded()
+        {
+            if (UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.USER_INVENTORY_RECEIVED) && !userInventoryLoaded)
+            {
+                userInventoryLoaded = true;
+
+                UpdateTokens();
+            }
         }
     }
 }

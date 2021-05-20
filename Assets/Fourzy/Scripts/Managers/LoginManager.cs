@@ -591,7 +591,7 @@ namespace Fourzy
 
             if (inventoryTokens.Count > 0)
             {
-                UserManager.Instance.UnlockTokens(inventoryTokens, _Updates.Serialized.TokenUnlockType.AREA_PROGRESS);
+                PlayerPrefsWrapper.AddUnlockedTokens(inventoryTokens, _Updates.Serialized.TokenUnlockType.AREA_PROGRESS);
             }
 
             foreach (var currentcyData in inventoryRequestResult.VirtualCurrency)

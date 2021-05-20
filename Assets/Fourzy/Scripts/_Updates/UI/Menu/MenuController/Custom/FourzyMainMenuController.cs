@@ -1,12 +1,9 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu.Screens;
-using Newtonsoft.Json;
-using Photon.Pun;
-using PlayFab;
-using PlayFab.ClientModels;
+using FourzyGameModel.Model;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,12 +14,22 @@ namespace Fourzy._Updates.UI.Menu
         public static FourzyMainMenuController instance;
 
         private MatchmakingScreen matchmakingScreen;
+        private List<TokenType> unlockedTokensQueue = new List<TokenType>();
 
         protected override void Awake()
         {
             base.Awake();
 
             instance = this;
+
+            UserManager.onTokenUnlocked += OnTokensUnlocked;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            UserManager.onTokenUnlocked -= OnTokensUnlocked;
         }
 
         protected override void Start()
@@ -38,60 +45,13 @@ namespace Fourzy._Updates.UI.Menu
             }
         }
 
-        protected void Update()
+        private void OnTokensUnlocked(IEnumerable<TokenType> tokens, TokenUnlockType unlockType)
         {
-            ////try load fast puzzlePack
-            //if (Input.GetKeyDown(KeyCode.A))
-            //{
-            //    //GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks.Values.First());
-            //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            //    {
-            //        FunctionName = "updateFastPuzzlesStat",
-            //        FunctionParameter = new { value = 5 },
-            //        GeneratePlayStreamEvent = true,
-            //    },
-            //    (result) => { Debug.Log($"Fast puzzles stat updated {5}"); },
-            //    (error) => { Debug.LogError(error.ErrorMessage); });
-            //}
-            //else if (Input.GetKeyDown(KeyCode.W))
-            //{
-            //    //create turn based game
-            //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            //    {
-            //        FunctionName = "helloWorld",
-            //        FunctionParameter = "-input-",
+            unlockedTokensQueue.AddRange(tokens);
 
-            //    }, OnResult, OnError);
-            //}
+            if (!state) return;
 
-            //if (Input.GetKeyDown(KeyCode.X))
-            //{
-            //    GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle("ENCHANTED_FOREST_Puzzle_39_WinIn2"));
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.Q))
-            //{
-            //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            //    {
-            //        FunctionName = "getFastPuzzleLB",
-            //        FunctionParameter = new { maxCount = 6, }
-            //    }, OnResult, OnError);
-            //}
-        }
-
-        public void AddUnlockedTokenToQueue(string tokenId)
-        {
-
-        }
-
-        private void OnResult(ExecuteCloudScriptResult result)
-        {
-            print("good: " + result.ToJson());
-        }
-
-        private void OnError(PlayFabError error)
-        {
-            print("bad: " + error.ToString());
+            ShowNextRewardInQueue();
         }
 
         protected override void OnInvokeMenuEvents(MenuEvents events)
@@ -128,6 +88,17 @@ namespace Fourzy._Updates.UI.Menu
             {
                 matchmakingScreen.CloseSelf(false);
             }
+
+            ShowNextRewardInQueue();
+        }
+
+        private void ShowNextRewardInQueue()
+        {
+            Debug.Log(unlockedTokensQueue.Count + " unlocked");
+            if (unlockedTokensQueue.Count == 0) return;
+
+            GetOrAddScreen<AreaProgressionRewardScreen>().ShowReward(unlockedTokensQueue[unlockedTokensQueue.Count - 1], ShowNextRewardInQueue);
+            unlockedTokensQueue.RemoveAt(unlockedTokensQueue.Count - 1);
         }
 
         protected override void OnInitialized()

@@ -274,13 +274,6 @@ namespace Fourzy
                 unlockType);
         }
 
-        public void UnlockTokens(IEnumerable<TokenType> tokens, TokenUnlockType unlockType)
-        {
-            PlayerPrefsWrapper.AddUnlockedTokens(tokens, unlockType);
-
-            onTokenUnlocked?.Invoke(tokens, unlockType);
-        }
-
         public int GetAreaProgression(Area area)
         {
             return _areaProgression[area];

@@ -243,56 +243,6 @@ namespace Fourzy
 #endif
         }
 
-        protected void Update()
-        {
-            //force demo game
-            //if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
-
-            if (Application.isEditor || Debug.isDebugBuild)
-            {
-                if (Input.GetKeyDown(KeyCode.X))
-                {
-                    Debug.Log($"Reset games counter on all areas for player.");
-
-                    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                    {
-                        FunctionName = "resetAreaProgression",
-                        GeneratePlayStreamEvent = true,
-                    },
-                    null,
-                    (error) =>
-                    {
-                        Debug.LogError(error.ErrorMessage);
-
-                        ReportPlayFabError(error.ErrorMessage);
-                    });
-                }
-                else if (Input.GetKeyDown(KeyCode.C))
-                {
-                    ReportAreaProgression(Area.TRAINING_GARDEN);
-                }
-                else if (Input.GetKeyDown(KeyCode.V))
-                {
-                    ReportAreaProgression(Area.ENCHANTED_FOREST);
-                }
-                else if (Input.GetKeyDown(KeyCode.B))
-                {
-                    ReportAreaProgression(Area.ICE_PALACE);
-                }
-                else if (Input.GetKeyDown(KeyCode.N))
-                {
-                    ReportAreaProgression(Area.SANDY_ISLAND);
-                }
-                else if (Input.GetKeyDown(KeyCode.M))
-                {
-                    //unlock all tokens, only for client, tokens will be reset after client restart
-                    UserManager.Instance.UnlockTokens(
-                        GameContentManager.Instance.tokens.Select(_tokenData => _tokenData.tokenType), 
-                        TokenUnlockType.AREA_PROGRESS);
-                }
-            }
-        }
-
         protected void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;

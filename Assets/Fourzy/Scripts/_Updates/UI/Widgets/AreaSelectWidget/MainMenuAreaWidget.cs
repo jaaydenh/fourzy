@@ -22,16 +22,17 @@ namespace Fourzy._Updates.UI.Widgets
         public Slider progressionSlider;
         public ValueTween sliderValueTween;
         public Image rewardParent;
+        public GameObject noNextReward;
 
         private bool isPlayFabInitialized = false;
         private GameObject currentRewardItem;
-        private int cachedValue = 0;
+        private int cachedValue = -1;
 
         private AreaProgression progressionData = null;
         private AreaProgressionEntry previousReward;
         private AreaProgressionEntry nextReward;
         private BundleItem rewardItem;
-        private int gamesPlayed = 0;
+        private int currentValue = -1;
         private Area currentArea;
 
         protected void Start()
@@ -50,11 +51,11 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base._Update();
 
-            if (cachedValue != 0)
+            if (cachedValue != -1)
             {
                 OnAreaProgression(currentArea, cachedValue);
 
-                cachedValue = 0;
+                cachedValue = -1;
             }
         }
 
@@ -91,8 +92,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnAreaProgression(Area area, int value)
         {
-            // if (!pbInitialized || area != currentArea || gamesPlayed == value) return;
-            if (!isPlayFabInitialized || area != currentArea || (gamesPlayed > 0 && gamesPlayed == value)) return;
+            if (!isPlayFabInitialized || area != currentArea || currentValue == value) return;
 
             if (!visible)
             {
@@ -101,9 +101,10 @@ namespace Fourzy._Updates.UI.Widgets
                 return;
             }
 
-            gamesPlayed = value;
-            previousReward = progressionData.GetCurrent(gamesPlayed);
-            nextReward = progressionData.GetNext(gamesPlayed);
+            currentValue = value;
+
+            previousReward = progressionData.GetCurrent(currentValue);
+            nextReward = progressionData.GetNext(currentValue);
 
             UpdateLabel(value);
             UpdateSlider(true);
@@ -178,12 +179,12 @@ namespace Fourzy._Updates.UI.Widgets
                 if (previousReward == null)
                 {
                     progressionSlider.maxValue = nextReward.gamesNumber;
-                    to = gamesPlayed;
+                    to = currentValue;
                 }
                 else
                 {
                     progressionSlider.maxValue = nextReward.gamesNumber - previousReward.gamesNumber;
-                    to = gamesPlayed - previousReward.gamesNumber;
+                    to = currentValue - previousReward.gamesNumber;
                 }
             }
 
@@ -208,7 +209,16 @@ namespace Fourzy._Updates.UI.Widgets
             }
             rewardParent.color = Color.clear;
 
-            if (nextReward == null) return;
+            if (nextReward == null)
+            {
+                noNextReward.SetActive(true);
+
+                return;
+            }
+            else
+            {
+                noNextReward.SetActive(false);
+            }
 
             rewardItem = GameContentManager.Instance.allBundlesInfo[nextReward.id].GetFirstItem();
 

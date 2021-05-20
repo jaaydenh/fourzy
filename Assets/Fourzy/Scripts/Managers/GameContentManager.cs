@@ -101,27 +101,6 @@ namespace Fourzy
             LoadPassAndPlayBoards();
         }
 
-        protected void Update()
-        {
-            if (Application.isEditor || Debug.isDebugBuild)
-            {
-                if (Input.GetKeyDown(KeyCode.Z))
-                {
-                    int boardsComplete = PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed();
-
-                    if (boardsComplete < realtimeBotBoards.Count)
-                    {
-                        PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
-                        Debug.Log($"FTUE boards complete {PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed()}");
-                    }
-                    else
-                    {
-                        Debug.Log($"All FTUE boards complete");
-                    }
-                }
-            }
-        }
-
         public void GetBundlesInfo()
         {
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
