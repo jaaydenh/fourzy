@@ -556,7 +556,7 @@ namespace Fourzy
 
                 Debug.Log($"Stats received: wins {data.wins} loses {data.loses} draws {data.drawGames} rating {data.rating}");
 
-                UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.PLAYER_STATS_RECEIVED);
+                Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.PLAYER_STATS_RECEIVED);
             }, onFailed);
         }
 

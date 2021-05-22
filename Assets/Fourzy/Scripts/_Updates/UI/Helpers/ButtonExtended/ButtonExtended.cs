@@ -55,6 +55,7 @@ namespace Fourzy._Updates.UI.Helpers
         private HashSet<AffectedGraphics> maskableGraphics { get; set; }
 
         private bool initialized = false;
+        private CanvasGroup _canvasGroup;
 
         protected override void Awake()
         {
@@ -89,6 +90,13 @@ namespace Fourzy._Updates.UI.Helpers
             {
                 GameManager.onNetworkAccess -= OnConnectionStatusChanged;
             }
+        }
+
+        protected override void OnCanvasGroupChanged()
+        {
+            base.OnCanvasGroupChanged();
+
+            _canvasGroup = GetComponentInParent<CanvasGroup>();
         }
 
         public LabelPair GetLabel(string labelName = "name")
@@ -275,7 +283,7 @@ namespace Fourzy._Updates.UI.Helpers
                 base.OnPointerClick(eventData);
             }
 
-            if (!interactable) return;
+            if (!interactable || (_canvasGroup && !_canvasGroup.interactable)) return;
 
             events.Invoke();
 

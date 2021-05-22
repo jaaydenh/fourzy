@@ -18,6 +18,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private Action _onClose;
 
+        public override void Open()
+        {
+            Close(false);
+
+            CancelRoutine("open");
+            BlockInput();
+
+            StartRoutine("open", Constants.APREA_PROGRESSION_REWARD_DELAY, ActualOpen, null);
+        }
+
         public override void OnBack()
         {
             base.OnBack();
@@ -28,13 +38,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CloseSelf();
         }
 
-        internal void ShowReward(TokenType token, Action _onClose)
+        internal void ShowReward(TokenType token, Action _onClose = null)
         {
             TokensDataHolder.TokenData _data = GameContentManager.Instance.GetTokenData(token);
             tokenImage.sprite = _data.GetTokenSprite();
             tokenName.text = LocalizationManager.Value(_data.name);
-
-            HeaderScreen.Instance.Close();
 
             this._onClose = _onClose;
 
@@ -44,6 +52,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void TryButtonPress()
         {
 
+        }
+
+        private void ActualOpen()
+        {
+            base.Open();
+
+            HeaderScreen.Instance.Close();
         }
     }
 }

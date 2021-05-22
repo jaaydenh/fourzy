@@ -531,6 +531,8 @@ namespace Fourzy
                     ProgressionReward[] newItems =
                         JsonConvert.DeserializeObject<ProgressionReward[]>(result.FunctionResult.ToString());
 
+                    bool rewardDisplayed = false;
+
                     foreach (var item in newItems)
                     {
                         switch (item.itemClass)
@@ -936,9 +938,6 @@ namespace Fourzy
 
                     activeGame = null;
                     currentPuzzlePack = null;
-
-                    //get player stats
-                    UserManager.GetMyStats();
 
                     break;
             }

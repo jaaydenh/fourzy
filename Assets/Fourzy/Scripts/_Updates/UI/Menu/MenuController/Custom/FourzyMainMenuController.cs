@@ -1,11 +1,9 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu
 {
@@ -14,22 +12,14 @@ namespace Fourzy._Updates.UI.Menu
         public static FourzyMainMenuController instance;
 
         private MatchmakingScreen matchmakingScreen;
-        private List<TokenType> unlockedTokensQueue = new List<TokenType>();
+
+        private List<ProgressionReward> progressionRewardsQueue = new List<ProgressionReward>();
 
         protected override void Awake()
         {
             base.Awake();
 
             instance = this;
-
-            UserManager.onTokenUnlocked += OnTokensUnlocked;
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            UserManager.onTokenUnlocked -= OnTokensUnlocked;
         }
 
         protected override void Start()
@@ -43,15 +33,6 @@ namespace Fourzy._Updates.UI.Menu
             {
                 AudioHolder.instance.PlayBGAudio("bg_main_menu", true, .75f, 1f);
             }
-        }
-
-        private void OnTokensUnlocked(IEnumerable<TokenType> tokens, TokenUnlockType unlockType)
-        {
-            unlockedTokensQueue.AddRange(tokens);
-
-            if (!state) return;
-
-            ShowNextRewardInQueue();
         }
 
         protected override void OnInvokeMenuEvents(MenuEvents events)
@@ -88,17 +69,6 @@ namespace Fourzy._Updates.UI.Menu
             {
                 matchmakingScreen.CloseSelf(false);
             }
-
-            ShowNextRewardInQueue();
-        }
-
-        private void ShowNextRewardInQueue()
-        {
-            Debug.Log(unlockedTokensQueue.Count + " unlocked");
-            if (unlockedTokensQueue.Count == 0) return;
-
-            GetOrAddScreen<AreaProgressionRewardScreen>().ShowReward(unlockedTokensQueue[unlockedTokensQueue.Count - 1], ShowNextRewardInQueue);
-            unlockedTokensQueue.RemoveAt(unlockedTokensQueue.Count - 1);
         }
 
         protected override void OnInitialized()

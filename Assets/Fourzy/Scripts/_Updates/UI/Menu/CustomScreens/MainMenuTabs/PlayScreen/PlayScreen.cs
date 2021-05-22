@@ -41,8 +41,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             UserManager.onWinsUpdate += OnWinsUpdate;
             UserManager.onLosesUpdate += OnLosesUpdate;
             UserManager.onDrawsUpdate += OnDrawsUpdate;
-
-            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
         protected void OnDestroy()
@@ -50,8 +48,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             UserManager.onRatingUpdate -= OnRatingUpate;
             UserManager.onDisplayNameChanged -= OnUpdateUserInfo;
             UserManager.OnUpdateUserGamePieceID -= OnUpdateUserGamePieceID;
-
-            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         public override void OnBack()
@@ -188,17 +184,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void OnDrawsUpdate(int draw)
         {
             drawsLabel.text = draw + "";
-        }
-
-        private void OnSceneUnloaded(Scene scene)
-        {
-            switch (scene.name)
-            {
-                case Constants.GAMEPLAY_SCENE_NAME:
-                    ratingLabel.text = $"{LocalizationManager.Value("rating")}: ...";
-
-                    break;
-            }
         }
 
         protected override void OnInitialized()

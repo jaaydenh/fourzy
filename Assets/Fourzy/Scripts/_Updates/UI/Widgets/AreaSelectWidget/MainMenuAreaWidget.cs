@@ -16,29 +16,48 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class MainMenuAreaWidget : WidgetBase
     {
-        public TMP_Text areaLabel;
-        public TMP_Text progressionValue;
-        public Image areaImage;
-        public Slider progressionSlider;
-        public ValueTween sliderValueTween;
-        public Image rewardParent;
-        public GameObject noNextReward;
+        [SerializeField]
+        private TMP_Text areaLabel;
+        [SerializeField]
+        private TMP_Text progressionValue;
+        [SerializeField]
+        private Image areaImage;
+        [SerializeField]
+        private Slider progressionSlider;
+        [SerializeField]
+        private ValueTween sliderValueTween;
+        [SerializeField]
+        private Image rewardParent;
+        [SerializeField]
+        private GameObject noReward;
+        [SerializeField]
+        private ProgressionRewardAnimatorWidget rewardAnimation;
 
         private bool isPlayFabInitialized = false;
         private GameObject currentRewardItem;
-        private int cachedValue = -1;
+        private int cachedValue = 0;
 
         private AreaProgression progressionData = null;
         private AreaProgressionEntry previousReward;
         private AreaProgressionEntry nextReward;
         private BundleItem rewardItem;
-        private int currentValue = -1;
+        private int gamesPlayed = 0;
         private Area currentArea;
 
         protected void Start()
         {
             UserManager.onAreaProgression += OnAreaProgression;
             UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
+        }
+
+        protected void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                menuScreen.menuController
+                    .GetOrAddScreen<AreaProgressionRewardScreen>()
+                    .ShowReward(TokenType.ARROW);
+            }
         }
 
         protected void OnDestroy()
@@ -51,11 +70,30 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base._Update();
 
-            if (cachedValue != -1)
+            //this called ecverytime playScreen is opened
+            //so using code below i can pass unlocked rewards
+            //one by one even if we skipped thought them
+            if (cachedValue != 0)
             {
-                OnAreaProgression(currentArea, cachedValue);
+                //cached rewards are set when we add value to progression, but this screen isn't visible
 
-                cachedValue = -1;
+                //check if there is next reward for current amount of gamesPlayed (not same as cached value)
+                AreaProgressionEntry _next = progressionData.GetNext(gamesPlayed);
+
+                if (_next != null && cachedValue >= _next.gamesNumber)
+                {
+                    //if there is next reward and our cached value is enough to unlock it, 
+                    //pass _next.gamesNumber into OnAreaProgression to trigger reward manually
+                    OnAreaProgression(currentArea, _next.gamesNumber);
+                    return;
+                }
+                else
+                {
+                    //otherwise just progress to current value
+
+                    OnAreaProgression(currentArea, cachedValue);
+                    cachedValue = 0;
+                }
             }
         }
 
@@ -92,23 +130,45 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnAreaProgression(Area area, int value)
         {
-            if (!isPlayFabInitialized || area != currentArea || currentValue == value) return;
+            if (!isPlayFabInitialized || area != currentArea || (gamesPlayed > 0 && gamesPlayed == value)) return;
 
             if (!visible)
             {
                 cachedValue = value;
-
                 return;
             }
 
-            currentValue = value;
+            gamesPlayed = value;
 
-            previousReward = progressionData.GetCurrent(currentValue);
-            nextReward = progressionData.GetNext(currentValue);
+            bool newReward = false;
+            previousReward = progressionData.GetCurrent(gamesPlayed);
+            if (previousReward == nextReward && nextReward != null)
+            {
+                newReward = true;
+            }
+            nextReward = progressionData.GetNext(gamesPlayed);
+            if (nextReward == null)
+            {
+                newReward = true;
+            }
 
-            UpdateLabel(value);
-            UpdateSlider(true);
-            UpdateBundleReward();
+            if (newReward)
+            {
+                menuScreen.menuController
+                    .GetOrAddScreen<AreaProgressionRewardScreen>()
+                    .ShowReward((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId));
+
+                progressionValue.text = "";
+                rewardAnimation.Animate(Constants.APREA_PROGRESSION_REWARD_DELAY);
+                UpdateSlider(true, 1f);
+
+                //animate reward
+                StartRoutine("next", Constants.APREA_PROGRESSION_REWARD_DELAY, UpdateFromCurrentValues);
+            }
+            else
+            {
+                UpdateFromCurrentValues();
+            }
         }
 
         private void OnPlayfabValueLoaded()
@@ -144,7 +204,14 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        private void UpdateLabel(int gamesPlayed)
+        private void UpdateFromCurrentValues()
+        {
+            UpdateLabel();
+            UpdateSlider(true);
+            UpdateBundleReward();
+        }
+
+        private void UpdateLabel()
         {
             if (nextReward == null)
             {
@@ -165,7 +232,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void UpdateSlider(bool animate)
         {
-            float from = progressionSlider.value;
             float to;
 
             if (nextReward == null)
@@ -176,28 +242,26 @@ namespace Fourzy._Updates.UI.Widgets
             }
             else
             {
-                if (previousReward == null)
-                {
-                    progressionSlider.maxValue = nextReward.gamesNumber;
-                    to = currentValue;
-                }
-                else
-                {
-                    progressionSlider.maxValue = nextReward.gamesNumber - previousReward.gamesNumber;
-                    to = currentValue - previousReward.gamesNumber;
-                }
+                to = previousReward == null ?
+                    (float)gamesPlayed / nextReward.gamesNumber :
+                    (float)(gamesPlayed - previousReward.gamesNumber) / (nextReward.gamesNumber - previousReward.gamesNumber);
             }
 
+            UpdateSlider(animate, to);
+        }
+
+        private void UpdateSlider(bool animate, float value)
+        {
             if (animate)
             {
-                sliderValueTween.from = from;
-                sliderValueTween.to = to;
+                sliderValueTween.from = progressionSlider.value;
+                sliderValueTween.to = value;
 
                 sliderValueTween.PlayForward(true);
             }
             else
             {
-                progressionSlider.value = to;
+                progressionSlider.value = value;
             }
         }
 
@@ -208,17 +272,9 @@ namespace Fourzy._Updates.UI.Widgets
                 Destroy(currentRewardItem);
             }
             rewardParent.color = Color.clear;
+            noReward.SetActive(nextReward == null);
 
-            if (nextReward == null)
-            {
-                noNextReward.SetActive(true);
-
-                return;
-            }
-            else
-            {
-                noNextReward.SetActive(false);
-            }
+            if (nextReward == null) return;
 
             rewardItem = GameContentManager.Instance.allBundlesInfo[nextReward.id].GetFirstItem();
 
