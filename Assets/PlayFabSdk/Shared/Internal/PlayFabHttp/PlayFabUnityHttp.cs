@@ -97,7 +97,7 @@ namespace PlayFab.Internal
             CallRequestContainer reqContainer = (CallRequestContainer)reqContainerObj;
             reqContainer.RequestHeaders["Content-Type"] = "application/json";
 
-#if !UNITY_WSA && !UNITY_WP8 && !UNITY_WEBGL
+#if !UNITY_WSA && !UNITY_WP8 && !UNITY_WEBGL && !UNITY_EDITOR
             if (PlayFabSettings.CompressApiData)
             {
                 reqContainer.RequestHeaders["Content-Encoding"] = "GZIP";
