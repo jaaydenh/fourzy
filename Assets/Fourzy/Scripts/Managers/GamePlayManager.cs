@@ -573,7 +573,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             foreach (TokensDataHolder.TokenData token in tokens)
             {
                 TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
-                popupUI.Prompt(token);
+                popupUI.Prompt(token, false);
 
                 yield return new WaitWhile(() => popupUI.isOpened);
 

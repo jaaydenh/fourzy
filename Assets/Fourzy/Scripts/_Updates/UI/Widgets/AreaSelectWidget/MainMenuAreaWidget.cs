@@ -106,7 +106,7 @@ namespace Fourzy._Updates.UI.Widgets
                 case Constants.PLAYFAB_TOKEN_CLASS:
                     PersistantMenuController.Instance
                         .GetOrAddScreen<TokenPrompt>()
-                        .Prompt(GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)));
+                        .Prompt(GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)), true);
 
                     break;
 

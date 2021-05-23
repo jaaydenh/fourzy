@@ -15,7 +15,7 @@ MonoBehaviour:
   areas:
   - name: area_garden
     enabled: 1
-    areaColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
+    areaColor: {r: 0.8156863, g: 1, b: 0.29803923, a: 1}
     description: area_garden
     levelToUnlock: 0
     areaID: 2
@@ -54,7 +54,7 @@ MonoBehaviour:
         type: 3}
   - name: area_forest
     enabled: 1
-    areaColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
+    areaColor: {r: 0.45490196, g: 0.91764706, b: 0.30588236, a: 1}
     description: area_forest
     levelToUnlock: 0
     areaID: 4
@@ -88,7 +88,7 @@ MonoBehaviour:
         type: 3}
   - name: area_island
     enabled: 1
-    areaColor: {r: 1, g: 0.9930853, b: 0.3915094, a: 1}
+    areaColor: {r: 1, g: 0.8862745, b: 0.7019608, a: 1}
     description: area_island
     levelToUnlock: 0
     areaID: 8
@@ -122,7 +122,7 @@ MonoBehaviour:
         type: 3}
   - name: area_palace
     enabled: 1
-    areaColor: {r: 0.4669811, g: 0.9826793, b: 1, a: 1}
+    areaColor: {r: 0.050980393, g: 1, b: 0.9843137, a: 1}
     description: area_palace
     levelToUnlock: 0
     areaID: 16

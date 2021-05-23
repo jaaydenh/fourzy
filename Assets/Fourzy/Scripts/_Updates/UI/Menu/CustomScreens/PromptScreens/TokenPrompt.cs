@@ -15,10 +15,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class TokenPrompt : PromptScreen
     {
-        public Badge locationBadge;
-        public Badge priceBadge;
-        public TMP_Text extra;
-        public Image tokenImage;
+        [SerializeField]
+        private GameObject newTokenRibbon;
+        [SerializeField]
+        private ButtonExtended tryItButton;
+
+        [SerializeField]
+        private TMP_Text locationLabel;
+        [SerializeField]
+        private Image tokenImage;
         public TokensDataHolder.TokenData data { get; private set; }
 
         private GameboardView gameboard;
@@ -31,11 +36,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gameboard = GetComponentInChildren<GameboardView>();
         }
 
-        public virtual void Prompt(TokensDataHolder.TokenData data)
+        public virtual void Prompt(TokensDataHolder.TokenData data, bool canTryIt)
         {
             this.data = data;
 
-            gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
+            newTokenRibbon.gameObject.SetActive(!canTryIt);
+            tryItButton.SetActive(canTryIt);
 
             InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
         }
@@ -43,6 +49,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public virtual void Prompt(TokenView tokenView)
         {
             data = GameContentManager.Instance.tokensDataHolder.GetTokenData(tokenView.tokenType);
+
+            newTokenRibbon.gameObject.SetActive(false);
+            tryItButton.SetActive(false);
 
             InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
         }
@@ -54,46 +63,41 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CancelRoutine("tokenInstructions");
         }
 
+        /// <summary>
+        /// Invoked from button
+        /// </summary>
+        public void TryIt()
+        {
+            if (gameboardDefinition == null)
+            {
+                Debug.LogError("Token prompt gameboard definition is empty");
+                return;
+            }
+
+            CloseSelf();
+
+            ClientFourzyGame _game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Bot", AIProfile.BadBot))
+            {
+                _Type = GameType.AI,
+            };
+            _game.UpdateFirstState();
+
+            GameManager.Instance.StartGame(_game, GameTypeLocal.LOCAL_GAME);
+        }
+
         private void InitPrompt(List<AreasDataHolder.GameArea> themes)
         {
             gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
             tokenImage.sprite = data.GetTokenSprite();
 
-            //badges
-            if (data.isSpell)
+            locationLabel.text = GameContentManager.Instance.GetTokenAreaNames(data.tokenType)[0];
+
+            if (themes.Count > 0)
             {
-                locationBadge.SetState(false);
-                priceBadge.SetValue(data.price);
-
-                if (themes.Count > 0)
-                {
-                    priceBadge.SetColor(themes[0].areaColor);
-                }
-            }
-            else
-            {
-                List<string> locations = GameContentManager.Instance.GetTokenAreaNames(data.tokenType);
-
-                if (locations.Count == 6)
-                {
-                    locationBadge.SetValue("All");
-                }
-                else
-                {
-                    locationBadge.SetValue(string.Join(", ", locations));
-                }
-
-                if (themes.Count > 0)
-                {
-                    locationBadge.SetColor(themes[0].areaColor);
-                }
-
-                priceBadge.SetState(false);
+                locationLabel.color = themes[0].areaColor;
             }
 
-            extra.text = LocalizationManager.Value(data.description);
-
-            Prompt(LocalizationManager.Value(data.name), "");
+            Prompt(LocalizationManager.Value(data.name), LocalizationManager.Value(data.description));
 
             //play instructions
             CancelRoutine("tokenInstructions");

@@ -321,6 +321,10 @@
       "value": "Music"
     },
     {
+      "key": "new_token_unlocked",
+      "value": "NEW TOKEN UNLOCKED"
+    },
+    {
       "key": "news",
       "value": "News"
     },
@@ -811,6 +815,10 @@
     {
       "key": "tutorial",
       "value": "Tutorial"
+    },
+    {
+      "key": "try_it_out",
+      "value": "Try it out"
     },
     {
       "key": "unlocked",
