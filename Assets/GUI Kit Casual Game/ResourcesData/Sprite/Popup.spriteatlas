@@ -40,18 +40,20 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 5695d6959b77c483e874d5374ab295b1, type: 3}
-    totalSpriteSurfaceArea: 3496977
+    totalSpriteSurfaceArea: 3485956
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 73d8983007ddd4830baf7ecba1debd74, type: 3}
   - {fileID: 21300000, guid: eb3db5b0868bc4f348e3d3a1dfbf32a8, type: 3}
   - {fileID: 21300000, guid: e7616c318c334479c9b0c12357d85650, type: 3}
   - {fileID: 21300000, guid: 10467a51965ec4f8abe04190081e5636, type: 3}
-  - {fileID: 21300000, guid: 4e9baab14e03b4b1c9219bb1a838f001, type: 3}
   - {fileID: 21300000, guid: 6859da92742c94fa9bfcb5d416e98e56, type: 3}
   - {fileID: 21300000, guid: bd7820459436c4022b247f5a14f682ad, type: 3}
   - {fileID: 21300000, guid: e792b7a6f9b844e14b97fcb3514851e0, type: 3}
@@ -68,7 +70,6 @@ SpriteAtlas:
   - popup_bg
   - txt_field_icon_account_1
   - txt_field_icon_pw_0
-  - popup_btn_close
   - txt_field_icon_email_1
   - txt_field_icon_email_0
   - popup_bg_login
@@ -80,5 +81,6 @@ SpriteAtlas:
   - txt_field_icon_account_0
   - icon_network_error
   - frame
+  m_RenderDataMap: {}
   m_Tag: Popup
   m_IsVariant: 0

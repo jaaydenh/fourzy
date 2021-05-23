@@ -16,12 +16,9 @@ MonoBehaviour:
     type: 3}
   tokens:
   - tokenType: 1
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_blocker
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 0
     themesTokens:
     - theme: 2
@@ -45,12 +42,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 745307ef58b57ab41bc5cfd36bcae9b8, type: 3}
   - tokenType: 5
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_arrow
-    showBackground: 1
-    backgroundTileColor: {r: 1, g: 0.8117648, b: 0.427451, a: 1}
     gameboardInstructionID: 1
     themesTokens:
     - theme: 127
@@ -58,12 +52,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: bfa0bf42d2bc3ad4c908acd62dd251e2, type: 3}
   - tokenType: 2
-    tokenIcon: {fileID: 21300000, guid: 9daaa4893d4e27b4bbc1dd74873d6d70, type: 3}
     isSpell: 0
     spellID: 0
     description: token_desc_sticky
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 2
     themesTokens:
     - theme: 127
@@ -72,12 +63,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 090ecd917ea32a94c809db6786946e9d, type: 3}
   - tokenType: 4
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_ghost
-    showBackground: 1
-    backgroundTileColor: {r: 1, g: 0.8117648, b: 0.427451, a: 1}
     gameboardInstructionID: 3
     themesTokens:
     - theme: 127
@@ -86,82 +74,64 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 65a418b85c995124fb3529ba2ee56f23, type: 3}
   - tokenType: 12
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_pit
-    showBackground: 1
-    backgroundTileColor: {r: 1, g: 0.8117648, b: 0.427451, a: 1}
     gameboardInstructionID: 5
     themesTokens:
-    - theme: 127
+    - theme: 4
       tokenPrefab: {fileID: 8540056239470390242, guid: bf28af94637c81343b3ec7aa7881e520,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: 98fc7cb9c6a66f0488e2b9294c88cf50, type: 3}
   - tokenType: 8
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_ice
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 4
     themesTokens:
-    - theme: 127
+    - theme: 16
       tokenPrefab: {fileID: 8766325973168727599, guid: f0ce173f3e315674b8cc3349c2adf111,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: 7049d2ec64c0afe4e967933549474d93, type: 3}
   - tokenType: 10
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_sand
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 6
     themesTokens:
-    - theme: 127
+    - theme: 8
       tokenPrefab: {fileID: 1922302832650764088, guid: 87aeb43e86023ca4eb5daec14f9a4a34,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: dbc2281c16df0df4a82dfeef55d800ac, type: 3}
   - tokenType: 19
-    tokenIcon: {fileID: 21300000, guid: e00d767c04b95427d9ce87938b0c5df4, type: 3}
     isSpell: 0
     spellID: 0
     description: token_desc_fruit
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 8
     themesTokens:
-    - theme: 127
+    - theme: 6
       tokenPrefab: {fileID: 6842218752336031025, guid: 53f97e1f4d129544895c6e44cb48894a,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: f0608149fef0222408904d8b2d326de9, type: 3}
   - tokenType: 3
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_water
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 12
     themesTokens:
-    - theme: 127
+    - theme: 4
       tokenPrefab: {fileID: 6678527419331126617, guid: 57e499ac1c032be4592d8767b4286b0b,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: e094f0e9ba53ed241b014551c4121af5, type: 3}
   - tokenType: 13
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_circle_bomb
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 14
     themesTokens:
     - theme: 127
@@ -170,12 +140,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 4e289b1fca8a6b940ac95cbf9b427ef5, type: 3}
   - tokenType: 6
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_fourway_arrow
-    showBackground: 1
-    backgroundTileColor: {r: 1, g: 0.8117648, b: 0.427451, a: 1}
     gameboardInstructionID: 22
     themesTokens:
     - theme: 127
@@ -184,54 +151,42 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 4f2063d83fd50fe49a8fa277d2f77383, type: 3}
   - tokenType: 55
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_fruit_tree
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 18
     themesTokens:
-    - theme: 127
+    - theme: 4
       tokenPrefab: {fileID: 5355287401105794246, guid: 09a7348c89d97004c94d76e3ec02f228,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: 4ef48c66478d0df44ac3a1b4e438c29e, type: 3}
   - tokenType: 9
-    tokenIcon: {fileID: 21300000, guid: 71c6951ce3a2ccf46a54f1c12bff57da, type: 3}
     isSpell: 0
     spellID: 0
     description: token_desc_ice_block
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 19
     themesTokens:
-    - theme: 127
+    - theme: 16
       tokenPrefab: {fileID: 1799370101569748514, guid: e9f45406d89dd5a42bb3faef0ff7b144,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: f589a8fb7223ba8488190b3bca66df4b, type: 3}
   - tokenType: 18
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_snow
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 20
     themesTokens:
-    - theme: 127
+    - theme: 16
       tokenPrefab: {fileID: 5537000560462396341, guid: 888dc4e93d2d5334db936a8bab6a4ec9,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: 66f6ab76d37eff44c939e89c85e0c837, type: 3}
   - tokenType: 33
-    tokenIcon: {fileID: 0}
     isSpell: 1
     spellID: 0
     description: token_desc_hex
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 21
     themesTokens:
     - theme: 127
@@ -240,26 +195,20 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 501b70ea6b7afb843b946c7d5f84f84a, type: 3}
   - tokenType: 49
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_moving_ghost
-    showBackground: 1
-    backgroundTileColor: {r: 1, g: 0.8117648, b: 0.427451, a: 1}
     gameboardInstructionID: 31
     themesTokens:
-    - theme: 127
+    - theme: 4
       tokenPrefab: {fileID: 5308922800023532423, guid: 90b5ae3199dbbe44b86a228afba8d913,
         type: 3}
       tokenIcons:
       - {fileID: 21300000, guid: b52886d167da7984082a498fcfad3e5c, type: 3}
   - tokenType: 27
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_rotating_arrow
-    showBackground: 1
-    backgroundTileColor: {r: 1, g: 0.8117648, b: 0.427451, a: 1}
     gameboardInstructionID: 3d15e1e1-4069-4d6d-ac97-ff4acb938f5c
     themesTokens:
     - theme: 127
@@ -268,12 +217,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: bfa0bf42d2bc3ad4c908acd62dd251e2, type: 3}
   - tokenType: 20
-    tokenIcon: {fileID: 0}
     isSpell: 1
     spellID: 12
     description: token_desc_lure
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 23
     themesTokens:
     - theme: 127
@@ -282,12 +228,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 84b86c464f0731b42a13241fe6eebcf1, type: 3}
   - tokenType: 61
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_move_blocker
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: 24
     themesTokens:
     - theme: 127
@@ -296,12 +239,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 841b5e7899341194e94776486635daa1, type: 3}
   - tokenType: 14
-    tokenIcon: {fileID: 0}
     isSpell: 0
     spellID: 0
     description: token_desc_cross_bomb
-    showBackground: 0
-    backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
     gameboardInstructionID: cefb7a62-c34c-4f20-9c62-96b560b1ba89
     themesTokens:
     - theme: 127
@@ -310,12 +250,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 400939cf78b860f4fb368a975c59ee4e, type: 3}
   - tokenType: 64
-    tokenIcon: {fileID: 0}
     isSpell: 1
     spellID: 3
     description: token_desc_darkness
-    showBackground: 1
-    backgroundTileColor: {r: 1, g: 0.8117648, b: 0.427451, a: 1}
     gameboardInstructionID: 7722f447-2374-4956-8336-4411d523884a
     themesTokens:
     - theme: 127
