@@ -51,7 +51,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void TryButtonPress()
         {
-
+            OnBack();
         }
 
         private void ActualOpen()

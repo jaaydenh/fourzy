@@ -140,19 +140,11 @@ namespace Fourzy._Updates.UI.Widgets
 
             gamesPlayed = value;
 
-            bool newReward = false;
+            AreaProgressionEntry _next = nextReward;
             previousReward = progressionData.GetCurrent(gamesPlayed);
-            if (previousReward == nextReward && nextReward != null)
-            {
-                newReward = true;
-            }
             nextReward = progressionData.GetNext(gamesPlayed);
-            if (nextReward == null)
-            {
-                newReward = true;
-            }
 
-            if (newReward)
+            if (_next != null && _next != nextReward)
             {
                 menuScreen.menuController
                     .GetOrAddScreen<AreaProgressionRewardScreen>()
