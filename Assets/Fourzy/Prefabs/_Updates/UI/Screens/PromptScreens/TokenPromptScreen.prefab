@@ -2756,7 +2756,7 @@ MonoBehaviour:
   promptText: {fileID: 450377831991392477}
   acceptButton: {fileID: 0}
   declineButton: {fileID: 0}
-  newTokenLabel: {fileID: 5064647505155802562}
+  newTokenRibbon: {fileID: 8996170469159219462}
   tryItButton: {fileID: 1535660083264897018}
   locationLabel: {fileID: 5670080184071082016}
   tokenImage: {fileID: 5262574001681136904}

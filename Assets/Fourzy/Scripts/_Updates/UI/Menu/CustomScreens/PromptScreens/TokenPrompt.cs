@@ -16,7 +16,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class TokenPrompt : PromptScreen
     {
         [SerializeField]
-        private TMP_Text newTokenLabel;
+        private GameObject newTokenRibbon;
         [SerializeField]
         private ButtonExtended tryItButton;
 
@@ -40,7 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.data = data;
 
-            newTokenLabel.gameObject.SetActive(canTryIt);
+            newTokenRibbon.gameObject.SetActive(!canTryIt);
             tryItButton.SetActive(canTryIt);
 
             InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
@@ -50,7 +50,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             data = GameContentManager.Instance.tokensDataHolder.GetTokenData(tokenView.tokenType);
 
-            newTokenLabel.gameObject.SetActive(false);
+            newTokenRibbon.gameObject.SetActive(false);
             tryItButton.SetActive(false);
 
             InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
