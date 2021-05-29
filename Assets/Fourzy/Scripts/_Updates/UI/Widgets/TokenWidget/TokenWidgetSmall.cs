@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using System.Linq;
 using UnityEngine.UI;
 using static Fourzy._Updates.Serialized.TokensDataHolder;
 
@@ -21,6 +22,9 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public void OnClick() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(data, true);
+        public void OnClick() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(
+            data, 
+            PlayerPrefsWrapper.GetUnlockedTokens().Select(_data => _data.tokenType).Contains(data.tokenType), 
+            false);
     }
 }
