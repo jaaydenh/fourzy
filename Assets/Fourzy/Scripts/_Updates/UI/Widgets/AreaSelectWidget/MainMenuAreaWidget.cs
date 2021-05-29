@@ -117,7 +117,10 @@ namespace Fourzy._Updates.UI.Widgets
                 case Constants.PLAYFAB_TOKEN_CLASS:
                     PersistantMenuController.Instance
                         .GetOrAddScreen<TokenPrompt>()
-                        .Prompt(GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)), false);
+                        .Prompt(
+                            GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)), 
+                            false, 
+                            false);
 
                     break;
 
@@ -195,7 +198,8 @@ namespace Fourzy._Updates.UI.Widgets
                 }
 
                 isPlayFabInitialized = true;
-                OnAreaProgression(currentArea, UserManager.Instance.GetAreaProgression(currentArea));
+                gamesPlayed = UserManager.Instance.GetAreaProgression(currentArea);
+                OnAreaProgression(currentArea, gamesPlayed);
             }
         }
 
