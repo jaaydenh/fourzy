@@ -32,7 +32,9 @@ namespace Fourzy._Updates.UI.Widgets
         /// <summary>
         /// Invoked from button
         /// </summary>
-        public void OnTap() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(tokenData);
+        public void OnTap() => PersistantMenuController.Instance
+            .GetOrAddScreen<TokenPrompt>()
+            .Prompt(tokenData, true);
 
         /// <summary>
         /// Either grayed out or normal
