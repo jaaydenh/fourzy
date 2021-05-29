@@ -88,11 +88,14 @@ namespace Fourzy
         public const int MAX_PLAYER_LEVEL = 32;
         public const int MIN_PLAYER_LEVEL = 1;
 
-        public const string PUZZLE_PACKS_ROOT_FOLDER = "PuzzlePacks";
-        public const string PUZZLES_ROOT_FOLDER = "PuzzlePool";
-        public const string REALTIME_BOT_BOARDS = "FTUE_ProgressionBoards";
-        public const string PASS_AND_PLAY_BOARDS = "PassAndPlayBoards";
-        public const string MISC_BOARDS_FOLDER = "MiscBoards";
+        public const string BOARDS_ROOT = "GameBoards";
+        public const string FAST_PUZZLES_FOLDER = BOARDS_ROOT + "/FastPuzzles";
+        public const string REALTIME_BOT_BOARDS_FOLDER = BOARDS_ROOT + "/FTUE_ProgressionBoards";
+        public const string PUZZLE_PACKS_FOLDER = BOARDS_ROOT + "/PuzzlePacks";
+        public const string PASS_AND_PLAY_BOARDS_FOLDER = BOARDS_ROOT + "/PassAndPlayBoards";
+        public const string MISC_BOARDS_FOLDER = BOARDS_ROOT + "/MiscBoards";
+        public const string TRYI_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
+
         public const string AREAS_PROGRESSION_FOLDER = "AreasProgression";
         public const string LOCALIZATION_FOLDER = "Localization";
 

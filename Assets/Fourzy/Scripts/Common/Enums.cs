@@ -3,17 +3,20 @@
     public enum PlayerEnum { NONE, ONE, TWO, ALL, EMPTY };
     public enum ChallengeType { NONE, STANDARD, TOURNAMENT };
     public enum ChallengeState { NONE, RUNNING, ISSUED, COMPLETE };
-    public enum GameType { 
-        NONE, 
-        TURN_BASED, 
-        PASSANDPLAY, 
-        FRIEND, 
-        LEADERBOARD, 
-        PUZZLE, 
-        AI, 
-        REALTIME, 
-        ONBOARDING, 
-        PRESENTATION};
+    public enum GameType
+    {
+        NONE,
+        TURN_BASED,
+        PASSANDPLAY,
+        FRIEND,
+        LEADERBOARD,
+        PUZZLE,
+        AI,
+        REALTIME,
+        ONBOARDING,
+        PRESENTATION,
+        TRY_TOKEN,
+    };
 
     public enum GameMode { NONE, PUZZLE_FAST, PUZZLE_PACK, AI_PACK, BOSS_AI_PACK, GAUNTLET, VERSUS }
     public enum AIPlayerSkill { LEVEL1, LEVEL2, LEVEL3 };

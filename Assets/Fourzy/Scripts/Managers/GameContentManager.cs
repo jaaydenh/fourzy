@@ -134,6 +134,32 @@ namespace Fourzy
 
         public GameBoardDefinition GetMiscBoard(string boardID) => miscBoards.Find(board => board.ID == boardID);
 
+        public void StartTryItBoard(TokenType token)
+        {
+            ResourceItem _boardTextFile =  ResourceDB
+                .GetFolder(Constants.TRYI_IT_BOARDS_FOLDER)
+                .GetChild(token.ToString(), ResourceItem.Type.Asset);
+
+            if (_boardTextFile == null)
+            {
+                Debug.LogError($"Failed to find Try It board for {token}");
+                return;
+            }
+            else
+            {
+                ClientFourzyGame _game = new ClientFourzyGame
+                    (JsonConvert.DeserializeObject<GameBoardDefinition>(_boardTextFile.Load<TextAsset>().text), 
+                    UserManager.Instance.meAsPlayer, 
+                    new Player(2, "Bot", AIProfile.BadBot))
+                {
+                    _Type = GameType.TRY_TOKEN,
+                };
+                _game.UpdateFirstState();
+
+                GameManager.Instance.StartGame(_game, GameTypeLocal.LOCAL_GAME);
+            }
+        }
+
         public TokenView GetTokenPrefab(TokenType tokenType, Area theme) =>
             tokensDataHolder.GetToken(tokenType, theme);
 
@@ -224,7 +250,7 @@ namespace Fourzy
         private void LoadAllFastPuzzles()
         {
             foreach (ResourceItem item in ResourceDB
-                .GetFolder(Constants.PUZZLES_ROOT_FOLDER)
+                .GetFolder(Constants.FAST_PUZZLES_FOLDER)
                 .GetChilds("", ResourceItem.Type.Asset)
                 .Where(_file => _file.Ext == "json"))
             {
@@ -244,7 +270,7 @@ namespace Fourzy
             externalPuzzlePacks = new Dictionary<string, BasicPuzzlePack>();
 
             foreach (ResourceItem @event in ResourceDB
-                .GetFolder(Constants.PUZZLE_PACKS_ROOT_FOLDER)
+                .GetFolder(Constants.PUZZLE_PACKS_FOLDER)
                 .GetChilds("", ResourceItem.Type.Folder))
             {
                 IEnumerable<ResourceItem> items = @event.GetChilds("", ResourceItem.Type.Asset);
@@ -293,7 +319,7 @@ namespace Fourzy
         private void LoadTutorialBotGames()
         {
             realtimeBotBoards = new List<ResourceItem>(ResourceDB
-                .GetFolder(Constants.REALTIME_BOT_BOARDS)
+                .GetFolder(Constants.REALTIME_BOT_BOARDS_FOLDER)
                 .GetChilds("", ResourceItem.Type.Asset)
                 .Where(_file => _file.Ext == "json")
                 .OrderBy(_file => int.Parse(_file.Name.Split(' ')[0])));
@@ -333,7 +359,7 @@ namespace Fourzy
         private void LoadPassAndPlayBoards()
         {
             passAndPlayBoards = new List<GameBoardDefinition>(ResourceDB
-                .GetFolder(Constants.PASS_AND_PLAY_BOARDS)
+                .GetFolder(Constants.PASS_AND_PLAY_BOARDS_FOLDER)
                 .GetChild("used", ResourceItem.Type.Folder)
                 .GetChilds("", ResourceItem.Type.Asset)
                 .Where(_file => _file.Ext == "json")

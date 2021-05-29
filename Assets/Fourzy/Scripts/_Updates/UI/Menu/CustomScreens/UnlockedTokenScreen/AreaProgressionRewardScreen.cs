@@ -1,5 +1,6 @@
 //@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
 using System;
@@ -17,13 +18,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private TMP_Text tokenName;
 
         private Action _onClose;
+        private TokenType tokenReward;
 
         public override void Open()
         {
-            Close(false);
+            if (!isOpened)
+            {
+                Close(false);
 
-            CancelRoutine("open");
-            BlockInput();
+                CancelRoutine("open");
+                BlockInput();
+            }
         }
 
         public override void OnBack()
@@ -38,6 +43,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         internal void ShowReward(TokenType token, Action _onClose = null)
         {
+            tokenReward = token;
             TokensDataHolder.TokenData _data = GameContentManager.Instance.GetTokenData(token);
             tokenImage.sprite = _data.GetTokenSprite();
             tokenName.text = LocalizationManager.Value(_data.name);
@@ -49,7 +55,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void TryButtonPress()
         {
-            OnBack();
+            CloseSelf();
+
+            GameContentManager.Instance.StartTryItBoard(tokenReward);
         }
 
         public void ActualOpen()

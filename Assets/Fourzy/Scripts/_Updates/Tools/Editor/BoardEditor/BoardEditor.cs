@@ -1228,7 +1228,7 @@ namespace Fourzy._Updates.Tools
             if (option.ToString() == saveOptions[0])
             {
                 if (string.IsNullOrEmpty(selectedPath))
-                    path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/BoardsPool");
+                    path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "Assets/Resources/GameBoards/BoardsPool");
                 else
                     path = EditorUtility.SaveFilePanelInProject("Save board", selectedFileName, "json", "", selectedPath);
 
@@ -1239,7 +1239,7 @@ namespace Fourzy._Updates.Tools
             else if (option.ToString() == saveOptions[1])
             {
                 if (string.IsNullOrEmpty(selectedPath))
-                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Resources/GameBoards/PuzzleDrafts");
                 else
                     path = EditorUtility.SaveFilePanelInProject("Save puzzle", selectedFileName, "json", "", selectedPath);
 
@@ -1266,7 +1266,7 @@ namespace Fourzy._Updates.Tools
             else if (option.ToString() == saveOptions[2])
             {
                 if (string.IsNullOrEmpty(selectedPath))
-                    path = EditorUtility.SaveFilePanelInProject("Save game", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                    path = EditorUtility.SaveFilePanelInProject("Save game", currentBoard.BoardName, "json", "Assets/Resources/GameBoards/PuzzleDrafts");
                 else
                     path = EditorUtility.SaveFilePanelInProject("Save game", selectedFileName, "json", "", selectedPath);
 
@@ -1284,7 +1284,7 @@ namespace Fourzy._Updates.Tools
                 if (currentPuzzleData.GameBoard == null) currentPuzzleData.GameBoard = currentBoard;
 
                 if (string.IsNullOrEmpty(selectedPath))
-                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Resources/GameBoards/PuzzleDrafts");
                 else
                     path = EditorUtility.SaveFilePanelInProject("Save puzzle", selectedFileName, "json", "", selectedPath);
 

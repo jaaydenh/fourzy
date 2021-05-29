@@ -350,7 +350,10 @@ namespace Fourzy._Updates.UI.Menu
 
         public void ExecuteMenuEvents()
         {
-            if (!menuEvents.ContainsKey(name)) menuEvents.Add(name, new MenuEvents());
+            if (!menuEvents.ContainsKey(name))
+            {
+                menuEvents.Add(name, new MenuEvents());
+            }
 
             if (menuEvents.Count == 0 || !state) return;
 

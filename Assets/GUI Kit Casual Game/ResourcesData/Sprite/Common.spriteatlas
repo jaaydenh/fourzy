@@ -88,7 +88,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1c72bf871f2614c4a8e129267b425912, type: 3}
   - {fileID: 21300000, guid: 75bcd0b7eff514a1b963792ac5ce380c, type: 3}
   - {fileID: 21300000, guid: 4e264218963304cd4af172f9081b6fb8, type: 3}
-  - {fileID: 21300000, guid: 4f004328d7c9547edae34787869f3e8a, type: 3}
   - {fileID: 21300000, guid: e2a40928d5976449ea8dafad110b4317, type: 3}
   - {fileID: 21300000, guid: d6cce558fcc344f4ea971d01b01edaa6, type: 3}
   - {fileID: 21300000, guid: 535d5068f6e6f4174a907fe1688dc8c1, type: 3}
@@ -164,7 +163,6 @@ SpriteAtlas:
   - common_tab_bg
   - common_white_box
   - tab_full_bg
-  - ribbon_bg_green
   - reward_menu_label
   - top_btn_icon_setting
   - button_white

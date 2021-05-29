@@ -84,7 +84,14 @@ namespace Fourzy._Updates.UI.Widgets
                 {
                     //if there is next reward and our cached value is enough to unlock it, 
                     //pass _next.gamesNumber into OnAreaProgression to trigger reward manually
+                    if (progressionSlider.value == 1f)
+                    {
+                        UpdateSlider(false, 0f);
+                        UpdateBundleReward();
+                    }
+
                     OnAreaProgression(currentArea, _next.gamesNumber);
+
                     return;
                 }
                 else
@@ -96,14 +103,8 @@ namespace Fourzy._Updates.UI.Widgets
             }
             else if (updateRewardOnOpen)
             {
-                updateRewardOnOpen = false;
-
-                StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, () =>
-                {
-                    UpdateSlider(true);
-                    UpdateBundleReward();
-                    UpdateLabel();
-                });
+                CancelRoutine("delayed_update");
+                StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, UpdateProgress, null);
             }
         }
 
@@ -116,7 +117,7 @@ namespace Fourzy._Updates.UI.Widgets
                 case Constants.PLAYFAB_TOKEN_CLASS:
                     PersistantMenuController.Instance
                         .GetOrAddScreen<TokenPrompt>()
-                        .Prompt(GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)), true);
+                        .Prompt(GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)), false);
 
                     break;
 
@@ -161,12 +162,7 @@ namespace Fourzy._Updates.UI.Widgets
             }
             else
             {
-                StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, () =>
-                {
-                    UpdateSlider(true);
-                    UpdateBundleReward();
-                    UpdateLabel();
-                });
+                StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, UpdateProgress, null);
             }
         }
 
@@ -201,10 +197,6 @@ namespace Fourzy._Updates.UI.Widgets
                 isPlayFabInitialized = true;
                 OnAreaProgression(currentArea, UserManager.Instance.GetAreaProgression(currentArea));
             }
-        }
-
-        private void UpdateFromCurrentValues()
-        {
         }
 
         private void UpdateLabel()
@@ -281,6 +273,15 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 rewardAnimation.AnimateProgress();
             }
+        }
+
+        private void UpdateProgress()
+        {
+            UpdateSlider(true);
+            UpdateBundleReward();
+            UpdateLabel();
+
+            updateRewardOnOpen = false;
         }
 
         private IEnumerator UnlockRewardRoutine()

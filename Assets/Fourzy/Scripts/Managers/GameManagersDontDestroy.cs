@@ -161,6 +161,14 @@ namespace Fourzy
             });
         }
 
+        [Button]
+        public void StartFastPuzzleMatch()
+        {
+            if (!IsRuntime()) return;
+
+            GameManager.Instance.StartGame(GameContentManager.Instance.GetNextFastPuzzle(), GameTypeLocal.LOCAL_GAME);
+        }
+
         private bool IsRuntime()
         {
             if (!Application.isPlaying)
