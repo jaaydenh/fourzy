@@ -24,8 +24,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             CancelRoutine("open");
             BlockInput();
-
-            StartRoutine("open", Constants.APREA_PROGRESSION_REWARD_DELAY, ActualOpen, null);
         }
 
         public override void OnBack()
@@ -54,7 +52,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             OnBack();
         }
 
-        private void ActualOpen()
+        public void ActualOpen()
         {
             base.Open();
 
