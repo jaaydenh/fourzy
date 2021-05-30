@@ -3,6 +3,7 @@
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,9 +33,10 @@ namespace Fourzy._Updates.UI.Widgets
         /// <summary>
         /// Invoked from button
         /// </summary>
-        public void OnTap() => PersistantMenuController.Instance
-            .GetOrAddScreen<TokenPrompt>()
-            .Prompt(tokenData, true);
+        public void OnTap() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(
+            tokenData,
+            PlayerPrefsWrapper.GetUnlockedTokens().Select(_data => _data.tokenType).Contains(tokenData.tokenType),
+            false);
 
         /// <summary>
         /// Either grayed out or normal

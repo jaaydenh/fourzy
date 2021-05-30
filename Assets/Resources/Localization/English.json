@@ -121,6 +121,10 @@
       "value": "Disconnected"
     },
     {
+      "key": "disconnected_and_forfeits",
+      "value": "disconnected and forfeits."
+    },
+    {
       "key": "draw",
       "value": "Draw"
     },

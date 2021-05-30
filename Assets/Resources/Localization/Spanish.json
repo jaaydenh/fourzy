@@ -125,6 +125,10 @@
       "value": "Desconectado"
     },
     {
+      "key": "disconnected_and_forfeits",
+      "value": "desconectada y pierde."
+    },
+    {
       "key": "draw",
       "value": "Empate"
     },
