@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 0490c2a3a63a14f019048386031255f0, type: 3}
-    totalSpriteSurfaceArea: 2390098
+    totalSpriteSurfaceArea: 2387767
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -83,7 +83,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 97015b9c8e41d49de9b3b84779bcf5a7, type: 3}
   - {fileID: 21300000, guid: 7a860c9c2d94544b688db0cd613e58bd, type: 3}
   - {fileID: 21300000, guid: 12e556acc0e044f6ab466ba4f262091d, type: 3}
-  - {fileID: 21300000, guid: 079e16bce45e14ab2b4512c4e4d08d4a, type: 3}
   - {fileID: 21300000, guid: f3b7e31eb60b84b17870d0b5d926cfad, type: 3}
   - {fileID: 21300000, guid: 23e2b16eb7e0748babf6dc861d198ed1, type: 3}
   - {fileID: 21300000, guid: 1986397ee03644e76be554f7b1158ef7, type: 3}
@@ -126,7 +125,6 @@ SpriteAtlas:
   - character_grade_label_green
   - character_role_icon_2
   - character_card_gradient_white
-  - character_lv_bar_yellow
   - character_sample_0
   - character_sample_6
   - character_select_sample
