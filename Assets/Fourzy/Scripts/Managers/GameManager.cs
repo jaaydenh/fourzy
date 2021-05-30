@@ -373,7 +373,7 @@ namespace Fourzy
                 PlayerPrefsWrapper.GetAdventurePuzzleResets());
         }
 
-        public void ReportRealtimeGameFinished(IClientFourzy game, string winnerID, string opponentID)
+        public void ReportRealtimeGameFinished(IClientFourzy game, string winnerID, string opponentID, bool abandoned)
         {
             if (activeGame == null) return;
             if (string.IsNullOrEmpty(opponentID)) return;
@@ -386,6 +386,7 @@ namespace Fourzy
                     winnerID,
                     opponentID,
                     activeGame.draw,
+                    abandoned,
                 },
                 GeneratePlayStreamEvent = true,
             },
@@ -438,14 +439,22 @@ namespace Fourzy
                 if (player.playfabID == LoginManager.playfabId)
                 {
                     UserManager.Instance.lastCachedRating = player.rating;
+                    UserManager.Instance.realtimeGamesComplete += 1;
 
-                    if (player.winner)
+                    if (data.draw)
                     {
-                        UserManager.Instance.playfabWinsCount += 1;
+                        UserManager.Instance.playfabDrawsCount += 1;
                     }
                     else
                     {
-                        UserManager.Instance.playfabLosesCount += 1;
+                        if (player.winner)
+                        {
+                            UserManager.Instance.playfabWinsCount += 1;
+                        }
+                        else
+                        {
+                            UserManager.Instance.playfabLosesCount += 1;
+                        }
                     }
                 }
                 else
@@ -461,7 +470,7 @@ namespace Fourzy
             ratingDataReceived?.Invoke(data);
         }
 
-        public void ReportBotGameFinished(IClientFourzy game, bool updateRating)
+        public void ReportBotGameFinished(IClientFourzy game, bool updateRating, bool abandoned)
         {
             if (game == null) return;
             if (string.IsNullOrEmpty(RealtimeOpponent.Id)) return;
@@ -476,7 +485,8 @@ namespace Fourzy
                     playerId = LoginManager.playfabId,
                     winner,
                     botId = game.opponent.Profile.ToString(),
-                    updateRating 
+                    updateRating,
+                    abandoned,
                 },
                 GeneratePlayStreamEvent = true,
             },

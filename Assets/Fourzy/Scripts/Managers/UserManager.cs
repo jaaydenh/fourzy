@@ -31,6 +31,7 @@ namespace Fourzy
         public static Action<int> onWinsUpdate;
         public static Action<int> onLosesUpdate;
         public static Action<int> onDrawsUpdate;
+        public static Action<int> onRealtimeGamesCompleteUdpate;
         public static Action<int> onTotalGamesUpdate;
 
         public bool settingRandomName = false;
@@ -222,6 +223,19 @@ namespace Fourzy
             }
         }
 
+        public int realtimeGamesComplete
+        {
+            get => _lastCachedRealtimeGamesComplete;
+
+            set
+            {
+                Amplitude.Instance.setUserProperty("totalRealtimeGamesPlayed", value);
+                _lastCachedRealtimeGamesComplete = value;
+
+                onRealtimeGamesCompleteUdpate?.Invoke(_lastCachedRealtimeGamesComplete);
+            }
+        }
+
         public int totalRatedGames
         {
             get
@@ -246,6 +260,7 @@ namespace Fourzy
         private int _lastCachedWins = 0;
         private int _lastCachedLoses = 0;
         private int _lastCachedDraws = 0;
+        private int _lastCachedRealtimeGamesComplete = 0;
         private PlayfabValuesLoaded _playfabValueLoaded;
         private Dictionary<Area, int> _areaProgression = new Dictionary<Area, int>()
         {
@@ -546,6 +561,7 @@ namespace Fourzy
                 Instance.playfabWinsCount = data.wins;
                 Instance.playfabLosesCount = data.loses;
                 Instance.playfabDrawsCount = data.drawGames;
+                Instance.realtimeGamesComplete = data.realtimeGamesComplete;
 
                 Instance.SetAreaProgression(Area.TRAINING_GARDEN, data.totalRealtimeGamesCompleteTrainingGarden);
                 Instance.SetAreaProgression(Area.ENCHANTED_FOREST, data.totalRealtimeGamesCompleteEnchantedForest);
@@ -654,6 +670,7 @@ namespace Fourzy
             public int wins;
             public int loses;
             public int drawGames;
+            public int realtimeGamesComplete;
             public int totalRealtimeGamesCompleteTrainingGarden;
             public int totalRealtimeGamesCompleteEnchantedForest;
             public int totalRealtimeGamesCompleteSandyIsland;
