@@ -75,21 +75,19 @@ namespace Fourzy
         }
 
         [Button]
-        public void CompleteNextFTUEBoard()
+        public void AddRealtimeGameComplete()
         {
             if (!IsRuntime()) return;
 
-            int boardsComplete = PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed();
-
-            if (boardsComplete < GameContentManager.Instance.realtimeBotBoards.Count)
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
-                Debug.Log($"FTUE boards complete {PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed()}");
-            }
-            else
-            {
-                Debug.Log($"All FTUE boards complete");
-            }
+                FunctionName = "addRealtimeGameComplete",
+                GeneratePlayStreamEvent = true,
+            },
+            (value) => {
+                UserManager.Instance.realtimeGamesComplete += 1;
+            },
+            null);
         }
 
         [Button]

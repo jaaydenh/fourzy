@@ -171,7 +171,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             case GameManager.BotGameType.FTUE_RATED:
                             case GameManager.BotGameType.REGULAR:
-                                GameManager.Instance.ReportBotGameFinished(game, true);
+                                GameManager.Instance.ReportBotGameFinished(game, true, true);
 
                                 //will get logged, but not with up to date rating values
                                 GameManager.Instance.LogGameComplete(game);
@@ -179,7 +179,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                                 break;
 
                             case GameManager.BotGameType.FTUE_NOT_RATED:
-                                GameManager.Instance.ReportBotGameFinished(game, false);
+                                GameManager.Instance.ReportBotGameFinished(game, false, true);
 
                                 //will get logged, but not with up to date rating values
                                 GameManager.Instance.LogGameComplete(game);
@@ -188,6 +188,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         }
                     }
 
+                    break;
+            }
+
+            switch (GameManager.Instance.ExpectedGameType)
+            {
+                case GameTypeLocal.REALTIME_BOT_GAME:
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
                     PlayerPrefsWrapper.AddRealtimGamesAbandoned();
                     Amplitude.Instance.setUserProperty(
                         "totalRealtimeGamesAbandoned",
@@ -641,8 +649,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     //unload tutorial screen
                     OnboardingScreen.CloseTutorial();
 
-                    int boardIndex = PlayerPrefsWrapper.GetTutorialRealtimeBotGamesPlayed();
-                    ResourceItem botGameBoardFile = GameContentManager.Instance.GetRealtimeBotBoard(boardIndex);
+                    ResourceItem botGameBoardFile = GameContentManager.Instance.GetRealtimeBotBoard(UserManager.Instance.realtimeGamesComplete);
 
                     if (GameManager.Instance.RealtimeOpponent == null)
                     {
@@ -1214,7 +1221,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             GameManager.Instance.ReportRealtimeGameFinished(
                                 game,
                                 LoginManager.playfabId,
-                                GameManager.Instance.RealtimeOpponent.Id);
+                                GameManager.Instance.RealtimeOpponent.Id,
+                                true);
                         }
 
                         PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
@@ -1227,9 +1235,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             .GetOrAddScreen<PromptScreen>()
                             .Prompt(
                                 $"{otherPlayer.NickName} {LocalizationManager.Value("left_game")}",
-                                $"{otherPlayer.NickName} disconnected and forfeits.",
+                                $"{otherPlayer.NickName} {LocalizationManager.Value("disconnected_and_forfeits")}",
                                 null,
-                                "Back",
+                                LocalizationManager.Value("back"),
                                 null,
                                 BackButtonOnClick)
                             .CloseOnDecline();
@@ -1364,15 +1372,22 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                                 GameManager.Instance.ReportRealtimeGameFinished(
                                     game,
                                     LoginManager.playfabId,
-                                    GameManager.Instance.RealtimeOpponent.Id);
+                                    GameManager.Instance.RealtimeOpponent.Id,
+                                    false);
                             }
                             else
                             {
                                 GameManager.Instance.ReportRealtimeGameFinished(
                                     game,
                                     GameManager.Instance.RealtimeOpponent.Id,
-                                    LoginManager.playfabId);
+                                    LoginManager.playfabId,
+                                    false);
                             }
+                        }
+                        else
+                        {
+                            //for other player update value manually 
+                            UserManager.Instance.realtimeGamesComplete += 1;
                         }
 
                         break;
@@ -1382,21 +1397,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             case GameManager.BotGameType.FTUE_RATED:
                             case GameManager.BotGameType.REGULAR:
-                                GameManager.Instance.ReportBotGameFinished(game, true);
+                                GameManager.Instance.ReportBotGameFinished(game, true, false);
 
                                 break;
 
                             case GameManager.BotGameType.FTUE_NOT_RATED:
-                                GameManager.Instance.ReportBotGameFinished(game, false);
-
-                                break;
-                        }
-
-                        switch (GameManager.Instance.botGameType)
-                        {
-                            case GameManager.BotGameType.FTUE_NOT_RATED:
-                            case GameManager.BotGameType.FTUE_RATED:
-                                PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
+                                GameManager.Instance.ReportBotGameFinished(game, false, false);
 
                                 break;
                         }
@@ -1557,20 +1563,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (prevGame == null || (prevGame.BoardID != game.BoardID))
             {
                 AnalyticsManager.Instance.LogGame(game.GameToAnalyticsEvent(true), game);
-            }
-
-            switch (GameManager.Instance.ExpectedGameType)
-            {
-                case GameTypeLocal.REALTIME_LOBBY_GAME:
-                case GameTypeLocal.REALTIME_QUICKMATCH:
-                case GameTypeLocal.REALTIME_BOT_GAME:
-                    PlayerPrefsWrapper.AddRealtimeGamePlayed();
-
-                    Amplitude.Instance.setUserProperty(
-                        "totalRealtimeGamesPlayed",
-                        PlayerPrefsWrapper.GetRealtimeGamesPlayed());
-
-                    break;
             }
         }
 
