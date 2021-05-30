@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 262cdbae735c34fee811e62aed1400e5, type: 3}
     totalSpriteSurfaceArea: 273703
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: eb7d7924565314b6da762e984c32e4ff, type: 3}
@@ -64,5 +67,6 @@ SpriteAtlas:
   - lockscreen_character_sample
   - stat_icon_battery_half
   - device_stat_info_bg
+  m_RenderDataMap: {}
   m_Tag: LockScreen
   m_IsVariant: 0

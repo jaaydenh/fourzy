@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 76c23290b3e684259bac38ff5328a65f, type: 3}
     totalSpriteSurfaceArea: 2553279
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: dd50370016aa3427cbffd86ff9d349ea, type: 3}
@@ -134,5 +137,6 @@ SpriteAtlas:
   - stage_icon_boss_dim
   - stage_character_sample_2
   - stage_detail_popup
+  m_RenderDataMap: {}
   m_Tag: Stage
   m_IsVariant: 0

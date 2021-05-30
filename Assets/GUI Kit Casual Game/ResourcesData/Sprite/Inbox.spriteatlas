@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: d92734e730f2f4b97b6e41e8166d0fba, type: 3}
     totalSpriteSurfaceArea: 343641
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 9f3c50c022da640648ee29ee9ee7adf8, type: 3}
@@ -76,5 +79,6 @@ SpriteAtlas:
   - inbox_character_sample_1
   - inbox_list_get_reward_bg
   - inbox_reward_gem
+  m_RenderDataMap: {}
   m_Tag: Inbox
   m_IsVariant: 0

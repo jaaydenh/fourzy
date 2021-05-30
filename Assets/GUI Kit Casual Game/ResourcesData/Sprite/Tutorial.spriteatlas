@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 6f7f2c1d6181c40b583007ec2080a3cc, type: 3}
     totalSpriteSurfaceArea: 600557
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 4a48007029c4149328b7260ce7230120, type: 3}
@@ -62,5 +65,6 @@ SpriteAtlas:
   - tutorial_chat_bg_arrow
   - tutorial_character_sample
   - tutorial_chat_bg
+  m_RenderDataMap: {}
   m_Tag: Tutorial
   m_IsVariant: 0

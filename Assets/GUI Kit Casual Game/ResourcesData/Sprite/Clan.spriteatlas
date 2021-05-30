@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 879b178b46ee84f48871353be335cbf1, type: 3}
     totalSpriteSurfaceArea: 1031005
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 3e36b570a407647f18e279be6421bc72, type: 3}
@@ -112,5 +115,6 @@ SpriteAtlas:
   - clan_symbol_1
   - clan_img_4
   - clan_info_bg
+  m_RenderDataMap: {}
   m_Tag: Clan
   m_IsVariant: 0

@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 905f757f8bb774773bc3e82060e3f824, type: 3}
     totalSpriteSurfaceArea: 641115
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 460f4830064ce4dc8b3534b94a4f636a, type: 3}
@@ -100,5 +103,6 @@ SpriteAtlas:
   - mission_list_reward_gold
   - mission_reward_bg_gray
   - mission_icon_trophy
+  m_RenderDataMap: {}
   m_Tag: Mission
   m_IsVariant: 0

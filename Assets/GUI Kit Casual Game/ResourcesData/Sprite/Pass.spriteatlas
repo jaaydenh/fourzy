@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 7117d79a771584c12b4bc7f40b18743b, type: 3}
     totalSpriteSurfaceArea: 949132
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 3ead9d80760a040d0b70e86939528e32, type: 3}
@@ -120,5 +123,6 @@ SpriteAtlas:
   - pass_icon_lock
   - pass_reward_icon_book
   - pass_reward_prg_bg
+  m_RenderDataMap: {}
   m_Tag: Pass
   m_IsVariant: 0

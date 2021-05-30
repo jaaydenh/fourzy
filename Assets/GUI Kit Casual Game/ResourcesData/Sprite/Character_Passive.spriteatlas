@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 56a193a5f86cc4901b29995e42d750dc, type: 3}
     totalSpriteSurfaceArea: 3420735
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 9be338601f2df46fdb4de32cda440c67, type: 3}
@@ -106,5 +109,6 @@ SpriteAtlas:
   - skill_icon_0
   - skill_icon_passive_get
   - character_detail_sample_shadow
+  m_RenderDataMap: {}
   m_Tag: Character_Passive
   m_IsVariant: 0

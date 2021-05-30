@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 8d2c05b2406cd478ba695dd968b9f1d0, type: 3}
     totalSpriteSurfaceArea: 5482488
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 4ee91d319886c4e4b8a4155b88bc8e7f, type: 3}
@@ -76,5 +79,6 @@ SpriteAtlas:
   - levelup_effect_circle_white
   - levelup_effect_glow_white
   - levelup_paticle_white
+  m_RenderDataMap: {}
   m_Tag: Levleup
   m_IsVariant: 0

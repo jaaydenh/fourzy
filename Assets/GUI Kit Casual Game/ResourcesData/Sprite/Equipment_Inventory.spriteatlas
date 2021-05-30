@@ -40,11 +40,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 99bf95467be834baca856b33dbd7259e, type: 3}
     totalSpriteSurfaceArea: 1085485
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: e999f11042cd241a38ff7e27c7803480, type: 3}
@@ -176,5 +179,6 @@ SpriteAtlas:
   - equipicon_sample_energy
   - equipment_tab_icon_0_f
   - equipicon_sample_egg
+  m_RenderDataMap: {}
   m_Tag: Equipment_Inventory
   m_IsVariant: 0
