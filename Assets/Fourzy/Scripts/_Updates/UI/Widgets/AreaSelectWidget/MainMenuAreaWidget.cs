@@ -34,6 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
         private ProgressionRewardAnimatorWidget rewardAnimation;
 
         private bool isPlayFabInitialized = false;
+        private bool displayedAfterLoad = false;
         private bool updateRewardOnOpen;
         private int cachedValue = 0;
 
@@ -48,16 +49,6 @@ namespace Fourzy._Updates.UI.Widgets
         {
             UserManager.onAreaProgression += OnAreaProgression;
             UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
-        }
-
-        protected void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                menuScreen.menuController
-                    .GetOrAddScreen<AreaProgressionRewardScreen>()
-                    .ShowReward(TokenType.ARROW);
-            }
         }
 
         protected void OnDestroy()
@@ -105,6 +96,11 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 CancelRoutine("delayed_update");
                 StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, UpdateProgress, null);
+            }
+
+            if (!displayedAfterLoad)
+            {
+                OnPlayfabValueLoaded();
             }
         }
 
@@ -198,6 +194,7 @@ namespace Fourzy._Updates.UI.Widgets
                 }
 
                 isPlayFabInitialized = true;
+                displayedAfterLoad = true;
                 gamesPlayed = UserManager.Instance.GetAreaProgression(currentArea);
                 OnAreaProgression(currentArea, gamesPlayed);
             }
