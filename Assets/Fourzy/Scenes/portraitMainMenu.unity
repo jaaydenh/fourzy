@@ -13412,7 +13412,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 5
-          selectedMember: 16
+          selectedMember: 15
           isDynamic: 0
         target: {fileID: 169684871}
         memberName: CloseCurrentScreen
@@ -20773,7 +20773,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.66626644, g: 0.08962262, b: 1, a: 1}
+      maxColor: {r: 1, g: 0.9647059, b: 0.31764707, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -21416,7 +21416,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 2.2
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -28646,7 +28646,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 5
-          selectedMember: 16
+          selectedMember: 15
           isDynamic: 0
         target: {fileID: 169684871}
         memberName: CloseCurrentScreen
@@ -46206,6 +46206,11 @@ PrefabInstance:
       propertyPath: resetGameOnClose
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: excludeInstructionsFor.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b153745504954e599a747ae789ac703, type: 3}
 --- !u!1 &1117171734
@@ -52908,7 +52913,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.66626644, g: 0.08962262, b: 1, a: 1}
+      maxColor: {r: 1, g: 0.9647059, b: 0.42745098, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -53551,7 +53556,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 2.8
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -82786,7 +82791,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 5
-          selectedMember: 16
+          selectedMember: 15
           isDynamic: 0
         target: {fileID: 169684871}
         memberName: CloseCurrentScreen
@@ -89989,7 +89994,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0aff41489ca2441879fe4da19a0b8589, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 079e16bce45e14ab2b4512c4e4d08d4a, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -90025,14 +90030,14 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.9239014
-      value: 0.73090214
-      inSlope: 2.5006907
-      outSlope: 2.5006907
+      time: 0.9993035
+      value: 0.0033977926
+      inSlope: 0.009949268
+      outSlope: 0.009949268
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.24656275
+      inWeight: 0.07057116
+      outWeight: 1
     - serializedVersion: 3
       time: 1
       value: 1
@@ -90056,8 +90061,8 @@ MonoBehaviour:
   customObjects: []
   propagate: 0
   changeAlpha: 1
-  from: {r: 1, g: 1, b: 1, a: 1}
-  to: {r: 0.5019608, g: 1, b: 0, a: 1}
+  from: {r: 0.09019608, g: 1, b: 0, a: 1}
+  to: {r: 1, g: 0.9843137, b: 0, a: 1}
 --- !u!1001 &1742364411386840893
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -22826,6 +22826,11 @@ PrefabInstance:
       propertyPath: passAndPlayTimer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: excludeInstructionsFor.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6077144665870927472, guid: 3b153745504954e599a747ae789ac703,
         type: 3}
       propertyPath: onPurchaseFailed.m_PersistentCalls.m_Calls.Array.size

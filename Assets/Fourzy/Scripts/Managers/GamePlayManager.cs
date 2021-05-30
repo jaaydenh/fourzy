@@ -304,7 +304,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             CancelRoutine("gameInit");
             CancelRoutine("takeTurn");
-            CancelRoutine("realtimeCoutdownRoutine");
+            CancelRoutine("realtimeCountdownRoutine");
             CancelRoutine("postGameRoutine");
 
             gameState = GameState.OPENNING_GAME;
@@ -1720,11 +1720,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //instruction boards
             switch (game._Type)
             {
-                //no token instructions for these types
+                // Do not show token instructions popup for REALTIME, ONBOARDING, PRESENTATION games
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
                 case GameType.PRESENTATION:
-                case GameType.TRY_TOKEN:
                     break;
 
                 default:
@@ -1755,7 +1754,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 //start timer
                 case GameType.REALTIME:
-                    StartRoutine("realtimeCoutdownRoutine", StartRealtimeCountdown());
+                    StartRoutine("realtimeCountdownRoutine", StartRealtimeCountdown());
 
                     break;
 

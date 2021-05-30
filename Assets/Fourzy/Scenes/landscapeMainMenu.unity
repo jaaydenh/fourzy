@@ -268,7 +268,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -441,7 +441,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -1233,7 +1233,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -8346,7 +8346,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -8646,7 +8646,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -8837,7 +8837,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -10052,7 +10052,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -10230,7 +10230,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -10915,7 +10915,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -11643,7 +11643,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -12587,7 +12587,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -12975,7 +12975,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -13376,7 +13376,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -13699,7 +13699,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -14433,7 +14433,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -15511,7 +15511,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -16249,7 +16249,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -17128,7 +17128,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -17941,7 +17941,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -18365,7 +18365,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -19593,7 +19593,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -19913,7 +19913,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -20185,7 +20185,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -20387,7 +20387,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -20524,7 +20524,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -20740,6 +20740,11 @@ PrefabInstance:
     - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
         type: 3}
       propertyPath: forceDisplayTutorials
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: excludeInstructionsFor.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1433641275703540861, guid: 3b153745504954e599a747ae789ac703,
@@ -22281,7 +22286,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -22654,7 +22659,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -22927,7 +22932,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -23736,7 +23741,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -25789,7 +25794,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -27130,7 +27135,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -27452,7 +27457,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -27785,7 +27790,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -28353,7 +28358,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -28678,7 +28683,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -29425,7 +29430,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -30036,7 +30041,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -31258,10 +31263,15 @@ MonoBehaviour:
   defaultCalls: 1
   menuController: {fileID: 0}
   autoAdjustSize: 0
+  discordButton: {fileID: 0}
   body: {fileID: 0}
-  portalsHolder: {fileID: 0}
-  fastPuzzleButton: {fileID: 1295063782}
-  gauntletGameButton: {fileID: 1574380346}
+  pieceParent: {fileID: 0}
+  playerNameLabel: {fileID: 0}
+  pieceNameLabel: {fileID: 0}
+  ratingLabel: {fileID: 0}
+  winsLabel: {fileID: 0}
+  losesLabel: {fileID: 0}
+  drawsLabel: {fileID: 0}
 --- !u!225 &1739894149
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -31633,7 +31643,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 1
   textMaterial: {fileID: 2100000, guid: a7ac62c97f4aa8e4ba34cc4b6a77d726, type: 2}
@@ -32944,7 +32954,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -33707,7 +33717,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -33894,7 +33904,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -34319,7 +34329,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -35030,7 +35040,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 1
   textMaterial: {fileID: 2100000, guid: a7ac62c97f4aa8e4ba34cc4b6a77d726, type: 2}
@@ -36573,7 +36583,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -37326,7 +37336,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -37701,6 +37711,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1321256762649328586, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383494730100144736, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383494730100144736, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383494730100144736, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383494730100144736, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
@@ -40330,7 +40360,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -40878,7 +40908,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -41174,7 +41204,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -41463,7 +41493,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -41925,7 +41955,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -42372,7 +42402,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -42537,7 +42567,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 0
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -43146,7 +43176,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -43703,7 +43733,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -44953,7 +44983,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -45679,7 +45709,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}
@@ -45867,7 +45897,7 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
-  playOnClick: 2
+  clickSfx: button_click
   changeMaterialOnState: 1
   networkAffected: 0
   textMaterial: {fileID: 0}

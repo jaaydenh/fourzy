@@ -46,21 +46,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayTutorials: 1
   forceDisplayTutorials: 1
-  showInfoToasts: 1
-  debugMessages: 1
   extraFeatures: 1
   tapToStartGame: 1
   characterType: 2
-  hideTabsBar: 1
-  hideGems: 1
-  hideTickets: 1
-  hidePortalWidgets: 1
+  showInfoToasts: 1
   defaultGauntletState: 1
   defaultPuzzlesState: 1
   resetGameOnClose: 0
+  botGameType: 0
+  customUserId: 
   fallbackLatitude: 37.7833
   fallbackLongitude: 122.4167
-  excludeInstructionsFor: 01000000
+  excludeInstructionsFor: 
 --- !u!114 &8207626076476472605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +76,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7148789414301431505}
+        m_TargetAssemblyTypeName: 
         m_MethodName: OnPurchaseComplete
         m_Mode: 0
         m_Arguments:
@@ -93,6 +91,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7148789414301431505}
+        m_TargetAssemblyTypeName: 
         m_MethodName: OnPurchaseFailed
         m_Mode: 0
         m_Arguments:
