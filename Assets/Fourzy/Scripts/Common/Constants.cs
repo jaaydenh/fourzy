@@ -93,8 +93,8 @@ namespace Fourzy
         public const string REALTIME_BOT_BOARDS_FOLDER = BOARDS_ROOT + "/FTUE_ProgressionBoards";
         public const string PUZZLE_PACKS_FOLDER = BOARDS_ROOT + "/PuzzlePacks";
         public const string PASS_AND_PLAY_BOARDS_FOLDER = BOARDS_ROOT + "/PassAndPlayBoards";
-        public const string MISC_BOARDS_FOLDER = BOARDS_ROOT + "/InstructionBoards";
-        public const string TRYI_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
+        public const string INSTRUCTION_BOARDS_FOLDER  = BOARDS_ROOT + "/InstructionBoards";
+        public const string TRY_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
 
         public const string AREAS_PROGRESSION_FOLDER = "AreasProgression";
         public const string LOCALIZATION_FOLDER = "Localization";

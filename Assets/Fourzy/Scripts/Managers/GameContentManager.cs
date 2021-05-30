@@ -137,7 +137,7 @@ namespace Fourzy
         public void StartTryItBoard(TokenType token)
         {
             ResourceItem _boardTextFile =  ResourceDB
-                .GetFolder(Constants.TRYI_IT_BOARDS_FOLDER)
+                .GetFolder(Constants.TRY_IT_BOARDS_FOLDER)
                 .GetChild(token.ToString(), ResourceItem.Type.Asset);
 
             if (_boardTextFile == null)
@@ -345,7 +345,7 @@ namespace Fourzy
         private void LoadMiscBoards()
         {
             miscBoards = new List<GameBoardDefinition>(ResourceDB
-                .GetFolder(Constants.MISC_BOARDS_FOLDER)
+                .GetFolder(Constants.INSTRUCTION_BOARDS_FOLDER )
                 .GetChilds("", ResourceItem.Type.Asset)
                 .Where(_file => _file.Ext == "json")
                 .Select(_file => JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text)));
