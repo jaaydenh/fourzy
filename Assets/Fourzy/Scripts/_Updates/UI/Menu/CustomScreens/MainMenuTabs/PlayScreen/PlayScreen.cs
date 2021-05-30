@@ -5,7 +5,6 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -214,9 +213,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             OnUpdateUserGamePieceID(user.gamePieceID);
             OnUpdateUserInfo();
 
-            winsLabel.text = "000";
-            losesLabel.text = "000";
-            drawsLabel.text = "000";
+            OnRatingUpate(-1);
+            OnWinsUpdate(UserManager.Instance.playfabWinsCount);
+            OnLosesUpdate(UserManager.Instance.playfabLosesCount);
+            OnDrawsUpdate(UserManager.Instance.playfabDrawsCount);
         }
     }
 }
