@@ -364,7 +364,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 preferences.TargetComplexityHigh = actualMinMax.Item2;
 
                 //ready opponent
-                Player opponen =
+                Player opponent =
                     new Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
                     {
                         HerdId = FourzyPhotonManager.GetOpponentProperty(
@@ -379,7 +379,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 ClientFourzyGame _game = new ClientFourzyGame(
                     _area,
                     me,
-                    opponen,
+                    opponent,
                     UnityEngine.Random.value > .5f ? 1 : 2,
                     null,
                     preferences)

@@ -538,29 +538,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (value)
             {
-                //next game button
                 switch (game._Type)
                 {
-                    case GameType.TURN_BASED:
-                        nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
-
-                        break;
-
-                    default:
-                        nextGameButton.SetActive(false);
-
-                        break;
-                }
-
-                //rematch button
-                switch (game._Type)
-                {
-                    //case GameType.REALTIME:
                     case GameType.PRESENTATION:
                         rematchButton.SetActive(false);
-
                         break;
-
+                    case GameType.TURN_BASED:
+                        nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
+                        break;
+                    case GameType.REALTIME:
+                        exitButton.SetActive(true);
+                        break;
+                    case GameType.TRY_TOKEN:
+                        rematchButton.SetActive(false);
+                        exitButton.SetActive(true);
+                        break;
+                    case GameType.PASSANDPLAY:
+                        rematchButton.SetActive(true);
+                        exitButton.SetActive(true);
+                        break;
                     default:
                         switch (GameManager.Instance.ExpectedGameType)
                         {
@@ -569,37 +565,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 {
                                     case GameManager.BotGameType.REGULAR:
                                         rematchButton.SetActive(true);
-
                                         break;
 
                                     default:
                                         rematchButton.SetActive(false);
-
                                         break;
                                 }
-
                                 break;
-
                             default:
-                                rematchButton.SetActive(true);
-
+                                nextGameButton.SetActive(false);
+                                exitButton.SetActive(false);
+                                rematchButton.SetActive(false); 
                                 break;
                         }
-
-                        break;
-                }
-
-                //exit button
-                switch (game._Type)
-                {
-                    case GameType.REALTIME:
-                        exitButton.SetActive(true);
-
-                        break;
-
-                    default:
-                        exitButton.SetActive(false);
-
                         break;
                 }
             }
