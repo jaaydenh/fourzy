@@ -6,7 +6,9 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,34 +17,52 @@ namespace Fourzy
 {
     public class LoadingScreenControl : MonoBehaviour
     {
-        public const float WAIT_DURATION = 1.7f;
-
         public Slider slider;
         public GameplayBG bg;
         public OnRatio landscape;
         public OnRatio portrait;
         public GameObject _target;
 
+        private PlayfabValuesLoaded[] valuesToWaitFor;
+
         protected void Start()
         {
-            StartCoroutine(LoadingRoutine());
+            valuesToWaitFor = ((PlayfabValuesLoaded[])Enum.GetValues(typeof(PlayfabValuesLoaded))).Where(_value => _value != PlayfabValuesLoaded.NONE).ToArray();
+
+            UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
 
             if (GameManager.Instance.Landscape)
+            {
                 landscape.CheckOrientation();
+            }
             else
+            {
                 portrait.CheckOrientation();
+            }
 
             bg.Configure();
+
+            StartCoroutine(LoadingRoutine());
         }
 
         protected void OnDestroy()
         {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            UserManager.onPlayfabValuesLoaded -= OnPlayfabValueLoaded;
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
+        private void OnPlayfabValueLoaded()
         {
-            SceneManager.SetActiveScene(scene);
+            int values = 0;
+
+            foreach (PlayfabValuesLoaded value in valuesToWaitFor)
+            {
+                if (UserManager.Instance.IsPlayfabValueLoaded(value))
+                {
+                    values++;
+                }
+            }
+
+            slider.value = (float)values / valuesToWaitFor.Length;
         }
 
         private IEnumerator LoadingRoutine()
@@ -60,16 +80,11 @@ namespace Fourzy
                 async.allowSceneActivation = false;
             }
 
-            float duration = 0;
-            while (duration < WAIT_DURATION)
+            while (slider.value != 1f)
             {
-                duration += Time.deltaTime;
-                slider.value = duration / WAIT_DURATION * 0.75f;
-
                 yield return null;
             }
 
-            slider.value = 1f;
             if (async != null)
             {
                 async.allowSceneActivation = true;
@@ -84,7 +99,7 @@ namespace Fourzy
             if (displayTutorial)
             {
                 onboardingScreen.OpenTutorial(
-                    HardcodedTutorials.GetByName(GameManager.Instance.Landscape ? 
+                    HardcodedTutorials.GetByName(GameManager.Instance.Landscape ?
                         "OnboardingLandscape" :
                         "Onboarding"));
             }
