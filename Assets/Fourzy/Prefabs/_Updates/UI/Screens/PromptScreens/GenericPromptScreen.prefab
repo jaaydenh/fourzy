@@ -1342,7 +1342,9 @@ MonoBehaviour:
   scaleOnClick: 1
   buttonGraphics:
     list: []
-  labels: []
+  labels:
+  - labelName: name
+    label: {fileID: 8730522358620563557}
   badges: []
 --- !u!114 &5339734865278453265
 MonoBehaviour:
@@ -1837,7 +1839,9 @@ MonoBehaviour:
   scaleOnClick: 1
   buttonGraphics:
     list: []
-  labels: []
+  labels:
+  - labelName: name
+    label: {fileID: 3484344153116318274}
   badges: []
 --- !u!114 &4437882631730478525
 MonoBehaviour:

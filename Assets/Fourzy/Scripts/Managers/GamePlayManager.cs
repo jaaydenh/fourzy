@@ -579,7 +579,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             foreach (TokensDataHolder.TokenData token in tokens)
             {
                 TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
-                popupUI.Prompt(token, false);
+                popupUI.Prompt(token, false, true);
 
                 yield return new WaitWhile(() => popupUI.isOpened);
 
@@ -1728,7 +1728,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //instruction boards
             switch (game._Type)
             {
-                //no token instructions for these modes
+                //no token instructions for these types
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
                 case GameType.PRESENTATION:

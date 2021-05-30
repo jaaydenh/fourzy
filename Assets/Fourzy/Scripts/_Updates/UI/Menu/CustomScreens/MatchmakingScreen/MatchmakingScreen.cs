@@ -84,8 +84,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Close(animate);
 
-            StopRoutine("botMatch", false);
-            StopRoutine("randomText", false);
+            CancelRoutine("botMatch");
+            CancelRoutine("randomText");
 
             state = MatchmakingScreenState.NONE;
             timerLabel.text = string.Empty;

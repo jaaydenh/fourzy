@@ -36,11 +36,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gameboard = GetComponentInChildren<GameboardView>();
         }
 
-        public virtual void Prompt(TokensDataHolder.TokenData data, bool canTryIt)
+        public virtual void Prompt(TokensDataHolder.TokenData data, bool canTryIt, bool ribbon)
         {
             this.data = data;
 
-            newTokenRibbon.gameObject.SetActive(!canTryIt);
+            newTokenRibbon.gameObject.SetActive(ribbon);
             tryItButton.SetActive(canTryIt);
 
             InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
