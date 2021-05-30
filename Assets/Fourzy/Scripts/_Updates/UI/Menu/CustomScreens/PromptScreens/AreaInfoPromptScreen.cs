@@ -143,7 +143,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case CurrencyType.COINS:
                     if (UserManager.Instance.coins < unlockRequirement.quantity)
                     {
-                        GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enought coins");
+                        GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enough coins");
                         return;
                     }
 
@@ -154,7 +154,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case CurrencyType.GEMS:
                     if (UserManager.Instance.gems < unlockRequirement.quantity)
                     {
-                        GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enought gems");
+                        GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enough gems");
                         return;
                     }
 
@@ -166,7 +166,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case CurrencyType.TICKETS:
                     if (UserManager.Instance.gems < unlockRequirement.quantity)
                     {
-                        GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enought tickets");
+                        GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enough tickets");
                         return;
                     }
 
