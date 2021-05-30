@@ -121,11 +121,6 @@ namespace Fourzy
 
         public static int GetAdventurePuzzleResets() => PlayerPrefs.GetInt("puzzles_resets", 0);
 
-        public static void AddRealtimeGamePlayed() =>
-            PlayerPrefs.SetInt("realtime_games_played", GetRealtimeGamesPlayed() + 1);
-
-        public static int GetRealtimeGamesPlayed() => PlayerPrefs.GetInt("realtime_games_played", 0);
-
         public static void AddRealtimeGamesWon() =>
             PlayerPrefs.SetInt("realtime_games_won", GetRealtimeGamesWon() + 1);
 
@@ -151,12 +146,6 @@ namespace Fourzy
 
         public static int GetRealtimeGamesOpponentAbandoned() =>
             PlayerPrefs.GetInt("realtime_games_opponent_abandoned", 0);
-
-        public static void AddTutorialRealtimeBotGamePlayed() =>
-            PlayerPrefs.SetInt("realtime_tutorial_bot_games_played", GetTutorialRealtimeBotGamesPlayed() + 1);
-
-        public static int GetTutorialRealtimeBotGamesPlayed() =>
-            PlayerPrefs.GetInt("realtime_tutorial_bot_games_played", 0);
 
         public static void SetAppOpenedTime() =>
             PlayerPrefs.SetString("app_opened_last_time", Utils.EpochSeconds().ToString());

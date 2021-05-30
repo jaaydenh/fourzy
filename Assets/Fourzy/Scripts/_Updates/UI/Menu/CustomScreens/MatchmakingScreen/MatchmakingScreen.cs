@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
@@ -89,6 +90,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             state = MatchmakingScreenState.NONE;
             timerLabel.text = string.Empty;
+
+            if (FourzyPhotonManager.IsQMLobby)
+            {
+                FourzyPhotonManager.TryLeaveRoom();
+            }
         }
 
         public override void OnBack()
@@ -98,44 +104,38 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnBack();
 
             CloseSelf();
-
-            if (FourzyPhotonManager.IsQMLobby)
-            {
-                FourzyPhotonManager.TryLeaveRoom();
-            }
         }
 
         public void OpenRealtime()
         {
-            if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) ==
-                RoomType.LOBBY_ROOM)
-            {
-                menuController
-                    .GetOrAddScreen<PromptScreen>()
-                    .Prompt("Leave room?", "To enter the quickmatch you have to leave the room you'r currently in.", () =>
-                    {
-                        state = MatchmakingScreenState.WAITTING_ROOM_LEFT;
-                        FourzyPhotonManager.TryLeaveRoom();
+            //if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) ==
+            //    RoomType.LOBBY_ROOM)
+            //{
+            //    menuController
+            //        .GetOrAddScreen<PromptScreen>()
+            //        .Prompt("Leave room?", "To enter the quickmatch you have to leave the room you'r currently in.", () =>
+            //        {
+            //            state = MatchmakingScreenState.WAITTING_ROOM_LEFT;
+            //            FourzyPhotonManager.TryLeaveRoom();
 
-                        _prompt
-                            .Prompt(
-                            "Leaving room...",
-                            "",
-                            null,
-                            "Back",
-                            null,
-                            () => state = MatchmakingScreenState.NONE)
-                            .CloseOnDecline();
-                    }, null)
-                    .CloseOnDecline()
-                    .CloseOnAccept();
-            }
-            else
-            {
+            //            _prompt
+            //                .Prompt(
+            //                "Leaving room...",
+            //                "",
+            //                null,
+            //                "Back",
+            //                null,
+            //                () => state = MatchmakingScreenState.NONE)
+            //                .CloseOnDecline();
+            //        }, null)
+            //        .CloseOnDecline()
+            //        .CloseOnAccept();
+            //}
+            //else
+            //{
                 state = MatchmakingScreenState.REALTIME;
-
                 menuController.OpenScreen(this);
-            }
+            //}
         }
 
         public override void Open()
@@ -164,13 +164,33 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         messageLabel.text = LocalizationManager.Value("searching_for_opponent");
 
                         roomCreatedTime = Time.time;
-                        FourzyPhotonManager.JoinRandomRoom();
 
                         AnalyticsManager.Instance.LogEvent(
                             "realtimeMatchmakingStarted",
                             AnalyticsManager.AnalyticsProvider.ALL,
                             new KeyValuePair<string, object>("playfabPlayerId", LoginManager.masterAccountId),
                             new KeyValuePair<string, object>("area", ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString()));
+
+                        bool _needRoom = true;
+                        //check for tutorial board
+                        ResourceItem botGameBoardFile = GameContentManager.Instance.GetRealtimeBotBoard(UserManager.Instance.realtimeGamesComplete);
+                        if (botGameBoardFile != null)
+                        {
+                            FTUEGameBoardDefinition _board = JsonConvert.DeserializeObject<FTUEGameBoardDefinition>(
+                                botGameBoardFile.Load<TextAsset>().text);
+
+                            if (_board.aiProfile >= 0)
+                            {
+                                _needRoom = false;
+                                StartBotMatch();
+                            }
+                        }
+
+                        if (_needRoom)
+                        {
+
+                            FourzyPhotonManager.JoinRandomRoom();
+                        }
                     }, () =>
                     {
                         messageLabel.text = "Failed retrieving players' stats";
@@ -193,50 +213,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             StartRoutine("randomText", ShowRandomTextRoutine(3.5f));
         }
 
-
-        internal void StartBotMatch()
+        internal void Timeout()
         {
             if (useBotMatch)
             {
-                //get bot profile from players' rating
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "botDataFromRating",
-                    GeneratePlayStreamEvent = true,
-                },
-                (result) =>
-                {
-                    BotSettings botSettings =
-                        JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
-
-                    GameManager.Instance.RealtimeOpponent =
-                        new OpponentData(
-                            "bot",
-                            botSettings.r,
-                            InternalSettings.Current.GAMES_BEFORE_RATING_USED);
-                    GameManager.Instance.Bot = new Player(
-                        2,
-                        CharacterNameFactory.GenerateBotName(AIDifficulty.Medium),
-                        botSettings.AIProfile)
-                    {
-                        HerdId = GameContentManager.Instance.piecesDataHolder.random.Id,
-                        PlayerString = "2",
-                    };
-
-                    StartMatch(GameTypeLocal.REALTIME_BOT_GAME);
-
-                    if (FourzyPhotonManager.IsQMLobby)
-                    {
-                        FourzyPhotonManager.TryLeaveRoom();
-                    }
-                },
-                (error) =>
-                {
-                    CloseSelf();
-                    GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
-
-                    Debug.LogError(error.ErrorMessage);
-                });
+                StartBotMatch();
             }
             else
             {
@@ -251,6 +232,49 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     null,
                     null);
             }
+        }
+
+        internal void StartBotMatch()
+        {
+            //get bot profile from players' rating
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "botDataFromRating",
+                GeneratePlayStreamEvent = true,
+            },
+            (result) =>
+            {
+                BotSettings botSettings =
+                    JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
+
+                GameManager.Instance.RealtimeOpponent =
+                    new OpponentData(
+                        "bot",
+                        botSettings.r,
+                        InternalSettings.Current.GAMES_BEFORE_RATING_USED);
+                GameManager.Instance.Bot = new Player(
+                    2,
+                    CharacterNameFactory.GenerateBotName(AIDifficulty.Medium),
+                    botSettings.AIProfile)
+                {
+                    HerdId = GameContentManager.Instance.piecesDataHolder.random.Id,
+                    PlayerString = "2",
+                };
+
+                StartMatch(GameTypeLocal.REALTIME_BOT_GAME);
+
+                if (FourzyPhotonManager.IsQMLobby)
+                {
+                    FourzyPhotonManager.TryLeaveRoom();
+                }
+            },
+            (error) =>
+            {
+                CloseSelf();
+                GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+
+                Debug.LogError(error.ErrorMessage);
+            });
         }
 
         #region Photon callbacks
@@ -282,7 +306,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 useBotMatch ?
                     InternalSettings.Current.BOT_SETTINGS.randomMatchAfter :
                     Constants.REALTIME_OPPONENT_WAIT_TIME,
-                StartBotMatch,
+                Timeout,
                 null);
         }
 
@@ -300,7 +324,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!isOpened) return;
 
             GameManager.Instance.RealtimeOpponent = new OpponentData(otherPlayer);
-            //other player connected, switch to gameplay scene
+            //other player connected, open to gameplay scene
             StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
         }
 
@@ -311,7 +335,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 GameManager.Instance.RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
-
                 //open gameplay scene
                 StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
             }
