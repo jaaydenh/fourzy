@@ -12,8 +12,6 @@ using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Photon.Pun;
-using PlayFab;
-using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -338,7 +336,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (PhotonNetwork.IsMasterClient)
             {
                 Area _area = FourzyPhotonManager.GetRoomProperty(
-                    Constants.REALTIME_ROOM_AREA, 
+                    Constants.REALTIME_ROOM_AREA,
                     InternalSettings.Current.DEFAULT_AREA);
 
                 //get percent
@@ -346,7 +344,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 int opponentPercent = UserManager.GetComplexityPercent(
                     FourzyPhotonManager.GetOpponentTotalGames(),
                     FourzyPhotonManager.GetOpponentProperty(
-                        Constants.REALTIME_RATING_KEY, 
+                        Constants.REALTIME_RATING_KEY,
                         UserManager.Instance.lastCachedRating));
 
                 //get complexity scores
@@ -358,7 +356,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     opponentPercent);
 
                 (int, int) actualMinMax = (
-                    Mathf.Min(myMinMax.Item1, oppMinMax.Item1), 
+                    Mathf.Min(myMinMax.Item1, oppMinMax.Item1),
                     Mathf.Min(myMinMax.Item2, oppMinMax.Item2));
 
                 BoardGenerationPreferences preferences = new BoardGenerationPreferences();
@@ -379,9 +377,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(
-                    _area, 
+                    _area,
                     me,
-                    opponen, 
+                    opponen,
                     UnityEngine.Random.value > .5f ? 1 : 2,
                     null,
                     preferences)
@@ -475,6 +473,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameType.PUZZLE:
+                    if (!game.isOver && !game.isMyTurn)
+                    {
+                        board.TakeAITurn();
+                    }
+
+                    break;
+
+                case GameType.TRY_TOKEN:
                     if (!game.isOver && !game.isMyTurn)
                     {
                         board.TakeAITurn();
@@ -711,12 +717,24 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (sendResetEvent)
             {
-                AnalyticsManager.Instance.LogGame(
-                    game.GameToAnalyticsEvent(false),
-                    game,
-                    values: new KeyValuePair<string, object>(
-                        AnalyticsManager.GAME_RESULT_KEY,
-                        AnalyticsManager.GameResultType.reset));
+                switch (game._Type)
+                {
+                    case GameType.ONBOARDING:
+                    case GameType.TRY_TOKEN:
+                    case GameType.PRESENTATION:
+
+                        break;
+
+                    default:
+                        AnalyticsManager.Instance.LogGame(
+                            game.GameToAnalyticsEvent(false),
+                            game,
+                            values: new KeyValuePair<string, object>(
+                                AnalyticsManager.GAME_RESULT_KEY,
+                                AnalyticsManager.GameResultType.reset));
+
+                        break;
+                }
             }
 
             board.StopAIThread();
@@ -724,6 +742,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.AI:
                 case GameType.PUZZLE:
+                case GameType.ONBOARDING:
+                case GameType.TRY_TOKEN:
                     game._Reset();
 
                     LoadGame(game);
@@ -1289,7 +1309,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (GameManager.Instance.ExpectedGameType == GameTypeLocal.LOCAL_GAME)
             {
-                LogGameComplete(false);
+                switch (game._Type)
+                {
+                    case GameType.TRY_TOKEN:
+                    case GameType.ONBOARDING:
+                    case GameType.PRESENTATION:
+
+                        break;
+
+                    default:
+                        LogGameComplete(false);
+
+                        break;
+                }
 
                 switch (game._Mode)
                 {
@@ -1513,7 +1545,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void LogGameStart()
         {
-            if (game._Type == GameType.ONBOARDING) return;
+            //skip for next game types
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                case GameType.TRY_TOKEN:
+                case GameType.PRESENTATION:
+                    return;
+            }
 
             if (prevGame == null || (prevGame.BoardID != game.BoardID))
             {
@@ -1525,17 +1564,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                 case GameTypeLocal.REALTIME_BOT_GAME:
-                    LogRealtimeGamePlayed();
+                    PlayerPrefsWrapper.AddRealtimeGamePlayed();
+
+                    Amplitude.Instance.setUserProperty(
+                        "totalRealtimeGamesPlayed",
+                        PlayerPrefsWrapper.GetRealtimeGamesPlayed());
+
                     break;
-            }
-
-            void LogRealtimeGamePlayed()
-            {
-                PlayerPrefsWrapper.AddRealtimeGamePlayed();
-
-                Amplitude.Instance.setUserProperty(
-                    "totalRealtimeGamesPlayed",
-                    PlayerPrefsWrapper.GetRealtimeGamesPlayed());
             }
         }
 
@@ -1685,7 +1720,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 _screen = menuController.GetScreen<VSGamePrompt>();
             }
 
-            while (_screen && _screen.isOpened) yield return null;
+            while (_screen && _screen.isOpened)
+            {
+                yield return null;
+            }
 
             //instruction boards
             switch (game._Type)
@@ -1694,7 +1732,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
                 case GameType.PRESENTATION:
-				
+                case GameType.TRY_TOKEN:
                     break;
 
                 default:
@@ -1867,18 +1905,24 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.AI:
                 case GameType.TURN_BASED:
                 case GameType.REALTIME:
+                case GameType.TRY_TOKEN:
                     if (game.IsWinner())
                     {
                         winningParticleGenerator.ShowParticles();
 
                         GameManager.Vibrate();
                     }
+
                     break;
 
                 default:
-                    if (!game.draw) winningParticleGenerator.ShowParticles();
+                    if (!game.draw)
+                    {
+                        winningParticleGenerator.ShowParticles();
+                    }
 
                     GameManager.Vibrate();
+
                     break;
             }
 
@@ -1904,6 +1948,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.FRIEND:
                 case GameType.LEADERBOARD:
                 case GameType.AI:
+                case GameType.TRY_TOKEN:
                 case GameType.TURN_BASED:
                     if (game.IsWinner())
                     {

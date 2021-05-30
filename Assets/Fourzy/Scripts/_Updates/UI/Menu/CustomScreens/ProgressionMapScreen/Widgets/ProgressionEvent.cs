@@ -487,7 +487,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             //get all puzzlepacks
             foreach (ResourceItem pack in resouceDB.root
-                .GetChild(Constants.PUZZLE_PACKS_ROOT_FOLDER)
+                .GetChild(Constants.PUZZLE_PACKS_FOLDER)
                 .GetChilds("", ResourceItem.Type.Folder))
             {
                 values.Add(pack.Name, pack.Name);

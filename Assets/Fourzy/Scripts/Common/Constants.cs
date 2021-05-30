@@ -26,7 +26,10 @@ namespace Fourzy
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
         public const float EXTRA_DELAY_BETWEEN_TURNS = 0.1f;
-        public const float APREA_PROGRESSION_REWARD_DELAY = 2f;
+
+        public const float AREA_PROGRESSION_BEFORE_DELAY = 1f;
+        public const float AREA_PROGRESSION_OPEN_SCREEN_DELAY = 2f;
+
         public const float GAMEPIECE_AFTER_SPAWN_DELAY = .6f;
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
@@ -85,11 +88,14 @@ namespace Fourzy
         public const int MAX_PLAYER_LEVEL = 32;
         public const int MIN_PLAYER_LEVEL = 1;
 
-        public const string PUZZLE_PACKS_ROOT_FOLDER = "PuzzlePacks";
-        public const string PUZZLES_ROOT_FOLDER = "PuzzlePool";
-        public const string REALTIME_BOT_BOARDS = "FTUE_ProgressionBoards";
-        public const string PASS_AND_PLAY_BOARDS = "PassAndPlayBoards";
-        public const string MISC_BOARDS_FOLDER = "MiscBoards";
+        public const string BOARDS_ROOT = "GameBoards";
+        public const string FAST_PUZZLES_FOLDER = BOARDS_ROOT + "/FastPuzzles";
+        public const string REALTIME_BOT_BOARDS_FOLDER = BOARDS_ROOT + "/FTUE_ProgressionBoards";
+        public const string PUZZLE_PACKS_FOLDER = BOARDS_ROOT + "/PuzzlePacks";
+        public const string PASS_AND_PLAY_BOARDS_FOLDER = BOARDS_ROOT + "/PassAndPlayBoards";
+        public const string INSTRUCTION_BOARDS_FOLDER  = BOARDS_ROOT + "/InstructionBoards";
+        public const string TRY_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
+
         public const string AREAS_PROGRESSION_FOLDER = "AreasProgression";
         public const string LOCALIZATION_FOLDER = "Localization";
 

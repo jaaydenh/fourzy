@@ -574,7 +574,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 37
+          selectedMember: 38
           isDynamic: 0
         target: {fileID: 6527753386061954441}
         memberName: TryButtonPress
@@ -10659,7 +10659,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: OK
+  m_text: Try it out!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 039df6059edacc74aa3426c151c05af8, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
@@ -10740,7 +10740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: ok
+  key: try_it_out
   updateOnStart: 1
 --- !u!1 &6527753385108255394
 GameObject:

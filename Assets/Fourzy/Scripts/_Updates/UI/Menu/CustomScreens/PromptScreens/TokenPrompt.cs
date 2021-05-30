@@ -68,21 +68,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         /// </summary>
         public void TryIt()
         {
-            if (gameboardDefinition == null)
-            {
-                Debug.LogError("Token prompt gameboard definition is empty");
-                return;
-            }
-
             CloseSelf();
 
-            ClientFourzyGame _game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Bot", AIProfile.BadBot))
-            {
-                _Type = GameType.AI,
-            };
-            _game.UpdateFirstState();
-
-            GameManager.Instance.StartGame(_game, GameTypeLocal.LOCAL_GAME);
+            GameContentManager.Instance.StartTryItBoard(data.tokenType);
         }
 
         private void InitPrompt(List<AreasDataHolder.GameArea> themes)

@@ -1,13 +1,13 @@
 //@vadym udod
 
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
         private ProgressionRewardAnimatorWidget rewardAnimation;
 
         private bool isPlayFabInitialized = false;
-        private GameObject currentRewardItem;
+        private bool updateRewardOnOpen;
         private int cachedValue = 0;
 
         private AreaProgression progressionData = null;
@@ -84,16 +84,27 @@ namespace Fourzy._Updates.UI.Widgets
                 {
                     //if there is next reward and our cached value is enough to unlock it, 
                     //pass _next.gamesNumber into OnAreaProgression to trigger reward manually
+                    if (progressionSlider.value == 1f)
+                    {
+                        UpdateSlider(false, 0f);
+                        UpdateBundleReward();
+                    }
+
                     OnAreaProgression(currentArea, _next.gamesNumber);
+
                     return;
                 }
                 else
                 {
                     //otherwise just progress to current value
-
                     OnAreaProgression(currentArea, cachedValue);
                     cachedValue = 0;
                 }
+            }
+            else if (updateRewardOnOpen)
+            {
+                CancelRoutine("delayed_update");
+                StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, UpdateProgress, null);
             }
         }
 
@@ -106,7 +117,10 @@ namespace Fourzy._Updates.UI.Widgets
                 case Constants.PLAYFAB_TOKEN_CLASS:
                     PersistantMenuController.Instance
                         .GetOrAddScreen<TokenPrompt>()
-                        .Prompt(GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)), false, false);
+                        .Prompt(
+                            GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)), 
+                            false, 
+                            false);
 
                     break;
 
@@ -130,7 +144,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnAreaProgression(Area area, int value)
         {
-            if (!isPlayFabInitialized || area != currentArea || (gamesPlayed > 0 && gamesPlayed == value)) return;
+            if (!isPlayFabInitialized || area != currentArea) return;
 
             if (!visible)
             {
@@ -144,22 +158,14 @@ namespace Fourzy._Updates.UI.Widgets
             previousReward = progressionData.GetCurrent(gamesPlayed);
             nextReward = progressionData.GetNext(gamesPlayed);
 
+            CancelRoutine("delayed_update");
             if (_next != null && _next != nextReward)
             {
-                menuScreen.menuController
-                    .GetOrAddScreen<AreaProgressionRewardScreen>()
-                    .ShowReward((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId));
-
-                progressionValue.text = "";
-                rewardAnimation.Animate(Constants.APREA_PROGRESSION_REWARD_DELAY);
-                UpdateSlider(true, 1f);
-
-                //animate reward
-                StartRoutine("next", Constants.APREA_PROGRESSION_REWARD_DELAY, UpdateFromCurrentValues);
+                StartRoutine("reward_routine", UnlockRewardRoutine());
             }
             else
             {
-                UpdateFromCurrentValues();
+                StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, UpdateProgress, null);
             }
         }
 
@@ -192,15 +198,9 @@ namespace Fourzy._Updates.UI.Widgets
                 }
 
                 isPlayFabInitialized = true;
-                OnAreaProgression(currentArea, UserManager.Instance.GetAreaProgression(currentArea));
+                gamesPlayed = UserManager.Instance.GetAreaProgression(currentArea);
+                OnAreaProgression(currentArea, gamesPlayed);
             }
-        }
-
-        private void UpdateFromCurrentValues()
-        {
-            UpdateLabel();
-            UpdateSlider(true);
-            UpdateBundleReward();
         }
 
         private void UpdateLabel()
@@ -259,36 +259,55 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void UpdateBundleReward()
         {
-            if (currentRewardItem)
-            {
-                Destroy(currentRewardItem);
-            }
-            rewardParent.color = Color.clear;
             noReward.SetActive(nextReward == null);
 
-            if (nextReward == null) return;
-
-            rewardItem = GameContentManager.Instance.allBundlesInfo[nextReward.id].GetFirstItem();
-
-            switch (rewardItem.ItemClass)
+            if (nextReward == null)
             {
-                case Constants.PLAYFAB_GAMEPIECE_CLASS:
-                    GamePieceView _gamepiece = Instantiate(
-                        GameContentManager.Instance.piecesDataHolder.GetGamePieceData(rewardItem.ItemId).player1Prefab,
-                        rewardParent.rectTransform);
-                    _gamepiece.StartBlinking();
-
-                    currentRewardItem = _gamepiece.gameObject;
-                    rewardParent.color = Color.clear;
-
-                    break;
-
-                case Constants.PLAYFAB_TOKEN_CLASS:
-                    rewardParent.sprite = GameContentManager.Instance.GetTokenData((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId)).GetTokenSprite();
-                    rewardParent.color = Color.white;
-
-                    break;
+                rewardAnimation.RemoveCurrentReward();
+                return;
             }
+
+            BundleItem _current = GameContentManager.Instance.allBundlesInfo[nextReward.id].GetFirstItem();
+            if (rewardItem != _current)
+            {
+                rewardItem = GameContentManager.Instance.allBundlesInfo[nextReward.id].GetFirstItem();
+                rewardAnimation.SetReward(rewardItem);
+            }
+            else if (rewardAnimation)
+            {
+                rewardAnimation.AnimateProgress();
+            }
+        }
+
+        private void UpdateProgress()
+        {
+            UpdateSlider(true);
+            UpdateBundleReward();
+            UpdateLabel();
+
+            updateRewardOnOpen = false;
+        }
+
+        private IEnumerator UnlockRewardRoutine()
+        {
+            AreaProgressionRewardScreen _rewardScreen = menuScreen.menuController.GetOrAddScreen<AreaProgressionRewardScreen>();
+            //this screen is transparent at first
+            //and will also block inputs
+            _rewardScreen.ShowReward((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId));
+
+            progressionValue.text = "";
+
+            yield return new WaitForSeconds(Constants.AREA_PROGRESSION_BEFORE_DELAY);
+
+            rewardAnimation.Animate(Constants.AREA_PROGRESSION_OPEN_SCREEN_DELAY);
+            UpdateSlider(true, 1f);
+
+            //animate reward
+            yield return new WaitForSeconds(Constants.AREA_PROGRESSION_OPEN_SCREEN_DELAY);
+
+            _rewardScreen.ActualOpen();
+
+            updateRewardOnOpen = true;
         }
     }
 }
