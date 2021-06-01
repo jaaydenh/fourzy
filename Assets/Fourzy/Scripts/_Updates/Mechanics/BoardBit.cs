@@ -253,9 +253,13 @@ namespace Fourzy._Updates.Mechanics
             if (!outline)
             {
                 if (parentRectTransform)
+                {
                     outline = body.AddComponent<UIOutline>();
+                }
                 else
+                {
                     outline = body.AddComponent<SpriteRendererOutline>();
+                }
             }
 
             outline.blueSize = .0015f;
@@ -268,20 +272,32 @@ namespace Fourzy._Updates.Mechanics
             if (outline)
             {
                 if (hide)
+                {
                     outline.HideOutline();
+                }
                 else
+                {
                     outline.Animate(outline.tween._value, 0f, .5f, false);
+                }
             }
         }
 
         public virtual void SetMaterial(Material material)
         {
             if (parentRectTransform)
+            {
                 foreach (SpriteToImage imageRenderer in imageRenderers)
+                {
                     imageRenderer.image.material = material;
+                }
+            }
             else
+            {
                 foreach (SpriteRenderer spriteRenderer in spriteRenderers)
+                {
                     spriteRenderer.material = material;
+                }
+            }
         }
 
         public virtual void Position(BoardLocation boardLocation) => transform.localPosition = gameboard.BoardLocationToVec2(boardLocation);
@@ -298,8 +314,12 @@ namespace Fourzy._Updates.Mechanics
             float distance = 0f;
 
             if (locations.Length > 1)
+            {
                 for (int index = 1; index < locations.Length; index++)
+                {
                     distance += Vector2.Distance(gameboard.BoardLocationToVec2(locations[index - 1]), gameboard.BoardLocationToVec2(locations[index]));
+                }
+            }
 
             StartCoroutine(MoveRoutine(startMove, locations));
 
@@ -355,14 +375,21 @@ namespace Fourzy._Updates.Mechanics
         public virtual void _Destroy(float time = 0f)
         {
             if (time == 0f)
+            {
                 _Destroy();
+            }
             else
+            {
                 StartRoutine("destroy", time, () => _Destroy());
+            }
         }
 
         public virtual void _Destroy()
         {
-            if (gameboard) gameboard.RemoveBoardBit(this);
+            if (gameboard)
+            {
+                gameboard.RemoveBoardBit(this);
+            }
 
             Destroy(gameObject);
         }
@@ -474,7 +501,9 @@ namespace Fourzy._Updates.Mechanics
                 imageRenderers = new SpriteToImage[spriteRenderers.Length];
 
                 for (int rendererIndex = 0; rendererIndex < spriteRenderers.Length; rendererIndex++)
+                {
                     imageRenderers[rendererIndex] = spriteRenderers[rendererIndex].gameObject.AddComponent<SpriteToImage>();
+                }
             }
 
             //size it
@@ -502,7 +531,9 @@ namespace Fourzy._Updates.Mechanics
                 }
             }
             else
+            {
                 transform.localScale = Vector3.one;
+            }
 
             //configure alpha tween
             alphaTween.propagate = true;

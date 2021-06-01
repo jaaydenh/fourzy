@@ -51,7 +51,9 @@ namespace Fourzy._Updates.Tools
             intensity = 0f;
 
             if (tween)
+            {
                 tween.StopTween(false);
+            }
         }
     }
 }
