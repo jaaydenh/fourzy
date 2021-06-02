@@ -15,10 +15,12 @@ namespace Fourzy._Updates.Tools
             Initialize();
         }
 
-        protected void Update()
+        private void Update()
         {
             if (!initialized)
+            {
                 Initialize();
+            }
 
             spriteRenderer.sharedMaterial.SetFloat("_Intensity", intensity);
             spriteRenderer.sharedMaterial.SetFloat("_OutlineBorder", size);
