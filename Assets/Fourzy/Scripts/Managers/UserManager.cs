@@ -229,7 +229,7 @@ namespace Fourzy
 
             set
             {
-                Amplitude.Instance.setUserProperty("totalRealtimeGamesPlayed", value);
+                Amplitude.Instance.setUserProperty("totalRealtimeGamesCompleted", value);
                 _lastCachedRealtimeGamesComplete = value;
 
                 onRealtimeGamesCompleteUdpate?.Invoke(_lastCachedRealtimeGamesComplete);

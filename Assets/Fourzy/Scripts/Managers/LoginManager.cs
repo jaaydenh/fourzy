@@ -383,7 +383,7 @@ namespace Fourzy
                     ["totalAdventurePuzzlesCompleted"] = 0,
                     ["totalAdventurePuzzleFailures"] = 0,
                     ["totalAdventurePuzzlesReset"] = 0,
-                    ["totalRealtimeGamesPlayed"] = 0,
+                    ["totalRealtimeGamesCompleted"] = 0,
                     ["totalRealtimeGamesWon"] = 0,
                     ["totalRealtimeGamesLost"] = 0,
                     ["totalRealtimeGamesDraw"] = 0,
