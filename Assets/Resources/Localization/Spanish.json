@@ -329,6 +329,14 @@
       "value": "Música"
     },
     {
+      "key": "new_token",
+      "value": "Token Nuevo"
+    },
+    {
+      "key": "new_gamepiece",
+      "value": "Nuevo Fourzy"
+    },
+    {
       "key": "new_token_unlocked",
       "value": "NUEVO TOKEN DESBLOQUEADO"
     },

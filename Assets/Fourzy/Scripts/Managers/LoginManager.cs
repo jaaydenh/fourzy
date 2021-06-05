@@ -31,6 +31,7 @@ namespace Fourzy
         public static string masterAccountId;
 
         private bool isConnecting;
+        private bool loadingInventory = false;
 
         private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
 
@@ -41,6 +42,7 @@ namespace Fourzy
             if (InstanceExists) return;
 
             GameManager.onNetworkAccess += OnNetworkAccess;
+            UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
 
             //Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             //Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
@@ -55,6 +57,7 @@ namespace Fourzy
         protected void OnDestroy()
         {
             GameManager.onNetworkAccess -= OnNetworkAccess;
+            UserManager.onPlayfabValuesLoaded -= OnPlayfabValueLoaded;
 
             //Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
             //Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
@@ -435,6 +438,23 @@ namespace Fourzy
             }, AuthenticateWithPhoton, OnPlayFabError);
         }
 
+        private void OnPlayfabValueLoaded()
+        {
+            if (!loadingInventory && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.CATALOG_INFO_RECEIVED))
+            {
+                loadingInventory = true;
+
+                //get inventory
+                PlayFabClientAPI.GetUserInventory(
+                    new GetUserInventoryRequest(),
+                    OnUserInventoryFetched,
+                    error => {
+                        loadingInventory = false;
+                        OnPlayFabError(error);
+                    });
+            }
+        }
+
         private void AuthenticateWithPhoton(GetPhotonAuthenticationTokenResult obj)
         {
             LogMessage("Photon token acquired: " + obj.PhotonCustomAuthenticationToken + "  Authentication complete.");
@@ -519,22 +539,19 @@ namespace Fourzy
                     GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
                 });
 
-            //get inventory
-            PlayFabClientAPI.GetUserInventory(
-                new GetUserInventoryRequest(),
-                OnUserInventoryFetched,
-                OnPlayFabError);
-
             //get catalog items
-            GameContentManager.Instance.GetBundlesInfo();
+            GameContentManager.Instance.GetItemsCataloge();
         }
 
         private void OnUserInventoryFetched(GetUserInventoryResult inventoryRequestResult)
         {
+            loadingInventory = false;
+
             //clear all tokens exept default
             PlayerPrefsWrapper.RemoveAllButDefault();
             List<TokenType> inventoryTokens = new List<TokenType>();
 
+            GameContentManager.Instance.piecesDataHolder.ResetPieces();
             foreach (ItemInstance itemInstance in inventoryRequestResult.Inventory)
             {
                 switch (itemInstance.ItemClass)

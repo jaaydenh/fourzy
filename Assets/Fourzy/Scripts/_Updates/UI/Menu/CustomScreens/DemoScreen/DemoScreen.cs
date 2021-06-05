@@ -78,17 +78,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void SetPlacementStyle(int value) =>
             GameManager.Instance.placementStyle = (GameManager.PlacementStyle)value;
 
-        public void UnlockGamepieces()
-        {
-            GameContentManager.Instance.piecesDataHolder.UnlockAll();
-        }
-
-        public void ResetGamepieces()
-        {
-            GamePiecesDataHolder.ClearGamepiecesData();
-            GameContentManager.Instance.piecesDataHolder.Initialize();
-        }
-
         public void OpenGeneratorTester()
         {
             Toggle();

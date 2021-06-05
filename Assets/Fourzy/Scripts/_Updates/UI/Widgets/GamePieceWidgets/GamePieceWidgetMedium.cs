@@ -25,9 +25,13 @@ namespace Fourzy._Updates.UI.Widgets
             notFound.SetActive(data.State == GamePieceState.NotFound);
 
             if (data.State == GamePieceState.NotFound)
+            {
                 gamePiece.SetMaterial(greyscaleMaterial);
+            }
             else
+            {
                 gamePiece.SetMaterial(null);
+            }
 
             switch (data.State)
             {
@@ -53,7 +57,7 @@ namespace Fourzy._Updates.UI.Widgets
                     borderImage.color = data.borderColor;
 
                     //stars slider
-                    starsSlider.value = data.Champions;
+                    starsSlider.value = 0f;
 
                     break;
             }

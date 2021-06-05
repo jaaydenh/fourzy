@@ -3,6 +3,7 @@
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Tools;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -17,24 +18,17 @@ namespace Fourzy._Updates.Serialized
 
         public Dictionary<string, GamePieceData> gamePiecesFastAccess { get; set; }
 
-        public Dictionary<string, GamePieceData> enabledGamePiecesFastAccess { get; set; }
-
-        public GamePieceData random => enabledGamePiecesFastAccess.Values.Random();
+        public GamePieceData random => gamePiecesFastAccess.Values.Random();
 
         public void Initialize()
         {
             gamePiecesFastAccess = new Dictionary<string, GamePieceData>();
-            enabledGamePiecesFastAccess = new Dictionary<string, GamePieceData>();
 
             foreach (GamePieceData gamePieceData in gamePieces)
             {
                 if (gamePieceData.enabled)
                 {
-                    gamePieceData.Initialize();
-
                     gamePiecesFastAccess.Add(gamePieceData.Id, gamePieceData);
-
-                    enabledGamePiecesFastAccess.Add(gamePieceData.Id, gamePieceData);
                 }
             }
         }
@@ -60,29 +54,28 @@ namespace Fourzy._Updates.Serialized
                 gamePiece.name.Contains(_prefabData.player2Prefab.name));
         }
 
-        public void UnlockAll()
+        public void ResetPieces()
         {
-            foreach (GamePieceData gamePiecePrefabData in enabledGamePiecesFastAccess.Values)
+            foreach (GamePieceData data in gamePieces)
             {
-                gamePiecePrefabData.Pieces = gamePiecePrefabData.piecesToUnlock;
-            }
-        }
-
-        public static void ClearGamepiecesData()
-        {
-            for (int index = 0; index < 50; index++)
-            {
-                PlayerPrefsWrapper.GamePieceDeleteData(index + "");
+                data.Pieces = 0;
+                data.Magic = 0;
+                //default value
+                data.PiecesToUnlock = 30;
             }
         }
 
         public static GamePieceData _GetGamePieceData(GamePieceView gamePiece)
         {
             if (Application.isPlaying)
+            {
                 return GameContentManager.Instance.piecesDataHolder.GetGamePieceData(gamePiece);
+            }
 #if UNITY_EDITOR
             else
+            {
                 return AssetDatabase.LoadAssetAtPath<GamePiecesDataHolder>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("DefaultGamePiecesDataHolder")[0])).GetGamePieceData(gamePiece);
+            }
 #else
             return null;
 #endif

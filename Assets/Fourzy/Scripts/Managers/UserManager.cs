@@ -691,7 +691,7 @@ namespace Fourzy
         PLAYER_PROFILE_RECEIVED = 1 << 5,
         LANGUAGE_CHECKED = 1 << 6,
         USER_INVENTORY_RECEIVED = 1 << 7,
-        BUNDLES_INFO_RECEIVED = 1 << 8,
+        CATALOG_INFO_RECEIVED = 1 << 8,
         NEWS_CHECKED = 1 << 9,
     }
 }

@@ -3,6 +3,7 @@
 using Fourzy._Updates.Mechanics._GamePiece;
 using FourzyGameModel.Model;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,18 +12,11 @@ namespace Fourzy
     [System.Serializable]
     public class GamePieceData
     {
-        public static System.Action<GamePieceData> onUpgrade;
-
         public string name;
         public GamePieceView player1Prefab;
         public GamePieceView player2Prefab;
         public string Id;
         public bool enabled;
-        public int startingMagic = 100;
-        public int piecesToUnlock = 40;
-
-        [InfoBox("How many pieces unlocked by default")]
-        public int pieces = 0;
 
         [BoxGroup("Misc data")]
         public Sprite profilePicture;
@@ -33,17 +27,15 @@ namespace Fourzy
         [BoxGroup("Misc data")]
         public Color borderColor = Color.green;
 
-        public int Pieces
-        {
-            get => PlayerPrefsWrapper.GetGamePiecePieces(Id);
-            set => PlayerPrefsWrapper.GamePieceUpdatePiecesCount(Id, value);
-        }
-
-        public int Champions
-        {
-            get => PlayerPrefsWrapper.GetGamePieceChampions(Id);
-            set => PlayerPrefsWrapper.GamePieceUpdateChampionsCount(Id, value);
-        }
+        [InfoBox("Current amount of pieces (pulled from server)")]
+        [NonSerialized, ShowInInspector]
+        public int Pieces;
+        [InfoBox("Actual value pilled from server")]
+        [NonSerialized, ShowInInspector]
+        public int Magic;
+        [InfoBox("Actual value pilled from server")]
+        [NonSerialized, ShowInInspector]
+        public int PiecesToUnlock;
 
         /// <summary>
         /// Temp returns these values
@@ -61,45 +53,6 @@ namespace Fourzy
             }
         }
 
-        public int ChampionsFromPieces
-        {
-            get
-            {
-                int starsCount = 0;
-                //int piecesCount = Pieces;
-
-                //if (piecesCount < piecesToUnlock) return 0;
-
-                //for (int count = 0; count < 5; count++)
-                //    if (count < piecesProgression.list.Count)
-                //    {
-                //        if (piecesProgression.list[count] > piecesCount)
-                //        {
-                //            if (count > 0) starsCount = count;
-
-                //            break;
-                //        }
-                //    }
-                //    else
-                //        return count;
-
-                return starsCount;
-            }
-        }
-
-        public int GetCurrentTierProgression
-        {
-            get
-            {
-                //if (Pieces < piecesToUnlock)
-                //    return piecesToUnlock;
-                //else
-                //    return piecesProgression.list[Champions];
-
-                return 80;
-            }
-        }
-
         public GamePieceState State
         {
             get
@@ -110,7 +63,7 @@ namespace Fourzy
                 {
                     return GamePieceState.NotFound;
                 }
-                else if (piecesCount < piecesToUnlock)
+                else if (piecesCount < PiecesToUnlock)
                 {
                     return GamePieceState.FoundAndLocked;
                 }
@@ -121,34 +74,10 @@ namespace Fourzy
             }
         }
 
-        public bool CanUpgrade => Pieces >= GetCurrentTierProgression;
-
-        public void AddPieces(int quantity) => Pieces += quantity;
-
-        public void Upgrade()
+        public void AddPieces(int quantity)
         {
-            if (!CanUpgrade) return;
 
-            Champions++;
-
-            onUpgrade?.Invoke(this);
         }
-
-        public void Initialize()
-        {
-            //set default number of pieces if value in player prefs not set
-            if (!PlayerPrefsWrapper.HaveGamePieceRecord(Id))
-            {
-                //this will record it into player prefs
-                Pieces = pieces;
-            }
-        }
-    }
-
-    [System.Serializable]
-    public class ProgressionCollection
-    {
-        public List<int> list = new List<int>(new int[] { 80, 150, 240, 300, 550 });
     }
 
     public enum GamePieceState

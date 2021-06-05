@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 6527753384053150864}
   - component: {fileID: 6527753384053150870}
   - component: {fileID: 6527753384053150865}
+  - component: {fileID: 5120115191203805065}
   m_Layer: 5
   m_Name: UnlockedText
   m_TagString: Untagged
@@ -273,6 +274,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5120115191203805065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6527753384053150867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: unlocked
+  updateOnStart: 1
 --- !u!1 &6527753384059721544
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,7 +302,7 @@ GameObject:
   - component: {fileID: 6527753384059721548}
   - component: {fileID: 6527753384059721549}
   m_Layer: 5
-  m_Name: TokenIcon
+  m_Name: Reward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -302,7 +317,7 @@ RectTransform:
   m_GameObject: {fileID: 6527753384059721544}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 300, y: 300, z: 1}
   m_Children: []
   m_Father: {fileID: 6527753386061954440}
   m_RootOrder: 3
@@ -310,7 +325,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 79}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6527753384059721551
 CanvasRenderer:
@@ -597,7 +612,9 @@ MonoBehaviour:
   scaleOnClick: 1
   buttonGraphics:
     list: []
-  labels: []
+  labels:
+  - labelName: name
+    label: {fileID: 6527753385072909920}
   badges: []
 --- !u!114 &6531486784956171210
 MonoBehaviour:
@@ -10471,7 +10488,7 @@ GameObject:
   - component: {fileID: 6527753385054307935}
   - component: {fileID: 6527753385054307934}
   m_Layer: 5
-  m_Name: TokenNameText
+  m_Name: RewardNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10604,7 +10621,6 @@ GameObject:
   - component: {fileID: 6527753385072909923}
   - component: {fileID: 6527753385072909921}
   - component: {fileID: 6527753385072909920}
-  - component: {fileID: 230208169937790115}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -10728,20 +10744,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &230208169937790115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6527753385072909922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: try_it_out
-  updateOnStart: 1
 --- !u!1 &6527753385108255394
 GameObject:
   m_ObjectHideFlags: 0
@@ -20574,7 +20576,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 26
+          selectedMember: 27
           isDynamic: 0
         target: {fileID: 6527753386061954441}
         memberName: OnBack
@@ -40183,7 +40185,9 @@ MonoBehaviour:
   defaultCalls: 1
   menuController: {fileID: 0}
   tokenImage: {fileID: 6527753384059721550}
-  tokenName: {fileID: 6527753385054307934}
+  rewardTitle: {fileID: 6527753384885093217}
+  rewardName: {fileID: 6527753385054307934}
+  okButton: {fileID: 6527753384835877242}
 --- !u!114 &6527753386061954447
 MonoBehaviour:
   m_ObjectHideFlags: 0

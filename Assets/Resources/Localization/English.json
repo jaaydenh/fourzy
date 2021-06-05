@@ -325,6 +325,14 @@
       "value": "Music"
     },
     {
+      "key": "new_token",
+      "value": "New Token"
+    },
+    {
+      "key": "new_gamepiece",
+      "value": "New Fourzy"
+    },
+    {
       "key": "new_token_unlocked",
       "value": "NEW TOKEN UNLOCKED"
     },

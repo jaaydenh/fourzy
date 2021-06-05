@@ -10,6 +10,7 @@ using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PlayFab;
 using PlayFab.ClientModels;
 using Sirenix.OdinInspector;
@@ -23,8 +24,6 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
-        public static Action onBundlesLoaded;
-
         public List<Camera3dItemProgressionMap> progressionMaps;
         public GamePiecesDataHolder piecesDataHolder;
         public AIPlayersDataHolder aiPlayersDataHolder;
@@ -56,7 +55,7 @@ namespace Fourzy
 
         internal List<string> bundlesInPlayerInventory { get; set; } = new List<string>();
 
-        internal Dictionary<string, BundleInfo> allBundlesInfo;
+        internal Dictionary<string, CatalogItem> allItemsInfo;
 
         internal IEnumerable<TokensDataHolder.TokenData> unlockedTokensData
         {
@@ -101,42 +100,81 @@ namespace Fourzy
             LoadPassAndPlayBoards();
         }
 
-        public void GetBundlesInfo()
+        public void GetItemsCataloge()
         {
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "getBundlesData",
-                GeneratePlayStreamEvent = true,
-            },
-            result =>
-            {
-                allBundlesInfo = new Dictionary<string, BundleInfo>();
-
-                foreach (BundleInfo info in JsonConvert.DeserializeObject<BundleInfo[]>(result.FunctionResult.ToString()))
+            PlayFabClientAPI.GetCatalogItems(
+                new GetCatalogItemsRequest(),
+                result =>
                 {
-                    allBundlesInfo.Add(info.BundleId, info);
-                }
+                    allItemsInfo = new Dictionary<string, CatalogItem>();
 
-                if (Application.isEditor || Debug.isDebugBuild)
+                    if (Application.isEditor || Debug.isDebugBuild)
+                    {
+                        Debug.Log($"Pulled {result.Catalog.Count} items from server");
+                    }
+
+                    foreach (CatalogItem item in result.Catalog)
+                    {
+                        allItemsInfo.Add(item.ItemId, item);
+
+                        switch (item.ItemClass)
+                        {
+                            case Constants.PLAYFAB_GAMEPIECE_CLASS:
+                                GamePieceData data = piecesDataHolder.GetGamePieceData(item.ItemId);
+                                if (data == null)
+                                {
+                                    Debug.LogError($"Unknown gamepiece {item.ItemId}");
+                                }
+                                else
+                                {
+                                    JObject _customData = JObject.Parse(item.CustomData);
+                                    data.PiecesToUnlock = _customData.Value<int>("toUnlock");
+                                }
+
+                                break;
+                        }
+                    }
+
+                    UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.CATALOG_INFO_RECEIVED);
+                },
+                error =>
                 {
-                    Debug.Log($"Pulled {allBundlesInfo.Count} bundles from server");
-                }
+                    GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+                });
+        }
 
-                onBundlesLoaded?.Invoke();
-
-                UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.BUNDLES_INFO_RECEIVED);
-            },
-            error =>
+        public CatalogItem GetCatalogItem(string itemId)
+        {
+            if (allItemsInfo.ContainsKey(itemId))
             {
-                GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
-            });
+                return allItemsInfo[itemId];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public CatalogItem GetFirstInBundle(string bundleId)
+        {
+            if (allItemsInfo.ContainsKey(bundleId) &&
+                allItemsInfo[bundleId].Bundle != null && 
+                allItemsInfo[bundleId].Bundle.BundledItems != null && 
+                allItemsInfo[bundleId].Bundle.BundledItems.Count > 0)
+            {
+                return GetCatalogItem(allItemsInfo[bundleId].Bundle.BundledItems[0]);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public GameBoardDefinition GetMiscBoard(string boardID) => miscBoards.Find(board => board.ID == boardID);
 
         public void StartTryItBoard(TokenType token)
         {
-            ResourceItem _boardTextFile =  ResourceDB
+            ResourceItem _boardTextFile = ResourceDB
                 .GetFolder(Constants.TRY_IT_BOARDS_FOLDER)
                 .GetChild(token.ToString(), ResourceItem.Type.Asset);
 
@@ -148,8 +186,8 @@ namespace Fourzy
             else
             {
                 ClientFourzyGame _game = new ClientFourzyGame
-                    (JsonConvert.DeserializeObject<GameBoardDefinition>(_boardTextFile.Load<TextAsset>().text), 
-                    UserManager.Instance.meAsPlayer, 
+                    (JsonConvert.DeserializeObject<GameBoardDefinition>(_boardTextFile.Load<TextAsset>().text),
+                    UserManager.Instance.meAsPlayer,
                     new Player(2, "Bot", AIProfile.BadBot))
                 {
                     _Type = GameType.TRY_TOKEN,
@@ -345,7 +383,7 @@ namespace Fourzy
         private void LoadMiscBoards()
         {
             miscBoards = new List<GameBoardDefinition>(ResourceDB
-                .GetFolder(Constants.INSTRUCTION_BOARDS_FOLDER )
+                .GetFolder(Constants.INSTRUCTION_BOARDS_FOLDER)
                 .GetChilds("", ResourceItem.Type.Asset)
                 .Where(_file => _file.Ext == "json")
                 .Select(_file => JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text)));
@@ -429,28 +467,6 @@ namespace Fourzy
             public string type;
             public GameObject prefab;
         }
-    }
-
-    /// <summary>
-    /// Playdfab bundles info
-    /// </summary>
-    [Serializable]
-    public class BundleInfo
-    {
-        public string BundleId;
-
-        public BundleItem[] Items;
-
-        public BundleItem GetFirstItem() => Items.First(
-            _item => _item.ItemClass == Constants.PLAYFAB_GAMEPIECE_CLASS ||
-            _item.ItemClass == Constants.PLAYFAB_TOKEN_CLASS);
-    }
-
-    [Serializable]
-    public class BundleItem
-    {
-        public string ItemId;
-        public string ItemClass;
     }
 
     /// <summary>
