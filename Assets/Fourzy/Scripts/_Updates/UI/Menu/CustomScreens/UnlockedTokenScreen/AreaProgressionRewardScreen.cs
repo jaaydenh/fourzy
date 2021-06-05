@@ -41,6 +41,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnBack();
 
+            switch (reward.ItemClass)
+            {
+                case Constants.PLAYFAB_TOKEN_CLASS:
+                    AnalyticsManager.Instance.LogEvent(
+                        "tryItButtonPress",
+                        AnalyticsManager.AnalyticsProvider.ALL,
+                        new System.Collections.Generic.KeyValuePair<string, object>("token", reward.ItemId),
+                        new System.Collections.Generic.KeyValuePair<string, object>("realtimeGamesCompleted", UserManager.Instance.realtimeGamesComplete),
+                        new System.Collections.Generic.KeyValuePair<string, object>("skipped", true));
+
+                    break;
+            }
+
             CloseSelf();
         }
 
@@ -92,6 +105,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (reward.ItemClass)
             {
                 case Constants.PLAYFAB_TOKEN_CLASS:
+                    AnalyticsManager.Instance.LogEvent(
+                        "tryItButtonPress",
+                        AnalyticsManager.AnalyticsProvider.ALL,
+                        new System.Collections.Generic.KeyValuePair<string, object>("token", reward.ItemId),
+                        new System.Collections.Generic.KeyValuePair<string, object>("realtimeGamesCompleted", UserManager.Instance.realtimeGamesComplete),
+                        new System.Collections.Generic.KeyValuePair<string, object>("skipped", false));
+
                     GameContentManager.Instance.StartTryItBoard((TokenType)Enum.Parse(typeof(TokenType), reward.ItemId));
 
                     break;
@@ -103,6 +123,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             HeaderScreen.Instance.Close();
+
+            switch (reward.ItemClass)
+            {
+                case Constants.PLAYFAB_TOKEN_CLASS:
+                    AnalyticsManager.Instance.LogEvent(
+                        "tokenUnlocked",
+                        AnalyticsManager.AnalyticsProvider.ALL,
+                        new System.Collections.Generic.KeyValuePair<string, object>("token", reward.ItemId),
+                        new System.Collections.Generic.KeyValuePair<string, object>("realtimeGamesCompleted", UserManager.Instance.realtimeGamesComplete));
+
+                    break;
+
+                case Constants.PLAYFAB_GAMEPIECE_CLASS:
+                    AnalyticsManager.Instance.LogEvent(
+                        "fourzyUnlocked",
+                        AnalyticsManager.AnalyticsProvider.ALL,
+                        new System.Collections.Generic.KeyValuePair<string, object>("piece", reward.ItemId),
+                        new System.Collections.Generic.KeyValuePair<string, object>("realtimeGamesCompleted", UserManager.Instance.realtimeGamesComplete));
+
+                    break;
+            }
         }
     }
 }
