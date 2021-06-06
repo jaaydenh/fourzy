@@ -30,10 +30,10 @@ namespace Fourzy
         [InfoBox("Current amount of pieces (pulled from server)")]
         [NonSerialized, ShowInInspector]
         public int Pieces;
-        [InfoBox("Actual value pilled from server")]
+        [InfoBox("Actual value pulled from server")]
         [NonSerialized, ShowInInspector]
         public int Magic;
-        [InfoBox("Actual value pilled from server")]
+        [InfoBox("Actual value pulled from server")]
         [NonSerialized, ShowInInspector]
         public int PiecesToUnlock;
 
