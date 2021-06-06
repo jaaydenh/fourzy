@@ -50,6 +50,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected bool lockedExpanded = true;
 
         private bool userInventoryLoaded = false;
+        private bool catalogLoaded = false;
 
         protected override void Awake()
         {
@@ -67,45 +68,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
             UserManager.onPlayfabValuesLoaded -= OnPlayfabValueLoaded;
         }
 
-        protected void Update()
-        {
-            //remove
-#if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                //give game pieces
-                foreach (GamePieceWidgetMedium widget in gamePieces)
-                {
-                    widget.data.AddPieces(Random.Range(1, 5));
-                    widget._Update();
-                }
-
-                PlaceGamepieceWidgets();
-            }
-
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                //give game pieces
-                foreach (GamePieceWidgetMedium widget in gamePieces)
-                {
-                    widget.data.AddPieces(-3);
-                    widget._Update();
-                }
-
-                PlaceGamepieceWidgets();
-            }
-#endif
-        }
-
         public override void Open()
         {
             base.Open();
 
-            PlaceGamepieceWidgets();
+            foreach (GamePieceWidgetMedium widget in gamePieces)
+            {
+                //highlight selected one
+                widget.SetSelectedState(widget.data.Id == UserManager.Instance.gamePieceID);
+            }
 
-            //highlight selected one
-            gamePieces.ForEach(widget => widget.SetSelectedState(
-                widget.data.Id == UserManager.Instance.gamePieceID));
+            PlaceGamepieceWidgets();
         }
 
         public void SetPiecesActive()
@@ -318,6 +291,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 userInventoryLoaded = true;
 
                 UpdateTokens();
+            }
+
+            if (UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.CATALOG_INFO_RECEIVED, PlayfabValuesLoaded.USER_INVENTORY_RECEIVED) && !catalogLoaded)
+            {
+                catalogLoaded = true;
+
+                if (isOpened)
+                {
+                    foreach (GamePieceWidgetMedium widget in gamePieces)
+                    {
+                        widget._Update();
+                    }
+
+                    PlaceGamepieceWidgets();
+                }
             }
         }
     }

@@ -65,6 +65,7 @@ namespace Fourzy._Updates.UI.Widgets
             GamePieceView _gamepiece = Instantiate(
                 GameContentManager.Instance.piecesDataHolder.GetGamePieceData(pieceID).player1Prefab,
                 transform.transform);
+            _gamepiece.transform.localScale = Vector3.one * .5f;
             _gamepiece.StartBlinking();
         }
 

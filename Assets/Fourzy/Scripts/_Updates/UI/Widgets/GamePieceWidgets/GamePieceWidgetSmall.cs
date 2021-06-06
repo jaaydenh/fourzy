@@ -22,12 +22,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.Awake();
 
-            GamePieceData.onUpgrade += UpdateData;
         }
 
         protected void OnDestroy()
         {
-            GamePieceData.onUpgrade -= UpdateData;
         }
 
         public virtual WidgetBase SetData(GamePieceData data)
@@ -48,7 +46,8 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case GamePieceState.FoundAndLocked:
                 case GamePieceState.FoundAndUnlocked:
-                    piecesCount.text = string.Format("{0}/{1}", data.Pieces, data.GetCurrentTierProgression);
+                    piecesCount.text = string.Format("{0}/{1}", data.Pieces, data.PiecesToUnlock);
+
                     break;
 
                 case GamePieceState.NotFound:
@@ -63,7 +62,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void UpdateProgressBar()
         {
-            float progressValue = (float)data.Pieces / data.GetCurrentTierProgression;
+            float progressValue = (float)data.Pieces / data.PiecesToUnlock;
 
             progressBar.value = Mathf.Clamp01(progressValue);
 
