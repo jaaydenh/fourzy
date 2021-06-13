@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -92,7 +91,7 @@ namespace Fourzy._Updates.UI.Toasts
         public void ShowToast(float displayTime, Vector2 fromPosition, Vector2 toPosition)
         {
             alphaTween.OnReset();
-            
+
             MoveTo(fromPosition, toPosition, .4f);
             Show(.4f);
             available = false;

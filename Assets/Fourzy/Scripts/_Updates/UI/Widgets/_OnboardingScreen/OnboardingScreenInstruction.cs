@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using TMPro;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -9,21 +8,17 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public TMP_Text label;
 
-        public OnboardingScreenInstruction DisplayText(float yAnchor, string message)
+        public OnboardingScreenInstruction SetText(string message)
         {
-            if (!visible || alphaTween._value != 0f) 
-                Show(.2f);
-
             label.text = message;
-            SetAnchors(new Vector2(.5f, yAnchor));
-
             return this;
         }
 
-        public void _Hide()
+        public OnboardingScreenInstruction SetFontSize(float size)
         {
-            if (visible || alphaTween._value != 0f)
-                Hide(.3f);
+            label.fontSize = size;
+
+            return this;
         }
     }
 }

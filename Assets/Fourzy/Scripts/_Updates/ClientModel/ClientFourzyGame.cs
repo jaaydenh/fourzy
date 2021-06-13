@@ -30,6 +30,7 @@ namespace Fourzy._Updates.ClientModel
         public bool isBoardRandom { get; private set; } = false;
 
         private int _originalHerdCount;
+        private GameMode _mode = GameMode.VERSUS;
 
         public Area _Area
         {
@@ -127,10 +128,13 @@ namespace Fourzy._Updates.ClientModel
                     }
                 }
 
-                return GameMode.VERSUS;
+                return _mode;
             }
 
-            set { }
+            set
+            {
+                _mode = value;
+            }
         }
 
         public float initializedTime { get; set; }

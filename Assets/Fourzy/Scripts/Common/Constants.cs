@@ -95,6 +95,7 @@ namespace Fourzy
         public const string PASS_AND_PLAY_BOARDS_FOLDER = BOARDS_ROOT + "/PassAndPlayBoards";
         public const string INSTRUCTION_BOARDS_FOLDER  = BOARDS_ROOT + "/InstructionBoards";
         public const string TRY_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
+        public const string MISC_BOARDS_FOLDER = BOARDS_ROOT + "/MiscBoards";
 
         public const string AREAS_PROGRESSION_FOLDER = "AreasProgression";
         public const string LOCALIZATION_FOLDER = "Localization";

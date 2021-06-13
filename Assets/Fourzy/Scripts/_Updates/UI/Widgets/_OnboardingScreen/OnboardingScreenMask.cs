@@ -29,23 +29,31 @@ namespace Fourzy._Updates.UI.Widgets
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void ShowMasks(OnboardingTask_ShowMaskedArea task, bool clear = true)
+        public void ShowMasks(OnboardingTask_ShowMaskedBoardCells task, bool clear = true)
         {
             board = GamePlayManager.Instance.board;
             Show();
 
-            if (clear) Clear();
+            if (clear)
+            {
+                Clear();
+            }
 
             bg.color = new Color(0f, 0f, 0f, .75f);
 
             Rect[] toUse = task.areas;
-            if (task.areasByPlacement.ContainsKey(GameManager.Instance.placementStyle)) toUse = new Rect[] { task.areasByPlacement[GameManager.Instance.placementStyle] };
+            if (task.areasByPlacement.ContainsKey(GameManager.Instance.placementStyle))
+            {
+                toUse = new Rect[] { task.areasByPlacement[GameManager.Instance.placementStyle] };
+            }
 
             foreach (Rect area in toUse)
+            {
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
+                {
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)
                     {
-                        Vector2 viewportPoint = Camera.main.WorldToViewportPoint(board.BoardLocationToVec2(new BoardLocation(row, column)) + 
+                        Vector2 viewportPoint = Camera.main.WorldToViewportPoint(board.BoardLocationToVec2(new BoardLocation(row, column)) +
                             (Vector2)GamePlayManager.Instance.board.transform.position);
 
                         //figure size
@@ -57,17 +65,32 @@ namespace Fourzy._Updates.UI.Widgets
                             .SetStyle((OnboardingScreenMaskObject.MaskStyle)task.intValue)
                             .SetAnchors(viewportPoint);
                     }
+                }
+            }
         }
 
-        public void ShowMask(Vector2 anchors, Vector2 size, OnboardingScreenMaskObject.MaskStyle maskStyle, Vector2 offset, bool showBG, bool clear = true)
+        public void ShowMask(
+            Vector2 anchors,
+            Vector2 pivot,
+            Vector2 size,
+            Vector2 offset,
+            OnboardingScreenMaskObject.MaskStyle maskStyle,
+            bool showBG,
+            bool clear = true)
         {
             Show();
 
             bg.color = new Color(0f, 0f, 0f, showBG ? .75f : 0f);
 
-            if (clear) Clear();
+            if (clear)
+            {
+                Clear();
+            }
 
-            AddMaskObject()
+            OnboardingScreenMaskObject _maskObject = AddMaskObject();
+
+            _maskObject
+                .SetPivot(pivot)
                 .Size(size)
                 .SetStyle(maskStyle)
                 .SetAnchors(anchors)
@@ -80,7 +103,10 @@ namespace Fourzy._Updates.UI.Widgets
 
             bg.color = new Color(0f, 0f, 0f, showBG ? .75f : 0f);
 
-            if (clear) Clear();
+            if (clear)
+            {
+                Clear();
+            }
 
             AddMaskObject()
                 .SetStyle(toCopy, scale)
@@ -90,8 +116,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void Show(float time = .3f)
         {
-            //if (alphaTween._value != 0f) return;
-
             if (time == 0f)
             {
                 alphaTween.SetAlpha(1f);
@@ -102,7 +126,7 @@ namespace Fourzy._Updates.UI.Widgets
                 alphaTween.PlayForward(true);
             }
 
-            canvasGroup.interactable = true;
+            //canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
         }
 
@@ -118,11 +142,10 @@ namespace Fourzy._Updates.UI.Widgets
                 alphaTween.PlayBackward(true);
             }
 
-            canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
         }
 
-        private void Clear()
+        public void Clear()
         {
             foreach (OnboardingScreenMaskObject mask in masks)
             {
@@ -131,6 +154,12 @@ namespace Fourzy._Updates.UI.Widgets
             }
 
             masks.Clear();
+        }
+
+        public void Interactable(bool state)
+        {
+            canvasGroup.interactable = state;
+            //canvasGroup.blocksRaycasts = state;
         }
 
         private OnboardingScreenMaskObject AddMaskObject()

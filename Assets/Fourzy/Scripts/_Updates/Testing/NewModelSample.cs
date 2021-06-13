@@ -59,7 +59,7 @@ namespace Fourzy.Testing
         protected void Start()
         {
             game = new ClientFourzyGame(
-                GameContentManager.Instance.GetMiscBoard("201"), 
+                GameContentManager.Instance.GetMiscBoard("EmptyBoard"), 
                 UserManager.Instance.meAsPlayer, 
                 new Player(2, "Player Two"));
 

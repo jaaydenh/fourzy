@@ -25,13 +25,15 @@ namespace Fourzy._Updates.UI.Menu
         public void AdjustSize()
         {
             if (Application.isPlaying && layoutElement)
+            {
                 layoutElement.minWidth = menuController.widthAdjusted;
+            }
             else
+            {
                 GetComponent<LayoutElement>().minWidth = GetComponentInParent<MenuController>()._widthAdjusted;
+            }
         }
 
         public override bool isCurrent => tabsParent?.IsCurrentTab(this) ?? menuController.currentScreen == this;
-
-        public override bool IsWidgetVisible(WidgetBase widget) => base.IsWidgetVisible(widget) && isCurrent;
     }
 }

@@ -21,7 +21,6 @@ namespace Fourzy
         public GameplayBG bg;
         public OnRatio landscape;
         public OnRatio portrait;
-        public GameObject _target;
 
         private PlayfabValuesLoaded[] valuesToWaitFor;
 
@@ -99,9 +98,7 @@ namespace Fourzy
             if (displayTutorial)
             {
                 onboardingScreen.OpenTutorial(
-                    HardcodedTutorials.GetByName(GameManager.Instance.Landscape ?
-                        "OnboardingLandscape" :
-                        "Onboarding"));
+                    HardcodedTutorials.GetByName(GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding"));
             }
         }
     }
