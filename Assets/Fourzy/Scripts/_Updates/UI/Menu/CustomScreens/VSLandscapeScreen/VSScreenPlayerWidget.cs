@@ -66,7 +66,7 @@ namespace Fourzy._Updates.UI.Widgets
                                 .SetData(GameContentManager.Instance.tokensDataHolder.GetTokenData(spellId)));
                     }
 
-                    magic.SetValue(data.startingMagic);
+                    magic.SetValue(data.Magic);
                     magic.SetState(true);
 
                     prevData = data;

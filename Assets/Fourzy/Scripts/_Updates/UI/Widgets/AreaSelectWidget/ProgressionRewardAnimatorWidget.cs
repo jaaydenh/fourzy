@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
+using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace Fourzy._Updates.UI.Widgets
             StartRoutine("animation", duration, OnComplete);
         }
 
-        public void SetReward(BundleItem item)
+        public void SetReward(CatalogItem item)
         {
             CancelRoutine("set_item");
             StartRoutine("set_item", UpdateRewardRoutine(item));
@@ -52,7 +53,7 @@ namespace Fourzy._Updates.UI.Widgets
             rewardParticles.Stop();
         }
 
-        private IEnumerator UpdateRewardRoutine(BundleItem item)
+        private IEnumerator UpdateRewardRoutine(CatalogItem item)
         {
             CancelRoutine("remove_current");
             yield return RemoveCurrentRewardRoutine();

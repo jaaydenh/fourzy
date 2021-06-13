@@ -53,14 +53,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void CheckUpdate()
         {
-            if (data.CanUpgrade)
-            {
-                UpdateAcceptButton("Upgrade");
-            }
-            else
-            {
-                UpdateAcceptButton("");
-            }
+            UpdateAcceptButton("");
         }
 
         private void CheckSelected()

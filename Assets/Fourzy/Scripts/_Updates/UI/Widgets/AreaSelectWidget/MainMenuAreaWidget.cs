@@ -6,6 +6,7 @@ using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
+using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using TMPro;
@@ -41,7 +42,7 @@ namespace Fourzy._Updates.UI.Widgets
         private AreaProgression progressionData = null;
         private AreaProgressionEntry previousReward;
         private AreaProgressionEntry nextReward;
-        private BundleItem rewardItem;
+        private CatalogItem rewardItem;
         private int gamesPlayed = 0;
         private Area currentArea;
 
@@ -121,7 +122,10 @@ namespace Fourzy._Updates.UI.Widgets
                     break;
 
                 case Constants.PLAYFAB_GAMEPIECE_CLASS:
-                    //nothing
+                    PersistantMenuController.Instance
+                        .GetOrAddScreen<UpgradeGamePiecePromptScreen>()
+                        .Prompt(
+                            GameContentManager.Instance.piecesDataHolder.GetGamePieceData(rewardItem.ItemId));
 
                     break;
             }
@@ -168,7 +172,7 @@ namespace Fourzy._Updates.UI.Widgets
         private void OnPlayfabValueLoaded()
         {
             //ini slider
-            if (!isPlayFabInitialized && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.TITLE_DATA_RECEIVED, PlayfabValuesLoaded.PLAYER_STATS_RECEIVED, PlayfabValuesLoaded.BUNDLES_INFO_RECEIVED))
+            if (!isPlayFabInitialized && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.TITLE_DATA_RECEIVED, PlayfabValuesLoaded.PLAYER_STATS_RECEIVED, PlayfabValuesLoaded.CATALOG_INFO_RECEIVED))
             {
                 switch (currentArea)
                 {
@@ -264,10 +268,10 @@ namespace Fourzy._Updates.UI.Widgets
                 return;
             }
 
-            BundleItem _current = GameContentManager.Instance.allBundlesInfo[nextReward.id].GetFirstItem();
+            CatalogItem _current = GameContentManager.Instance.GetFirstInBundle(nextReward.id);
             if (rewardItem != _current)
             {
-                rewardItem = GameContentManager.Instance.allBundlesInfo[nextReward.id].GetFirstItem();
+                rewardItem = GameContentManager.Instance.GetFirstInBundle(nextReward.id);
                 rewardAnimation.SetReward(rewardItem);
             }
             else if (rewardAnimation)
@@ -290,7 +294,7 @@ namespace Fourzy._Updates.UI.Widgets
             AreaProgressionRewardScreen _rewardScreen = menuScreen.menuController.GetOrAddScreen<AreaProgressionRewardScreen>();
             //this screen is transparent at first
             //and will also block inputs
-            _rewardScreen.ShowReward((TokenType)Enum.Parse(typeof(TokenType), rewardItem.ItemId));
+            _rewardScreen.ShowReward(rewardItem);
 
             progressionValue.text = "";
 

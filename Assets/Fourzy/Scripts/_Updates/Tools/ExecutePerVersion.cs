@@ -29,7 +29,6 @@ namespace Fourzy._Updates.Tools
             Debug.Log("Gamepieces reset " + PlayerPrefs.GetString(kVersionKey, ""));
 
             //execute
-            GamePiecesDataHolder.ClearGamepiecesData();
         }
     }
 }

@@ -103,14 +103,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     herdId = selectedPlayers[0].data.Id;
                     displaName = selectedPlayers[0].data.name;
-                    magic = selectedPlayers[0].data.startingMagic;
+                    magic = selectedPlayers[0].data.Magic;
                 }
                 else
                 {
                     GamePieceData random = unlockedGamepieces.Random();
                     herdId = random.Id;
                     displaName = random.name;
-                    magic = random.startingMagic;
+                    magic = random.Magic;
                 }
 
                 player1.HerdId = herdId;
@@ -125,14 +125,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     herdId = selectedPlayers[1].data.Id;
                     displaName = selectedPlayers[1].data.name;
-                    magic = selectedPlayers[1].data.startingMagic;
+                    magic = selectedPlayers[1].data.Magic;
                 }
                 else
                 {
                     GamePieceData random = unlockedGamepieces.Random();
                     herdId = random.Id;
                     displaName = random.name;
-                    magic = random.startingMagic;
+                    magic = random.Magic;
                 }
 
                 player2.HerdId = herdId;

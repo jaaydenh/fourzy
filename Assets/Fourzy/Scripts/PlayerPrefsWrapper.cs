@@ -165,27 +165,6 @@ namespace Fourzy
         public static string GetUserName() =>
             PlayerPrefs.GetString("userName_");
 
-        public static void GamePieceUpdatePiecesCount(string id, int value) =>
-            PlayerPrefs.SetInt("gamePiecePieces_" + id, value);
-
-        public static void GamePieceDeleteData(string id)
-        {
-            PlayerPrefs.DeleteKey("gamePiecePieces_" + id);
-            PlayerPrefs.DeleteKey("gamePieceChampions_" + id);
-        }
-
-        public static int GetGamePiecePieces(string id) =>
-            PlayerPrefs.GetInt("gamePiecePieces_" + id, 0);
-
-        public static bool HaveGamePieceRecord(string id) =>
-            PlayerPrefs.HasKey("gamePiecePieces_" + id);
-
-        public static void GamePieceUpdateChampionsCount(string id, int value) =>
-            PlayerPrefs.SetInt("gamePieceChampions_" + id, value);
-
-        public static int GetGamePieceChampions(string id) =>
-            PlayerPrefs.GetInt("gamePieceChampions_" + id, 0);
-
         public static string GetSelectedGamePiece() =>
             PlayerPrefs.GetString("selectedGamePiece_", InternalSettings.Current.DEFAULT_GAME_PIECE);
 

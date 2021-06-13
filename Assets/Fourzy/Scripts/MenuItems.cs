@@ -14,12 +14,6 @@ public class MenuItems : MonoBehaviour
         ScreenCapture.CaptureScreenshot("../test.png");
     }
 
-    [UnityEditor.MenuItem("Fourzy/Clear Gamepieces PlayerPrefs")]
-    public static void ClearGamepiecesPlayerPrefs()
-    {
-        GamePiecesDataHolder.ClearGamepiecesData();
-    }
-
     [UnityEditor.MenuItem("Fourzy/DeleteAllPlayerPrefs")]
     static void DeleteAllPlayerPrefs()
     {
