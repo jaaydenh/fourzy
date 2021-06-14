@@ -2,6 +2,7 @@
 
 #if UNITY_EDITOR
 
+using System;
 using Fourzy;
 using Fourzy._Updates;
 using FourzyGameModel.Model;
@@ -13,6 +14,21 @@ using UnityEngine;
 
 public class MenuItems : MonoBehaviour
 {
+    [UnityEditor.MenuItem("Fourzy/Take screenshot")]
+    static void Screenshot()
+    {
+        ScreenCapture.CaptureScreenshot("../" + Guid.NewGuid() + ".png");
+    }
+
+    [MenuItem("Fourzy/Reset Player")]
+    public static void ResetPlayer()
+    {
+        DeleteAllPlayerPrefs();
+        ClearInventory();
+        ClearAreaProgress();
+        ResetPlayerStats();
+    }
+
     [MenuItem("Fourzy/DeleteAllPlayerPrefs")]
     public static void DeleteAllPlayerPrefs()
     {
@@ -20,7 +36,7 @@ public class MenuItems : MonoBehaviour
     }
 
     [MenuItem("Fourzy/Clear Inventory")]
-    public static void ClaerInventory()
+    public static void ClearInventory()
     {
         if (!IsRuntime()) return;
 
@@ -84,7 +100,7 @@ public class MenuItems : MonoBehaviour
        {
            UserManager.GetMyStats();
 
-           Debug.Log("Playe Stats cleared");
+           Debug.Log("Player Stats cleared");
        },
        (error) =>
        {
@@ -186,16 +202,16 @@ public class MenuItems : MonoBehaviour
         GameManager.Instance.ReportAreaProgression(Area.ICE_PALACE);
     }
 
-    [MenuItem("Fourzy/Place Player1 Piece[P]")]
+    [MenuItem("Fourzy/Place Player1 Piece [P]")]
     public static void PlacePlayer1Piece()
     {
-        Debug.Log("Hower over cell you want to place gamepiece at and press [P] on your keyboard");
+        Debug.Log("Hover over cell you want to place gamepiece at and press [P] on your keyboard");
     }
 
-    [MenuItem("Fourzy/Place Player2 Piece[O]")]
+    [MenuItem("Fourzy/Place Player2 Piece [O]")]
     public static void PlacePlayer2Piece()
     {
-        Debug.Log("Hower over cell you want to place gamepiece at and press [O] on your keyboard");
+        Debug.Log("Hover over cell you want to place gamepiece at and press [O] on your keyboard");
     }
 
     private static bool IsRuntime()
