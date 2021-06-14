@@ -383,6 +383,8 @@ namespace Fourzy._Updates.Mechanics.Board
                     else
                     {
                         CastSpell(touchLocation, activeSpellID);
+
+                        SendMoveEvent(activeSpellID.ToString(), touchLocation.GetDirection(), touchLocation.GetLocation(game), MoveType.SPELL);
                     }
 
                     actionState = BoardActionState.MOVE;
@@ -1371,10 +1373,14 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.HeavyImpact);
 
-            SimpleMove _move = new SimpleMove(
-                game.activePlayerPiece,
-                GetDirection(selectedBoardLocation.Value),
-                GetLocationFromBoardLocation(selectedBoardLocation.Value));
+            Piece piece = game.activePlayerPiece;
+            Direction direction = GetDirection(selectedBoardLocation.Value);
+            int location = GetLocationFromBoardLocation(selectedBoardLocation.Value);
+
+            SimpleMove _move = new SimpleMove(piece, direction, location);
+
+            //analytics event
+            SendMoveEvent(piece.HerdId, direction, location, MoveType.SIMPLE);
 
             switch (game._Type)
             {
@@ -1613,6 +1619,32 @@ namespace Fourzy._Updates.Mechanics.Board
             CancelRoutine("lock_board");
             interactable = false;
             StartRoutine("lock_board", time, () => interactable = true, null);
+        }
+
+        private void SendMoveEvent(string herdId, Direction direction, int location, MoveType moveType)
+        {
+            bool sendEvent = false;
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                case GameType.TRY_TOKEN:
+                case GameType.ONBOARDING:
+                    sendEvent = true;
+
+                    break;
+            }
+
+            if (sendEvent)
+            {
+                AnalyticsManager.Instance.LogEvent(
+                    "movePiece",
+                    AnalyticsManager.AnalyticsProvider.ALL,
+                    new KeyValuePair<string, object>("piece", herdId),
+                    new KeyValuePair<string, object>("direction", direction.ToString()),
+                    new KeyValuePair<string, object>("location", location),
+                    new KeyValuePair<string, object>("moveType", MoveType.SIMPLE),
+                    new KeyValuePair<string, object>("notation", moveType));
+            }
         }
 
         private void CalculatePositions()
