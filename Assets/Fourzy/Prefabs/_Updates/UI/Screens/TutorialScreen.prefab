@@ -2763,6 +2763,7 @@ GameObject:
   - component: {fileID: 6062849536371812910}
   - component: {fileID: 6331020115111675313}
   - component: {fileID: 3166751806645851319}
+  - component: {fileID: 620936736110054725}
   m_Layer: 5
   m_Name: Graphics
   m_TagString: Untagged
@@ -2871,9 +2872,77 @@ MonoBehaviour:
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
-      calls: []
+      calls:
+      - genericMenuData:
+          selectedComponent: 5
+          selectedMember: 1
+          isDynamic: 1
+        target: {fileID: 620936736110054725}
+        memberName: AtProgress
+        memberType: 8
+        argument:
+          supportedType: 3
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          objectArgument: {fileID: 0}
+          gameObjectArgument: {fileID: 0}
+          transformArgument: {fileID: 0}
+        isDynamic: 1
+        isCallEnabled: 1
   from: {x: 1, y: 1, z: 1}
   to: {x: 0.6, y: 0.6, z: 0.6}
+--- !u!114 &620936736110054725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4206308852576484688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f9ac5ca75a4fe040a5a702ca1c26378, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playbackDirection: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  unscaledTime: 0
+  playbackTime: 0.3
+  playOnAwake: 0
+  repeat: 0
+  onProgress:
+    inspectorListHeight: 63
+    persistentCalls:
+      calls: []
+  from: {x: 0, y: 0, z: -5}
+  to: {x: 0, y: 0, z: 6}
 --- !u!1 &5317918236873084801
 GameObject:
   m_ObjectHideFlags: 0
