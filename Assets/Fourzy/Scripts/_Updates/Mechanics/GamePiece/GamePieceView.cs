@@ -1,10 +1,12 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics._GamePiece
@@ -25,10 +27,16 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         private int h_MovingHorizontal = Animator.StringToHash("MovingHorizontal");
         private int h_MovingVertical = Animator.StringToHash("MovingVertical");
+
         private int h_RightHit = Animator.StringToHash("RightHit");
         private int h_LeftHit = Animator.StringToHash("LeftHit");
         private int h_BottomHit = Animator.StringToHash("BottomHit");
         private int h_TopHit = Animator.StringToHash("TopHit");
+
+        private int h_RightSmash = Animator.StringToHash("SmashRight");
+        private int h_LeftSmash = Animator.StringToHash("SmashLeft");
+        private int h_BottomSmash = Animator.StringToHash("SmashDown");
+        private int h_TopSmash = Animator.StringToHash("SmashTop");
 
         private int h_MoveLeft = Animator.StringToHash("MoveLeft");
         private int h_MoveRight = Animator.StringToHash("MoveRight");
@@ -101,6 +109,39 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             }
         }
 
+        public void PlaySmashAnimation(Direction direction)
+        {
+            gameboard.OnGamepieceSmashed(this);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked("gamepiece_smash");
+
+            const float transitionTime = 0.1f;
+
+            switch (direction)
+            {
+                case Direction.DOWN:
+                    pieceAnimator.CrossFade(h_BottomSmash, transitionTime, indexBaseLayer);
+
+                    break;
+
+                case Direction.UP:
+                    pieceAnimator.CrossFade(h_TopSmash, transitionTime, indexBaseLayer);
+
+                    break;
+
+                case Direction.RIGHT:
+                    pieceAnimator.CrossFade(h_RightSmash, transitionTime, indexBaseLayer);
+
+                    break;
+
+                case Direction.LEFT:
+                    pieceAnimator.CrossFade(h_LeftSmash, transitionTime, indexBaseLayer);
+
+                    break;
+            }
+
+            PlayFinishAnimation();
+        }
+
         public void PlayFinishMovement(bool animateHit)
         {
             const float transitionTime = 0.03f;
@@ -131,6 +172,11 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                 pieceAnimator.CrossFade(h_Idle, transitionTime, indexBaseLayer);
             }
 
+            PlayFinishAnimation();
+        }
+
+        public void PlayFinishAnimation()
+        {
             if (pieceAnimator.GetCurrentAnimatorStateInfo(indexEyeMouthLayer).shortNameHash == h_Idle)
             {
                 pieceAnimator.Play(h_Idle, indexEyeMouthLayer);
@@ -254,7 +300,50 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         {
             base.OnAfterMove(startTurn, actionsMoves);
 
-            PlayFinishMovement(actionsMoves.Length > 1);
+            if (actionsMoves.Length > 3)
+            {
+                Direction direction = actionsMoves.GetDirectionFromLocations();
+                BoardLocation _next = actionsMoves.Last().Neighbor(direction);
+
+                bool playSmash = false;
+                if (_next.OnBoard(gameboard.game._State.Board))
+                {
+                    //check next
+                    BoardSpace _target = gameboard.game._State.Board.ContentsAt(_next);
+
+                    if (_target.TokenCount == 0)
+                    {
+                        if (_target.PieceCount > 0)
+                        {
+                            playSmash = true;
+                        }
+                    }
+                    else if (_target.ContainsTokenType(TokenType.BLOCKER) ||
+                            _target.ContainsTokenType(TokenType.FRUIT_TREE) ||
+                            _target.ContainsTokenType(TokenType.ICE_BLOCK) ||
+                            _target.ContainsTokenType(TokenType.MOVE_BLOCKER))
+                    {
+                        playSmash = true;
+                    }
+                }
+
+                if (playSmash)
+                {
+                    PlaySmashAnimation(direction);
+                }
+                else
+                {
+                    PlayFinishMovement(true);
+                }
+            }
+            else if (actionsMoves.Length > 1)
+            {
+                PlayFinishMovement(true);
+            }
+            else
+            {
+                PlayFinishMovement(false);
+            }
         }
 
         public override float _Destroy(DestroyType reason)
@@ -284,7 +373,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         {
             pieceAnimator.Play(h_Jumping);
 
-            while (pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer).shortNameHash != h_Jumping) 
+            while (pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer).shortNameHash != h_Jumping)
                 yield return true;
 
             AnimatorStateInfo stateInfo = pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer);

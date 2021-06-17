@@ -55,6 +55,8 @@ namespace Fourzy._Updates.Mechanics.Board
         public Action onCastCanceled;
         public Action<SpellId, int> onCast;
         public Action onWrongTurn;
+        public Action<GamePieceView> onGamepieceSmashed;
+
         public ClientPlayerTurn turn = null;
 
         private Vector3 topLeft;
@@ -1645,6 +1647,11 @@ namespace Fourzy._Updates.Mechanics.Board
                     new KeyValuePair<string, object>("moveType", MoveType.SIMPLE),
                     new KeyValuePair<string, object>("notation", moveType));
             }
+		}
+		
+        internal void OnGamepieceSmashed(GamePieceView gamepieceView)
+        {
+            onGamepieceSmashed?.Invoke(gamepieceView);
         }
 
         private void CalculatePositions()
