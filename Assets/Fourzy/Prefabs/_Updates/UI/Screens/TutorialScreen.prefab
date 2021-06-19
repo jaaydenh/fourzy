@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &224055631067808874
 RectTransform:
   m_ObjectHideFlags: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -126,7 +126,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 34
+          selectedMember: 37
           isDynamic: 0
         target: {fileID: 114675544619200078}
         memberName: OnBack
@@ -405,6 +405,7 @@ MonoBehaviour:
   highlight: {fileID: 114456347597830884}
   graphics: {fileID: 114727008969564380}
   instructions: {fileID: 1050550859489448962}
+  backButton: {fileID: 114217200338221180}
 --- !u!225 &225779078419219204
 CanvasGroup:
   m_ObjectHideFlags: 0

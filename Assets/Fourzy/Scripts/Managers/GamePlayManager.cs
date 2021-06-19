@@ -326,22 +326,30 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             menuController.BackToRoot();
 
             //back button
-            if (game._Type != GameType.ONBOARDING)
+            switch (game._Type)
             {
-                switch (GameManager.Instance.ExpectedGameType)
-                {
-                    case GameTypeLocal.LOCAL_GAME:
-                        backButton.SetActive(true);
+                case GameType.ONBOARDING:
+                    backButton.SetActive(false);
 
-                        break;
+                    break;
 
-                    case GameTypeLocal.REALTIME_BOT_GAME:
-                    case GameTypeLocal.REALTIME_LOBBY_GAME:
-                    case GameTypeLocal.REALTIME_QUICKMATCH:
-                        backButton.SetActive(false);
+                default:
+                    switch (GameManager.Instance.ExpectedGameType)
+                    {
+                        case GameTypeLocal.LOCAL_GAME:
+                            backButton.SetActive(true);
 
-                        break;
-                }
+                            break;
+
+                        case GameTypeLocal.REALTIME_BOT_GAME:
+                        case GameTypeLocal.REALTIME_LOBBY_GAME:
+                        case GameTypeLocal.REALTIME_QUICKMATCH:
+                            backButton.SetActive(false);
+
+                            break;
+                    }
+
+                    break;
             }
 
             winningParticleGenerator.HideParticles();

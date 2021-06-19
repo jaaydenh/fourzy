@@ -29,6 +29,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public OnboardingScreenGraphics graphics;
         public OnboardingScreenInstruction instructions;
 
+        public ButtonExtended backButton;
+
         public bool isTutorialRunning { get; private set; }
         public ButtonExtended currentButton { get; private set; }
         public OnboardingTask currentTask { get; private set; }
@@ -112,6 +114,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             instructions.Hide(0f);
             bg.Hide(0f);
             graphics.Hide(0f);
+            backButton.SetActive(false);
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.name, true);
             StartCoroutine(DisplayCurrentStep());
@@ -362,6 +365,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.SHOW_MASKED_BOARD_CELL:
                         masks.ShowMasks(currentTask as OnboardingTask_ShowMaskedBoardCells);
+                        masks.Interactable(false);
 
                         break;
 
@@ -401,10 +405,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SET_BACK_BUTTON_STATE:
-                        if (GamePlayManager.Instance)
-                        {
-                            GamePlayManager.Instance.backButton.SetActive(currentTask.boolValue);
-                        }
+                        backButton.SetActive(currentTask.boolValue);
 
                         break;
 

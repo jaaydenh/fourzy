@@ -23,12 +23,12 @@ namespace Fourzy._Updates._Tutorial
                 {
                     new OnboardingTask_Log("Tutorial Step 1"),
 
+                    new OnboardingTask() { action = OnboardingActions.SET_BACK_BUTTON_STATE, boolValue = true },
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.NONE, "OnboardingBoard0"),
                     new OnboardingTask() { action = OnboardingActions.SHOW_GRAPHICS, vector2value = new Vector2(.5f, .75f) },
                     new OnboardingTask_ShowBG(),
                     new OnboardingTask_ShowMiniboard(new Vector2(.5f, .35f), "TutorialBoard_01"),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("instruction_01"), new Vector2(.5f, .57f), 32f),
-                    new OnboardingTask_Log("howToWin"),
 
                     new OnboardingTask() { action = OnboardingActions.HIDE_GRAPHICS },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MINIBOARD },
@@ -44,11 +44,11 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.SWIPE_STYLE_2] = new Rect(4f, 0f, 1f, 3f),
                         [PlacementStyle.EDGE_TAP] = new Rect(4f, 0f, 1f, 1f),
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+                    new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02"), new Vector2(.5f, .15f)),
+                    new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
 
                     new OnboardingTask_Log("Tutorial Step 2 part a"),
 
-                    new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02"), new Vector2(.5f, .15f)),
-                    new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.PAUSE_BOARD },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
@@ -124,9 +124,10 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
                     new OnboardingTask() { action = OnboardingActions.HIDE_GRAPHICS },
-                    new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.VERSUS, "OnboardingBoard2", new Player(2, "Triangry", AIProfile.EasyAI) { HerdId = "triangry" }),
                     new OnboardingTask() { action = OnboardingActions.SET_BACK_BUTTON_STATE, boolValue = false },
+                    new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.VERSUS, "OnboardingBoard2", new Player(2, "Triangry", AIProfile.EasyAI) { HerdId = "triangry" }),
 
+                    new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
                     new OnboardingTask_Log("Tutorial Step 8"),
                 },
             },
