@@ -1,7 +1,6 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
@@ -285,65 +284,51 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             this.piece = piece;
         }
 
-        public override void OnBeforeMoveAction(bool startTurn, params BoardLocation[] locations)
+        public override void OnBeforeMoveActions(bool startTurn, BoardLocation from, BoardLocation to)
         {
-            base.OnBeforeMoveAction(startTurn, locations);
+            base.OnBeforeMoveActions(startTurn, from, to);
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(moveSfx);
-
-            if (locations.Length < 2) return;
-
-            PutMovementDirection(locations.GetDirectionFromLocations());
         }
 
-        public override void OnAfterMove(bool startTurn, params BoardLocation[] actionsMoves)
+        public override void OnAfterMoveAction(bool startTurn, BoardLocation from, BoardLocation to)
         {
-            base.OnAfterMove(startTurn, actionsMoves);
+            Direction direction = Utils.GetDirectionFromLocations(from, to);
+            BoardLocation _next = to.Neighbor(direction);
 
-            if (actionsMoves.Length > 3)
+            bool playSmash = false;
+            if (speedMltp >= 1.5f)
             {
-                Direction direction = actionsMoves.GetDirectionFromLocations();
-                BoardLocation _next = actionsMoves.Last().Neighbor(direction);
-
-                bool playSmash = false;
                 if (_next.OnBoard(gameboard.game._State.Board))
                 {
                     //check next
                     BoardSpace _target = gameboard.game._State.Board.ContentsAt(_next);
 
-                    if (_target.TokenCount == 0)
-                    {
-                        if (_target.PieceCount > 0)
-                        {
-                            playSmash = true;
-                        }
-                    }
-                    else if (_target.ContainsTokenType(TokenType.BLOCKER) ||
-                            _target.ContainsTokenType(TokenType.FRUIT_TREE) ||
-                            _target.ContainsTokenType(TokenType.ICE_BLOCK) ||
-                            _target.ContainsTokenType(TokenType.MOVE_BLOCKER))
+                    if (_target.Tokens.Any(_token => !_token.Value.pieceCanEnter && !_token.Value.pieceCanEndMoveOn))
                     {
                         playSmash = true;
                     }
                 }
-
-                if (playSmash)
-                {
-                    PlaySmashAnimation(direction);
-                }
-                else
-                {
-                    PlayFinishMovement(true);
-                }
             }
-            else if (actionsMoves.Length > 1)
+
+            if (playSmash)
             {
-                PlayFinishMovement(true);
+                PlaySmashAnimation(direction);
             }
             else
             {
-                PlayFinishMovement(false);
+                PlayFinishMovement(true);
             }
+
+            base.OnAfterMoveAction(startTurn, from, to);
+        }
+
+        public override float StartMoveRoutine(bool startMove, BoardLocation from, BoardLocation to)
+        {
+            PutMovementDirection(Utils.GetDirectionFromLocations(from, to));
+            speedMltp += .15f;
+
+            return base.StartMoveRoutine(startMove, from, to);
         }
 
         public override float _Destroy(DestroyType reason)

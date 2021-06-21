@@ -36,9 +36,9 @@ namespace Fourzy._Updates.Mechanics.Board
             _Destroy();
         }
 
-        public override float OnGameAction(params GameAction[] actions)
+        public override float OnGameAction(GameAction action)
         {
-            GameActionTokenTransition _transition = actions[0] as GameActionTokenTransition;
+            GameActionTokenTransition _transition = action as GameActionTokenTransition;
 
             if (_transition == null || _transition.Reason != TransitionType.EAT_LURE) return 0f;
 
