@@ -6,25 +6,22 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class DarknessTokenView : TokenSpell
     {
+        public DarknessToken token => Token as DarknessToken;
+
         public override void SetData(ISpell spell, IMove spellMove)
         {
-            if (spell.SpellId != SpellId.DARKNESS) return;
-
             base.SetData(spell, spellMove);
 
-            currentCountdownValue = (spell as DarknessSpell).Duration - 1;
-
-            countdown.SetValue(currentCountdownValue);
+            countdown.SetValue(currentCountdownValue = (spell as DarknessSpell).Duration - 1);
         }
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            if (tokenData == null || tokenData.Type != TokenType.DARKNESS) return base.SetData(tokenData);
+            base.SetData(tokenData);
 
-            currentCountdownValue = (tokenData as DarknessToken).Countdown - 1;
-            countdown.SetValue(currentCountdownValue);
+            countdown.SetValue(currentCountdownValue = token.Countdown - 1);
 
-            return base.SetData(tokenData);
+            return this;
         }
 
         public override void OnAfterTurn(bool startTurn)

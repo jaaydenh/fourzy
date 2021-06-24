@@ -302,9 +302,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                 if (_next.OnBoard(gameboard.game._State.Board))
                 {
                     //check next
-                    BoardSpace _target = gameboard.game._State.Board.ContentsAt(_next);
-
-                    if (_target.Tokens.Any(_token => !_token.Value.pieceCanEnter && !_token.Value.pieceCanEndMoveOn))
+                    if (gameboard.BoardTokensAt(_next).Any(_token => !_token.Token.pieceCanEnter && !_token.Token.pieceCanEndMoveOn))
                     {
                         playSmash = true;
                     }

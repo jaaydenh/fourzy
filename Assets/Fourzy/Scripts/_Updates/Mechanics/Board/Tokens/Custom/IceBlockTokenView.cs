@@ -13,7 +13,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private Animator animator;
         private int h_IceBlockBreak = Animator.StringToHash("IceBlockBreak");
 
-        public IceBlockToken token { get; private set; }
+        public IceBlockToken token => Token as IceBlockToken;
 
         protected override void OnInitialized()
         {
@@ -24,12 +24,14 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            token = tokenData as IceBlockToken;
+            base.SetData(tokenData);
 
             if (token.Broken)
+            {
                 _Destroy();
+            }
 
-            return base.SetData(tokenData);
+            return this;
         }
 
         public override void OnActivate()

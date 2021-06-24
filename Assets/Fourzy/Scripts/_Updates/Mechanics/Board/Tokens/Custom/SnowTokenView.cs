@@ -17,7 +17,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
             BoardLocation _location = location;
             //spawn ice token
-            gameboard.SpawnToken<TokenView>(_location.Row, _location.Column, TokenType.ICE, false).Show(.3f);
+            gameboard
+                .SpawnToken<TokenView>(_location.Row, _location.Column, TokenType.ICE, false)
+                .Show(.3f);
 
             yield break;
         }
@@ -26,7 +28,10 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             GameActionTokenTransition _transition = action as GameActionTokenTransition;
 
-            if (_transition == null || _transition.Reason != TransitionType.SNOW_ICE) return 0f;
+            if (_transition == null || _transition.Reason != TransitionType.SNOW_ICE)
+            {
+                return 0f;
+            }
 
             StartCoroutine(OnActivated());
 

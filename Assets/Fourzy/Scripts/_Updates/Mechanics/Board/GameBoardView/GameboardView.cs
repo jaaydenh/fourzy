@@ -739,7 +739,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public IEnumerable<T> BoardTokenAt<T>(BoardLocation at, TokenType tokenType) where T : TokenView =>
             boardBits.
-            Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenView).tokenType == tokenType).
+            Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenView).Token.Type == tokenType).
             Cast<T>();
 
         public IEnumerable<TokenView> BoardTokensAt(BoardLocation at) =>
@@ -2395,14 +2395,20 @@ namespace Fourzy._Updates.Mechanics.Board
                     {
                         if (_token.spell != null)
                         {
-                            _token.spell.Cast(game._State);
+                            _token.spell.Cast(game._State, out List<IToken> tokens);
+                            _token.SetData(tokens.FirstOrDefault());
+
                             _token.SetAlpha(1f);
+
+
                         }
                         else
                         {
                             _token._Destroy();
                         }
                     });
+
+                    createdSpellTokens.Clear();
                 }
             }
 
@@ -2435,7 +2441,6 @@ namespace Fourzy._Updates.Mechanics.Board
             SetHintAreaSelectableState(true);
 
             turn = null;
-            createdSpellTokens.Clear();
 
             boardUpdateRoutines.Remove(turnResults.GameState.UniqueId);
 
