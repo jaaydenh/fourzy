@@ -21,8 +21,8 @@ namespace Fourzy._Updates._Tutorial
                 onBack = TutorialOnBack.SHOW_LEAVE_PROMPT,
                 tasks = new OnboardingTask[]
                 {
-                    new OnboardingTask_Log("Tutorial Step 1"),
-
+                    // Tutorial Step 1 - Explain the game and how to win
+                    new OnboardingTask_Log("whatIsFourzy"),
                     new OnboardingTask() { action = OnboardingActions.SET_BACK_BUTTON_STATE, boolValue = true },
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.NONE, "OnboardingBoard0"),
                     new OnboardingTask() { action = OnboardingActions.SHOW_GRAPHICS, vector2value = new Vector2(.5f, .75f) },
@@ -34,7 +34,9 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.HIDE_MINIBOARD },
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-
+                    
+                    // Tutorial Step 2 part A - How to move
+                    new OnboardingTask_Log("howToMove"),
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
                         [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
@@ -47,8 +49,8 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02"), new Vector2(.5f, .15f)),
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
 
-                    new OnboardingTask_Log("Tutorial Step 2 part a"),
-
+                    // Tutorial Step 2 part B
+                    new OnboardingTask_Log("pieceOriginInstructions"),
                     new OnboardingTask() { action = OnboardingActions.PAUSE_BOARD },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
@@ -59,15 +61,14 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.HIGHLIGHT_GAMPIECES },
                     new OnboardingTask_Wait (-1f),
 
-                    new OnboardingTask_Log("Tutorial Step 2 part b"),
-
                     new OnboardingTask() { action = OnboardingActions.HIDE_BUBBLE_MESSAGE },
                     new OnboardingTask() { action = OnboardingActions.RESUME_BOARD },
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_GAMEPIECES },
-                    new OnboardingTask_Wait (.5f),
+                    new OnboardingTask_Wait (1.6f),
 
-                    new OnboardingTask_Log("Tutorial Step 3"),
+                    // Tutorial Step 3 - Highlight Opponent Player Area
+                    new OnboardingTask_Log("showOpponentInfo1"),
 
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_04"), new Vector2(.5f, .15f)),
                     new OnboardingTask_ShowMaskedArea(
@@ -79,7 +80,8 @@ namespace Fourzy._Updates._Tutorial
                         true),
                     new OnboardingTask_Wait (-1f),
 
-                    new OnboardingTask_Log("Tutorial Step 4"),
+                    // Tutorial Step 4  - Opponent makes a move
+                    new OnboardingTask_Log("showOpponentInfo2"),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_05"), new Vector2(.5f, .15f)),
 
                     new OnboardingTask_Wait (-1f),
@@ -90,8 +92,8 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.HIDE_BUBBLE_MESSAGE },
                     new OnboardingTask_Wait (1.5f),
 
-                    new OnboardingTask_Log("Tutorial Step 5"),
-
+                    // Tutorial Step 5 - How to win
+                    new OnboardingTask_Log("howToWin"),
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.NONE, "OnboardingBoard1"),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_06"), new Vector2(.5f, .15f)),
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
@@ -112,23 +114,27 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.SHOW_GRAPHICS, vector2value = new Vector2(.5f, .75f) },
                     new OnboardingTask_ShowBG(),
 
-                    new OnboardingTask_Log("Tutorial Step 6"),
-
+                    // Tutorial Step 6 - Explain other ways to win
+                    new OnboardingTask_Log("winInstructionsMiniboard"),
                     new OnboardingTask_ShowMiniboard(new Vector2(.5f, .35f), "TutorialBoard_02", "TutorialBoard_03", "TutorialBoard_04"),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("instruction_07"), new Vector2(.5f, .57f), 32f),
                     new OnboardingTask() { action = OnboardingActions.HIDE_MINIBOARD },
+                    new OnboardingTask_Log("practiceGameIntro"),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("instruction_08"), new Vector2(.5f, .57f), 32f),
 
-                    new OnboardingTask_Log("Tutorial Step 7"),
+                    // Tutorial Step 7 - Play practice game
+                    new OnboardingTask_Log("startPracticeGame"),
 
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
                     new OnboardingTask() { action = OnboardingActions.HIDE_GRAPHICS },
                     new OnboardingTask() { action = OnboardingActions.SET_BACK_BUTTON_STATE, boolValue = false },
-                    new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.VERSUS, "OnboardingBoard2", new Player(2, "Triangry", AIProfile.EasyAI) { HerdId = "triangry" }),
+                    new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.VERSUS, "OnboardingBoard2", new Player(2, "Triangry", AIProfile.BadBot) { HerdId = "triangry" }),
 
                     new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
-                    new OnboardingTask_Log("Tutorial Step 8"),
+
+                    // Tutorial Step 8 - Tutorial completed
+                    new OnboardingTask_Log("tutorialCompleted"),
                 },
             },
 
