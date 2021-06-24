@@ -23,7 +23,34 @@ namespace Fourzy._Updates.UI.Widgets
         public AlphaTween alphaTween { get; protected set; }
         public ButtonExtended button { get; private set; }
 
-        public virtual bool visible => menuScreen.IsWidgetVisible(this);
+        public virtual bool visible
+        {
+            get
+            {
+                if (gameObject.activeInHierarchy)
+                {
+                    if (canvasGroup)
+                    {
+                        if (canvasGroup.alpha > 0f)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
 
         protected override void Awake()
         {
@@ -32,34 +59,54 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void SetAlpha(float value)
         {
-            if (canvasGroup) canvasGroup.alpha = value;
-            else if (alphaTween) alphaTween.SetAlpha(value);
+            if (canvasGroup)
+            {
+                canvasGroup.alpha = value;
+            }
+            else if (alphaTween)
+            {
+                alphaTween.SetAlpha(value);
+            }
         }
 
         public virtual void Hide(float time)
         {
+            if (!visible) return;
+
             if (alphaTween)
             {
                 if (time == 0f)
+                {
                     alphaTween.SetAlpha(0f);
+                }
                 else
                 {
-                    alphaTween.playbackTime = time;
-                    alphaTween.PlayBackward(true);
+                    if (!(alphaTween.isPlaying && alphaTween.playbackDirection == PlaybackDirection.BACKWARD))
+                    {
+                        alphaTween.playbackTime = time;
+                        alphaTween.PlayBackward(true);
+                    }
                 }
             }
         }
 
         public virtual void Show(float time)
         {
+            if (visible) return;
+
             if (alphaTween)
             {
                 if (time == 0f)
+                {
                     alphaTween.SetAlpha(1f);
+                }
                 else
                 {
-                    alphaTween.playbackTime = time;
-                    alphaTween.PlayForward(true);
+                    if (!(alphaTween.isPlaying && alphaTween.playbackDirection == PlaybackDirection.FORWARD))
+                    {
+                        alphaTween.playbackTime = time;
+                        alphaTween.PlayForward(true);
+                    }
                 }
             }
         }
@@ -67,9 +114,13 @@ namespace Fourzy._Updates.UI.Widgets
         public virtual void MoveTo(Vector3 to, float time)
         {
             if (rectTransform)
+            {
                 MoveTo(rectTransform.anchoredPosition, to, time);
+            }
             else
+            {
                 MoveTo(transform.localPosition, to, time);
+            }
         }
 
         public virtual void MoveTo(Vector3 from, Vector3 to, float time)
@@ -170,9 +221,18 @@ namespace Fourzy._Updates.UI.Widgets
             scaleTween = GetComponent<ScaleTween>();
             button = GetComponentInChildren<ButtonExtended>();
 
-            if (alphaTween) alphaTween.Initialize();
-            if (positionTween) positionTween.Initialize();
-            if (scaleTween) scaleTween.Initialize();
+            if (alphaTween)
+            {
+                alphaTween.Initialize();
+            }
+            if (positionTween)
+            {
+                positionTween.Initialize();
+            }
+            if (scaleTween)
+            {
+                scaleTween.Initialize();
+            }
 
             rectTransform = GetComponent<RectTransform>();
             layoutElement = GetComponent<LayoutElement>();

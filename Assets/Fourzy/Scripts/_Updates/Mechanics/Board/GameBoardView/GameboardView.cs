@@ -76,7 +76,6 @@ namespace Fourzy._Updates.Mechanics.Board
         private float swipeSpeedScale;
 
         private AlphaTween alphaTween;
-        private Dictionary<string, Coroutine> boardUpdateRoutines;
         private Vfx negativeVfx;
         private Transform vfxsParent;
         private Thread aiTurnThread;
@@ -101,6 +100,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public BoardLocation? selectedBoardLocation { get; private set; }
         public BoardLocation previousLocation { get; private set; }
         public int direction { get; private set; }
+        public bool Paused { get; private set; }
 
         public List<BoardBit> tokens => boardBits.Where(bit => (bit.GetType() == typeof(TokenView) || bit.GetType().IsSubclassOf(typeof(TokenView)))).ToList();
 
@@ -227,6 +227,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 if (!game.isMyTurn)
                 {
                     onWrongTurn?.Invoke();
+
                     return;
                 }
             }
@@ -872,9 +873,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         turn.AITurn = true;
 
-                        boardUpdateRoutines.Add(
-                            turnResults.GameState.UniqueId, 
-                            StartCoroutine(BoardUpdateRoutine(turnResults, false)));
+                        StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(turnResults, false));
 
                         //manually reset noInput timer
                         StandaloneInputModuleExtended.instance.ResetNoInputTimer();
@@ -911,9 +910,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 turn.createdOnThisDevice = true;
             }
 
-            Coroutine _coroutine = TakeTurn(turn);
-
-            return _coroutine;
+            return TakeTurn(turn);
         }
 
         public Coroutine TakeTurn(ClientPlayerTurn turn)
@@ -947,11 +944,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 turnResults.Activity.RemoveAt(0);
             }
 
-            Coroutine coroutine = StartCoroutine(BoardUpdateRoutine(turnResults, false));
-
-            boardUpdateRoutines.Add(turnResults.GameState.UniqueId, coroutine);
-
-            return coroutine;
+            return StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(turnResults, false));
         }
 
         /// <summary>
@@ -1200,18 +1193,38 @@ namespace Fourzy._Updates.Mechanics.Board
             return actionsMove.ToArray();
         }
 
-        public void SetAlpha(float alpha)
-        {
-            alphaTween.SetAlpha(alpha);
-        }
-
         public void Fade(float alpha, float time)
         {
-            alphaTween.from = alphaTween._value;
-            alphaTween.to = alpha;
-            alphaTween.playbackTime = time;
+            if (alphaTween)
+            {
+                alphaTween.from = alphaTween._value;
+                alphaTween.to = alpha;
+                alphaTween.playbackTime = time;
 
-            alphaTween.PlayForward(true);
+                alphaTween.PlayForward(true);
+            }
+            else
+            {
+                Debug.LogError("Alpha tween not set!");
+            }
+        }
+
+        public void Pause()
+        {
+            Paused = true;
+
+            SetPausedState(true);
+            gamePieces.ForEach(_gp => _gp.SetPausedState(true));
+            tokens.ForEach(_token => _token.SetPausedState(true));
+        }
+
+        public void Resume()
+        {
+            Paused = false;
+
+            SetPausedState(false);
+            gamePieces.ForEach(_gp => _gp.SetPausedState(false));
+            tokens.ForEach(_token => _token.SetPausedState(false));
         }
 
         public void LimitInput(Rect[] areas)
@@ -1337,20 +1350,7 @@ namespace Fourzy._Updates.Mechanics.Board
             CancelRoutine("playMoves");
             CancelRoutine("createBitsRoutine");
 
-            if (boardUpdateRoutines != null)
-            {
-                foreach (Coroutine boardUpdateRoutine in boardUpdateRoutines.Values)
-                {
-                    if (boardUpdateRoutine != null)
-                    {
-                        StopCoroutine(boardUpdateRoutine);
-                    }
-                }
-            }
-
-            boardUpdateRoutines = new Dictionary<string, Coroutine>();
-
-            StopAllCoroutines();
+            StopAllRoutines(false);
         }
 
         public void SortBits()
@@ -1439,10 +1439,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (game._allTurnRecord.Count == 0)
             {
-                coroutine = StartCoroutine(BoardUpdateRoutine(game.StartTurn(), true));
-
-                //play first turns' before actions
-                boardUpdateRoutines.Add(game._State.UniqueId, coroutine);
+                StartRoutine(game._State.UniqueId, BoardUpdateRoutine(game.StartTurn(), true));
             }
 
             return coroutine;
@@ -1937,8 +1934,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
             bool localyCreatedTurn = turn != null ? turn.createdOnThisDevice : false;
 
-            //SimpleMove move = turn != null ? turn.GetMove() : null;
-
             SetHintAreaColliderState(false);
             isAnimating = true;
             boardBits.ForEach(bit => { if (bit.active) bit.OnBeforeTurn(startTurn); });
@@ -1981,6 +1976,12 @@ namespace Fourzy._Updates.Mechanics.Board
                             newGamePiece.Show(.25f);
                             newGamePiece.ScaleToCurrent(Vector3.zero, .25f);
 
+                            //add spawn vfx
+                            Vfx poofVfx = VfxHolder.instance
+                                .GetVfx<Vfx>("VFX_GAMEPIECE_SPAWN")
+                                .StartVfx(vfxsParent, BoardLocationToVec2(_outsideBoardMove.Start.Row, _outsideBoardMove.Start.Column), 0f);
+                            poofVfx.SetSaLastSibling();
+
                             firstGameActionMoveFound = true;
                         }
 
@@ -1995,6 +1996,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         GamePieceView bit = (newGamePiece != null) ? newGamePiece : targetPiece;
 
+                        //move gamepiece
                         float waitTime = 0f;
                         if (newGamePiece == null)
                         {
@@ -2003,12 +2005,6 @@ namespace Fourzy._Updates.Mechanics.Board
                         //new gamepiece
                         else
                         {
-                            //add spawn vfx
-                            Vfx poofVfx = VfxHolder.instance
-                                .GetVfx<Vfx>("VFX_GAMEPIECE_SPAWN")
-                                .StartVfx(vfxsParent, BoardLocationToVec2(_outsideBoardMove.Start.Row, _outsideBoardMove.Start.Column), 0f);
-                            poofVfx.SetSaLastSibling();
-
                             yield return new WaitForSeconds(Constants.GAMEPIECE_AFTER_SPAWN_DELAY);
 
                             waitTime = bit.ExecuteGameAction(
@@ -2076,7 +2072,10 @@ namespace Fourzy._Updates.Mechanics.Board
                         GameActionTokenRemove tokenRemove = turnResults.Activity[actionIndex] as GameActionTokenRemove;
                         IEnumerable<TokenView> tokens = BoardTokenAt<TokenView>(tokenRemove.Location, tokenRemove.Before.Type);
 
-                        if (tokens.Count() > 0) yield return new WaitForSeconds(tokens.First()._Destroy(tokenRemove.Reason));
+                        if (tokens.Count() > 0)
+                        {
+                            yield return new WaitForSeconds(tokens.First()._Destroy(tokenRemove.Reason));
+                        }
 
                         actionIndex++;
 
@@ -2307,6 +2306,8 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
             }
 
+            while (Paused) yield return null;
+
             game.CheckLost();
 
             //check if gauntlet game finished
@@ -2377,8 +2378,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
             turn = null;
             createdSpellTokens.Clear();
-
-            boardUpdateRoutines.Remove(turnResults.GameState.UniqueId);
 
             if (!game.turnEvaluator.IsAvailableSimpleMove())
             {

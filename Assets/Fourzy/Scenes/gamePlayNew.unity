@@ -29850,6 +29850,7 @@ MonoBehaviour:
   bgParent: {fileID: 2068058696}
   noNetworkOverlay: {fileID: 7418769054685816303}
   hintBlocksParent: {fileID: 1256455895}
+  backButton: {fileID: 1633794817}
   rematchRequested: 0
 --- !u!4 &1899509753
 Transform:
@@ -30830,7 +30831,6 @@ MonoBehaviour:
   newScreensParent: {fileID: 711810975}
   canvasRoot: {fileID: 711810975}
   extraScreens: []
-  backButton: {fileID: 1633794817}
 --- !u!114 &2049771982
 MonoBehaviour:
   m_ObjectHideFlags: 0

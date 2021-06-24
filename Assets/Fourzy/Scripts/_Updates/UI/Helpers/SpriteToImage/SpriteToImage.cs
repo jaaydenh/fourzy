@@ -22,8 +22,17 @@ namespace Fourzy._Updates.UI.Helpers
             {
                 spriteRenderer.color = Color.clear;
 
-                image = gameObject.AddComponent<Image>();
-                rectTransform = GetComponent<RectTransform>();
+                image = gameObject.GetComponent<Image>();
+                if (!image)
+                {
+                    image = gameObject.AddComponent<Image>();
+                }
+
+                rectTransform = gameObject.GetComponent<RectTransform>();
+                if (!rectTransform)
+                {
+                    rectTransform = GetComponent<RectTransform>();
+                }
             }
 
             if (sortingGroup)

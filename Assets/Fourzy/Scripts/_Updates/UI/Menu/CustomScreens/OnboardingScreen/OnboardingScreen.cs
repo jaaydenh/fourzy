@@ -22,11 +22,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public OnboardingScreenMask masks;
         public OnboardingScreenBG bg;
+        public OnboardingScreenMiniboard miniboard;
         public OnboardingScreenDialog dialog;
         public OnboardingScreenPointer pointer;
         public OnboardingScreenHighlight highlight;
         public OnboardingScreenGraphics graphics;
         public OnboardingScreenInstruction instructions;
+
+        public ButtonExtended backButton;
 
         public bool isTutorialRunning { get; private set; }
         public ButtonExtended currentButton { get; private set; }
@@ -111,6 +114,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             instructions.Hide(0f);
             bg.Hide(0f);
             graphics.Hide(0f);
+            backButton.SetActive(false);
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.name, true);
             StartCoroutine(DisplayCurrentStep());
@@ -120,7 +124,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!GameManager.Instance.displayTutorials) return false;
 
-            if (tutorial == null || 
+            if (tutorial == null ||
                 ((PlayerPrefsWrapper.GetTutorialOpened(tutorial.name) ||
                   PlayerPrefsWrapper.GetTutorialFinished(tutorial.name)) &&
                   !GameManager.Instance.forceDisplayTutorials))
@@ -197,7 +201,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public IEnumerator DisplayCurrentStep()
         {
-            IClientFourzy activeGame = GameManager.Instance.activeGame;
+            GameboardView board;
             Vector2 anchors;
 
             for (int taskIndex = 0; taskIndex < tutorial.tasks.Length; taskIndex++)
@@ -206,27 +210,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 switch (currentTask.action)
                 {
+                    case OnboardingActions.SHOW_MINIBOARD:
+                        OnboardingTask_ShowMiniboard miniboardTask = currentTask as OnboardingTask_ShowMiniboard;
+
+                        miniboard.SetBoards(miniboardTask.Boards);
+                        miniboard.Show(.2f);
+                        miniboard.SetAnchors(miniboardTask.Anchor);
+
+                        break;
+
+                    case OnboardingActions.HIDE_MINIBOARD:
+                        miniboard.Hide(.2f);
+
+                        break;
+
                     //dialog
                     case OnboardingActions.SHOW_MESSAGE:
                         OnboardingTask_ShowMessage messageTask = currentTask as OnboardingTask_ShowMessage;
 
-                        switch (messageTask.intValue)
-                        {
-                            case 0:
-                                dialog.DisplayText(messageTask.yAnchor, currentTask.stringValue);
+                        dialog
+                            .SetText(messageTask.Message)
+                            .SetFontSize(messageTask.FontSize)
+                            .SetAnchors(currentTask.vector2value)
+                            .Show(.2f);
 
-                                break;
-
-                            case 1:
-                                instructions.DisplayText(messageTask.yAnchor, currentTask.stringValue);
-
-                                break;
-                        }
-
-                        if (messageTask.skipAfter != -1f)
+                        if (messageTask.SkipAfter != -1f)
                         {
                             _yield = true;
-                            StartRoutine("messageYield", messageTask.skipAfter, SkipToNext, null);
+                            StartRoutine("messageYield", messageTask.SkipAfter, SkipToNext, null);
                         }
                         else if (bg.shown)
                         {
@@ -236,14 +247,65 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.HIDE_MESSAGE_BOX:
-                        dialog._Hide();
-                        instructions._Hide();
+                        dialog.Hide(.2f);
+
+                        break;
+
+                    case OnboardingActions.SHOW_BUBBLE_MESSAGE:
+                        OnboardingTask_ShowBubbleMessage bubbleMessageTask = currentTask as OnboardingTask_ShowBubbleMessage;
+
+                        instructions
+                            .SetText(bubbleMessageTask.Message)
+                            .SetFontSize(bubbleMessageTask.FontSize)
+                            .SetAnchors(currentTask.vector2value)
+                            .Show(.2f);
+
+                        if (bubbleMessageTask.SkipAfter != -1f)
+                        {
+                            _yield = true;
+                            StartRoutine("messageYield", bubbleMessageTask.SkipAfter, SkipToNext, null);
+                        }
+                        else if (bg.shown)
+                        {
+                            _yield = true;
+                        }
+
+                        break;
+
+                    case OnboardingActions.HIDE_BUBBLE_MESSAGE:
+                        instructions.Hide(.2f);
+
+                        break;
+
+                    case OnboardingActions.PAUSE_BOARD:
+                        board = GamePlayManager.Instance.board;
+                        if (board == null) break;
+
+                        board.Pause();
+
+                        break;
+
+                    case OnboardingActions.RESUME_BOARD:
+                        board = GamePlayManager.Instance.board;
+                        if (board == null) break;
+
+                        board.Resume();
+
+                        break;
+
+                    case OnboardingActions.HIGHLIGHT_GAMPIECES:
+                        bg.ShowGamepieces();
+
+                        break;
+
+                    case OnboardingActions.HIDE_GAMEPIECES:
+                        bg.HideGamepieces();
 
                         break;
 
                     //pointer
                     case OnboardingActions.POINT_AT:
-                        GameboardView board = GamePlayManager.Instance.board;
+                        board = GamePlayManager.Instance.board;
                         if (board == null) break;
 
                         OnboardingTask_PointAt pointAtTask = currentTask as OnboardingTask_PointAt;
@@ -284,31 +346,31 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SHOW_BOARD_HINT_AREA:
-                        GamePlayManager.Instance.board.SetHintAreaSelectableState(false);
-                        GamePlayManager.Instance.board.ShowHintArea(
-                            GameboardView.HintAreaStyle.ANIMATION_LOOP,
-                            GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        board = GamePlayManager.Instance.board;
+                        board.SetHintAreaSelectableState(false);
+                        board.ShowHintArea(GameboardView.HintAreaStyle.ANIMATION_LOOP, GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
                         yield return null;
 
                         break;
 
                     case OnboardingActions.HIDE_BOARD_HINT_AREA:
-                        GamePlayManager.Instance.board.SetHintAreaSelectableState(true);
-                        GamePlayManager.Instance.board.HideHintArea(GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        board = GamePlayManager.Instance.board;
+                        board.SetHintAreaSelectableState(true);
+                        board.HideHintArea(GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
                         yield return null;
 
                         break;
 
-                    case OnboardingActions.SHOW_MASKED_AREA:
-                        masks.ShowMasks(currentTask as OnboardingTask_ShowMaskedArea);
+                    case OnboardingActions.SHOW_MASKED_BOARD_CELL:
+                        masks.ShowMasks(currentTask as OnboardingTask_ShowMaskedBoardCells);
+                        masks.Interactable(false);
 
                         break;
 
                     case OnboardingActions.HIDE_MAKSED_AREA:
                         masks.Hide();
-                        instructions._Hide();
 
                         break;
 
@@ -328,7 +390,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SHOW_BG:
-                        bg._Show(currentTask.intValue == 0);
+                        OnboardingTask_ShowBG showBGTask = currentTask as OnboardingTask_ShowBG;
+                        bg._Show(true);
+                        bg.SetInteractable(showBGTask.Interactable);
 
                         break;
 
@@ -340,12 +404,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
+                    case OnboardingActions.SET_BACK_BUTTON_STATE:
+                        backButton.SetActive(currentTask.boolValue);
+
+                        break;
+
                     case OnboardingActions.OPEN_GAME:
+                        OnboardingTask_OpenGame _openGameTask = currentTask as OnboardingTask_OpenGame;
+
                         ClientFourzyGame _game = new ClientFourzyGame(
-                                GameContentManager.Instance.GetMiscBoard(currentTask.stringValue),
+                                GameContentManager.Instance.GetMiscBoard(_openGameTask.GameId),
                                 UserManager.Instance.meAsPlayer,
-                                new Player(2, "Player Two"))
-                        { _Type = (GameType)currentTask.intValue };
+                                _openGameTask.Player == null ? new Player(2, "Player Two") : _openGameTask.Player)
+                        {
+                            _Type = _openGameTask.Type,
+                            _Mode = _openGameTask.Mode
+                        };
                         _game.UpdateFirstState();
 
                         //wait for game to load
@@ -355,7 +429,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.WAIT:
                         OnboardingTask_Wait waitTask = currentTask as OnboardingTask_Wait;
-                        yield return new WaitForSeconds(waitTask.time);
+
+                        if (waitTask.WaitTime > 0f)
+                        {
+                            yield return new WaitForSeconds(waitTask.WaitTime);
+                        }
+                        else
+                        {
+                            _yield = true;
+                        }
 
                         break;
 
@@ -364,36 +446,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case OnboardingActions.HIDE_WIZARD:
+                    case OnboardingActions.HIDE_GRAPHICS:
                         graphics.Hide(.3f);
 
                         break;
 
-                    case OnboardingActions.WIZARD_CENTER:
+                    case OnboardingActions.SHOW_GRAPHICS:
                         graphics.Show(.3f);
+                        graphics.SetAnchors(currentTask.vector2value);
 
                         break;
 
                     //player1 make move
                     case OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
                         GamePlayManager.Instance.board.TakeTurn(
-                            new SimpleMove(
-                                activeGame.playerPiece,
-                                currentTask.direction,
-                                currentTask.intValue));
-
-                        _yield = true;
+                            new SimpleMove(GameManager.Instance.activeGame.playerPiece, currentTask.direction, currentTask.intValue));
 
                         break;
 
                     case OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
                         GamePlayManager.Instance.board.TakeTurn(
-                            new SimpleMove(
-                                activeGame.opponentPiece,
-                                currentTask.direction,
-                                currentTask.intValue));
-
-                        _yield = true;
+                            new SimpleMove(GameManager.Instance.activeGame.opponentPiece, currentTask.direction, currentTask.intValue));
 
                         break;
 
@@ -402,19 +475,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    //case OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE:
-                    //    if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
-                    //    {
-                    //        Next();
-                    //        yield break;
-                    //    }
-
-                    //    break;
-
                     case OnboardingActions.LOAD_MAIN_MENU:
                         GameManager.Instance.OpenMainMenu();
 
-                        while (!FourzyMainMenuController.instance || 
+                        while (!FourzyMainMenuController.instance ||
                             !FourzyMainMenuController.instance.initialized)
                         {
                             yield return null;
@@ -430,11 +494,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    //will update currentWidget
                     case OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
-                        OnboardingTask_HighlightProgressionEvent _eventTask = 
+                        OnboardingTask_HighlightProgressionEvent _eventTask =
                             currentTask as OnboardingTask_HighlightProgressionEvent;
 
                         ProgressionEvent progressionEvent;
@@ -452,10 +515,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         anchors = GameManager.Instance.currentMap.GetEventCameraRelativePosition(progressionEvent);
 
                         masks.ShowMask(
-                            anchors, 
-                            progressionEvent.rectTransform, 
-                            _eventTask.vector2value, 
-                            Vector2.zero, 
+                            anchors,
+                            progressionEvent.rectTransform,
+                            _eventTask.vector2value,
+                            Vector2.zero,
                             _eventTask.showBG);
 
                         if (!pointer.visible)
@@ -466,7 +529,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (_eventTask.messageData != null)
                         {
-                            instructions.DisplayText(anchors.y, _eventTask.messageData.message);
+                            instructions.SetText(_eventTask.messageData.message);
+                            instructions.SetAnchors(anchors);
                             instructions.SetLocalPosition(_eventTask.messageData.positionOffset);
                         }
 
@@ -503,8 +567,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         masks.ShowMask(
                             viewportPosition,
-                            currentButton.rectTransform, 
-                            _buttonTask.vector2value, 
+                            currentButton.rectTransform,
+                            _buttonTask.vector2value,
                             _buttonTask.maskOffset,
                             _buttonTask.showBG);
 
@@ -517,11 +581,56 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (_buttonTask.messageData != null)
                         {
-                            instructions.DisplayText(viewportPosition.y, _buttonTask.messageData.message);
+                            instructions.SetText(_buttonTask.messageData.message);
+                            instructions.SetAnchors(viewportPosition);
                             instructions.SetLocalPosition(_buttonTask.messageData.positionOffset);
                         }
 
                         pointer.SetLocalPosition(_buttonTask.pointerOffset);
+
+                        break;
+
+                    case OnboardingActions.SHOW_MASKED_AREA:
+                        OnboardingTask_ShowMaskedArea areaMaskTask = currentTask as OnboardingTask_ShowMaskedArea;
+
+                        if (string.IsNullOrEmpty(areaMaskTask.Target))
+                        {
+                            masks.ShowMask(
+                                areaMaskTask.Anchor,
+                                areaMaskTask.Pivot,
+                                areaMaskTask.Size,
+                                areaMaskTask.Offset,
+                                areaMaskTask.MaskStyle,
+                                true);
+                        }
+                        else
+                        {
+                            _menuController = MenuController.GetMenu(areaMaskTask.stringValue);
+                            RectTransform _target = _menuController.transform.FindRecursive(areaMaskTask.Target) as RectTransform;
+
+                            if (_target)
+                            {
+                                if (_menuController.canvas)
+                                {
+                                    if (_menuController.canvas.renderMode == RenderMode.ScreenSpaceCamera)
+                                    {
+                                        masks.ShowMask(
+                                            Camera.main.WorldToViewportPoint(_target.transform.position),
+                                            _target.pivot,
+                                            areaMaskTask.Size,
+                                            areaMaskTask.Offset,
+                                            areaMaskTask.MaskStyle,
+                                            true);
+                                    }
+                                    else
+                                    {
+                                        //todo
+                                    }
+                                }
+                            }
+                        }
+
+                        masks.Interactable(areaMaskTask.Interactable);
 
                         break;
                 }

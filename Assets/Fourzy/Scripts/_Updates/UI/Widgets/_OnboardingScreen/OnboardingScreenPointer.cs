@@ -3,6 +3,7 @@
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using System.Collections;
 using UnityEngine;
@@ -14,18 +15,28 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public static float POINTER_MOVE_SPEED = 2.5f;
 
-        public Image hand;
-        public Badge messagaBox;
-        public VerticalLayoutGroup container;
+        [SerializeField]
+        private RectTransform handRoot;
+        [SerializeField]
+        private Badge messagaBox;
+        [SerializeField]
+        private VerticalLayoutGroup container;
+        [SerializeField]
+        private ScaleTween handScaleTween;
 
         private RectTransform root;
-
         private GameboardView board;
 
         public override WidgetBase SetAnchors(Vector2 anchor)
         {
-            if (anchor.x > .6f) hand.transform.localScale = Vector3.one;
-            else hand.transform.localScale = new Vector3(-1f, 1f, 1f);
+            if (anchor.x > .6f)
+            {
+                handRoot.localScale = Vector3.one;
+            }
+            else
+            {
+                handRoot.localScale = new Vector3(-1f, 1f, 1f);
+            }
 
             return base.SetAnchors(anchor);
         }
@@ -50,7 +61,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             StopRoutine("pointerAnimation", false);
 
-            if (alphaTween._value > 0f) Hide(.3f);
+            Hide(.3f);
 
             return this;
         }
@@ -78,7 +89,9 @@ namespace Fourzy._Updates.UI.Widgets
                     container.childAlignment = TextAnchor.MiddleRight;
                 }
                 else if (rectTransform.anchorMin.x < .4f)
+                {
                     container.childAlignment = TextAnchor.MiddleLeft;
+                }
                 else
                 {
                     pivot.x = .5f;
@@ -111,11 +124,26 @@ namespace Fourzy._Updates.UI.Widgets
 
         private IEnumerator PointerAnimationRoutine(Vector2[] points)
         {
-            if (points.Length == 0) yield break;
+            if (points.Length == 0)
+            {
+                yield break;
+            }
             else if (points.Length == 1)
             {
-                if (!visible) Show(.2f);
+                Show(.2f);
+
                 SetAnchors(Camera.main.WorldToViewportPoint((Vector2)board.transform.position + board.BoardLocationToVec2(points[0].y, points[0].x)));
+
+                while (true)
+                {
+                    handScaleTween.PlayForward(true);
+
+                    yield return new WaitForSeconds(scaleTween.playbackTime + .2f);
+
+                    handScaleTween.PlayBackward(true);
+
+                    yield return new WaitForSeconds(scaleTween.playbackTime + .2f);
+                }
             }
             else
             {
@@ -123,7 +151,8 @@ namespace Fourzy._Updates.UI.Widgets
                 {
                     SetAnchors(Camera.main.WorldToViewportPoint((Vector2)board.transform.position + board.BoardLocationToVec2(points[0].y, points[0].x)));
 
-                    if (!visible) Show(.3f);
+                    Show(.3f);
+
                     yield return new WaitForSeconds(.7f);
 
                     for (int pointIndex = 0; pointIndex < points.Length - 1; pointIndex++)

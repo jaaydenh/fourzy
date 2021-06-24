@@ -532,7 +532,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 switch (game._Type)
                 {
                     case GameType.ONBOARDING:
-                        //open nothing
+                        switch (game._Mode)
+                        {
+                            case GameMode.VERSUS:
+                                //open game win/lose screen
+                                gameWinLoseScreen.Open(game);
+
+                                break;
+                        }
 
                         break;
 

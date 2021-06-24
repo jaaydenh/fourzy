@@ -29,7 +29,10 @@ namespace Fourzy._Updates.Tools
             {
                 RoutineClass _routineContainer = new RoutineClass(this, name, routine, onEnd, onCanceled);
 
-                if (!_routineContainer.terminated) routines.Add(name, _routineContainer);
+                if (!_routineContainer.terminated)
+                {
+                    routines.Add(name, _routineContainer);
+                }
 
                 return _routineContainer.WaitFor();
             }
@@ -52,7 +55,10 @@ namespace Fourzy._Updates.Tools
             {
                 RoutineClass _routineContainer = new RoutineClass(this, name, time, onEnd, onCanceled);
 
-                if (!_routineContainer.terminated) routines.Add(name, _routineContainer);
+                if (!_routineContainer.terminated)
+                {
+                    routines.Add(name, _routineContainer);
+                }
 
                 return _routineContainer.WaitFor();
             }
@@ -68,6 +74,26 @@ namespace Fourzy._Updates.Tools
         /// <param name="name"></param>
         /// <returns></returns>
         public bool IsRoutineActive(string name) => routines.ContainsKey(name);
+
+        public void SetPausedState(string routineName, bool state)
+        {
+            if (IsRoutineActive(routineName))
+            {
+                routines[routineName].paused = state;
+            }
+        }
+
+        /// <summary>
+        /// Set paused state to all routines
+        /// </summary>
+        /// <param name="state"></param>
+        public void SetPausedState(bool state)
+        {
+            foreach (var entry in routines)
+            {
+                entry.Value.paused = state;
+            }
+        }
 
         /// <summary>
         /// Stops specified routine with optional call of onEnded
@@ -95,7 +121,10 @@ namespace Fourzy._Updates.Tools
         {
             List<string> keys = new List<string>(routines.Keys);
 
-            foreach (string key in keys) StopRoutine(key, callEnded);
+            foreach (string key in keys)
+            {
+                StopRoutine(key, callEnded);
+            }
         }
 
         /// <summary>
@@ -122,7 +151,9 @@ namespace Fourzy._Updates.Tools
         public void RemoveRoutine(string name)
         {
             if (routines.ContainsKey(name))
+            {
                 routines.Remove(name);
+            }
         }
     }
 
@@ -135,6 +166,7 @@ namespace Fourzy._Updates.Tools
         public Action onCanceled;
 
         public bool terminated = false;
+        public bool paused = false;
         public Coroutine nested;
         private IEnumerator payload;
 
@@ -171,8 +203,14 @@ namespace Fourzy._Updates.Tools
             terminated = true;
             owner.RemoveRoutine(name);
 
-            if (callOnEnded && onEnded != null) onEnded.Invoke();
-            if (nested != null) owner.StopCoroutine(nested);
+            if (callOnEnded && onEnded != null)
+            {
+                onEnded.Invoke();
+            }
+            if (nested != null)
+            {
+                owner.StopCoroutine(nested);
+            }
         }
 
         public void Cancel()
@@ -186,9 +224,40 @@ namespace Fourzy._Updates.Tools
         {
             if (time == 0f)
             {
-                if (payload != null) while (payload.MoveNext() && !terminated) yield return payload.Current;
+                if (payload != null)
+                {
+                    while (!terminated)
+                    {
+                        while (paused)
+                        {
+                            yield return null;
+                        }
+
+                        if (payload.MoveNext())
+                        {
+                            yield return payload.Current;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
             }
-            else if (time < 0f) while (true) if (terminated) yield break; else yield return null;
+            else if (time < 0f)
+            {
+                while (true)
+                {
+                    if (terminated)
+                    {
+                        break; 
+                    }
+                    else
+                    {
+                        yield return null;
+                    }
+                }
+            }
             else
             {
                 float timer = 0f;
@@ -196,10 +265,16 @@ namespace Fourzy._Updates.Tools
                 while (timer < time)
                 {
                     if (terminated)
-                        yield break;
+                    {
+                        break;
+                    }
                     else
                     {
-                        yield return null;
+                        do
+                        {
+                            yield return null;
+                        } while (paused);
+
                         timer += Time.deltaTime;
                     }
                 }
@@ -210,7 +285,10 @@ namespace Fourzy._Updates.Tools
 
         private IEnumerator Wait()
         {
-            while (!terminated) yield return null;
+            while (!terminated)
+            {
+                yield return null;
+            }
         }
     }
 }

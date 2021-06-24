@@ -38,9 +38,10 @@ namespace Fourzy
         internal Dictionary<string, ResourceItem> fastPuzzles = new Dictionary<string, ResourceItem>();
         internal Dictionary<string, BasicPuzzlePack> externalPuzzlePacks { get; private set; }
         internal Dictionary<string, GameObject> typedPrefabsFastAccess { get; private set; }
-        internal List<GameBoardDefinition> miscBoards { get; private set; }
+        internal List<ResourceItem> instructionBoards { get; private set; }
         internal List<ResourceItem> realtimeBotBoards { get; private set; }
         internal List<GameBoardDefinition> passAndPlayBoards { get; private set; }
+        internal List<ResourceItem> miscBoards { get; private set; }
 
         internal AreasDataHolder.GameArea currentArea
         {
@@ -96,6 +97,7 @@ namespace Fourzy
             LoadPuzzlePacks();
             LoadTutorialBotGames();
             LoadAreasProgression();
+            LoadInstructionBoards();
             LoadMiscBoards();
             LoadPassAndPlayBoards();
         }
@@ -170,7 +172,33 @@ namespace Fourzy
             }
         }
 
-        public GameBoardDefinition GetMiscBoard(string boardID) => miscBoards.Find(board => board.ID == boardID);
+        public GameBoardDefinition GetInstructionBoard(string boardFileName)
+        {
+            ResourceItem _file = instructionBoards.Find(file => file.Name == boardFileName);
+
+            if (_file != null)
+            {
+                return JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public GameBoardDefinition GetMiscBoard(string boardFileName)
+        {
+            ResourceItem _file = miscBoards.Find(file => file.Name == boardFileName);
+
+            if (_file != null)
+            {
+                return JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public void StartTryItBoard(TokenType token)
         {
@@ -380,13 +408,25 @@ namespace Fourzy
             }
         }
 
-        private void LoadMiscBoards()
+        private void LoadInstructionBoards()
         {
-            miscBoards = new List<GameBoardDefinition>(ResourceDB
+            instructionBoards = new List<ResourceItem>(ResourceDB
                 .GetFolder(Constants.INSTRUCTION_BOARDS_FOLDER)
                 .GetChilds("", ResourceItem.Type.Asset)
-                .Where(_file => _file.Ext == "json")
-                .Select(_file => JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text)));
+                .Where(_file => _file.Ext == "json"));
+
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.Log($"Loaded {instructionBoards.Count} instruction boards");
+            }
+        }
+
+        private void LoadMiscBoards()
+        {
+            miscBoards = new List<ResourceItem>(ResourceDB
+                .GetFolder(Constants.MISC_BOARDS_FOLDER)
+                .GetChilds("", ResourceItem.Type.Asset)
+                .Where(_file => _file.Ext == "json"));
 
             if (Application.isEditor || Debug.isDebugBuild)
             {
@@ -405,7 +445,7 @@ namespace Fourzy
 
             if (Application.isEditor || Debug.isDebugBuild)
             {
-                Debug.Log($"Loaded {miscBoards.Count} pass and play boards");
+                Debug.Log($"Loaded {passAndPlayBoards.Count} pass and play boards");
             }
         }
 

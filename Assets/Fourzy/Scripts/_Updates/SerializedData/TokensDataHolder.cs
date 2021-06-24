@@ -98,7 +98,6 @@ namespace Fourzy._Updates.Serialized
             public SpellId spellID;
 
             public string description;
-            public string gameboardInstructionID;
             public List<ThemeTokenPrefabPair> themesTokens;
 
             public string name

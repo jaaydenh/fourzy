@@ -458,15 +458,21 @@ namespace Fourzy._Updates.Mechanics
             }
         }
 
-        //public void AddBuff(BitBuff buff)
-        //{
-        //    if (!buffs.ContainsKey(buff.type)) buffs.Add(buff.type, new List<BitBuff>());
-        //    buffs[buff.type].Add(buff);
-
-        //    speedMltp += buff.value;
-        //}
-
         public float WaitTimeForDistance(float distance) => (distance * gameboard.step.x) / speed;
+
+        public void SetAnchor(Vector2 anchor)
+        {
+            if (GetComponentInParent<Canvas>())
+            {
+                if (!rectTransform)
+                {
+                    rectTransform = gameObject.AddComponent<RectTransform>();
+                }
+
+                rectTransform.anchorMin = rectTransform.anchorMax = anchor;
+                rectTransform.anchoredPosition = Vector2.zero;
+            }
+        }
 
         protected virtual void OnInitialized()
         {
@@ -476,6 +482,7 @@ namespace Fourzy._Updates.Mechanics
 
             parentRectTransform = GetComponentInParent<RectTransform>();
             rectTransform = GetComponent<RectTransform>();
+
             gameboard = GetComponentInParent<GameboardView>();
             alphaTween = GetComponent<AlphaTween>();
             positionTween = GetComponent<PositionTween>();

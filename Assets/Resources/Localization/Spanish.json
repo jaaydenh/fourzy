@@ -1,5 +1,38 @@
 {
   "items": [
+	{
+      "key": "instruction_01",
+      "value": "Fourzy es un juego de 2 jugadores. El objetivo: conseguir 4 seguidos"
+    },
+    {
+      "key": "instruction_02",
+      "value": "Toca para seleccionar adónde moverte "
+    },
+    {
+      "key": "instruction_03",
+      "value": "Las piezas entran desde fuera del tablero"
+    },
+    {
+      "key": "instruction_04",
+      "value": "Este es tu oponente "
+    },
+    {
+      "key": "instruction_05",
+      "value": "Ahora es el turno del oponente para moverse"
+    },
+    {
+      "key": "instruction_06",
+      "value": "Consigue 4 seguidos para ganar"
+    },
+    {
+      "key": "instruction_07",
+      "value": "También puedes ganar horizontal, vertical o diagonalmente"
+    },
+    {
+      "key": "instruction_08",
+      "value": "Ahora veamos cuánto has aprendido, ¡pondré a prueba tus habilidades!"
+    },
+	
     {
       "key": "adventure",
       "value": "Puzzle Aventuras"

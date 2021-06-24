@@ -2060,7 +2060,6 @@ MonoBehaviour:
   bg: {fileID: 1109914377}
   landscape: {fileID: 1897861376}
   portrait: {fileID: 1897861377}
-  _target: {fileID: 0}
 --- !u!4 &1897861375
 Transform:
   m_ObjectHideFlags: 0
