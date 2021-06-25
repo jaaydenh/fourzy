@@ -772,7 +772,7 @@ namespace Fourzy._Updates.Mechanics.Board
             return gamePiece;
         }
 
-        public TokenView SpawnToken(IToken token, bool sort = true)
+        public TokenView SpawnToken(BoardLocation location, IToken token, bool sort = true)
         {
             switch (token.Type)
             {
@@ -781,8 +781,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 default:
                     return SpawnToken<TokenView>(
-                            token.Space.Location.Row,
-                            token.Space.Location.Column,
+                            location.Row,
+                            location.Column,
                             token.Type, sort)
                         .SetData(token);
             }
@@ -2102,8 +2102,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         Debug.Log($"Spawned: {tokenDrop.Token.Type}, Reason: {tokenDrop.Reason}");
 
                         //add new token
-                        token = SpawnToken<TokenView>(tokenDrop.Destination.Row, tokenDrop.Destination.Column, tokenDrop.Token.Type);
-                        token.SetData(tokenDrop.Token);
+                        token = SpawnToken(tokenDrop.Destination, tokenDrop.Token);
                         token.Show(.5f);
 
                         switch (tokenDrop.Token.Type)
@@ -2399,8 +2398,6 @@ namespace Fourzy._Updates.Mechanics.Board
                             _token.SetData(tokens.FirstOrDefault());
 
                             _token.SetAlpha(1f);
-
-
                         }
                         else
                         {
@@ -2635,7 +2632,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     foreach (IToken token in boardSpace.Tokens.Values)
                     {
-                        SpawnToken(token);
+                        SpawnToken(boardSpace.Location, token);
                     }
 
                     foreach (Piece piece in boardSpace.Pieces)

@@ -55,7 +55,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private IEnumerator Transition(GameActionTokenTransition _transition)
         {
-            TokenView newToken = gameboard.SpawnToken<TokenView>(_transition.Location.Row, _transition.Location.Column, _transition.After.Type, true);
+            TokenView newToken = gameboard.SpawnToken(_transition.Location, _transition.After);
             newToken.SetAlpha(0f);
 
             yield return StartCoroutine(OnActivated());
