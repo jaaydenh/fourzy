@@ -297,7 +297,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             BoardLocation _next = to.Neighbor(direction);
 
             bool playSmash = false;
-            if (speedMltp >= 1.5f)
+            if (speedMltp >= 1.0f)
             {
                 if (_next.OnBoard(gameboard.game._State.Board))
                 {
