@@ -79,11 +79,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
-        public void StartPrivateMatch()
-        {
-
-        }
-
         public void ResetTutorial() =>
             PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>()
                 .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ?
@@ -119,16 +114,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenOnlineLobby()
         {
-            if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
-            {
-                menuController.GetScreen<LobbyScreen>().CheckLobby();
-            }
-            else
-            {
-                menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
+            //if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
+            //{
+                menuController.GetOrAddScreen<LobbyScreen>().CheckLobby();
+            //}
+            //else
+            //{
+            //    menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
 
-                PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
-            }
+            //    PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
+            //}
         }
 
         public void StartRealtimeQuickmatch() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();

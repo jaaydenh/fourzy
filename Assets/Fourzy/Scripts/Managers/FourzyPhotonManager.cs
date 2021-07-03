@@ -165,6 +165,13 @@ namespace Fourzy
                         break;
                 }
             }
+            else
+            {
+                if (PhotonNetwork.NetworkClientState != ClientState.JoiningLobby)
+                {
+                    JoinLobby();
+                }
+            }
         }
 
         public override void OnJoinedLobby()
