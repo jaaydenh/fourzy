@@ -543,20 +543,36 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case GameType.PRESENTATION:
                         rematchButton.SetActive(false);
                         break;
+
                     case GameType.TURN_BASED:
                         nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
                         break;
+
                     case GameType.REALTIME:
                         exitButton.SetActive(true);
                         break;
+
                     case GameType.TRY_TOKEN:
                         rematchButton.SetActive(false);
                         exitButton.SetActive(true);
                         break;
+
                     case GameType.PASSANDPLAY:
                         rematchButton.SetActive(true);
                         exitButton.SetActive(true);
                         break;
+
+                    case GameType.ONBOARDING:
+                        switch (game._Mode)
+                        {
+                            case GameMode.VERSUS:
+                                exitButton.SetActive(true);
+
+                                break;
+                        }
+
+                        break;
+
                     default:
                         switch (GameManager.Instance.ExpectedGameType)
                         {
@@ -565,17 +581,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 {
                                     case GameManager.BotGameType.REGULAR:
                                         rematchButton.SetActive(true);
+
                                         break;
 
                                     default:
                                         rematchButton.SetActive(false);
+
                                         break;
                                 }
                                 break;
+
                             default:
                                 nextGameButton.SetActive(false);
                                 exitButton.SetActive(false);
                                 rematchButton.SetActive(false); 
+
                                 break;
                         }
                         break;

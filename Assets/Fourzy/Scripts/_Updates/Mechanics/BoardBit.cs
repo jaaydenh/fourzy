@@ -436,8 +436,6 @@ namespace Fourzy._Updates.Mechanics
             }
         }
 
-        //public float WaitTimeForDistance(float distance) => (distance * gameboard.step.x) / speed;
-
         protected virtual void OnInitialized()
         {
             active = true;
@@ -446,6 +444,7 @@ namespace Fourzy._Updates.Mechanics
 
             parentRectTransform = GetComponentInParent<RectTransform>();
             rectTransform = GetComponent<RectTransform>();
+
             gameboard = GetComponentInParent<GameboardView>();
             alphaTween = GetComponent<AlphaTween>();
             positionTween = GetComponent<PositionTween>();

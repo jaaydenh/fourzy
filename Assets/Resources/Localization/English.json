@@ -1,6 +1,39 @@
 {
   "items": [
     {
+      "key": "instruction_01",
+      "value": "Fourzy is a 2 player game. The goal: get 4 in a row"
+    },
+    {
+      "key": "instruction_02",
+      "value": "Tap to select where to move"
+    },
+    {
+      "key": "instruction_03",
+      "value": "Pieces enter from outside the board"
+    },
+    {
+      "key": "instruction_04",
+      "value": "This is your opponent"
+    },
+    {
+      "key": "instruction_05",
+      "value": "Now it's the opponent's turn to move"
+    },
+    {
+      "key": "instruction_06",
+      "value": "Get 4 in a row to win"
+    },
+    {
+      "key": "instruction_07",
+      "value": "You can also win Horizontally, Vertically or Diagonally"
+    },
+    {
+      "key": "instruction_08",
+      "value": "Now let's see how much you learned, I will test your skills!"
+    },
+  
+    {
       "key": "adventure",
       "value": "Puzzle Adventure"
     },

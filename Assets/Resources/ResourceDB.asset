@@ -85,6 +85,17 @@ MonoBehaviour:
     type: 2
     objectTypeName: PlayFabSharedSettings, PlayFab, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - name: Sirenix
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: GlobalSerializationConfig
+    ext: asset
+    path: Sirenix
+    type: 2
+    objectTypeName: Sirenix.Serialization.GlobalSerializationConfig, Sirenix.Serialization.Config,
+      Version=3.0.4.0, Culture=neutral, PublicKeyToken=null
   - name: AreasProgression
     ext: 
     path: 
@@ -841,223 +852,133 @@ MonoBehaviour:
     path: GameBoards
     type: 1
     objectTypeName: 
-  - name: ArrowTokenInstruction
+  - name: ARROW
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: BlockerTokenInstruction
+  - name: BLOCKER
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: BounceTokenInstruction
+  - name: BOUNCE
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: CircleBombTokenInstruction
+  - name: CIRCLE_BOMB
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: CrossBombInstructionBoard
+  - name: CROSS_BOMB
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: DarknessInstruction
+  - name: DARKNESS
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: EmptyBoard
+  - name: FOURWAY_ARROW
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: FireTokenInstruction
+  - name: FRUIT
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: FourWayArrowTokenInstruction
+  - name: FRUIT_TREE
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: FruitTokenInstruction
+  - name: GHOST
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: FruitTreeInstructionBoard
+  - name: HEX
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: GhostTokenInstruction
+  - name: ICE
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: HexSpellTokenInstruction
+  - name: ICE_BLOCK
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: IceBlockTokenInstruction
+  - name: LURE
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: IceTokenInstruction
+  - name: MOVE_BLOCKER
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: LureTokenInstructionBoard
+  - name: MOVING_GHOST
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: MoveBlockerTokenInstruction
+  - name: PIT
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: MovingGhostInstruction
+  - name: ROTATING_ARROW
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: MovingGhostTest
+  - name: SAND
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: OnboardingBoard1
+  - name: SNOW
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: OnboardingBoard2
+  - name: STICKY
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: OnboardingBoard3
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: OnboardingLevelSampleBoard
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PitTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuddleTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: RandomLeftRightTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: RotatingArrowInstructionBoard
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: RotatingArrowSample
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: SandTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: SnowTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: SpiderTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: StickyTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Testing board
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: VictoryRewardTestingBoard
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: WallTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: WaterTokenInstruction
-    ext: json
-    path: GameBoards/InstructionBoards
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: WebTokenInstruction
+  - name: WATER
     ext: json
     path: GameBoards/InstructionBoards
     type: 2
@@ -1298,6 +1219,59 @@ MonoBehaviour:
   - name: Level_ZigZag3
     ext: json
     path: GameBoards/LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: MiscBoards
+    ext: 
+    path: GameBoards
+    type: 1
+    objectTypeName: 
+  - name: OnboardingBoard0
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: OnboardingBoard1
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: OnboardingBoard2
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: OnboardingLevelSampleBoard
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TutorialBoard_01
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TutorialBoard_02
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TutorialBoard_03
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TutorialBoard_04
+    ext: json
+    path: GameBoards/MiscBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -3161,6 +3135,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 483
-  m_FolderCount: 50
+  m_FileCount: 477
+  m_FolderCount: 52
   UpdateAutomatically: 0

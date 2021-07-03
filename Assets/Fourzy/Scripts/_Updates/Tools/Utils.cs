@@ -41,6 +41,26 @@ namespace Fourzy._Updates.Tools
         //https://stackoverflow.com/questions/16100/how-should-i-convert-a-string-to-an-enum-in-c
         public static T ToEnum<T>(this string value) => (T)Enum.Parse(typeof(T), value, true);
 
+        public static Transform FindRecursive(this Transform parent, string childName)
+        {
+            foreach (Transform child in parent)
+            {
+                if (child.name == childName)
+                {
+                    return child;
+                }
+                else
+                {
+                    Transform found = FindRecursive(child, childName);
+                    if (found != null)
+                    {
+                        return found;
+                    }
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Angle to vector
         /// </summary>

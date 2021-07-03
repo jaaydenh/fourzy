@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using TMPro;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -10,18 +9,18 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text message;
         public TMP_Text hint;
 
-        public void DisplayText(float yAnchor, string text)
+        public OnboardingScreenDialog SetText(string text)
         {
-            if (!visible) Show(.2f);
-
-            SetAnchors(new Vector2(.5f, yAnchor));
-
             message.text = text;
+
+            return this;
         }
 
-        public void _Hide()
+        public OnboardingScreenDialog SetFontSize(float size)
         {
-            if (visible) Hide(.3f);
+            message.fontSize = size;
+
+            return this;
         }
 
         protected override void OnInitialized()

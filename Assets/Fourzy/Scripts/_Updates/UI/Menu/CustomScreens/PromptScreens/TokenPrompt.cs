@@ -75,7 +75,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void InitPrompt(List<AreasDataHolder.GameArea> themes)
         {
-            gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
+            gameboardDefinition = GameContentManager.Instance.GetInstructionBoard(data.tokenType.ToString());
             tokenImage.sprite = data.GetTokenSprite();
 
             locationLabel.text = GameContentManager.Instance.GetTokenAreaNames(data.tokenType)[0];

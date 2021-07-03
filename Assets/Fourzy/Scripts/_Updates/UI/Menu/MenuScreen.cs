@@ -191,36 +191,12 @@ namespace Fourzy._Updates.UI.Menu
                 }
             }
             else
+            {
                 Close(animate);
+            }
         }
 
         public virtual void ExecuteMenuEvent(MenuEvents menuEvent) { }
-
-        public virtual bool IsWidgetVisible(WidgetBase widget)
-        {
-            if (widget.gameObject.activeInHierarchy)
-            {
-                if (widget.canvasGroup)
-                {
-                    if (widget.canvasGroup.alpha > 0f)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public virtual void BlockInput()
         {

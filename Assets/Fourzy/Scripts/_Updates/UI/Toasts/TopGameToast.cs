@@ -23,9 +23,13 @@ namespace Fourzy._Updates.UI.Toasts
             base.Show(time);
 
             if (GameManager.Instance.Landscape)
+            {
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, landscapeHeight);
+            }
             else
+            {
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, defaultHeight);
+            }
         }
 
         public override void Hide(float time)

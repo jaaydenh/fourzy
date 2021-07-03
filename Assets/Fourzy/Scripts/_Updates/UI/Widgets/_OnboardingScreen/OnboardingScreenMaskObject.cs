@@ -25,7 +25,17 @@ namespace Fourzy._Updates.UI.Widgets
 
         public OnboardingScreenMaskObject Size(Vector2 size)
         {
-            if (size != Vector2.zero) sizeTween.SetSize(size);
+            if (size != Vector2.zero)
+            {
+                sizeTween.SetSize(size);
+            }
+
+            return this;
+        }
+
+        public OnboardingScreenMaskObject SetPivot(Vector2 pivot)
+        {
+            rectTransform.pivot = pivot;
 
             return this;
         }
@@ -70,9 +80,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 ClearObject(child);
 
-                if (!child.gameObject.activeInHierarchy || 
-                    child.GetComponent<RotationTween>() ||
-                    child.GetComponent<UIOutline>())
+                if (!child.gameObject.activeInHierarchy)
                 {
                     Destroy(child.gameObject);
                     continue;

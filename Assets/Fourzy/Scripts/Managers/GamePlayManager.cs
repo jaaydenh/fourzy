@@ -8,6 +8,7 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
@@ -43,6 +44,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public GameObject noNetworkOverlay;
         public RectTransform hintBlocksParent;
         public GameCameraManager gameCameraManager;
+        public ButtonExtended backButton;
 
         [HideInInspector]
         public bool rematchRequested = false;
@@ -273,7 +275,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     case GameTypeLocal.LOCAL_GAME:
                         game = new ClientFourzyGame(
-                            GameContentManager.Instance.GetMiscBoard("20"),
+                            GameContentManager.Instance.GetMiscBoard("SnowTokenInstruction"),
                             UserManager.Instance.meAsPlayer,
                             new Player(2, "Player Two"))
                         {
@@ -325,7 +327,33 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             //close other screens
             menuController.BackToRoot();
-            menuController.OnGameLoaded(game);
+
+            //back button
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                    backButton.SetActive(false);
+
+                    break;
+
+                default:
+                    switch (GameManager.Instance.ExpectedGameType)
+                    {
+                        case GameTypeLocal.LOCAL_GAME:
+                            backButton.SetActive(true);
+
+                            break;
+
+                        case GameTypeLocal.REALTIME_BOT_GAME:
+                        case GameTypeLocal.REALTIME_LOBBY_GAME:
+                        case GameTypeLocal.REALTIME_QUICKMATCH:
+                            backButton.SetActive(false);
+
+                            break;
+                    }
+
+                    break;
+            }
 
             winningParticleGenerator.HideParticles();
 
@@ -426,6 +454,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && game._State.ActivePlayerId != (pointerId + 1))
             {
                 gameplayScreen.OnWrongTurn();
+
                 return;
             }
 
@@ -503,6 +532,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (!game.isOver)
                     {
                         board.TakeAITurn();
+                    }
+
+                    break;
+
+                case GameType.ONBOARDING:
+                    switch (game._Mode)
+                    {
+                        case GameMode.VERSUS:
+                            if (!game.isOver && !game.isMyTurn)
+                            {
+                                board.TakeAITurn();
+                            }
+
+                            break;
                     }
 
                     break;
@@ -932,8 +975,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            _Tutorial.OnboardingTask_ShowMaskedArea maskTask =
-                new _Tutorial.OnboardingTask_ShowMaskedArea(new Dictionary<GameManager.PlacementStyle, Rect>()
+            _Tutorial.OnboardingTask_ShowMaskedBoardCells maskTask =
+                new _Tutorial.OnboardingTask_ShowMaskedBoardCells(new Dictionary<GameManager.PlacementStyle, Rect>()
                 {
                     [GameManager.PlacementStyle.EDGE_TAP] =
                     new Rect(location.Column, location.Row, 1f, 1f),
