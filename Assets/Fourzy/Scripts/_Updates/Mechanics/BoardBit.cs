@@ -83,7 +83,9 @@ namespace Fourzy._Updates.Mechanics
         protected void Update()
         {
             if (sortingGroup)
+            {
                 sortingGroup.sortingOrder = originalSortingOrder + location.Row;
+            }
         }
 
         protected void OnDrawGizmosSelected()
@@ -414,6 +416,20 @@ namespace Fourzy._Updates.Mechanics
                     _Destroy();
 
                     return 0f;
+            }
+        }
+
+        public void SetAnchor(Vector2 anchor)
+        {
+            if (GetComponentInParent<Canvas>())
+            {
+                if (!rectTransform)
+                {
+                    rectTransform = gameObject.AddComponent<RectTransform>();
+                }
+
+                rectTransform.anchorMin = rectTransform.anchorMax = anchor;
+                rectTransform.anchoredPosition = Vector2.zero;
             }
         }
 
