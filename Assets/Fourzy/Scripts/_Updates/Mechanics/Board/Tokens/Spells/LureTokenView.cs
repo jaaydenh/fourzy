@@ -8,15 +8,18 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class LureTokenView : TokenSpell
     {
-        public LureToken token { get; private set; }
+        public LureToken token => Token as LureToken;
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            token = tokenData as LureToken;
+            base.SetData(tokenData); 
 
-            if (token.Eaten) _Destroy();
+            if (token.Eaten)
+            {
+                _Destroy();
+            }
 
-            return base.SetData(tokenData);
+            return this;
         }
 
         public override void OnActivate()
@@ -36,11 +39,14 @@ namespace Fourzy._Updates.Mechanics.Board
             _Destroy();
         }
 
-        public override float OnGameAction(params GameAction[] actions)
+        public override float OnGameAction(GameAction action)
         {
-            GameActionTokenTransition _transition = actions[0] as GameActionTokenTransition;
+            GameActionTokenTransition _transition = action as GameActionTokenTransition;
 
-            if (_transition == null || _transition.Reason != TransitionType.EAT_LURE) return 0f;
+            if (_transition == null || _transition.Reason != TransitionType.EAT_LURE)
+            {
+                return 0f;
+            }
 
             StartCoroutine(OnActivated());
 

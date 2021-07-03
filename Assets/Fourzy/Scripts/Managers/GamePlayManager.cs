@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
@@ -42,6 +43,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public Transform bgParent;
         public GameObject noNetworkOverlay;
         public RectTransform hintBlocksParent;
+        public GameCameraManager gameCameraManager;
         public ButtonExtended backButton;
 
         [HideInInspector]
@@ -136,6 +138,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 board.onDraw -= OnDraw;
                 board.onMoveStarted -= OnMoveStarted;
                 board.onMoveEnded -= OnMoveEnded;
+                board.onGamepieceSmashed -= OnGamePieceSmashed;
             }
 
             GameManager.onNetworkAccess -= OnNetwork;
@@ -1014,6 +1017,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.onMoveStarted += OnMoveStarted;
             board.onMoveEnded += OnMoveEnded;
             board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
+            board.onGamepieceSmashed += OnGamePieceSmashed;
 
             //hide tokens/gamepieces
             board.FadeTokens(0f, 0f);
@@ -1741,6 +1745,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+        }
+
+        private void OnGamePieceSmashed(GamePieceView gamepiece)
+        {
+            gameCameraManager.Wiggle();
         }
 
         private IEnumerator GameInitRoutine()
