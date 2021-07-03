@@ -58,6 +58,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             isTutorialRunning = false;
 
             pointer.HidePointer();
+            miniboard.Hide(0f);
+            masks.Hide(0f);
+            bg._Hide();
+            dialog.Hide(0f);
+            highlight.Hide(0f);
+            graphics.Hide(0f);
+            instructions.Hide(0f);
+
             RemoveCurrentButton();
             StopAllCoroutines();
 
