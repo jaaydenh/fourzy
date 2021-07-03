@@ -5,12 +5,32 @@
       "id": "TRAINING_GARDEN_tier_1"
     },
     {
+      "gamesNumber": 3,
+      "id": "Fourzy_Unlock_1"
+    },
+    {
       "gamesNumber": 5,
       "id": "TRAINING_GARDEN_tier_2"
     },
     {
       "gamesNumber": 11,
       "id": "TRAINING_GARDEN_tier_3"
+    },
+    {
+      "gamesNumber": 20,
+      "id": "TRAINING_GARDEN_FRUIT"
+    },
+    {
+      "gamesNumber": 40,
+      "id": "TRAINING_GARDEN_FRUIT_TREE"
+    },
+    {
+      "gamesNumber": 70,
+      "id": "TRAINING_GARDEN_FOUR_WAY"
+    },
+    {
+      "gamesNumber": 100,
+      "id": "Fourzy_Unlock_2"
     }
   ]
 }
