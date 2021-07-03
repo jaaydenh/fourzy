@@ -44,10 +44,8 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (s.ContainsSpell)
             {

@@ -33,7 +33,7 @@ namespace Fourzy._Updates.Mechanics
         public bool active { get; set; }
         public float originalSpeed { get; private set; }
         public float speedCap { get; private set; }
-        public float speedMltp { get; protected set; } = 1f;
+        public float speedMltp { get; private set; } = 1f;
         public float speed => Mathf.Clamp(originalSpeed * speedMltp, originalSpeed * .5f, speedCap);
         public Dictionary<BitBuffType, List<BitBuff>> buffs { get; private set; }
 
@@ -308,14 +308,38 @@ namespace Fourzy._Updates.Mechanics
             positionTween.to = to;
         }
 
-        public virtual float StartMoveRoutine(bool startMove, BoardLocation from, BoardLocation to)
+        public virtual float StartMoveRoutine(bool startMove, params GameAction[] actions)
         {
-            StartCoroutine(MoveRoutine(startMove, from, to));
+            BoardLocation[] locations = actions.AsBoardLocations();
+            float distance = 0f;
 
-            return gameboard.BoardLocationsToBoardDistance(from, to) / speed;
+            if (locations.Length > 1)
+            {
+                for (int index = 1; index < locations.Length; index++)
+                {
+                    distance += Vector2.Distance(gameboard.BoardLocationToVec2(locations[index - 1]), gameboard.BoardLocationToVec2(locations[index]));
+                }
+            }
+
+            StartCoroutine(MoveRoutine(startMove, locations));
+
+            return distance / speed;
         }
 
-        public virtual float OnGameAction(GameAction action) { return 0f; }
+        public virtual float ExecuteGameAction(bool startMove, params GameAction[] actions)
+        {
+            if (actions == null || actions.Length == 0) return 0f;
+
+            switch (actions[0].Type)
+            {
+                case GameActionType.MOVE_PIECE: 
+                    return StartMoveRoutine(startMove, actions);
+            }
+
+            return OnGameAction(actions);
+        }
+
+        public virtual float OnGameAction(params GameAction[] actions) { return 0f; }
 
         public virtual void OnBeforeTurn(bool startTurn)
         {
@@ -325,12 +349,9 @@ namespace Fourzy._Updates.Mechanics
 
         public virtual void OnAfterTurn(bool startTurn) { }
 
-        public virtual void OnBeforeMoveActions(bool startTurn, BoardLocation from, BoardLocation to) { }
+        public virtual void OnBeforeMoveAction(bool startTurn, params BoardLocation[] actionsMoves) { }
 
-        public virtual void OnAfterMoveAction(bool startTurn, BoardLocation from, BoardLocation to)
-        {
-            speedMltp = 1f;
-        }
+        public virtual void OnAfterMove(bool startTurn, params BoardLocation[] actionsMoves) { }
 
         public virtual void OnBitEnter(BoardBit other) { }
 
@@ -377,18 +398,19 @@ namespace Fourzy._Updates.Mechanics
         {
             turnTokensInteractionList.AddRange(tokens);
 
-            //foreach (TokenView token in tokens)
-            //{
-            //    switch (token.tokenType)
-            //    {
-            //        case TokenType.ARROW:
-            //        case TokenType.ROTATING_ARROW:
-            //        case TokenType.FOURWAY_ARROW:
-            //            speedMltp += .1f;
+            foreach (TokenView token in tokens)
+            {
+                switch (token.tokenType)
+                {
+                    case TokenType.ARROW:
+                    case TokenType.ROTATING_ARROW:
+                    case TokenType.FOURWAY_ARROW:
+                        //AddBuff(new SpeedBuff());
+                        speedMltp += .1f;
 
-            //            break;
-            //    }
-            //}
+                        break;
+                }
+            }
         }
 
         public virtual float _Destroy(DestroyType reason)
@@ -433,6 +455,22 @@ namespace Fourzy._Updates.Mechanics
                     _Destroy(.75f);
 
                     return .75f;
+            }
+        }
+
+        public float WaitTimeForDistance(float distance) => (distance * gameboard.step.x) / speed;
+
+        public void SetAnchor(Vector2 anchor)
+        {
+            if (GetComponentInParent<Canvas>())
+            {
+                if (!rectTransform)
+                {
+                    rectTransform = gameObject.AddComponent<RectTransform>();
+                }
+
+                rectTransform.anchorMin = rectTransform.anchorMax = anchor;
+                rectTransform.anchoredPosition = Vector2.zero;
             }
         }
 
@@ -509,20 +547,35 @@ namespace Fourzy._Updates.Mechanics
             alphaTween.DoParse();
         }
 
-        protected virtual IEnumerator MoveRoutine(bool startTurn, BoardLocation from, BoardLocation to)
+        protected virtual IEnumerator MoveRoutine(bool startTurn, params BoardLocation[] actionsMoves)
         {
-            Vector2 start = gameboard.BoardLocationToVec2(from);
-            Vector2 end = gameboard.BoardLocationToVec2(to);
-            float distance = Vector2.Distance(start, end);
+            if (actionsMoves == null || actionsMoves.Length == 0) yield break;
 
-            for (float t = 0; t < 1f; t += Time.deltaTime * speed / distance)
+            OnBeforeMoveAction(startTurn, actionsMoves);
+
+            Vector2 start = gameboard.BoardLocationToVec2(actionsMoves[0]);
+            Vector2 end = gameboard.BoardLocationToVec2(actionsMoves[actionsMoves.Length - 1]);
+            float distance = Vector2.Distance(start, end);
+            int actionIndex = 0;
+            BoardLocation closest = new BoardLocation(-1, -1);
+
+            for (float t = 0; t < 1; t += Time.deltaTime * speed / distance)
             {
                 transform.localPosition = Vector3.Lerp(start, end, t);
+
+                if (actionIndex < actionsMoves.Length && Vector2.Distance(gameboard.BoardLocationToVec2(actionsMoves[actionIndex]), transform.localPosition) <= radius && !closest.Equals(actionsMoves[actionIndex]))
+                {
+                    closest = actionsMoves[actionIndex];
+                    actionIndex++;
+
+                    gameboard.OnBoardLocationEnter(closest, this);
+                }
+
                 yield return null;
             }
-
             transform.localPosition = end;
-            gameboard.OnBoardLocationEnter(to, this);
+
+            OnAfterMove(startTurn, actionsMoves);
         }
 
         public class BitBuff

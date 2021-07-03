@@ -44,10 +44,8 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (s.ContainsSpell)
             {
@@ -55,12 +53,7 @@ namespace FourzyGameModel.Model
             }
 
             s.ApplyElement(ElementType.LIFE);
-            if (!s.ContainsTerrain)
-            {
-                SproutToken _token = new SproutToken();
-                s.AddToken(_token);
-                tokens.Add(_token);
-            }
+            if (!s.ContainsTerrain) s.AddToken(new SproutToken());
             return true;
 
 

@@ -48,10 +48,8 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (!s.ContainsOnlyTerrain
                 || s.ContainsSpell)
@@ -59,14 +57,10 @@ namespace FourzyGameModel.Model
                 return false;
             }
 
-            MagicWaterToken _token = new MagicWaterToken(PlayerId, Duration);
-            State.Board.ContentsAt(Location).AddToken(_token);
-            tokens.Add(_token);
+            State.Board.ContentsAt(Location).AddToken(new MagicWaterToken(PlayerId, Duration));
             foreach (BoardLocation l in Location.GetOrthogonals(State.Board))
             {
-                _token = new MagicWaterToken(PlayerId, Duration);
-                State.Board.ContentsAt(l).AddToken(_token);
-                tokens.Add(_token);
+                State.Board.ContentsAt(l).AddToken(new MagicWaterToken(PlayerId, Duration));
                 State.Board.RecordGameAction(new GameActionTokenDrop(new MagicWaterToken(PlayerId, Duration), TransitionType.SPELL_CAST, Location, Location));
             }
          
