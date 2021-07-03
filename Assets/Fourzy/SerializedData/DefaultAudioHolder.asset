@@ -121,6 +121,3 @@ MonoBehaviour:
   - type: menu_back
     clips:
     - {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
-  - type: gamepiece_smash
-    clips:
-    - {fileID: 8300000, guid: 9b91e098ec133486f8b5ca06bc78dbb8, type: 3}

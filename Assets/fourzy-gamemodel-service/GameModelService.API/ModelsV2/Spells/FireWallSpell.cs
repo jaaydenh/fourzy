@@ -51,18 +51,13 @@ namespace FourzyGameModel.Model
                 return true;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (AllowedLocationTarget(s))
             {
-                MagicFireToken _token = new MagicFireToken(PlayerId, Duration);
                 State.Board.RecordGameAction(new GameActionTokenDrop(new MagicFireToken(PlayerId, Duration), TransitionType.SPELL_CAST, s.Location, s.Location));
-                State.Board.ContentsAt(Location).AddToken(_token);
-                tokens.Add(_token);
-
+                State.Board.ContentsAt(Location).AddToken(new MagicFireToken(PlayerId, Duration));
                 return true;
             }
             return false;

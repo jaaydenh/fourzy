@@ -50,10 +50,8 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             if (!State.Board.ContentsAt(Location).ContainsPiece)
             {
                 if (State.Board.ContentsAt(Location).ContainsHex)
@@ -63,11 +61,7 @@ namespace FourzyGameModel.Model
                     State.Board.RecordGameAction(new GameActionAdjustTokenCountdown((DarknessToken)hex[0], Duration));
                 } else
                 {
-                    HexSpellToken _token = new HexSpellToken(PlayerId, Duration);
-
-                    State.Board.ContentsAt(Location).AddToken(_token);
-                    tokens.Add(_token);
-
+                    State.Board.ContentsAt(Location).AddToken(new HexSpellToken(PlayerId, Duration));
                     return true;
                 }
 
