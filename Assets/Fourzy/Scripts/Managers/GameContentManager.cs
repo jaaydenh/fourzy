@@ -68,8 +68,6 @@ namespace Fourzy
             }
         }
 
-        internal Dictionary<Area, AreaProgression> defaultAreaProgression;
-
         internal int finishedFastPuzzlesCount =>
             fastPuzzles.Keys.Where(id => PlayerPrefsWrapper.GetFastPuzzleComplete(id)).Count();
 
@@ -96,7 +94,6 @@ namespace Fourzy
             LoadAllFastPuzzles();
             LoadPuzzlePacks();
             LoadTutorialBotGames();
-            LoadAreasProgression();
             LoadInstructionBoards();
             LoadMiscBoards();
             LoadPassAndPlayBoards();
@@ -391,21 +388,6 @@ namespace Fourzy
                 .OrderBy(_file => int.Parse(_file.Name.Split(' ')[0])));
 
             Debug.Log($"Loaded {realtimeBotBoards.Count} tutorial bot games.");
-        }
-
-        private void LoadAreasProgression()
-        {
-            defaultAreaProgression = new Dictionary<Area, AreaProgression>();
-
-            foreach (ResourceItem resourceItem in ResourceDB
-                .GetFolder(Constants.AREAS_PROGRESSION_FOLDER)
-                .GetChilds("", ResourceItem.Type.Asset)
-                .Where(_file => _file.Ext == "json"))
-            {
-                defaultAreaProgression.Add(
-                    (Area)Enum.Parse(typeof(Area), resourceItem.Name),
-                    AreaProgression.FromJsonString(resourceItem.Load<TextAsset>().text));
-            }
         }
 
         private void LoadInstructionBoards()
