@@ -169,7 +169,7 @@ namespace Fourzy._Updates
                                 {
                                     AreaProgression _progression = (AreaProgression)propertyInfo.GetValue(this);
 
-                                    if (_progression.jsonString != kvPair.Value)
+                                    if (_progression == null || _progression.jsonString != kvPair.Value)
                                     {
                                         PlayerPrefs.SetString(PREFIX + "_" + keyPieces[1], kvPair.Value);
                                         propertyInfo.SetValue(this, AreaProgression.FromJsonString(kvPair.Value));
