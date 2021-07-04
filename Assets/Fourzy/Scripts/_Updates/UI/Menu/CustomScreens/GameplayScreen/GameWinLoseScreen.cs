@@ -4,7 +4,6 @@ using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Photon.Pun;
@@ -32,6 +31,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private IClientFourzy game;
         private PromptScreen waitingScreen;
+        private GameplayScreen gameplayScreen;
         private TurnBaseScreen turnBasedTab;
         private bool showButtonRow = false;
         private int botRematchesLeft;
@@ -43,6 +43,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Awake();
 
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            gameplayScreen = menuController.GetScreen<GameplayScreen>();
         }
 
         protected void OnDestroy()
@@ -69,7 +76,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                     else
                     {
-                        if (game.IsWinner() && 
+                        if (game.IsWinner() &&
                             (game.myMembers.Count > 0 || game.puzzleData.pack.complete))
                         {
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>" +
@@ -105,7 +112,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         switch (GameManager.Instance.ExpectedGameType)
                         {
                             case GameTypeLocal.LOCAL_GAME:
-                                if (game.IsWinner())
+                                if (gameplayScreen.myTimerLeft == 0f || gameplayScreen.opponentTimerLeft == 0f)
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("out_of_time")}";
+                                }
+                                else if (game.IsWinner())
                                 {
                                     stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
                                         $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
@@ -123,7 +134,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             case GameTypeLocal.REALTIME_BOT_GAME:
                             case GameTypeLocal.REALTIME_LOBBY_GAME:
                             case GameTypeLocal.REALTIME_QUICKMATCH:
-                                if (game.IsWinner())
+                                if (gameplayScreen.myTimerLeft == 0f)
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("out_of_time")}";
+                                }
+                                else if (gameplayScreen.opponentTimerLeft == 0f)
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("out_of_time_opponent")}";
+                                }
+                                else if (game.IsWinner())
                                 {
                                     stateLabel.text = $"{game.me.DisplayName} <color=#" +
                                         $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
@@ -166,7 +185,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             tapToContinue.AtProgress(0f);
-            if (RewardsScreen.WillDisplayRewardsScreen(game) || 
+            if (RewardsScreen.WillDisplayRewardsScreen(game) ||
                 (game.puzzleData && game.puzzleData.pack))
             {
                 //display 'tap to continue'
@@ -215,7 +234,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GamePieceView gamepieceView = Instantiate(winningGamepieces[index], piecesParent);
 
                 gamepieceView.transform.position = winningGamepieces[index].transform.position;
-                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * 
+                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) *
                     Vector3.one;
                 gamepieceView.PlayWinAnimation(index * .15f + .15f);
 
@@ -383,7 +402,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 OnGauntletLost();
                             else
                                 menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
-                                    game.puzzleData.pack, 
+                                    game.puzzleData.pack,
                                     () => GamePlayManager.Instance.gameplayScreen.OnBack());
                         }
                     }
@@ -594,7 +613,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             default:
                                 nextGameButton.SetActive(false);
                                 exitButton.SetActive(false);
-                                rematchButton.SetActive(false); 
+                                rematchButton.SetActive(false);
 
                                 break;
                         }
@@ -611,8 +630,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnRoomPropertiesUpdate(Hashtable values)
         {
-            if (FourzyPhotonManager.CheckPlayersRematchReady() && 
-                waitingScreen && 
+            if (FourzyPhotonManager.CheckPlayersRematchReady() &&
+                waitingScreen &&
                 waitingScreen.isOpened)
             {
                 waitingScreen.CloseSelf();

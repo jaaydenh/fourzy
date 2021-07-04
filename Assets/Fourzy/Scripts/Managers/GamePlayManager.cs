@@ -101,9 +101,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void Start()
         {
-            gameplayScreen = menuController.GetOrAddScreen<GameplayScreen>();
-            playerPickScreen = menuController.GetOrAddScreen<RandomPlayerPickScreen>();
-            gameWinLoseScreen = menuController.GetOrAddScreen<GameWinLoseScreen>();
+            gameplayScreen = menuController.GetScreen<GameplayScreen>();
+            playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
+            gameWinLoseScreen = menuController.GetScreen<GameWinLoseScreen>();
 
             touchZone.onPointerDownData += OnPointerDown;
             touchZone.onPointerUpData += OnPointerRelease;
