@@ -245,18 +245,18 @@ namespace Fourzy
                 Debug.Log($"Failed to create new Room. {message}");
             }
 
-            AnalyticsManager.Instance.LogEvent(
-                "photonError",
-                AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("code", returnCode),
-                new KeyValuePair<string, object>("message", message));
-
             onCreateRoomFailed?.Invoke(message);
 
             if (connectionTimedOutRoutine != null)
             {
                 StopCoroutine(connectionTimedOutRoutine);
             }
+
+            AnalyticsManager.Instance.LogEvent(
+                "photonError",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("code", returnCode),
+                new KeyValuePair<string, object>("message", message));
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
@@ -268,18 +268,18 @@ namespace Fourzy
                 Debug.Log($"Failied to join room: {message}");
             }
 
-            AnalyticsManager.Instance.LogEvent(
-                "photonError",
-                AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("code", returnCode),
-                new KeyValuePair<string, object>("message", message));
-
             onJoinRoomFailed?.Invoke(message);
 
             if (connectionTimedOutRoutine != null)
             {
                 StopCoroutine(connectionTimedOutRoutine);
             }
+
+            AnalyticsManager.Instance.LogEvent(
+               "photonError",
+               AnalyticsManager.AnalyticsProvider.ALL,
+               new KeyValuePair<string, object>("code", returnCode),
+               new KeyValuePair<string, object>("message", message));
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
@@ -660,7 +660,7 @@ namespace Fourzy
             switch (type)
             {
                 case RoomType.LOBBY_ROOM:
-                    roomName = $"{UserManager.Instance.userName}";
+                    roomName = password;
 
                     break;
 

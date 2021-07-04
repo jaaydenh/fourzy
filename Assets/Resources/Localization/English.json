@@ -286,6 +286,10 @@
       "value": "Join"
     },
     {
+      "key": "join_game",
+      "value": "Join Game"
+    },
+    {
       "key": "joining_lobby",
       "value": "Joining lobby..."
     },
@@ -536,6 +540,10 @@
     {
       "key": "reset_progress",
       "value": "Reset Progress"
+    },
+    {
+      "key": "room_code",
+      "value": "Room Code"
     },
     {
       "key": "rule_swipe_down",
@@ -912,6 +920,10 @@
     {
       "key": "won",
       "value": "Won"
+    },
+    {
+      "key": "wrong_room_code",
+      "value": "Wrong Room Code"
     },
     {
       "key": "xp",
