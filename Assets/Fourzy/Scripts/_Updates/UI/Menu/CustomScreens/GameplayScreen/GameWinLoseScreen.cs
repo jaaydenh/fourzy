@@ -535,7 +535,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void SetButtonRowState(bool value)
         {
             buttonsRow.SetActive(value);
-
+            Console.Log("GAMETYPE: " + game._Type);
+            Console.Log("VALUE: " + value);
+            Console.Log("GameManager.Instance.ExpectedGameType: " + GameManager.Instance.ExpectedGameType);
             if (value)
             {
                 switch (game._Type)
@@ -549,6 +551,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case GameType.REALTIME:
+                        if (GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_LOBBY_GAME) {
+                            rematchButton.SetActive(true);
+                        } else {
+                            rematchButton.SetActive(false);
+                        }
                         exitButton.SetActive(true);
                         break;
 
@@ -590,7 +597,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                         break;
                                 }
                                 break;
-
                             default:
                                 nextGameButton.SetActive(false);
                                 exitButton.SetActive(false);
