@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Managers;
-using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using System;
@@ -19,7 +18,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ScrollRect areasContainer;
         public PracticeScreenAreaSelectWidget areaWidgetPrefab;
 
-        private bool passwordEnabled;
+        private bool passwordEnabled = true;
         private LoadingPromptScreen _prompt;
 
         public PracticeScreenAreaSelectWidget currentAreaWidget { get; private set; }
@@ -29,14 +28,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Awake();
 
             FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
-            FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimerOut;
         }
 
         protected void OnDestroy()
         {
             FourzyPhotonManager.onJoinedRoom -= OnJoinedRoom;
-            FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimerOut;
         }
 
@@ -72,18 +69,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Accept(force);
 
+            FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
             _prompt
-                .Prompt("Retrieving player stats...", "", null, null, null, null)
+                .Prompt("Retrieving player stats...", "", null, null, null, () =>
+                {
+                    FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
+                })
                 .CloseOnDecline();
 
             UserManager.GetPlayerRating(rating =>
             {
-                string password = "";
-
-                if (passwordEnabled)
-                    password = Guid.NewGuid().ToString().Substring(0, Constants.REALTIME_ROOM_PASSWORD_LENGTH);
-
-                FourzyPhotonManager.CreateRoom(RoomType.LOBBY_ROOM, password: password);
+                CreateRoom();
 
                 if (_prompt.isOpened)
                 {
@@ -96,6 +92,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     _prompt.Decline(true);
                 }
             });
+        }
+
+        private void CreateRoom()
+        {
+            string password = "";
+
+            if (passwordEnabled)
+            {
+                password = Guid.NewGuid().ToString().Substring(0, Constants.REALTIME_ROOM_PASSWORD_LENGTH);
+            }
+
+            FourzyPhotonManager.CreateRoom(RoomType.LOBBY_ROOM, password: password);
         }
 
         public void ToggleCheckmark()
@@ -167,15 +175,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnCreateRoomFailed(string error)
         {
-            if (isOpened)
-            {
-                GamesToastsController.ShowTopToast($"Failed: {error}");
-            }
-
-            if (_prompt.isOpened)
-            {
-                _prompt.Decline(true);
-            }
+            CreateRoom();
         }
 
         private void OnConnectionTimerOut()

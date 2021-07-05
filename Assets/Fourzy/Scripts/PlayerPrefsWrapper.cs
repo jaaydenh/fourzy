@@ -171,6 +171,21 @@ namespace Fourzy
         public static void SetSelectedGamePiece(string pieceID) =>
             PlayerPrefs.SetString("selectedGamePiece_", pieceID);
 
+        public static void AddPrivateGamesWon() =>
+            PlayerPrefs.SetInt("private_games_won", GetPrivateGamesWon() + 1);
+
+        public static int GetPrivateGamesWon() => PlayerPrefs.GetInt("private_games_won", 0);
+
+        public static void AddPrivateGamesLost() =>
+            PlayerPrefs.SetInt("private_games_lost", GetPrivateGamesLost() + 1);
+
+        public static int GetPrivateGamesLost() => PlayerPrefs.GetInt("private_games_lost");
+
+        public static void AddPrivateGamesDraw() =>
+            PlayerPrefs.SetInt("private_games_draw", GetPrivateGamesDraw() + 1);
+
+        public static int GetPrivateGamesDraw() => PlayerPrefs.GetInt("private_games_draw", 0);
+
         /// <summary>
         /// Turn-based games related
         /// </summary>

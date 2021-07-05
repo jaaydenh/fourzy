@@ -1322,7 +1322,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             switch (GameManager.Instance.ExpectedGameType)
             {
-                case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                 case GameTypeLocal.REALTIME_BOT_GAME:
                     if (game.draw)
@@ -1355,6 +1354,35 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     GameManager.Instance.ReportAreaProgression((Area)PlayerPrefsWrapper.GetCurrentArea());
 
+                    break;
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                    if (game.draw)
+                    {
+                        PlayerPrefsWrapper.AddPrivateGamesDraw();
+
+                        Amplitude.Instance.setUserProperty(
+                            "totalPrivateGamesDraw",
+                            PlayerPrefsWrapper.GetPrivateGamesDraw());
+                    }
+                    else
+                    {
+                        if (game.IsWinner())
+                        {
+                            PlayerPrefsWrapper.AddPrivateGamesWon();
+
+                            Amplitude.Instance.setUserProperty(
+                                "totalPrivateGamesWon",
+                                PlayerPrefsWrapper.GetPrivateGamesWon());
+                        }
+                        else
+                        {
+                            PlayerPrefsWrapper.AddPrivateGamesLost();
+
+                            Amplitude.Instance.setUserProperty(
+                                "totalPrivateGamesLost",
+                                PlayerPrefsWrapper.GetPrivateGamesLost());
+                        }
+                    }
                     break;
             }
 

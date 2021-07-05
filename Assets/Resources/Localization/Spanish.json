@@ -290,6 +290,10 @@
       "value": "Entrar"
     },
     {
+      "key": "join_game",
+      "value": "Unete al juego"
+    },
+    {
       "key": "joining_lobby",
       "value": "Uniéndose al lobby ..."
     },
@@ -540,6 +544,10 @@
     {
       "key": "reset_progress",
       "value": "Restablecer progreso"
+    },
+    {
+      "key": "room_code",
+      "value": "Código de juego"
     },
     {
       "key": "rule_swipe_down",
@@ -887,7 +895,7 @@
     },
     {
       "key": "waiting_for_opponent",
-      "value": "Esperando a la oponente"
+      "value": "Invite Code"
     },
     {
       "key": "watch_ad",
@@ -928,6 +936,10 @@
     {
       "key": "won",
       "value": "Ganaste"
+    },
+    {
+      "key": "wrong_room_code",
+      "value": "Código de habitación incorrecto"
     },
     {
       "key": "xp",
