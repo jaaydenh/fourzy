@@ -45623,6 +45623,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1088047662}
+  - component: {fileID: 1088047664}
   - component: {fileID: 1088047663}
   m_Layer: 5
   m_Name: UserInfo
@@ -45671,6 +45672,25 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1088047664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1088047661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecc3d37312b4f104a9c8c865a7def591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pieceParent: {fileID: 1296083883}
+  playerNameLabel: {fileID: 1309006477}
+  pieceNameLabel: {fileID: 988301301}
+  ratingLabel: {fileID: 1853816153}
+  winsLabel: {fileID: 210938547}
+  losesLabel: {fileID: 1944906134}
+  drawsLabel: {fileID: 1036410527}
 --- !u!1 &1088219969
 GameObject:
   m_ObjectHideFlags: 0
@@ -67879,13 +67899,6 @@ MonoBehaviour:
   autoAdjustSize: 1
   discordButton: {fileID: 969221048}
   body: {fileID: 658507998}
-  pieceParent: {fileID: 1296083883}
-  playerNameLabel: {fileID: 1309006477}
-  pieceNameLabel: {fileID: 988301301}
-  ratingLabel: {fileID: 1853816153}
-  winsLabel: {fileID: 210938547}
-  losesLabel: {fileID: 1944906134}
-  drawsLabel: {fileID: 1036410527}
 --- !u!225 &1739894149
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -68632,7 +68645,7 @@ GameObject:
   - component: {fileID: 1765221701}
   - component: {fileID: 1765221700}
   m_Layer: 5
-  m_Name: LossText
+  m_Name: LosesText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79485,7 +79498,7 @@ GameObject:
   - component: {fileID: 1944906135}
   - component: {fileID: 1944906134}
   m_Layer: 5
-  m_Name: LossValue
+  m_Name: LosesValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
