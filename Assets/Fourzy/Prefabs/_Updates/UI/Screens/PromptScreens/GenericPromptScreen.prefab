@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -26, y: -21.9}
-  m_SizeDelta: {x: 64.95, y: 64.95}
+  m_SizeDelta: {x: 65, y: 64.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222425834159249460
 CanvasRenderer:
@@ -1190,7 +1190,6 @@ GameObject:
   - component: {fileID: 6785869833458730239}
   - component: {fileID: 2749506896578716657}
   - component: {fileID: 5339734865278453265}
-  - component: {fileID: 8705677459989459782}
   - component: {fileID: 7528071386204212707}
   m_Layer: 5
   m_Name: Yes
@@ -1366,26 +1365,6 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
---- !u!114 &8705677459989459782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7065099345164603493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: 120
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &7528071386204212707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1510,7 +1489,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1644,7 +1623,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1687,7 +1666,6 @@ GameObject:
   - component: {fileID: 202292397980491525}
   - component: {fileID: 2283986278381877373}
   - component: {fileID: 4437882631730478525}
-  - component: {fileID: 1612243253083260564}
   - component: {fileID: 6784252509916895642}
   m_Layer: 5
   m_Name: No
@@ -1745,7 +1723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3374dbbd90e714049805bb8607d42b93, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1d576697ea57ce94c9183157264516ff, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1863,26 +1841,6 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
---- !u!114 &1612243253083260564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8524749610373815653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: 120
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &6784252509916895642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1970,7 +1928,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0f128b9c2bb08f14d96f7cbcb5f6b629, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b9892df556f39d6498aed02f62716f42, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1

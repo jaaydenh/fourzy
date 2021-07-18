@@ -27,23 +27,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnBack();
 
-            if (defaultCalls) Decline();
+            if (defaultCalls)
+            {
+                Decline();
+            }
         }
 
-        public virtual PromptScreen Prompt(
-            string title,
-            string text, 
-            Action accept = null, 
-            Action decline = null) => 
+        public virtual PromptScreen Prompt(string title, string text, Action accept = null, Action decline = null) => 
             Prompt(title, text, LocalizationManager.Value("yes"), LocalizationManager.Value("no"), accept, decline);
 
-        public virtual PromptScreen Prompt(
-            string title, 
-            string text, 
-            string yes, 
-            string no, 
-            Action accept = null, 
-            Action decline = null)
+        public virtual PromptScreen Prompt(string title, string text, string yes, string no, Action accept = null, Action decline = null)
         {
             onDecline = decline;
             onAccept = accept;
@@ -81,7 +74,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             onAccept?.Invoke();
 
-            if (closeOnAccept) CloseSelf();
+            if (closeOnAccept)
+            {
+                CloseSelf();
+            }
         }
 
         public virtual void Decline(bool force = false)
@@ -91,42 +87,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
             bool closeCalled = false;
 
             if (onDecline != null)
+            {
                 onDecline.Invoke();
+            }
             else
             {
                 closeCalled = true;
                 CloseSelf();
             }
 
-            if (!closeCalled && closeOnDecline) CloseSelf();
+            if (!closeCalled && closeOnDecline)
+            {
+                CloseSelf();
+            }
         }
 
         public void UpdateAcceptButton(string yes)
         {
-            if (acceptButton)
-            {
-                if (string.IsNullOrEmpty(yes))
-                    acceptButton.SetActive(false);
-                else
-                {
-                    acceptButton.SetActive(true);
-                    acceptButton.SetLabel(yes);
-                }
-            }
+            UpdateButton(acceptButton, yes);
         }
 
         public void UpdateDeclineButton(string no)
         {
-            if (declineButton)
-            {
-                if (string.IsNullOrEmpty(no))
-                    declineButton.SetActive(false);
-                else
-                {
-                    declineButton.SetActive(true);
-                    declineButton.SetLabel(no);
-                }
-            }
+            UpdateButton(declineButton, no);
         }
 
         public PromptScreen CloseOnAccept()
@@ -141,6 +124,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
             closeOnDecline = true;
 
             return this;
+        }
+
+        protected virtual void UpdateButton(ButtonExtended button, string text)
+        {
+            if (button)
+            {
+                if (string.IsNullOrEmpty(text))
+                {
+                    button.SetActive(false);
+                }
+                else
+                {
+                    button.SetActive(true);
+                    button.SetLabel(text);
+                }
+            }
         }
     }
 }
