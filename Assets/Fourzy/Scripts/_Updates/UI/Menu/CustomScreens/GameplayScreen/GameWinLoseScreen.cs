@@ -112,11 +112,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         switch (GameManager.Instance.ExpectedGameType)
                         {
                             case GameTypeLocal.LOCAL_GAME:
-                                if (gameplayScreen.myTimerLeft == 0f || gameplayScreen.opponentTimerLeft == 0f)
-                                {
-                                    stateLabel.text = $"{LocalizationManager.Value("out_of_time")}";
-                                }
-                                else if (game.IsWinner())
+                                if (game.IsWinner())
                                 {
                                     stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
                                         $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
@@ -129,20 +125,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                         $"{LocalizationManager.Value("won")}</color>";
                                 }
 
+                                if (gameplayScreen.myTimerLeft == 0f || gameplayScreen.opponentTimerLeft == 0f)
+                                {
+                                    SetInfoLabel($"{LocalizationManager.Value("out_of_time")}");
+                                }
+
                                 break;
 
                             case GameTypeLocal.REALTIME_BOT_GAME:
                             case GameTypeLocal.REALTIME_LOBBY_GAME:
                             case GameTypeLocal.REALTIME_QUICKMATCH:
-                                if (gameplayScreen.myTimerLeft == 0f)
-                                {
-                                    stateLabel.text = $"{LocalizationManager.Value("out_of_time")}";
-                                }
-                                else if (gameplayScreen.opponentTimerLeft == 0f)
-                                {
-                                    stateLabel.text = $"{LocalizationManager.Value("out_of_time_opponent")}";
-                                }
-                                else if (game.IsWinner())
+                                if (game.IsWinner())
                                 {
                                     stateLabel.text = $"{game.me.DisplayName} <color=#" +
                                         $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
@@ -153,6 +146,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     stateLabel.text = $"{game.opponent.DisplayName} <color=#" +
                                         $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
                                         $"{LocalizationManager.Value("won")}</color>";
+                                }
+
+                                if (gameplayScreen.myTimerLeft == 0f)
+                                {
+                                    SetInfoLabel($"{LocalizationManager.Value("out_of_time")}");
+                                }
+                                else if (gameplayScreen.opponentTimerLeft == 0f)
+                                {
+                                    SetInfoLabel($"{LocalizationManager.Value("out_of_time_opponent")}");
                                 }
 
                                 break;
@@ -244,7 +246,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SetInfoLabel(string text)
         {
-            infoLabel.text = text;
+            if (string.IsNullOrEmpty(infoLabel.text))
+            {
+                infoLabel.text = text;
+            }
+            else
+            {
+                infoLabel.text += "\n" + text;
+            }
         }
 
         public void CloseIfOpened()

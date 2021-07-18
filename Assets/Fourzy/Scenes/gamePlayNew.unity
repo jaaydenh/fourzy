@@ -12510,7 +12510,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 44
+          selectedMember: 43
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -12705,7 +12705,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -330}
+  m_AnchoredPosition: {x: 0, y: -360}
   m_SizeDelta: {x: 700, y: 225.88}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &810311171
@@ -12743,7 +12743,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -200}
+          vector2Argument: {x: 0, y: -230}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -12769,7 +12769,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -200}
+          vector2Argument: {x: 0, y: -230}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -12795,7 +12795,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -200}
+          vector2Argument: {x: 0, y: -230}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -12835,7 +12835,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -330}
+          vector2Argument: {x: 0, y: -360}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -12861,7 +12861,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -330}
+          vector2Argument: {x: 0, y: -360}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -12887,7 +12887,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -330}
+          vector2Argument: {x: 0, y: -360}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -13502,8 +13502,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -260}
-  m_SizeDelta: {x: 700, y: 110}
+  m_AnchoredPosition: {x: 0, y: -247}
+  m_SizeDelta: {x: 700, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &855172655
 MonoBehaviour:
@@ -13560,7 +13560,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 2
   m_wordSpacing: 0
@@ -13729,7 +13729,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -260}
+          vector2Argument: {x: 0, y: -247}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -13755,7 +13755,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -260}
+          vector2Argument: {x: 0, y: -247}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -13781,7 +13781,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -260}
+          vector2Argument: {x: 0, y: -247}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
