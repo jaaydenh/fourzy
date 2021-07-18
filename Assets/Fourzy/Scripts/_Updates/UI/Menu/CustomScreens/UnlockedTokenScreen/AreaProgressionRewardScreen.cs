@@ -119,6 +119,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     GameContentManager.Instance.StartTryItBoard((TokenType)Enum.Parse(typeof(TokenType), reward.ItemId));
 
                     break;
+
+                case Constants.PLAYFAB_GAMEPIECE_CLASS:
+                    if (MenuController.activeMenu == FourzyMainMenuController.instance)
+                    {
+                        FourzyMainMenuController.instance.GetScreen<MenuTabbedScreen>().OpenTab(1, true);
+                        FourzyMainMenuController.instance.GetScreen<GamePiecesScreen>().SetPiecesActive();
+                    }
+
+                    break;
             }
         }
 
