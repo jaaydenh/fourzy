@@ -127,12 +127,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //    PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
             //}
 
-            menuController.GetOrAddScreen<PromptScreen>()
-                .Prompt(LocalizationManager.Value("private_match"), "", LocalizationManager.Value("create_game"), LocalizationManager.Value("join_game"),
+            menuController.GetOrAddScreen<TwoOptionsPromptScreen>()
+                ._Prompt(LocalizationManager.Value("private_match"), "", LocalizationManager.Value("create_game"), LocalizationManager.Value("join_game"),
                 () =>
                 {
                     PersistantMenuController.Instance.GetOrAddScreen<CreateRealtimeGamePrompt>().Prompt();
                 },
+                null,
                 () =>
                 {
                     inputPromptScreen = menuController.GetOrAddScreen<InputFieldPrompt>();
@@ -152,8 +153,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         })
                         .CloseOnDecline();
                 })
-                .CloseOnAccept()
-                .CloseOnDecline();
+                .CloseOnAccept();
         }
 
         public void StartRealtimeQuickmatch() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
