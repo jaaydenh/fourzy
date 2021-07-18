@@ -80,20 +80,16 @@ namespace Fourzy._Updates
             PlayerPrefs.GetInt(PREFIX + "LOSE_ON_EMPTY_TIMER", Constants.LOSE_ON_EMPTY_TIMER ? 1 : 0) == 1;
 
         internal AreaProgression ENCHANTED_FOREST { get; private set; } =
-            GetAreaProgressionPlayerPrefs(Area.ENCHANTED_FOREST) ??
-            GameContentManager.Instance.defaultAreaProgression[Area.ENCHANTED_FOREST];
+            AreaProgression.FromJsonString(PlayerPrefs.GetString(PREFIX + "_" + Area.ENCHANTED_FOREST.ToString(), ""));
 
         internal AreaProgression TRAINING_GARDEN { get; private set; } =
-            GetAreaProgressionPlayerPrefs(Area.TRAINING_GARDEN) ??
-            GameContentManager.Instance.defaultAreaProgression[Area.TRAINING_GARDEN];
+            AreaProgression.FromJsonString(PlayerPrefs.GetString(PREFIX + "_" + Area.TRAINING_GARDEN.ToString(), ""));
 
         internal AreaProgression SANDY_ISLAND { get; private set; } =
-            GetAreaProgressionPlayerPrefs(Area.SANDY_ISLAND) ??
-            GameContentManager.Instance.defaultAreaProgression[Area.SANDY_ISLAND];
+            AreaProgression.FromJsonString(PlayerPrefs.GetString(PREFIX + "_" + Area.SANDY_ISLAND.ToString(), ""));
 
         internal AreaProgression ICE_PALACE { get; private set; } =
-            GetAreaProgressionPlayerPrefs(Area.ICE_PALACE) ??
-            GameContentManager.Instance.defaultAreaProgression[Area.ICE_PALACE];
+            AreaProgression.FromJsonString(PlayerPrefs.GetString(PREFIX + "_" + Area.ICE_PALACE.ToString(), ""));
 
         internal TokenType[] DEFAULT_TOKENS { get; private set; } = PlayerPrefsWrapper.IsDefaultTokensSet() ? 
             PlayerPrefsWrapper.GetUnlockedTokens()
@@ -162,8 +158,6 @@ namespace Fourzy._Updates
                                 {
                                     newValues.Add(keyPieces[1], kvPair.Value);
                                     UNLOCKED_AREAS = areas;
-
-                                    PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
                                 }
 
                                 break;
@@ -175,9 +169,10 @@ namespace Fourzy._Updates
                                 {
                                     AreaProgression _progression = (AreaProgression)propertyInfo.GetValue(this);
 
-                                    if (_progression.jsonString != kvPair.Value)
+                                    if (_progression == null || _progression.jsonString != kvPair.Value)
                                     {
                                         PlayerPrefs.SetString(PREFIX + "_" + keyPieces[1], kvPair.Value);
+                                        propertyInfo.SetValue(this, AreaProgression.FromJsonString(kvPair.Value));
                                         newValues.Add(keyPieces[1], kvPair.Value);
                                     }
                                 }
@@ -334,9 +329,6 @@ namespace Fourzy._Updates
                 return null;
             }
         }
-
-        private static AreaProgression GetAreaProgressionPlayerPrefs(Area area) =>
-            AreaProgression.FromJsonString(PlayerPrefs.GetString(PREFIX + "_" + area.ToString(), ""));
     }
 
     [Serializable]

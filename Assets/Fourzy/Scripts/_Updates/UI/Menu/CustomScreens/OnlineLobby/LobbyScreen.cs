@@ -32,6 +32,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinRoomFailed += OnJoinRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimerOut;
             FourzyPhotonManager.onConnectedToMaster += OnConnectedToMaster;
+
+            _prompt = PersistantMenuController.Instance
+                .GetOrAddScreen<LoadingPromptScreen>()
+                .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
         }
 
         protected void OnDestroy()
@@ -43,15 +47,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinRoomFailed -= OnJoinRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimerOut;
             FourzyPhotonManager.onConnectedToMaster -= OnConnectedToMaster;
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            _prompt = PersistantMenuController.Instance
-                .GetOrAddScreen<LoadingPromptScreen>()
-                .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
         }
 
         public override void OnBack()
@@ -110,7 +105,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else if (FourzyPhotonManager.ConnectedAndReady && FourzyPhotonManager.InDefaultLobby)
             {
-                if (!isCurrent) menuController.OpenScreen(this);
+                if (!isCurrent)
+                {
+                    menuController.OpenScreen(this);
+                }
 
                 return true;
             }

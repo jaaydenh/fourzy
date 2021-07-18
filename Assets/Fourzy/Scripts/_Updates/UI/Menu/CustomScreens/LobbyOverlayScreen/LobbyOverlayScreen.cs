@@ -4,10 +4,7 @@ using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
-using Newtonsoft.Json;
 using Photon.Pun;
-using PlayFab;
-using PlayFab.ClientModels;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -87,8 +84,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     state = LobbyOverlayState.LEAVING_ROOM;
                     leavingPrompt
-                        .Prompt("Leaving room...", "", null, () => state = LobbyOverlayState.NONE)
-                        .CloseOnDecline();
+                        .Prompt("Leaving room...", "", null, () => state = LobbyOverlayState.NONE);
                 }, null)
                 .CloseOnDecline()
                 .CloseOnAccept();
@@ -214,10 +210,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnRoomLeft()
         {
-            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
-                & displayable) == 0) return;
-
-            if (state == LobbyOverlayState.LOADING_BOT_GAME)
+            if (state != LobbyOverlayState.LEAVING_ROOM)
             {
                 return;
             }
@@ -246,7 +239,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case LobbyOverlayState.LEAVING_ROOM:
                     if (leavingPrompt.isOpened)
                     {
-                        leavingPrompt.Decline(true);
+                        leavingPrompt.CloseSelf();
                     }
 
                     break;
@@ -275,71 +268,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     ["complexityScore"] = "",
                 });
 
-            StartBotRoutine();
-        }
-
-        private void StartBotRoutine()
-        {
-            float waitTime = InternalSettings.Current.BOT_SETTINGS.randomMatchAfter;
-
-            if (waitTime <= 0f) return;
-
-            StartRoutine("startBotMatch", waitTime, (System.Action)(() =>
-            {
-                //get bot profile from players' rating
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "botDataFromRating",
-                    GeneratePlayStreamEvent = true,
-                },
-                (System.Action<ExecuteCloudScriptResult>)((result) =>
-                {
-                    BotSettings botSettings =
-                        JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
-
-                    Debug.Log("starting ai match for " + botSettings.AIProfile);
-                    if (wantToLeavePrompt && wantToLeavePrompt.isOpened)
-                    {
-                        wantToLeavePrompt.CloseSelf();
-                    }
-
-                    state = LobbyOverlayState.LOADING_BOT_GAME;
-
-                    GameManager.Instance.RealtimeOpponent =
-                        new OpponentData(
-                            "bot",
-                            botSettings.r,
-                            InternalSettings.Current.GAMES_BEFORE_RATING_USED);
-                    GameManager.Instance.Bot = new Player(
-                        2,
-                        CharacterNameFactory.GeneratePlayerName(),
-                        botSettings.AIProfile)
-                    {
-                        HerdId = GameContentManager.Instance.piecesDataHolder.random.Id,
-                        PlayerString = "2",
-                    };
-
-                    SetData(playerGamepiece,
-                        GameContentManager.Instance.piecesDataHolder.GetGamePieceData(
-                            (string)GameManager.Instance.Bot.HerdId).player1Prefab);
-
-                    AnalyticsManager.Instance.LogOtherJoinedLobby(
-                        GameManager.Instance.Bot.Profile.ToString(),
-                        Time.time - lobbyCreatedAt);
-
-                    StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, this.StartGame);
-
-                    FourzyPhotonManager.TryLeaveRoom();
-                    FourzyPhotonManager.Instance.JoinLobby();
-                }),
-                (error) =>
-                {
-                    Debug.LogError(error.ErrorMessage);
-
-                    GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
-                });
-            }),
-            null);
+            //StartBotRoutine();
         }
 
         private void OnConnectionTimedOut()
