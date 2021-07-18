@@ -9,6 +9,10 @@
       "value": "Toca para seleccionar adónde moverte "
     },
     {
+      "key": "instruction_02a",
+      "value": "Desliza para finalizar tu movimiento"
+    },
+    {
       "key": "instruction_03",
       "value": "Las piezas entran desde fuera del tablero"
     },

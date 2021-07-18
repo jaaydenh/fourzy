@@ -104,7 +104,6 @@ namespace Fourzy._Updates.UI.Menu
         protected virtual void Start()
         {
             size = new Vector2(widthAdjusted * transform.localScale.x, heightAdjusted * transform.localScale.y);
-            //print(size + " " + widthScaled + " " + heightScaled + " " + widthAdjusted + " " + heightAdjusted);
 
             StartCoroutine(InitializedRoutine());
         }
@@ -299,13 +298,18 @@ namespace Fourzy._Updates.UI.Menu
         //only works for portrait orientation
         public Vector2 WorldToCanvasPoint(Vector3 worldPoint)
         {
-            Vector3 screenPoint = _camera == null ?
-                Camera.main.WorldToViewportPoint(worldPoint) :
-                _camera.WorldToViewportPoint(worldPoint);
+            switch (canvas.renderMode)
+            {
+                case RenderMode.ScreenSpaceOverlay:
+                    Vector3 viewportPoint = WorldToViewport(worldPoint);
 
-            return new Vector2(
-                screenPoint.x * canvaseScaler.referenceResolution.x * widthRatioAdjusted,
-                screenPoint.y * canvaseScaler.referenceResolution.y * heightRatioAdjusted);
+                    return new Vector2(
+                        viewportPoint.x * canvaseScaler.referenceResolution.x * widthRatioAdjusted,
+                        viewportPoint.y * canvaseScaler.referenceResolution.y * heightRatioAdjusted);
+
+                default:
+                    return _camera ? _camera.WorldToScreenPoint(worldPoint) : Camera.main.WorldToScreenPoint(worldPoint);
+            }
         }
 
         public Vector2 WorldToCanvasSize(Vector2 size)
