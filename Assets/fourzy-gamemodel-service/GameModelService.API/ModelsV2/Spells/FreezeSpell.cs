@@ -44,8 +44,10 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State)
+        public bool Cast(GameState State, out List<IToken> tokens)
         {
+            tokens = new List<IToken>();
+
             BoardSpace s = State.Board.ContentsAt(Location);
             if (s.ContainsSpell)
             {
@@ -53,7 +55,13 @@ namespace FourzyGameModel.Model
             }
 
             s.ApplyElement(ElementType.FREEZE);
-            if (!s.ContainsTerrain) s.AddToken(new PreIceToken());
+            if (!s.ContainsTerrain)
+            {
+                PreIceToken _token = new PreIceToken();
+
+                s.AddToken(_token);
+                tokens.Add(_token);
+            }
             return true;
 
 
