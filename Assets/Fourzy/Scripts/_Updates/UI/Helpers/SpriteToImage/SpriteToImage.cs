@@ -20,13 +20,12 @@ namespace Fourzy._Updates.UI.Helpers
 
             if (spriteRenderer)
             {
-                spriteRenderer.color = Color.clear;
-
                 image = gameObject.GetComponent<Image>();
                 if (!image)
                 {
                     image = gameObject.AddComponent<Image>();
                 }
+                image.color = spriteRenderer.color;
 
                 rectTransform = gameObject.GetComponent<RectTransform>();
                 if (!rectTransform)
@@ -36,7 +35,9 @@ namespace Fourzy._Updates.UI.Helpers
             }
 
             if (sortingGroup)
+            {
                 sortingGroup.enabled = false;
+            }
 
             UpdateImage();
         }
@@ -70,9 +71,13 @@ namespace Fourzy._Updates.UI.Helpers
         public void ApplyMaterial(Material material)
         {
             if (image)
+            {
                 image.material = material;
+            }
             else if (spriteRenderer)
+            {
                 spriteRenderer.sharedMaterial = material;
+            }
         }
     }
 }

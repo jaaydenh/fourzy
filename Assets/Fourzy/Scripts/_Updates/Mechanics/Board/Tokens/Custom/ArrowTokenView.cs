@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Audio;
 using FourzyGameModel.Model;
-using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
@@ -12,6 +11,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public float maxPitchValue = 2f;
         public int maxPitchIn = 8;
         public Direction direction { get; private set; }
+        public override Color outlineColor => Color.yellow;
 
         public override TokenView SetData(IToken tokenData)
         {
@@ -37,8 +37,24 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public override void OnBitEnter(BoardBit other)
         {
-            AudioHolder.instance.PlaySelfSfxOneShot(onGamePieceEnter, volume, 
-                Mathf.Lerp(1f, maxPitchValue, other.turnTokensInteractionList.Where(bit => bit.tokenType == TokenType.ARROW).Count() / (float)maxPitchIn));
+            base.OnBitEnter(other);
+
+            AudioHolder.instance.PlaySelfSfxOneShot(onGamePieceEnter, volume, other.speedMltp);
+
+            if (!outlineShowed)
+            {
+                AnimateOutlineFrom(other.speedMltp * 2f, .1f, .0011f, other.speedMltp + .15f);
+            }
+        }
+
+        public override void OnBitExit(BoardBit other)
+        {
+            base.OnBitExit(other);
+
+            if (outlineShowed && !gameboard.game._State.Board.ContentsAt(location).ContainsPiece)
+            {
+                AnimateOutlineFrom(0f, .4f, .0011f, other.speedMltp + .15f);
+            }
         }
     }
 }

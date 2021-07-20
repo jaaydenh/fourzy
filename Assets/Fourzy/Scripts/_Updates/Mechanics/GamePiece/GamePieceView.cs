@@ -1,10 +1,12 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics._GamePiece
@@ -64,6 +66,24 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             {
                 CancelRoutine("blinking");
                 StartBlinking();
+            }
+        }
+
+        public override void OnEnter(BoardLocation location)
+        {
+            base.OnEnter(location);
+
+            foreach (TokenView _token in gameboard.BoardTokensAt(location))
+            {
+                switch (_token.tokenType)
+                {
+                    case TokenType.ARROW:
+                    case TokenType.ROTATING_ARROW:
+                    case TokenType.FOURWAY_ARROW:
+                        speedMltp += .1f;
+
+                        break;
+                }
             }
         }
 
@@ -143,7 +163,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void PlayWinAnimation(float delay)
         {
-            ShowOutline(false);
+            AnimateOutline(0f, 1f, 1f, .0015f);
 
             StartRoutine("winAnimation", delay, () =>
             {
@@ -167,12 +187,12 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             CancelRoutine("jumping");
             StartRoutine("jumping", JumpRoutine(3));
 
-            ShowOutline(true);
+            AnimateOutline(0f, 1f, 1f, .0015f, repeat: true);
         }
 
         public void StopTurnAnimation()
         {
-            HideOutline(false);
+            AnimateOutlineFrom(0f, 1f, .0015f, 1.15f);
 
             Sleep();
             pieceAnimator.CrossFade(h_Idle, 0.35f, indexBaseLayer);
