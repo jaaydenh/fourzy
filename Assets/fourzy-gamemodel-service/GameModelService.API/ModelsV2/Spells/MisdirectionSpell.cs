@@ -55,8 +55,10 @@ namespace FourzyGameModel.Model
             return true;
         }
 
-        public bool Cast(GameState State)
+        public bool Cast(GameState State, out List<IToken> tokens)
         {
+            tokens = new List<IToken>();
+
             BoardSpace s = State.Board.ContentsAt(Location);
             if (!ValidLocationTarget(s))
             {
@@ -64,7 +66,10 @@ namespace FourzyGameModel.Model
             }
 
             State.Board.RecordGameAction(new GameActionTokenDrop(new ArrowOnceToken(this.ArrowDirection), TransitionType.SPELL_CAST, s.Location, s.Location));
-            State.Board.ContentsAt(Location).AddToken(new ArrowOnceToken(this.ArrowDirection));
+            ArrowOnceToken _token = new ArrowOnceToken(this.ArrowDirection);
+            State.Board.ContentsAt(Location).AddToken(_token);
+            tokens.Add(_token);
+
             return true;
 
         }

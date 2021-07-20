@@ -53,6 +53,11 @@ MonoBehaviour:
   debugBoard: 0
   sortByOrder: 1
   interactable: 1
+  turn:
+    AITurn: 0
+    createdOnThisDevice: 0
+    playerTimerLeft: 0
+    magicLeft: 0
 --- !u!212 &2639398666342332815
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -67,6 +72,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -115,18 +122,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0050895214, y: 0.8013649}
+  m_Offset: {x: 0.007749319, y: 0.746717}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 11.25, y: 12.53}
+    oldSize: {x: 11.26, y: 12.44}
     newSize: {x: 10.97, y: 12.29}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10.602339, y: 10.555767}
+  m_Size: {x: 10.57666, y: 10.566482}
   m_EdgeRadius: 0
 --- !u!114 &8848853233266084598
 MonoBehaviour:
@@ -268,6 +275,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7235609577972644390, guid: 0af66368daef1c348a6a9226fb04ca0b,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7235609577972644390, guid: 0af66368daef1c348a6a9226fb04ca0b,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.81
       objectReference: {fileID: 0}
@@ -283,6 +295,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7235609577972644390, guid: 0af66368daef1c348a6a9226fb04ca0b,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7235609577972644390, guid: 0af66368daef1c348a6a9226fb04ca0b,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
@@ -295,16 +312,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7235609577972644390, guid: 0af66368daef1c348a6a9226fb04ca0b,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7235609577972644390, guid: 0af66368daef1c348a6a9226fb04ca0b,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7235609577972644390, guid: 0af66368daef1c348a6a9226fb04ca0b,
         type: 3}

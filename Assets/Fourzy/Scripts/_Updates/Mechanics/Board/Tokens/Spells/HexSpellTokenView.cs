@@ -7,6 +7,8 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class HexSpellTokenView : TokenSpell
     {
+        public HexSpellToken token => Token as HexSpellToken;
+
         public override Color outlineColor => Color.red;
 
         protected override void OnInitialized()
@@ -18,23 +20,18 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public override void SetData(ISpell spell, IMove spellMove)
         {
-            if (spell.SpellId != SpellId.HEX) return;
-
             base.SetData(spell, spellMove);
 
-            currentCountdownValue = (spell as HexSpell).Duration - 1;
-
-            countdown.SetValue(currentCountdownValue);
+            countdown.SetValue(currentCountdownValue = (spell as HexSpell).Duration - 1);
         }
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            if (tokenData == null || tokenData.Type != TokenType.HEX) return base.SetData(tokenData);
+            base.SetData(tokenData);
 
-            currentCountdownValue = (tokenData as HexSpellToken).Countdown - 1;
-            countdown.SetValue(currentCountdownValue);
+            countdown.SetValue(currentCountdownValue = token.Countdown - 1);
 
-            return base.SetData(tokenData);
+            return this;
         }
 
         public override void OnAfterTurn(bool startTurn)
