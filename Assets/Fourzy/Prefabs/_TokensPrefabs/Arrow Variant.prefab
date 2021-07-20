@@ -16,7 +16,6 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_arrow
-  tokenType: 5
   volume: 1
   onGamePieceEnter: token_arrow
   onActivate: 
@@ -48,7 +47,7 @@ PrefabInstance:
     - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
       propertyPath: m_Color.a
-      value: 0.7490196
+      value: 0.69803923
       objectReference: {fileID: 0}
     - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}

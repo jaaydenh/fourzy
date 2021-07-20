@@ -41,13 +41,6 @@ namespace Fourzy._Updates.Mechanics.Board
             SetValue(currentCountdownValue);
         }
 
-        public override void OnBitEnter(BoardBit other)
-        {
-            base.OnBitEnter(other);
-
-            AudioHolder.instance.PlaySelfSfxOneShot(onGamePieceEnter, volume, other.speedMltp);
-        }
-
         private void SetValue(int value)
         {
             if (frequency != 1)

@@ -1,7 +1,9 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Mechanics._GamePiece;
 using FourzyGameModel.Model;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
@@ -44,11 +46,14 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             base.OnBitEnter(other);
 
-            AudioHolder.instance.PlaySelfSfxOneShot(onGamePieceEnter, volume, other.speedMltp);
-
-            if (!outlineShowed)
+            if (other.GetType() == typeof(GamePieceView) || other.GetType().IsSubclassOf(typeof(GamePieceView)))
             {
-                AnimateOutlineFrom(other.speedMltp * 2f, .1f, .0011f, other.speedMltp + .15f);
+                GamePieceView _gamepiece = other as GamePieceView;
+                float mltp = GetMltp(_gamepiece.InteractionsWithToken<ArrowTokenView>(Token.Type).Count());
+
+                AudioHolder.instance.PlaySelfSfxOneShot(onGamePieceEnter, volume, mltp * 1.3f);
+
+                AnimateOutline(mltp, 1.2f, .1f, .0011f, 1.2f);
             }
         }
 
@@ -56,10 +61,17 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             base.OnBitExit(other);
 
-            if (outlineShowed && !gameboard.game._State.Board.ContentsAt(location).ContainsPiece)
+            if (outlineShowed && other.GetType() == typeof(GamePieceView) || other.GetType().IsSubclassOf(typeof(GamePieceView)))
             {
-                AnimateOutlineFrom(0f, .4f, .0011f, other.speedMltp + .15f);
+                GamePieceView _gamepiece = other as GamePieceView;
+
+                AnimateOutlineFrom(0f, .4f, .0011f, GetMltp(_gamepiece.InteractionsWithToken<ArrowTokenView>(Token.Type).Count()));
             }
+        }
+
+        private float GetMltp(int size)
+        {
+            return Mathf.Clamp(1.5f + (size * .06f), 1f, 2f);
         }
     }
 }

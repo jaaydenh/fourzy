@@ -51,6 +51,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         public GamePieceMouth mouth { get; private set; }
         public GamePieceEyes eyes { get; private set; }
         public Piece piece { get; private set; }
+        public List<BoardBit> interactions { get; private set; } = new List<BoardBit>();
 
         public override Color outlineColor => pieceData.outlineColor;
 
@@ -76,13 +77,30 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             }
         }
 
+        public override void OnBeforeTurn(bool startTurn)
+        {
+            base.OnBeforeTurn(startTurn);
+
+            interactions.Clear();
+        }
+
+        public override void OnAfterTurn(bool startTurn)
+        {
+            base.OnAfterTurn(startTurn);
+
+            interactions.Clear();
+        }
+
         public override void OnEnter(BoardLocation location)
         {
             base.OnEnter(location);
 
-            foreach (TokenView _token in gameboard.BoardTokensAt(location))
+            IEnumerable<BoardBit> _interactions = gameboard.BoardTokensAt(location);
+            interactions.AddRange(_interactions);
+
+            foreach (TokenView _token in _interactions)
             {
-                switch (_token.tokenType)
+                switch (_token.Token.Type)
                 {
                     case TokenType.ARROW:
                     case TokenType.ROTATING_ARROW:
@@ -92,6 +110,11 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                         break;
                 }
             }
+        }
+
+        public IEnumerable<T> InteractionsWithToken<T>(TokenType type) where T : TokenView
+        {
+            return interactions.Where(_bit => (_bit.GetType() == typeof(T) || _bit.GetType().IsSubclassOf(typeof(T))) && ((T)_bit).Token.Type == type).Cast<T>();
         }
 
         public void PutMovementDirection(Direction direction)

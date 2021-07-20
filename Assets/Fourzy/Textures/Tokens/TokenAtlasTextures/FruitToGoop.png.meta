@@ -1,0 +1,1068 @@
+fileFormatVersion: 2
+guid: 848d138e1fb70445da396522f82e1757
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7794195792750145734
+    second: FruitToGoop_0
+  - first:
+      213: 7394621202407157790
+    second: FruitToGoop_1
+  - first:
+      213: 7457688305088745744
+    second: FruitToGoop_2
+  - first:
+      213: 5639558166746458163
+    second: FruitToGoop_3
+  - first:
+      213: 7564350170482783887
+    second: FruitToGoop_4
+  - first:
+      213: -4302953472099966668
+    second: FruitToGoop_5
+  - first:
+      213: 2139913827197278692
+    second: FruitToGoop_6
+  - first:
+      213: -1048248346665276287
+    second: FruitToGoop_7
+  - first:
+      213: -1743621243040673261
+    second: FruitToGoop_8
+  - first:
+      213: -4131493690895087995
+    second: FruitToGoop_9
+  - first:
+      213: -2422185274849504891
+    second: FruitToGoop_10
+  - first:
+      213: -5324676481924423606
+    second: FruitToGoop_11
+  - first:
+      213: -7014443535195414517
+    second: FruitToGoop_12
+  - first:
+      213: 6068151894870877051
+    second: FruitToGoop_13
+  - first:
+      213: -4478499734155271145
+    second: FruitToGoop_14
+  - first:
+      213: 622428222142697708
+    second: FruitToGoop_15
+  - first:
+      213: 8783781981566779793
+    second: FruitToGoop_16
+  - first:
+      213: -8221698219909915829
+    second: FruitToGoop_17
+  - first:
+      213: 42454730268234517
+    second: FruitToGoop_18
+  - first:
+      213: 583990834689470739
+    second: FruitToGoop_19
+  - first:
+      213: 8030437901746943087
+    second: FruitToGoop_20
+  - first:
+      213: 3951970311770427193
+    second: FruitToGoop_21
+  - first:
+      213: -4715782730967209706
+    second: FruitToGoop_22
+  - first:
+      213: -842133493142241944
+    second: FruitToGoop_23
+  - first:
+      213: -7218113777306550077
+    second: FruitToGoop_24
+  - first:
+      213: -6439094237313794685
+    second: FruitToGoop_25
+  - first:
+      213: 8842480021756425179
+    second: FruitToGoop_26
+  - first:
+      213: 3498828465108590806
+    second: FruitToGoop_27
+  - first:
+      213: -569952755049898869
+    second: FruitToGoop_28
+  - first:
+      213: -9043797945860956615
+    second: FruitToGoop_29
+  - first:
+      213: 5642445162455289730
+    second: FruitToGoop_30
+  - first:
+      213: -3111010239729136501
+    second: FruitToGoop_31
+  - first:
+      213: -8039756659001159332
+    second: FruitToGoop_32
+  - first:
+      213: 5266263000711362261
+    second: FruitToGoop_33
+  - first:
+      213: -3622764834005402273
+    second: FruitToGoop_34
+  - first:
+      213: 9097359185562159727
+    second: FruitToGoop_35
+  - first:
+      213: 4180136478388727819
+    second: FruitToGoop_36
+  - first:
+      213: 7836196886873950359
+    second: FruitToGoop_37
+  - first:
+      213: 8197467212369902934
+    second: FruitToGoop_38
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 2
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FruitToGoop_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1062
+        width: 129
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b14d6bf15670a432283b28f7bd15e3df
+      internalID: 7794195792750145734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_1
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 1064
+        width: 128
+        height: 119
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8351340f9f4d1442ebe1835f6766da1e
+      internalID: 7394621202407157790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_2
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 1064
+        width: 128
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 557ecf03f9db64fb496e926923664bb5
+      internalID: 7457688305088745744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_3
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 1064
+        width: 129
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 344e4be5058044fe7ab851e617f1c943
+      internalID: 5639558166746458163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_4
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 1061
+        width: 129
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65ebb117548574992a8a12d375c71bd4
+      internalID: 7564350170482783887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_5
+      rect:
+        serializedVersion: 2
+        x: 661
+        y: 1062
+        width: 129
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffed2511c1072487d8dfae9e5d81f274
+      internalID: -4302953472099966668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_6
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 1063
+        width: 128
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f400e4b63589545888b6c1db87d04778
+      internalID: 2139913827197278692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 938
+        width: 130
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 3, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f1455f9358f545ceaecb9789d78a350
+      internalID: -1048248346665276287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_8
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 940
+        width: 130
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 296405570f7f542c2bab724849faec5f
+      internalID: -1743621243040673261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_9
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 938
+        width: 131
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a11713cbf3074c878f0c2a7d8d7735d
+      internalID: -4131493690895087995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_10
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 939
+        width: 128
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a34e4ffcade1c43e58e00aaf7ffae90e
+      internalID: -2422185274849504891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_11
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 939
+        width: 129
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a1ac9445c95549f1a44a5ff364e1058
+      internalID: -5324676481924423606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_12
+      rect:
+        serializedVersion: 2
+        x: 662
+        y: 939
+        width: 129
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e2df98861f4740249e8f681d9209b4d
+      internalID: -7014443535195414517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_13
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 945
+        width: 133
+        height: 115
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 508f4e04ceaee4a328cf4882eaf8da47
+      internalID: 6068151894870877051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_14
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 827
+        width: 141
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7297454f7a9c4479a76538ad3f52dba
+      internalID: -4478499734155271145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_15
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 831
+        width: 150
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea8225ef1a1dc478a88015309b30f8f6
+      internalID: 622428222142697708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_16
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 832
+        width: 149
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6493c2a4a5104b71af1902c8dd61f98
+      internalID: 8783781981566779793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_17
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 842
+        width: 160
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d867785cd0299432c8f5aaaf6fd0cf5d
+      internalID: -8221698219909915829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_18
+      rect:
+        serializedVersion: 2
+        x: 614
+        y: 848
+        width: 167
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e44a0002fd50e40a692e677971cc4fee
+      internalID: 42454730268234517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_19
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 857
+        width: 180
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d62242cf181d4cb295625cbfc03887d
+      internalID: 583990834689470739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 738
+        width: 94
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1da6ae3d94094a099b6fa6c092b5788
+      internalID: 8030437901746943087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_21
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 694
+        width: 130
+        height: 131
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1ae7dd94c1af4fb089c549b075d9c1d
+      internalID: 3951970311770427193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_22
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 657
+        width: 161
+        height: 171
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 914986f331f814b06b34da57fc5e3a7c
+      internalID: -4715782730967209706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_23
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 638
+        width: 176
+        height: 190
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4de6b580a80e74446a40a0630147472b
+      internalID: -842133493142241944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_24
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 613
+        width: 194
+        height: 216
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cccb121e3d4e54437a65778b431adc0e
+      internalID: -7218113777306550077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_25
+      rect:
+        serializedVersion: 2
+        x: 751
+        y: 609
+        width: 201
+        height: 216
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc6577dc3d4194948bd64bf33a06daa3
+      internalID: -6439094237313794685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 398
+        width: 212
+        height: 236
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d48043f0954374553aba64a0f2885707
+      internalID: 8842480021756425179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_27
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 397
+        width: 213
+        height: 233
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a77c70238bdf4adcbf4f7eed642412b
+      internalID: 3498828465108590806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_28
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 396
+        width: 216
+        height: 233
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90ebe061e7f7c4d6fab378535f122187
+      internalID: -569952755049898869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_29
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 407
+        width: 219
+        height: 209
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25742eb94e9eb40eca6fb15c8eb555e2
+      internalID: -9043797945860956615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_30
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 208
+        width: 216
+        height: 193
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 774675feb16524e7ca2d8284b080d7c7
+      internalID: 5642445162455289730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_31
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 206
+        width: 217
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 351fd28e403e14b049febc0ef36344ee
+      internalID: -3111010239729136501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_32
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 206
+        width: 219
+        height: 194
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f120c2d3530b54d24b107446f68be5f4
+      internalID: -8039756659001159332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_33
+      rect:
+        serializedVersion: 2
+        x: 662
+        y: 209
+        width: 219
+        height: 189
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2369fb12ed43642a3a9dcf4e82db2572
+      internalID: 5266263000711362261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_34
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 219
+        height: 186
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f310530897479412bb5474288cf051a7
+      internalID: -3622764834005402273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_35
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 1
+        width: 216
+        height: 181
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67e8d374aa625408eb0af8d38d4bb717
+      internalID: 9097359185562159727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_36
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 3
+        width: 182
+        height: 175
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: beabf56ecc9d3468f8c860aec5c8d709
+      internalID: 4180136478388727819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_37
+      rect:
+        serializedVersion: 2
+        x: 708
+        y: 33
+        width: 123
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcb098acbf7e345e79c9381685e906bf
+      internalID: 7836196886873950359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitToGoop_38
+      rect:
+        serializedVersion: 2
+        x: 879
+        y: 84
+        width: 127
+        height: 127
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73fa9ce4e80b6489ea34e93fb57c0efd
+      internalID: 8197467212369902934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: d867f36147934429293d018e1c32391a
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

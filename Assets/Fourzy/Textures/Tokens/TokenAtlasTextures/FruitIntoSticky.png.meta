@@ -1,0 +1,636 @@
+fileFormatVersion: 2
+guid: b67d7cdb0303441ad843bdcbde3048ba
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: FruitIntoSticky0000
+  - first:
+      213: 21300002
+    second: FruitIntoSticky0001
+  - first:
+      213: 21300004
+    second: FruitIntoSticky0002
+  - first:
+      213: 21300006
+    second: FruitIntoSticky0003
+  - first:
+      213: 21300008
+    second: FruitIntoSticky0004
+  - first:
+      213: 21300010
+    second: FruitIntoSticky0006
+  - first:
+      213: 21300012
+    second: FruitIntoSticky0007
+  - first:
+      213: 21300014
+    second: FruitIntoSticky0008
+  - first:
+      213: 21300016
+    second: FruitIntoSticky0009
+  - first:
+      213: 21300018
+    second: FruitIntoSticky0010
+  - first:
+      213: 21300020
+    second: FruitIntoSticky0011
+  - first:
+      213: 21300022
+    second: FruitIntoSticky0012
+  - first:
+      213: 21300024
+    second: FruitIntoSticky0013
+  - first:
+      213: 21300026
+    second: FruitIntoSticky0014
+  - first:
+      213: 21300028
+    second: FruitIntoSticky0015
+  - first:
+      213: 21300030
+    second: FruitIntoSticky0016
+  - first:
+      213: 21300032
+    second: FruitIntoSticky0017
+  - first:
+      213: 21300034
+    second: FruitIntoSticky0018
+  - first:
+      213: 21300036
+    second: FruitIntoSticky0019
+  - first:
+      213: 21300038
+    second: FruitIntoSticky0020
+  - first:
+      213: 21300040
+    second: FruitIntoSticky0021
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 2
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FruitIntoSticky0000
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 515
+        width: 105
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f01414253fa54d6c91896c2c0c93933
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0001
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 519
+        width: 111
+        height: 99
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2721856adff504a00859c797af007696
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0002
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 424
+        width: 115
+        height: 95
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52ced99fe420a460e98e3b4704fe35fd
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0003
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 430
+        width: 121
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 672d6e55dddc44ec3b4e99d8344d7739
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0004
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 440
+        width: 131
+        height: 79
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: deb6a6f25a0d04a83b1597c435f4e944
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0006
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 841
+        width: 67
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16e1138f8a7664c1c8ef9a81563d289f
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0007
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 546
+        width: 88
+        height: 79
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fb611da70c924b09ab86d0a69c0ea07
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0008
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 519
+        width: 121
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a851c99581fe423f9e434e292cbd8c9
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0009
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 502
+        width: 150
+        height: 141
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5b82009b698046f284dd0ae352c23e0
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0010
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 862
+        width: 171
+        height: 162
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd29f74daf5624da7a7afa8e27ef493b
+      internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0011
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 643
+        width: 186
+        height: 177
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1bd8b76b0df449eb83e8751df8c81ac
+      internalID: 21300020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0012
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 633
+        width: 196
+        height: 187
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 577a06a07ba234eb4b2b56b2a8a2964f
+      internalID: 21300022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0013
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 625
+        width: 204
+        height: 195
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cac2aedaf4a5b4f0f9a6b2f668cf8d50
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0014
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 620
+        width: 209
+        height: 200
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 043d3539e006d483c82185f6ed51a70b
+      internalID: 21300026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0015
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 618
+        width: 211
+        height: 202
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e34421e4c6ed43eebc544c753ea37d2
+      internalID: 21300028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0016
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 820
+        width: 213
+        height: 204
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfc5139d7a801474ca04dc7ab10ae446
+      internalID: 21300030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0017
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 820
+        width: 213
+        height: 204
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 350753bed48f04a55b3063c87a9d49f5
+      internalID: 21300032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0018
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 820
+        width: 213
+        height: 204
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c81a894da835e43cf8c3b4ff4fefc512
+      internalID: 21300034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0019
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 820
+        width: 213
+        height: 204
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74157d1c2bca7481994b1129f127f913
+      internalID: 21300036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0020
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 820
+        width: 213
+        height: 204
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55e4ef889756c40808585499fbdc6422
+      internalID: 21300038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FruitIntoSticky0021
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 516
+        width: 109
+        height: 109
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aea060f67c49b4767b260d71f16e6964
+      internalID: 21300040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: ed2d9a2088dba401bb0248ae5abf4b7c
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

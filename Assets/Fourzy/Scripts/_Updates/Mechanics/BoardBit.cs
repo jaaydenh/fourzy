@@ -28,14 +28,18 @@ namespace Fourzy._Updates.Mechanics
 
         protected bool initialized;
         protected int originalSortingOrder;
+        protected float _speedMltp = 1f;
         protected CircleCollider2D circleCollider;
 
         public bool active { get; set; }
         public float originalSpeed { get; private set; }
-        public float speedCap { get; private set; }
-        public float speedMltp { get; protected set; } = 1f;
-        public float speed => Mathf.Clamp(originalSpeed * speedMltp, originalSpeed * .5f, speedCap);
-        public Dictionary<BitBuffType, List<BitBuff>> buffs { get; private set; }
+        public float speedMltp
+        {
+            get => _speedMltp;
+            set => _speedMltp = Mathf.Clamp(value, .5f, maxSpeedMltp);
+        }
+        public float maxSpeedMltp { get; private set; }
+        public float speed => originalSpeed * speedMltp;
 
         public RectTransform rectTransform { get; private set; }
         public SortingGroup sortingGroup { get; private set; }
@@ -45,9 +49,10 @@ namespace Fourzy._Updates.Mechanics
         public ColorTween colorTween { get; private set; }
         public RotationTween rotationTween { get; private set; }
         public GameboardView gameboard { get; private set; }
-        public List<TokenView> turnTokensInteractionList { get; private set; }
         public virtual Color outlineColor { get; }
+        public bool isMoving { get; private set; }
         public string id { get; protected set; }
+        protected bool outlineShowed => outline ? outline.intensity > 0f : false;
 
         public BoardLocation location
         {
@@ -250,7 +255,7 @@ namespace Fourzy._Updates.Mechanics
             return _time;
         }
 
-        public virtual void ShowOutline(bool repeat)
+        public virtual void AnimateOutline(float from, float to, float time, float blurSize, float size = 1.15f, bool repeat = false)
         {
             if (!outline)
             {
@@ -264,24 +269,26 @@ namespace Fourzy._Updates.Mechanics
                 }
             }
 
-            outline.blueSize = .0015f;
+            outline.blueSize = blurSize;
             outline.outlineColor = outlineColor;
-            outline.Animate(0f, 1f, 1f, repeat);
+            outline.Animate(from, to, time, size, repeat);
         }
 
-        public virtual void HideOutline(bool hide)
+        public virtual void AnimateOutlineFrom(float to, float time, float blurSize, float size = 1.15f, bool repeat = false)
         {
-            if (outline)
+            if (!outline)
             {
-                if (hide)
+                if (parentRectTransform)
                 {
-                    outline.HideOutline();
+                    outline = body.AddComponent<UIOutline>();
                 }
                 else
                 {
-                    outline.Animate(outline.tween._value, 0f, .5f, false);
+                    outline = body.AddComponent<SpriteRendererOutline>();
                 }
             }
+
+            AnimateOutline(outline.intensity, to, time, blurSize, size, repeat);
         }
 
         public virtual void SetMaterial(Material material)
@@ -321,7 +328,6 @@ namespace Fourzy._Updates.Mechanics
 
         public virtual void OnBeforeTurn(bool startTurn)
         {
-            turnTokensInteractionList.Clear();
             speedMltp = 1f;
         }
 
@@ -334,7 +340,32 @@ namespace Fourzy._Updates.Mechanics
             speedMltp = 1f;
         }
 
+        /// <summary>
+        /// When other enters our location
+        /// </summary>
+        /// <param name="other"></param>
         public virtual void OnBitEnter(BoardBit other) { }
+
+        /// <summary>
+        /// When other leaves our location
+        /// </summary>
+        /// <param name="other"></param>
+        public virtual void OnBitExit(BoardBit other) { }
+
+        /// <summary>
+        /// Called when entering location
+        /// </summary>
+        /// <param name="location"></param>
+        public virtual void OnEnter(BoardLocation location)
+        {
+            gameboard.SortBits();
+        }
+
+        /// <summary>
+        /// Called when leaving location
+        /// </summary>
+        /// <param name="location"></param>
+        public virtual void OnExit(BoardLocation location) { }
 
         public void Initialize()
         {
@@ -373,24 +404,6 @@ namespace Fourzy._Updates.Mechanics
             }
 
             Destroy(gameObject);
-        }
-
-        public void AddInteraction(List<TokenView> tokens)
-        {
-            turnTokensInteractionList.AddRange(tokens);
-
-            //foreach (TokenView token in tokens)
-            //{
-            //    switch (token.tokenType)
-            //    {
-            //        case TokenType.ARROW:
-            //        case TokenType.ROTATING_ARROW:
-            //        case TokenType.FOURWAY_ARROW:
-            //            speedMltp += .1f;
-
-            //            break;
-            //    }
-            //}
         }
 
         public virtual float _Destroy(DestroyType reason)
@@ -455,8 +468,6 @@ namespace Fourzy._Updates.Mechanics
         protected virtual void OnInitialized()
         {
             active = true;
-            turnTokensInteractionList = new List<TokenView>();
-            buffs = new Dictionary<BitBuffType, List<BitBuff>>();
 
             parentRectTransform = GetComponentInParent<RectTransform>();
             rectTransform = GetComponent<RectTransform>();
@@ -473,7 +484,7 @@ namespace Fourzy._Updates.Mechanics
             if (gameboard)
             {
                 originalSpeed = gameboard.step.x * InternalSettings.Current.BASE_MOVE_SPEED;
-                speedCap = gameboard.step.x * InternalSettings.Current.MOVE_SPEED_CAP;
+                maxSpeedMltp = (gameboard.step.x * InternalSettings.Current.MOVE_SPEED_CAP) / originalSpeed;
             }
 
             spriteRenderers = GetComponentsInChildren<SpriteRenderer>(true);
@@ -527,40 +538,26 @@ namespace Fourzy._Updates.Mechanics
 
         protected virtual IEnumerator MoveRoutine(bool startTurn, BoardLocation from, BoardLocation to)
         {
+            isMoving = true;
+
             Vector2 start = gameboard.BoardLocationToVec2(from);
             Vector2 end = gameboard.BoardLocationToVec2(to);
             float distance = Vector2.Distance(start, end);
+
+            gameboard.OnBoardLocationExit(from, this);
+            OnExit(from);
 
             for (float t = 0; t < 1f; t += Time.deltaTime * speed / distance)
             {
                 transform.localPosition = Vector3.Lerp(start, end, t);
                 yield return null;
             }
-
             transform.localPosition = end;
+
             gameboard.OnBoardLocationEnter(to, this);
-        }
+            OnEnter(to);
 
-        public class BitBuff
-        {
-            public BitBuffType type;
-            public float value;
-
-            public BitBuff(BitBuffType type, float value)
-            {
-                this.type = type;
-                this.value = value;
-            }
-        }
-
-        public class SpeedBuff : BitBuff
-        {
-            public SpeedBuff() : base(BitBuffType.SPEED, .3f) { }
-        }
-
-        public enum BitBuffType
-        {
-            SPEED,
+            isMoving = false;
         }
     }
 }
