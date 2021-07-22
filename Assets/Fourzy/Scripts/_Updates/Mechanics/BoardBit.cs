@@ -7,9 +7,9 @@ using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.Mechanics
 {
@@ -50,6 +50,7 @@ namespace Fourzy._Updates.Mechanics
         public RotationTween rotationTween { get; private set; }
         public GameboardView gameboard { get; private set; }
         public virtual Color outlineColor { get; }
+        public virtual Color originalColor { get; private set; }
         public bool isMoving { get; private set; }
         public string id { get; protected set; }
         protected bool outlineShowed => outline ? outline.intensity > 0f : false;
@@ -291,6 +292,28 @@ namespace Fourzy._Updates.Mechanics
             AnimateOutline(outline.intensity, to, time, blurSize, size, repeat);
         }
 
+        public virtual void AnimateColor(Color from, Color to, float time)
+        {
+            if (colorTween == null)
+            {
+                colorTween = body.AddComponent<ColorTween>();
+                float tan45 = Mathf.Tan(Mathf.Deg2Rad * 45);
+                colorTween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(1f, 1f, tan45, tan45));
+
+                return;
+            }
+
+            colorTween.from = from;
+            colorTween.to = to;
+            colorTween.playbackTime = time;
+            colorTween.PlayForward(true);
+        }
+
+        public virtual void AnimateColorFrom(Color to, float time)
+        {
+            AnimateColor(colorTween._value, to, time);
+        }
+
         public virtual void SetMaterial(Material material)
         {
             if (parentRectTransform)
@@ -501,6 +524,10 @@ namespace Fourzy._Updates.Mechanics
                     imageRenderers[rendererIndex] = spriteRenderers[rendererIndex].gameObject.AddComponent<SpriteToImage>();
                 }
             }
+
+            Image bodyImageRenderer = body.GetComponent<Image>();
+            SpriteRenderer bodySpriteRenderer = body.GetComponent<SpriteRenderer>();
+            originalColor = bodyImageRenderer?.color ?? bodySpriteRenderer?.color ?? Color.white;
 
             //size it
             if (gameboard)
