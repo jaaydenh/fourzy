@@ -7,11 +7,11 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class CrossBombTokenView : TokenView
     {
-        public CrossBombToken token => Token as CrossBombToken;
+        public CrossBombToken token { get; private set; }
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            base.SetData(tokenData);
+            token = tokenData as CrossBombToken;
 
             if (!token.Active)
             {
@@ -19,7 +19,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 SetAlpha(0f);
             }
 
-            return this;
+            return base.SetData(tokenData);
         }
 
         public override void _Destroy()

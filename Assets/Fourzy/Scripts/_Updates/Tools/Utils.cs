@@ -152,7 +152,42 @@ namespace Fourzy._Updates.Tools
 
         public static GameActionMove AsMoveAction(this GameAction action) => action as GameActionMove;
 
-        public static GameActionTokenMovement AsMoveTokenAction(this GameAction action) => action as GameActionTokenMovement;
+        public static GameActionTokenMovement AsActionTokenMovement(this GameAction action) => action as GameActionTokenMovement;
+
+        public static BoardLocation[] AsBoardLocations(this GameAction[] actions)
+        {
+            List<BoardLocation> result = new List<BoardLocation>();
+
+            for (int index = 0; index < actions.Length; index++)
+            {
+                if (actions[index].GetType() == typeof(GameActionMove) && 
+                    LastBoardLocationCheck(result, actions[index].AsMoveAction().Start))
+                {
+                    result.Add(actions[index].AsMoveAction().Start);
+                }
+                else if (actions[index].GetType() == typeof(GameActionTokenMovement) &&
+                    LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().Start))
+                {
+                    result.Add(actions[index].AsActionTokenMovement().Start);
+                }
+
+                if (index == actions.Length - 1)
+                {
+                    if (actions[index].GetType() == typeof(GameActionMove) &&
+                        LastBoardLocationCheck(result, actions[index].AsMoveAction().End))
+                    {
+                        result.Add(actions[index].AsMoveAction().End);
+                    }
+                    else if (actions[index].GetType() == typeof(GameActionTokenMovement) &&
+                        LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().End))
+                    {
+                        result.Add(actions[index].AsActionTokenMovement().End);
+                    }
+                }
+            }
+
+            return result.ToArray();
+        }
 
         public static GameBoardData ToGameBoardData(this GameBoardDefinition definition)
         {
@@ -276,16 +311,21 @@ namespace Fourzy._Updates.Tools
             return null;
         }
 
-        public static Direction GetDirectionFromLocations(BoardLocation from, BoardLocation to)
+        public static Direction GetDirectionFromLocations(this BoardLocation[] locations)
         {
-            int y = to.Row - from.Row;
-            int x = to.Column - from.Column;
+            if (locations.Length < 2) return Direction.NONE;
+            else
+            {
+                int y = locations[locations.Length - 1].Row - locations[locations.Length - 2].Row;
+                int x = locations[locations.Length - 1].Column - locations[locations.Length - 2].Column;
 
-            if (x > 0) return Direction.RIGHT;
-            else if (x < 0) return Direction.LEFT;
-            else if (y < 0) return Direction.UP;
-            else if (y > 0) return Direction.DOWN;
-            else return Direction.NONE;
+                if (x > 0) return Direction.RIGHT;
+                else if (x < 0) return Direction.LEFT;
+                else if (y < 0) return Direction.UP;
+                else if (y > 0) return Direction.DOWN;
+            }
+
+            return Direction.NONE;
         }
 
         public static int GetLocation(this BoardLocation boardLocation, IClientFourzy model)
@@ -1341,7 +1381,7 @@ namespace Fourzy._Updates.Tools
 
         public static long EpochSeconds() => EpochMilliseconds() / 1000L;
 
-        //private static bool LastBoardLocationCheck(List<BoardLocation> actions, BoardLocation checkTo) => actions.Count == 0 || !actions[actions.Count - 1].Equals(checkTo);
+        private static bool LastBoardLocationCheck(List<BoardLocation> actions, BoardLocation checkTo) => actions.Count == 0 || !actions[actions.Count - 1].Equals(checkTo);
     }
 
     public class StackModified<T>
