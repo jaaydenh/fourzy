@@ -1298,7 +1298,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 token.alphaTween.playbackTime = time;
                 token.alphaTween.from = token.alphaTween._value;
-                token.alphaTween.to = to;
+                token.alphaTween.to = to * token.originalColor.a;
 
                 token.alphaTween.PlayForward(true);
             });

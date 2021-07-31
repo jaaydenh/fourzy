@@ -57,7 +57,7 @@ SpriteAtlas:
     packables:
     - {fileID: 102900000, guid: ae416e88881d82e47a33d779ee731522, type: 3}
     - {fileID: 102900000, guid: 1f3c566d7475b2f49a29c85d18b982ed, type: 3}
-    totalSpriteSurfaceArea: 20864918
+    totalSpriteSurfaceArea: 20848534
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -157,7 +157,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a2c2996baa8a54178be732284e466991, type: 3}
   - {fileID: 21300000, guid: 2deb827b8c59c1943b0c066902defaf2, type: 3}
   - {fileID: 21300000, guid: 3afd237b6813946bbbc7c57286b01172, type: 3}
-  - {fileID: 21300000, guid: b4c37a7b220787243b0e3b5a48074663, type: 3}
   - {fileID: 21300000, guid: a35bde9b67f454cec9dc365dfa6b7d4e, type: 3}
   - {fileID: 21300000, guid: f5ccbecb56a94674089448655db1a767, type: 3}
   - {fileID: 21300014, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
@@ -344,7 +343,6 @@ SpriteAtlas:
   - tokenPit
   - Token+Frame_5_Castle-80
   - tokenWeb
-  - tokenRotatingArrow
   - tokenTree
   - Token+Frame_4_IcePalace-52
   - FruitIntoSticky0008

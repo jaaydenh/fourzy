@@ -299,8 +299,6 @@ namespace Fourzy._Updates.Mechanics
                 colorTween = body.AddComponent<ColorTween>();
                 float tan45 = Mathf.Tan(Mathf.Deg2Rad * 45);
                 colorTween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(1f, 1f, tan45, tan45));
-
-                return;
             }
 
             colorTween.from = from;
@@ -559,6 +557,7 @@ namespace Fourzy._Updates.Mechanics
             }
 
             //configure alpha tween
+            alphaTween.to = originalColor.a;
             alphaTween.propagate = true;
             alphaTween.DoParse();
         }
