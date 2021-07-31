@@ -44,6 +44,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public Transform bgParent;
         public GameObject noNetworkOverlay;
         public RectTransform hintBlocksParent;
+        public GameCameraManager gameCameraManager;
         public ButtonExtended backButton;
 
         [HideInInspector]
@@ -103,9 +104,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void Start()
         {
-            gameplayScreen = menuController.GetOrAddScreen<GameplayScreen>();
-            playerPickScreen = menuController.GetOrAddScreen<RandomPlayerPickScreen>();
-            gameWinLoseScreen = menuController.GetOrAddScreen<GameWinLoseScreen>();
+            gameplayScreen = menuController.GetScreen<GameplayScreen>();
+            playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
+            gameWinLoseScreen = menuController.GetScreen<GameWinLoseScreen>();
 
             touchZone.onPointerDownData += OnPointerDown;
             touchZone.onPointerUpData += OnPointerRelease;
@@ -139,6 +140,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 board.onMoveStarted -= OnMoveStarted;
                 board.onMoveEnded -= OnMoveEnded;
                 board.onPieceSpawned -= OnGamepieceSpawned;
+                board.onGamepieceSmashed -= OnGamePieceSmashed;
             }
 
             GameManager.onNetworkAccess -= OnNetwork;
@@ -1023,6 +1025,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.onMoveEnded += OnMoveEnded;
             board.onPieceSpawned += OnGamepieceSpawned;
             board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
+            board.onGamepieceSmashed += OnGamePieceSmashed;
 
             //hide tokens/gamepieces
             board.FadeTokens(0f, 0f);
@@ -1778,6 +1781,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+        }
+
+        private void OnGamePieceSmashed(GamePieceView gamepiece)
+        {
+            gameCameraManager.Wiggle();
         }
 
         private IEnumerator GameInitRoutine()

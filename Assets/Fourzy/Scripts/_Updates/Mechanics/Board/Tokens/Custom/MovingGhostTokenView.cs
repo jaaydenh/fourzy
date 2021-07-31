@@ -7,33 +7,50 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class MovingGhostTokenView : TokenView
     {
+        public MovingGhostToken token => Token as MovingGhostToken;
         public override TokenView SetData(IToken tokenData = null)
         {
-            if (tokenData.Type != TokenType.MOVING_GHOST) return base.SetData(tokenData);
+            base.SetData(tokenData);
 
-            MovingGhostToken movingGhost = tokenData as MovingGhostToken;
-            frequency = movingGhost.Frequency;
-            currentCountdownValue = movingGhost.Countdown;
+            if (tokenData.Type != TokenType.MOVING_GHOST)
+            {
+                return this;
+            }
 
-            SetValue(currentCountdownValue);
+            frequency = token.Frequency;
 
-            return base.SetData(tokenData);
+            SetValue(currentCountdownValue = token.Countdown);
+
+            return this;
         }
 
         public override void OnAfterTurn(bool startTurn)
         {
             base.OnAfterTurn(startTurn);
 
-            if (startTurn) return;
+            if (startTurn)
+            {
+                return;
+            }
 
-            if (currentCountdownValue + 1 >= frequency) currentCountdownValue = 0;
-            else currentCountdownValue++;
+            if (currentCountdownValue + 1 >= frequency)
+            {
+                currentCountdownValue = 0;
+            }
+            else
+            {
+                currentCountdownValue++;
+            }
+
             SetValue(currentCountdownValue);
         }
 
         private void SetValue(int value)
         {
-            if (frequency != 1) countdown.SetValue(Mathf.Clamp(frequency - value, 1, frequency));
+            if (frequency != 1)
+            {
+                countdown.SetValue(Mathf.Clamp(frequency - value, 1, frequency));
+            }
         }
     }
 }

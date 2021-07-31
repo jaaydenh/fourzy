@@ -450,6 +450,14 @@
       "value": "Abrir portal raro"
     },
     {
+      "key": "out_of_time",
+      "value": "¡Te has quedado sin tiempo!"
+    },
+    {
+      "key": "out_of_time_opponent",
+      "value": "El oponente se quedó sin tiempo!"
+    },
+    {
       "key": "pass",
       "value": "Paso"
     },

@@ -446,6 +446,14 @@
       "value": "Open Rare Portal"
     },
     {
+      "key": "out_of_time",
+      "value": "You ran out of time!"
+    },
+    {
+      "key": "out_of_time_opponent",
+      "value": "Opponent ran out of time!"
+    },
+    {
       "key": "pass",
       "value": "Pass"
     },
