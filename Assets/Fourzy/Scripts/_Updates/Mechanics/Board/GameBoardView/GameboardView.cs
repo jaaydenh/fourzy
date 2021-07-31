@@ -9,6 +9,7 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Threading;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
@@ -37,6 +38,10 @@ namespace Fourzy._Updates.Mechanics.Board
         /// How far outside the board touch can be picked up for Swipe2 intup method (1 == 1 cell), currently broken and will be fixed when is needed (workds only with value 1)
         /// </summary>
         public static int SOOTB = 1;
+        /// <summary>
+        /// If piece is to be spawned outside the board, make it spawn a bit closer
+        /// </summary>
+        public static float OUTSIDE_BOARD_OFFSET = .5f;
         public static bool CAN_CANCEL_TAP = false;
 
         private static float SCREEN_PERCENT = (Screen.width + Screen.height) * .01f;
@@ -312,11 +317,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             break;
 
                         case GameManager.PlacementStyle.TWO_STEP_SWIPE:
-                            if (!spawnedGamepiece)
-                            {
-                                TwoStepCellSelected(position);
-                            }
-                            else
+                            if (spawnedGamepiece)
                             {
                                 BoardLocation _next = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
@@ -324,14 +325,7 @@ namespace Fourzy._Updates.Mechanics.Board
                                 {
                                     touchOriginalLocation = position;
                                     touchPreviousLocation = position;
-                                    twoStepSwipePhaseTwo = true;
                                 }
-                                else
-                                {
-                                    CancelSwipe2Move();
-                                    TwoStepCellSelected(position);
-                                }
-
                             }
 
                             break;
@@ -475,26 +469,25 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
-                    if (!twoStepSwipePhaseTwo)
-                    {
-                        break;
-                    }
-
                     if (spawnedGamepiece)
                     {
                         CalculateTouchOffset(position);
 
-                        swipeDirection = DirectionFromVec2(touchOffset);
-                        moveArrow.SetProgress(touchOffset.magnitude / (SCREEN_PERCENT * 7f));
-
-                        //check direction
-                        if (touchOffset.magnitude >= SCREEN_PERCENT * 7f)
+                        if (touchOffset.magnitude > SCREEN_PERCENT * 2f)
                         {
+                            twoStepSwipePhaseTwo = true;
+                        }
+
+                        if (twoStepSwipePhaseTwo)
+                        {
+                            swipeDirection = DirectionFromVec2(touchOffset);
+                            moveArrow.SetProgress(touchOffset.magnitude / (SCREEN_PERCENT * 7f));
+
                             if (swipeDirection != selectedBoardLocation.Value.GetDirection(game))
                             {
                                 CancelSwipe2Move();
                             }
-                            else
+                            else if (touchOffset.magnitude >= SCREEN_PERCENT * 7f)
                             {
                                 //finish swipe
                                 OnPointerRelease(position);
@@ -766,44 +759,54 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
-                    if (!twoStepSwipePhaseTwo)
+                    if (twoStepSwipePhaseTwo)
                     {
-                        break;
-                    }
+                        CalculateTouchOffset(position);
 
-                    CalculateTouchOffset(position);
-                    if (touchOffset.magnitude >= SCREEN_PERCENT * 7f)
-                    {
-                        swipeDirection = DirectionFromVec2(touchOffset);
-
-                        if (swipeDirection != selectedBoardLocation.Value.GetDirection(game))
+                        if (touchOffset.magnitude < SCREEN_PERCENT * 7f)
                         {
                             CancelSwipe2Move();
+                        }
+
+                        if (selectedBoardLocation != null)
+                        {
+                            OnMove();
+
+                            touchOriginalLocation = Vector2.zero;
+                            selectedBoardLocation = null;
+                            twoStepSwipePhaseTwo = false;
+
+                            moveArrow.ParticleExplode();
+                            moveArrow.Hide();
                         }
                     }
                     else
                     {
-                        BoardLocation _boardLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
-                        if (Mathf.Abs(_boardLocation.Row - selectedBoardLocation.Value.Row) > 1 || Mathf.Abs(_boardLocation.Column - selectedBoardLocation.Value.Column) > 1)
+                        if (!spawnedGamepiece)
                         {
-                            CancelSwipe2Move();
+                            TwoStepCellSelected(position);
                         }
-
-                        break;
-                    }
-
-                    if (selectedBoardLocation != null)
-                    {
-                        OnMove();
-
-                        touchOriginalLocation = Vector2.zero;
-                        selectedBoardLocation = null;
-
-                        moveArrow.ParticleExplode();
-                        moveArrow.Hide();
+                        else
+                        {
+                            if (!Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition).Equals(selectedBoardLocation.Value))
+                            {
+                                CancelSwipe2Move();
+                                TwoStepCellSelected(position);
+                            }
+                        }
                     }
 
                     HideHintArea(HintAreaAnimationPattern.NONE);
+
+                    void TwoStepCellSelected(Vector3 position)
+                    {
+                        if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
+                        {
+                            holdTimer = .05f;
+                        }
+
+                        twoStepSwipePhaseTwo = false;
+                    }
 
                     break;
             }
@@ -844,11 +847,28 @@ namespace Fourzy._Updates.Mechanics.Board
         public T BoardSpellAt<T>(BoardLocation at, SpellId spellId) where T : TokenSpell =>
             boardBits.Find(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenSpell).spellId == spellId) as T;
 
-        public GamePieceView SpawnPiece(int row, int col, PlayerEnum player, bool sort = true)
+        public GamePieceView SpawnPiece(float row, float col, PlayerEnum player, bool sort = true)
         {
             GamePieceView gamePiece = Instantiate(
                 player == PlayerEnum.ONE ? game.playerOneGamepiece : game.playerTwoGamepiece,
                 bitsParent);
+
+            if (gameplayManager)
+            {
+                OnRatio.DisplayRatioOption ratio = OnRatio.GetRatio(DeviceOrientation.Portrait);
+
+                if (ratio == OnRatio.DisplayRatioOption.IPHONEX || ratio == OnRatio.DisplayRatioOption.IPHONE)
+                {
+                    if (col < 0f)
+                    {
+                        col = -OUTSIDE_BOARD_OFFSET;
+                    }
+                    else if (col >= game.Columns)
+                    {
+                        col = game.Columns - OUTSIDE_BOARD_OFFSET;
+                    }
+                }
+            }
             Vector2 pieceLocalPosition = BoardLocationToVec2(row, col);
 
             gamePiece.gameObject.SetActive(true);
@@ -1255,6 +1275,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void PrepareForSpell(SpellId spellId)
         {
+            CancelSwipe2Move();
             actionState = BoardActionState.CAST_SPELL;
             activeSpellID = spellId;
             activeSpell = spellId.AsSpell(new BoardLocation());
@@ -1734,22 +1755,14 @@ namespace Fourzy._Updates.Mechanics.Board
             StartRoutine("lock_board", time, () => interactable = true, null);
         }
 
-        private void TwoStepCellSelected(Vector3 position)
-        {
-            if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
-            {
-                holdTimer = .05f;
-            }
-
-            twoStepSwipePhaseTwo = false;
-        }
-
         private void CancelSwipe2Move()
         {
             if (spawnedGamepiece != null)
             {
                 spawnedGamepiece._Destroy(.2f);
                 spawnedGamepiece.Hide(.2f);
+
+                spawnedGamepiece = null;
             }
 
             selectedBoardLocation = null;
