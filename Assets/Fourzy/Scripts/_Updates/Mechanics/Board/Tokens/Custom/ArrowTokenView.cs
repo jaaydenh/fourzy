@@ -54,7 +54,6 @@ namespace Fourzy._Updates.Mechanics.Board
                 AudioHolder.instance.PlaySelfSfxOneShot(onGamePieceEnter, volume, mltp * 1.3f);
 
                 AnimateOutline(mltp, 1.2f, .1f, .0011f, 1.2f);
-                Debug.Log(originalColor);
                 AnimateColor(originalColor, Color.white, 0f);
             }
         }
@@ -68,7 +67,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 GamePieceView _gamepiece = other as GamePieceView;
 
                 AnimateOutlineFrom(0f, .4f, .0011f, GetMltp(_gamepiece.InteractionsWithToken<ArrowTokenView>(Token.Type).Count()));
-                AnimateColorFrom(originalColor, .4f);
+                AnimateColorFrom(originalColor, .7f);
             }
         }
 
