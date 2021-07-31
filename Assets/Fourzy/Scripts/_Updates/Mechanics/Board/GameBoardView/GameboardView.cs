@@ -314,12 +314,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         case GameManager.PlacementStyle.TWO_STEP_SWIPE:
                             if (!spawnedGamepiece)
                             {
-                                if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
-                                {
-                                    holdTimer = .1f;
-                                }
-
-                                twoStepSwipePhaseTwo = false;
+                                TwoStepCellSelected(position);
                             }
                             else
                             {
@@ -334,7 +329,9 @@ namespace Fourzy._Updates.Mechanics.Board
                                 else
                                 {
                                     CancelSwipe2Move();
+                                    TwoStepCellSelected(position);
                                 }
+
                             }
 
                             break;
@@ -1737,6 +1734,16 @@ namespace Fourzy._Updates.Mechanics.Board
             StartRoutine("lock_board", time, () => interactable = true, null);
         }
 
+        private void TwoStepCellSelected(Vector3 position)
+        {
+            if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
+            {
+                holdTimer = .05f;
+            }
+
+            twoStepSwipePhaseTwo = false;
+        }
+
         private void CancelSwipe2Move()
         {
             if (spawnedGamepiece != null)
@@ -1748,6 +1755,7 @@ namespace Fourzy._Updates.Mechanics.Board
             selectedBoardLocation = null;
             touchOriginalLocation = Vector2.zero;
             twoStepSwipePhaseTwo = false;
+            moveArrow._Reset();
         }
 
         private Direction DirectionFromVec2(Vector2 vec2)
