@@ -270,6 +270,25 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             return base._Destroy(reason);
         }
 
+        public void PlaySubtleMove(Vector2 direction, float time)
+        {
+            positionTween.from = transform.localPosition;
+            positionTween.to = positionTween.from + (Vector3)direction;
+
+            positionTween.repeat = Tween.RepeatType.PING_PONG;
+            positionTween.playbackTime = time;
+
+            positionTween.PlayForward(true);
+        }
+
+        public void StopSubtleMove(float time = .2f)
+        {
+            if (positionTween.isPlaying)
+            {
+                positionTween.StopTween(false);
+            }
+        }
+
         private IEnumerator BlinkingRoutine()
         {
             while (true)
@@ -284,7 +303,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         {
             pieceAnimator.Play(h_Jumping);
 
-            while (pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer).shortNameHash != h_Jumping) 
+            while (pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer).shortNameHash != h_Jumping)
                 yield return true;
 
             AnimatorStateInfo stateInfo = pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer);

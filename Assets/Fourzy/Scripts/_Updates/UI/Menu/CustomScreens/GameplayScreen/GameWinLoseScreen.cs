@@ -535,9 +535,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void SetButtonRowState(bool value)
         {
             buttonsRow.SetActive(value);
-            Console.Log("GAMETYPE: " + game._Type);
-            Console.Log("VALUE: " + value);
-            Console.Log("GameManager.Instance.ExpectedGameType: " + GameManager.Instance.ExpectedGameType);
             if (value)
             {
                 switch (game._Type)

@@ -176,16 +176,37 @@ namespace Fourzy._Updates.Mechanics.Board
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
                     if (!spawnedGamepiece && selectedBoardLocation != null && (holdTimer -= Time.deltaTime) <= 0f)
                     {
-                        BoardLocation _outsideBoardMove = selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(selectedBoardLocation.Value.GetDirection(game)));
+                        Direction _direction = selectedBoardLocation.Value.GetDirection(game);
+                        BoardLocation _outsideBoardMove = selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction));
 
                         spawnedGamepiece = SpawnPiece(
                             _outsideBoardMove.Row,
                             _outsideBoardMove.Column,
                             (PlayerEnum)game._State.ActivePlayerId);
 
-                        spawnedGamepiece.SetPiece(game.activePlayerPiece);
                         spawnedGamepiece.Show(.25f);
                         spawnedGamepiece.ScaleToCurrent(Vector3.zero, .25f);
+
+                        spawnedGamepiece.ShowOutline(true);
+                        Vector3 offset = new Vector3(0f, -.2f);
+                        switch (_direction)
+                        {
+                            case Direction.UP:
+                                offset = new Vector3(0f, .2f);
+
+                                break;
+
+                            case Direction.LEFT:
+                                offset = new Vector3(-.2f, 0f);
+
+                                break;
+
+                            case Direction.RIGHT:
+                                offset = new Vector3(.2f, 0f);
+
+                                break;
+                        }
+                        spawnedGamepiece.PlaySubtleMove(offset, 1f);
 
                         //add spawn vfx
                         Vfx poofVfx = VfxHolder.instance
@@ -2158,7 +2179,6 @@ namespace Fourzy._Updates.Mechanics.Board
                                     _outsideBoardMove.Start.Column,
                                     (PlayerEnum)moveAction.Piece.PlayerId);
 
-                                spawnedGamepiece.SetPiece(moveAction.Piece.Piece);
                                 spawnedGamepiece.Show(.25f);
                                 spawnedGamepiece.ScaleToCurrent(Vector3.zero, .25f);
 
@@ -2170,8 +2190,13 @@ namespace Fourzy._Updates.Mechanics.Board
                             }
                             else
                             {
+                                spawnedGamepiece.StopSubtleMove(0f);
+                                spawnedGamepiece.HideOutline(true);
+
                                 preSpawned = true;
                             }
+
+                            spawnedGamepiece.SetPiece(moveAction.Piece.Piece);
 
                             firstGameActionMoveFound = true;
                         }
@@ -2185,7 +2210,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             moveActions[0].AsMoveAction().Start,
                             moveActions[0].AsMoveAction().Piece.UniqueId);
 
-                        GamePieceView bit = (spawnedGamepiece != null) ? spawnedGamepiece : targetPiece;
+                        GamePieceView bit = spawnedGamepiece ?? targetPiece;
 
                         //move gamepiece
                         float waitTime = 0f;
