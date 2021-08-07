@@ -13,7 +13,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public float maxPitchValue = 2f;
         public int maxPitchIn = 8;
         public Direction direction { get; private set; }
-        public override Color outlineColor => Color.yellow;
+        public override Color outlineColor => Color.white;
 
         public override TokenView SetData(IToken tokenData)
         {
@@ -53,7 +53,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 AudioHolder.instance.PlaySelfSfxOneShot(onGamePieceEnter, volume, mltp * 1.3f);
 
-                AnimateOutline(mltp, 1.2f, .1f, .0011f, 1.2f);
+                AnimateOutline(mltp, 1.2f, .2f, .0011f, 1.2f);
                 AnimateColor(originalColor, Color.white, 0f);
             }
         }
@@ -67,7 +67,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 GamePieceView _gamepiece = other as GamePieceView;
 
                 AnimateOutlineFrom(0f, .4f, .0011f, GetMltp(_gamepiece.InteractionsWithToken<ArrowTokenView>(Token.Type).Count()));
-                AnimateColorFrom(originalColor, .7f);
+                AnimateColorFrom(originalColor, .4f);
             }
         }
 

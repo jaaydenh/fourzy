@@ -570,18 +570,30 @@ namespace Fourzy._Updates.Mechanics
             Vector2 end = gameboard.BoardLocationToVec2(to);
             float distance = Vector2.Distance(start, end);
 
-            gameboard.OnBoardLocationExit(from, this);
-            OnExit(from);
+            float step;
+            float t = 0f;
 
-            for (float t = 0; t < 1f; t += Time.deltaTime * speed / distance)
+            do
             {
+                step = Time.deltaTime * speed / distance;
+
+                if (t + step >= .25f && t < .25f)
+                {
+                    gameboard.OnBoardLocationExit(from, this);
+                    OnExit(from);
+                }
+
+                if (t + step >= .75f && t < .75f)
+                {
+                    gameboard.OnBoardLocationEnter(to, this);
+                    OnEnter(to);
+                }
+
                 transform.localPosition = Vector3.Lerp(start, end, t);
                 yield return null;
-            }
+            } while ((t += step) < 1f);
+            
             transform.localPosition = end;
-
-            gameboard.OnBoardLocationEnter(to, this);
-            OnEnter(to);
 
             isMoving = false;
         }
