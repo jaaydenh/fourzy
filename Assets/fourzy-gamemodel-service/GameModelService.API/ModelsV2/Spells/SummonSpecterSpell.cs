@@ -46,10 +46,8 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (s.ContainsPiece
                 || s.ContainsSpell
@@ -58,10 +56,7 @@ namespace FourzyGameModel.Model
                 return false;
             }
 
-            SpecterToken _token = new SpecterToken();
-            State.Board.ContentsAt(Location).AddToken(_token);
-            tokens.Add(_token);
-
+            State.Board.ContentsAt(Location).AddToken(new SpecterToken());
             return true;
 
 

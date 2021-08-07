@@ -6,11 +6,11 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class PitTokenView : TokenView
     {
-        public PitToken token => Token as PitToken;
+        public PitToken token { get; private set; }
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            base.SetData(tokenData);
+            token = tokenData as PitToken;
 
             if (token.Filled)
             {
@@ -18,7 +18,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 SetAlpha(0f);
             }
 
-            return this;
+            return base.SetData(tokenData);
         }
     }
 }

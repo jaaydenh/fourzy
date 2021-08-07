@@ -9,7 +9,7 @@ namespace FourzyGameModel.Model
         SpellType SpellType { get;  }
         SpellId SpellId { get;  }
         int Cost { get; set; }
-        bool Cast(GameState State, out List<IToken> tokens);
+        bool Cast(GameState State);
         bool RequiresLocation { get; set; }
         List<BoardLocation> GetValidSpellLocations(GameBoard Board);
     }

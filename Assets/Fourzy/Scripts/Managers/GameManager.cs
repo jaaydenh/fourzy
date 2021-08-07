@@ -1099,7 +1099,8 @@ namespace Fourzy
             EDGE_TAP,
             DEMO_STYLE,
             SWIPE,
-            SWIPE_STYLE_2,
+            TAP_AND_DRAG,
+            TWO_STEP_SWIPE,
         }
     }
 
