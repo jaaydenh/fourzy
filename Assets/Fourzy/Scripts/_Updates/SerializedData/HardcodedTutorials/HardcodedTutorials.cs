@@ -38,15 +38,35 @@ namespace Fourzy._Updates._Tutorial
                     // Tutorial Step 2 part A - How to move
                     new OnboardingTask_Log("howToMove"),
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
-                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
+                        [PlacementStyle.TAP_AND_DRAG] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
+                        [PlacementStyle.SWIPE] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(4f, 0f) },
                     }),
                     new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                     new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
-                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(4f, 0f, 1f, 3f),
+                        [PlacementStyle.TAP_AND_DRAG] = new Rect(4f, 0f, 1f, 3f),
+                        [PlacementStyle.SWIPE] = new Rect(4f, 0f, 1f, 3f),
                         [PlacementStyle.EDGE_TAP] = new Rect(4f, 0f, 1f, 1f),
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Rect(4f, 0f, 1f, 1f),
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02"), new Vector2(.5f, .15f)),
+
+                    //two step swipe tutorial part
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_SWIPE },
+
+                    new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},
+                    new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02a"), new Vector2(.5f, .15f)),
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 1f) },
+                    }),
+                    new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Rect(4f, 0f, 1f, 2f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+
+                    new OnboardingTask() { action = OnboardingActions.SKIP_TO},
+                    //---------------------------
+
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
 
                     // Tutorial Step 2 part B
@@ -97,14 +117,30 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, GameMode.NONE, "OnboardingBoard1"),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_06"), new Vector2(.5f, .15f)),
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
-                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(7f, 4f), new Vector2(5f, 4f) },
+                        [PlacementStyle.TAP_AND_DRAG] = new Vector2[] { new Vector2(7f, 4f), new Vector2(5f, 4f) },
+                        [PlacementStyle.SWIPE] = new Vector2[] { new Vector2(7f, 4f), new Vector2(5f, 4f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(7f, 4f) },
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(7f, 4f) },
                     }),
                     new OnboardingTask_LimitInput(new Rect(7f, 4f, 1f, 1f)),
                     new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
-                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 4f, 8f, 1f),
+                        [PlacementStyle.TAP_AND_DRAG] = new Rect(0f, 4f, 8f, 1f),
+                        [PlacementStyle.SWIPE] = new Rect(0f, 4f, 8f, 1f),
                         [PlacementStyle.EDGE_TAP] = new Rect(0f, 4f, 8f, 1f),
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Rect(0f, 4f, 8f, 1f),
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+
+                    //two step swipe tutorial
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_SWIPE },
+
+                    new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(7f, 4f), new Vector2(4f, 4f) },
+                    }),
+
+                    new OnboardingTask() { action = OnboardingActions.SKIP_TO},
+                    //---------------------------
+
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                     new OnboardingTask_Wait (2f),
                     new OnboardingTask() { action = OnboardingActions.HIDE_BUBBLE_MESSAGE },
@@ -137,104 +173,6 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_Log("tutorialCompleted"),
                 },
             },
-
-            //new Tutorial()
-            //{
-            //    name = "OnboardingLandscape",
-            //    onBack = TutorialOnBack.SHOW_LEAVE_PROMPT,
-            //    tasks = new OnboardingTask[]
-            //    {
-            //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
-            //        new OnboardingTask() { action = OnboardingActions.SHOW_GRAPHICS },
-            //        new OnboardingTask() { action = OnboardingActions.SHOW_BG },
-            //        new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy"), new Vector2(.5f, .75f)),
-            //        new OnboardingTask_Log("1"),
-
-            //        new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), new Vector2(.5f, .75f)),
-
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_GRAPHICS },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-
-            //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding1"),
-
-            //        new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
-            //            [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
-            //            [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
-            //        }),
-            //        new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_tap_2"), new Vector2(.5f, .15f)),
-            //        new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
-            //        new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
-            //            [PlacementStyle.SWIPE_STYLE_2] = new Rect(4f, 0f, 1f, 3f),
-            //            [PlacementStyle.EDGE_TAP] = new Rect(4f, 0f, 1f, 1f),
-            //        }, OnboardingScreenMaskObject.MaskStyle.PX_0),
-
-            //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-            //        new OnboardingTask_Log("2"),
-
-            //        new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
-            //        new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
-            //        new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("win_vertical_rule"), new Vector2(.5f, .15f), 3f),
-
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-            //        new OnboardingTask_Wait(1f),
-
-            //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
-
-            //        new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
-            //            [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 3f), new Vector2(2f, 3f) },
-            //            [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 3f) },
-            //        }),
-            //        new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("rule_tap_2"), new Vector2(.5f, .15f)),
-            //        new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
-            //        new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
-            //            [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 3f, 3f, 1f),
-            //            [PlacementStyle.EDGE_TAP] = new Rect(0f, 3f, 1f, 1f),
-            //        }, OnboardingScreenMaskObject.MaskStyle.PX_0),
-
-            //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-            //        new OnboardingTask_Log("3"),
-
-            //        new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
-            //        new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
-            //        new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("win_horizontal_rule"), new Vector2(.5f, .15f), 3f),
-
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-            //        new OnboardingTask_Wait(1f),
-
-            //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
-
-            //        new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>(){
-            //            [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 1f), new Vector2(2f, 1f) },
-            //            [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 1f) },
-            //        }),
-            //        new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("rule_tap_3"), new Vector2(.5f, .15f)),
-            //        new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
-            //        new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
-            //            [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 1f, 3f, 1f),
-            //            [PlacementStyle.EDGE_TAP] = new Rect(0f, 1f, 1f, 1f),
-            //        }, OnboardingScreenMaskObject.MaskStyle.PX_0),
-
-            //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-            //        new OnboardingTask_Log("4"),
-
-            //        new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
-            //        new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
-            //        new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("win_diagonal_rule"), new Vector2(.5f, .15f), 3f),
-
-            //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-            //        new OnboardingTask_Wait(1f),
-            //        new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
-            //    },
-            //},
 
             new Tutorial()
             {
@@ -313,12 +251,14 @@ namespace Fourzy._Updates._Tutorial
 
         LOG_TUTORIAL,
         WAIT,
+        WAIT_FOR_GAMEPIECE_SPAWN,
 
         SHOW_MASKED_BOARD_CELL,
         SHOW_MASKED_AREA,
         HIDE_MAKSED_AREA,
 
-        SKIP_TO_NEXT_IF_DEMO_MODE,
+        SKIP_FROM,
+        SKIP_TO,
 
         SHOW_OPPONENT,
         HIDE_OPPONENT,

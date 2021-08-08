@@ -9,6 +9,10 @@
       "value": "Tap to select where to move"
     },
     {
+      "key": "instruction_02a",
+      "value": "Swipe to finish your move"
+    },
+    {
       "key": "instruction_03",
       "value": "Pieces enter from outside the board"
     },
@@ -440,14 +444,6 @@
     {
       "key": "openrareportal",
       "value": "Open Rare Portal"
-    },
-    {
-      "key": "out_of_time",
-      "value": "You ran out of time!"
-    },
-    {
-      "key": "out_of_time_opponent",
-      "value": "Opponent ran out of time!"
     },
     {
       "key": "pass",

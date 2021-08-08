@@ -54,10 +54,8 @@ namespace FourzyGameModel.Model
         }
 
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (!ValidLocationTarget(s))
             {
@@ -65,11 +63,7 @@ namespace FourzyGameModel.Model
             }
 
             State.Board.RecordGameAction(new GameActionTokenDrop(new RainbowToken(), TransitionType.SPELL_CAST, Location, Location));
-
-            RainbowToken _token = new RainbowToken();
-            State.Board.ContentsAt(Location).AddToken(_token);
-            tokens.Add(_token);
-
+            State.Board.ContentsAt(Location).AddToken(new RainbowToken());
             return true;
 
 

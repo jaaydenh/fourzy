@@ -50,10 +50,8 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             if (!State.Board.ContentsAt(Location).ContainsTokenType(TokenType.WATER)
                 && !State.Board.ContentsAt(Location).ContainsTokenType(TokenType.STICKY)) return false;
 
