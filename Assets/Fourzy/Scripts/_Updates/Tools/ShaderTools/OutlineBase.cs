@@ -16,43 +16,75 @@ namespace Fourzy._Updates.Tools
         public float blueSize = .03f;
         public Color outlineColor = Color.black;
 
-        public ValueTween tween { get; private set; }
+        public ValueTween intensityValueTween { get; private set; }
+        public ValueTween sizeValueTween { get; private set; }
 
         protected bool initialized = false;
         protected Material material;
 
-        public void Animate(float from, float to, float time, bool repeat)
+        public void Animate(float from, float to, float time, float size, bool repeat)
         {
-            if (!tween)
+            float tan45 = Mathf.Tan(Mathf.Deg2Rad * 45);
+            if (!intensityValueTween)
             {
-                float tan45 = Mathf.Tan(Mathf.Deg2Rad * 45);
+                intensityValueTween = gameObject.AddComponent<ValueTween>();
+                intensityValueTween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(1f, 1f, tan45, tan45));
 
-                tween = gameObject.AddComponent<ValueTween>();
-                tween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(1f, 1f, tan45, tan45));
-
-                tween._onValue += (value) => { intensity = value; };
+                intensityValueTween._onValue += (value) =>
+                {
+                    intensity = value; 
+                };
             }
 
-            tween.from = from;
-            tween.to = to;
-            tween.playbackTime = time;
-            tween.repeat = repeat ? RepeatType.PING_PONG : RepeatType.NONE;
+            if (!sizeValueTween)
+            {
+                sizeValueTween = gameObject.AddComponent<ValueTween>();
+                sizeValueTween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(1f, 1f, tan45, tan45));
 
-            tween.PlayForward(true);
+                sizeValueTween._onValue += (value) =>
+                {
+                    this.size = value;
+                };
+
+                sizeValueTween.from = 1.15f;
+            }
+            else
+            {
+                sizeValueTween.from = sizeValueTween.to;
+            }
+
+            sizeValueTween.to = size;
+            sizeValueTween.playbackTime = time;
+            sizeValueTween.repeat = repeat ? RepeatType.PING_PONG : RepeatType.NONE;
+
+            sizeValueTween.PlayForward(true);
+
+            intensityValueTween.from = from;
+            intensityValueTween.to = to;
+            intensityValueTween.playbackTime = time;
+            intensityValueTween.repeat = repeat ? RepeatType.PING_PONG : RepeatType.NONE;
+
+            intensityValueTween.PlayForward(true);
         }
 
         public void StopAnimation()
         {
-            tween.repeat = RepeatType.NONE;
+            intensityValueTween.repeat = RepeatType.NONE;
+            sizeValueTween.repeat = RepeatType.NONE;
         }
 
         public void HideOutline()
         {
             intensity = 0f;
 
-            if (tween)
+            if (intensityValueTween)
             {
-                tween.StopTween(false);
+                intensityValueTween.StopTween(false);
+            }
+
+            if (sizeValueTween)
+            {
+                sizeValueTween.StopTween(false);
             }
         }
     }

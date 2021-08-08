@@ -13,7 +13,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             base.OnInitialized();
 
-            ShowOutline(true);
+            AnimateOutline(0f, 1f, 1f, .0015f);
         }
 
         public override void SetData(ISpell spell, IMove spellMove)

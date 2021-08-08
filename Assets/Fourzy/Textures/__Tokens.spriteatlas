@@ -55,9 +55,9 @@ SpriteAtlas:
     secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
-    - {fileID: 102900000, guid: e1d5cc2cde4784b2daaffb156c3b71d3, type: 3}
+    - {fileID: 102900000, guid: ae416e88881d82e47a33d779ee731522, type: 3}
     - {fileID: 102900000, guid: 1f3c566d7475b2f49a29c85d18b982ed, type: 3}
-    totalSpriteSurfaceArea: 20897686
+    totalSpriteSurfaceArea: 20848534
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -97,7 +97,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: f7598df3d82cf49edbd0714764ddf448, type: 3}
   - {fileID: 21300000, guid: 4779831400e4f2246bc30d625da2f49d, type: 3}
   - {fileID: 21300000, guid: 091970443068f8b43ac2ebb25662af55, type: 3}
-  - {fileID: 21300000, guid: f5353a645dec944dbba7601104a19d8a, type: 3}
   - {fileID: 21300000, guid: 02dfbd849cc62490eae07f7e28e57782, type: 3}
   - {fileID: 21300000, guid: 2a1489a47606a4936a1cd25c52cebf37, type: 3}
   - {fileID: 21300000, guid: 07bcefc4626164fdf9d6a5ad71190fdb, type: 3}
@@ -134,7 +133,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 65a418b85c995124fb3529ba2ee56f23, type: 3}
   - {fileID: 21300000, guid: b23446c843fdeac4d8a0dd4a2bfcb227, type: 3}
   - {fileID: 21300000, guid: 4f2063d83fd50fe49a8fa277d2f77383, type: 3}
-  - {fileID: 21300000, guid: 97926709586254e1fa12a1694073c321, type: 3}
   - {fileID: 21300000, guid: f0608149fef0222408904d8b2d326de9, type: 3}
   - {fileID: 21300000, guid: 254e0f594d1958c47968197207db705b, type: 3}
   - {fileID: 21300000, guid: ecce4c69402955d4bb5026f310726f65, type: 3}
@@ -159,7 +157,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a2c2996baa8a54178be732284e466991, type: 3}
   - {fileID: 21300000, guid: 2deb827b8c59c1943b0c066902defaf2, type: 3}
   - {fileID: 21300000, guid: 3afd237b6813946bbbc7c57286b01172, type: 3}
-  - {fileID: 21300000, guid: b4c37a7b220787243b0e3b5a48074663, type: 3}
   - {fileID: 21300000, guid: a35bde9b67f454cec9dc365dfa6b7d4e, type: 3}
   - {fileID: 21300000, guid: f5ccbecb56a94674089448655db1a767, type: 3}
   - {fileID: 21300014, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
@@ -286,7 +283,6 @@ SpriteAtlas:
   - tokenFruitTree
   - Token+Frame_2_Forest-33
   - Token+Frame_1_Garden-14
-  - tokenArrow
   - tokenSand
   - tokenBlocker
   - token90LeftArrow 2
@@ -323,7 +319,6 @@ SpriteAtlas:
   - Token+Frame_2_Forest-28
   - darkness
   - Token+Frame_1_Garden-8
-  - tokenFourWayArrow1
   - Token+Frame_1_Garden-4
   - Token+Frame_5_Castle-75
   - Token+Frame_1_Garden-17
@@ -348,7 +343,6 @@ SpriteAtlas:
   - tokenPit
   - Token+Frame_5_Castle-80
   - tokenWeb
-  - tokenRotatingArrow
   - tokenTree
   - Token+Frame_4_IcePalace-52
   - FruitIntoSticky0008

@@ -1411,14 +1411,18 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void OnBoardLocationEnter(BoardLocation location, BoardBit bit)
         {
-            List<TokenView> other = BoardTokensAt(location).ToList();
+            foreach (TokenView token in BoardTokensAt(location))
+            {
+                token.OnBitEnter(bit);
+            }
+        }
 
-            other.ForEach(_bit => _bit.OnBitEnter(bit));
-
-            bit.AddInteraction(other);
-
-            //sort bits
-            SortBits();
+        public void OnBoardLocationExit(BoardLocation location, BoardBit bit)
+        {
+            foreach (TokenView token in BoardTokensAt(location))
+            {
+                token.OnBitExit(bit);
+            }
         }
 
         public void FadeTokens(float to, float time)
@@ -1429,7 +1433,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 token.alphaTween.playbackTime = time;
                 token.alphaTween.from = token.alphaTween._value;
-                token.alphaTween.to = to;
+                token.alphaTween.to = to * token.originalColor.a;
 
                 token.alphaTween.PlayForward(true);
             });
