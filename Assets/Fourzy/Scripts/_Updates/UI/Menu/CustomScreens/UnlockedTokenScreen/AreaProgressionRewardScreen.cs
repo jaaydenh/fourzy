@@ -22,6 +22,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private TMP_Text rewardName;
         [SerializeField]
         private ButtonExtended okButton;
+        [SerializeField]
+        private ParticleSystem fgStarsParticles;
 
         private CatalogItem reward;
         private GamePieceView gamepiece;
@@ -77,6 +79,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     rewardName.text = LocalizationManager.Value(_data.name);
 
                     okButton.SetLabel(LocalizationManager.Value("try_it_out"));
+                    fgStarsParticles.gameObject.SetActive(true);
 
                     break;
 
@@ -91,6 +94,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     rewardName.text = _pieceData.name;
 
                     okButton.SetLabel(LocalizationManager.Value("ok"));
+                    fgStarsParticles.gameObject.SetActive(false);
 
                     break;
             }
@@ -113,6 +117,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         new System.Collections.Generic.KeyValuePair<string, object>("skipped", false));
 
                     GameContentManager.Instance.StartTryItBoard((TokenType)Enum.Parse(typeof(TokenType), reward.ItemId));
+
+                    break;
+
+                case Constants.PLAYFAB_GAMEPIECE_CLASS:
+                    if (MenuController.activeMenu == FourzyMainMenuController.instance)
+                    {
+                        FourzyMainMenuController.instance.GetScreen<MenuTabbedScreen>().OpenTab(1, true);
+                        FourzyMainMenuController.instance.GetScreen<GamePiecesScreen>().SetPiecesActive();
+                    }
 
                     break;
             }

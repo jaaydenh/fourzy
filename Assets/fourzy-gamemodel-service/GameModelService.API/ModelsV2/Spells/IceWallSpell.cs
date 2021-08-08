@@ -57,12 +57,17 @@ namespace FourzyGameModel.Model
             return true;
         }
 
-        public bool Cast(GameState State)
+        public bool Cast(GameState State, out List<IToken> tokens)
         {
+            tokens = new List<IToken>();
+
             BoardSpace s = State.Board.ContentsAt(Location);
             if (ValidLocationTarget(s))
             {
-                State.Board.ContentsAt(Location).AddToken(new IceBlockToken());
+                IceBlockToken _token = new IceBlockToken();
+                State.Board.ContentsAt(Location).AddToken(_token);
+                tokens.Add(_token);
+
                 return true;
             }
             return false;

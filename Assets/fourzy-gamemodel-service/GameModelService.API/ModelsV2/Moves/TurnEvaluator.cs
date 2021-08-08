@@ -771,7 +771,7 @@ namespace FourzyGameModel.Model
             if (EvalState.Players[Spell.PlayerId].Magic >= Spell.Cost)
             {
                 EvalState.Players[Spell.PlayerId].Magic -= Spell.Cost;
-                if (Spell.Cast(EvalState))
+                if (Spell.Cast(EvalState, out _))
                 {
                     RecordAction(new GameActionSpell(Spell));
                     return true;

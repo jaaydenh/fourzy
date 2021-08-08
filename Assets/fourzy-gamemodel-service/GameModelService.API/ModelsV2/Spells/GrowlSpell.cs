@@ -50,8 +50,10 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State)
+        public bool Cast(GameState State, out List<IToken> tokens)
         {
+            tokens = new List<IToken>();
+
             BoardSpace s = State.Board.ContentsAt(Location);
             if (!s.ContainsPiece || s.Control != PlayerId) return false;
             Growl(State, Direction.UP);

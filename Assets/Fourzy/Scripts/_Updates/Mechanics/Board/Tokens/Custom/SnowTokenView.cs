@@ -2,6 +2,7 @@
 
 using FourzyGameModel.Model;
 using System.Collections;
+using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
@@ -11,26 +12,36 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             base.OnActivate();
 
-            //despawn this token
+            active = false;
             Hide(.3f);
-            _Destroy(.4f);
-
-            BoardLocation _location = location;
-            //spawn ice token
-            gameboard.SpawnToken<TokenView>(_location.Row, _location.Column, TokenType.ICE, false).Show(.3f);
 
             yield break;
         }
 
-        public override float OnGameAction(params GameAction[] actions)
+        public override float OnGameAction(GameAction action)
         {
-            GameActionTokenTransition _transition = actions[0] as GameActionTokenTransition;
+            GameActionTokenTransition _transition = action as GameActionTokenTransition;
 
-            if (_transition == null || _transition.Reason != TransitionType.SNOW_ICE) return 0f;
+            if (_transition == null || _transition.Reason != TransitionType.SNOW_ICE)
+            {
+                return 0f;
+            }
 
-            StartCoroutine(OnActivated());
+            StartCoroutine(Transition(_transition));
 
             return 0f;
+        }
+
+        private IEnumerator Transition(GameActionTokenTransition _transition)
+        {
+            gameboard
+                .SpawnToken(_transition.Location, _transition.After)
+                .Show(.3f);
+
+            yield return StartCoroutine(OnActivated());
+            yield return new WaitForSeconds(.3f);
+
+            _Destroy();
         }
     }
 }

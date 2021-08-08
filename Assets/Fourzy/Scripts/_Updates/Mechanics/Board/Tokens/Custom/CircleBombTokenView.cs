@@ -6,11 +6,11 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class CircleBombTokenView : TokenView
     {
-        public CircleBombToken token { get; private set; }
+        public CircleBombToken token => base.Token as CircleBombToken;
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            token = tokenData as CircleBombToken;
+            base.SetData(tokenData);
 
             if (!token.Active)
             {
@@ -18,7 +18,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 SetAlpha(0f);
             }
 
-            return base.SetData(tokenData);
+            return this;
         }
 
         public override void _Destroy()
