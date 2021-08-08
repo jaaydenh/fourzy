@@ -42,9 +42,9 @@ namespace Fourzy._Updates.Mechanics.Board
             yield return new WaitForSeconds(length);
         }
 
-        public override float OnGameAction(GameAction action)
+        public override float OnGameAction(params GameAction[] actions)
         {
-            GameActionTokenTransition _transition = action as GameActionTokenTransition;
+            GameActionTokenTransition _transition = actions[0] as GameActionTokenTransition;
 
             if (_transition == null || _transition.Reason != TransitionType.FRUIT_SQUASH) return 0f;
 
@@ -55,7 +55,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private IEnumerator Transition(GameActionTokenTransition _transition)
         {
-            TokenView newToken = gameboard.SpawnToken(_transition.Location, _transition.After);
+            TokenView newToken = gameboard.SpawnToken<TokenView>(_transition.Location.Row, _transition.Location.Column, _transition.After.Type, true);
             newToken.SetAlpha(0f);
 
             yield return StartCoroutine(OnActivated());

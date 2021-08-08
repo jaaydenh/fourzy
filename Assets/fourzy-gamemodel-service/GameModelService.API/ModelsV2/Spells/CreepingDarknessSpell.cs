@@ -45,16 +45,14 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
             //if (!State.Board.ContentsAt(Location).ContainsPiece)
             //{
             //    State.Board.ContentsAt(Location).AddToken(new DarknessToken(PlayerId, Duration));
             //    return true;
             //}
             //return false;
-
             return true;
         }
 
