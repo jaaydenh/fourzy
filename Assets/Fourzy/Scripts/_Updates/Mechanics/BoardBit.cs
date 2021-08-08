@@ -426,7 +426,7 @@ namespace Fourzy._Updates.Mechanics
 
             Destroy(gameObject);
         }
-
+		
         public virtual float _Destroy(DestroyType reason)
         {
             switch (reason)
@@ -572,7 +572,7 @@ namespace Fourzy._Updates.Mechanics
 
             float step;
             float t = 0f;
-
+			
             do
             {
                 step = Time.deltaTime * speed / distance;
