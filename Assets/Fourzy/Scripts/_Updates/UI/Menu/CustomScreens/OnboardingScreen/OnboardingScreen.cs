@@ -2,7 +2,6 @@
 
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tools;
@@ -50,7 +49,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GamePlayManager.onMoveStarted += MoveStarted;
             GamePlayManager.onMoveEnded += MoveEnded;
             GamePlayManager.onGameFinished += OnGameFinished;
-            GamePlayManager.onGamepiceSpawned += OnGamepeceSpawned;
         }
 
         public override void Close(bool animate)
@@ -74,7 +72,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GamePlayManager.onMoveStarted -= MoveStarted;
             GamePlayManager.onMoveEnded -= MoveEnded;
             GamePlayManager.onGameFinished -= OnGameFinished;
-            GamePlayManager.onGamepiceSpawned -= OnGamepeceSpawned;
         }
 
         public override void OnBack()
@@ -185,14 +182,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void OnGameFinished(IClientFourzy game)
         {
             if (currentTask.action == OnboardingActions.GAME_FINISHED)
-            {
-                SkipToNext();
-            }
-        }
-
-        private void OnGamepeceSpawned(GamePieceView obj)
-        {
-            if (currentTask.action == OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN)
             {
                 SkipToNext();
             }
@@ -319,18 +308,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.HIDE_GAMEPIECES:
                         bg.HideGamepieces();
-
-                        break;
-
-                    case OnboardingActions.SKIP_FROM:
-                        if (currentTask.boolValue)
-                        {
-                            do
-                            {
-                                taskIndex++;
-                            }
-                            while (tutorial.tasks[taskIndex].action != OnboardingActions.SKIP_TO && taskIndex < tutorial.tasks.Length);
-                        }
 
                         break;
 
@@ -469,11 +446,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         {
                             _yield = true;
                         }
-
-                        break;
-
-                    case OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN:
-                        _yield = true;
 
                         break;
 

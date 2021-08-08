@@ -1,10 +1,13 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics._GamePiece
@@ -25,10 +28,16 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         private int h_MovingHorizontal = Animator.StringToHash("MovingHorizontal");
         private int h_MovingVertical = Animator.StringToHash("MovingVertical");
+
         private int h_RightHit = Animator.StringToHash("RightHit");
         private int h_LeftHit = Animator.StringToHash("LeftHit");
         private int h_BottomHit = Animator.StringToHash("BottomHit");
         private int h_TopHit = Animator.StringToHash("TopHit");
+
+        private int h_RightSmash = Animator.StringToHash("SmashRight");
+        private int h_LeftSmash = Animator.StringToHash("SmashLeft");
+        private int h_BottomSmash = Animator.StringToHash("SmashDown");
+        private int h_TopSmash = Animator.StringToHash("SmashTop");
 
         private int h_MoveLeft = Animator.StringToHash("MoveLeft");
         private int h_MoveRight = Animator.StringToHash("MoveRight");
@@ -42,6 +51,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         public GamePieceMouth mouth { get; private set; }
         public GamePieceEyes eyes { get; private set; }
         public Piece piece { get; private set; }
+        public List<BoardBit> interactions { get; private set; } = new List<BoardBit>();
 
         public override Color outlineColor => pieceData.outlineColor;
 
@@ -65,6 +75,46 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                 CancelRoutine("blinking");
                 StartBlinking();
             }
+        }
+
+        public override void OnBeforeTurn(bool startTurn)
+        {
+            base.OnBeforeTurn(startTurn);
+
+            interactions.Clear();
+        }
+
+        public override void OnAfterTurn(bool startTurn)
+        {
+            base.OnAfterTurn(startTurn);
+
+            interactions.Clear();
+        }
+
+        public override void OnEnter(BoardLocation location)
+        {
+            base.OnEnter(location);
+
+            IEnumerable<BoardBit> _interactions = gameboard.BoardTokensAt(location);
+            interactions.AddRange(_interactions);
+
+            foreach (TokenView _token in _interactions)
+            {
+                switch (_token.Token.Type)
+                {
+                    case TokenType.ARROW:
+                    case TokenType.ROTATING_ARROW:
+                    case TokenType.FOURWAY_ARROW:
+                        speedMltp += .1f;
+
+                        break;
+                }
+            }
+        }
+
+        public IEnumerable<T> InteractionsWithToken<T>(TokenType type) where T : TokenView
+        {
+            return interactions.Where(_bit => (_bit.GetType() == typeof(T) || _bit.GetType().IsSubclassOf(typeof(T))) && ((T)_bit).Token.Type == type).Cast<T>();
         }
 
         public void PutMovementDirection(Direction direction)
@@ -101,6 +151,39 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             }
         }
 
+        public void PlaySmashAnimation(Direction direction)
+        {
+            gameboard.OnGamepieceSmashed(this);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked("gamepiece_smash");
+
+            const float transitionTime = 0.1f;
+
+            switch (direction)
+            {
+                case Direction.DOWN:
+                    pieceAnimator.CrossFade(h_BottomSmash, transitionTime, indexBaseLayer);
+
+                    break;
+
+                case Direction.UP:
+                    pieceAnimator.CrossFade(h_TopSmash, transitionTime, indexBaseLayer);
+
+                    break;
+
+                case Direction.RIGHT:
+                    pieceAnimator.CrossFade(h_RightSmash, transitionTime, indexBaseLayer);
+
+                    break;
+
+                case Direction.LEFT:
+                    pieceAnimator.CrossFade(h_LeftSmash, transitionTime, indexBaseLayer);
+
+                    break;
+            }
+
+            PlayFinishAnimation();
+        }
+
         public void PlayFinishMovement(bool animateHit)
         {
             const float transitionTime = 0.03f;
@@ -131,6 +214,11 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                 pieceAnimator.CrossFade(h_Idle, transitionTime, indexBaseLayer);
             }
 
+            PlayFinishAnimation();
+        }
+
+        public void PlayFinishAnimation()
+        {
             if (pieceAnimator.GetCurrentAnimatorStateInfo(indexEyeMouthLayer).shortNameHash == h_Idle)
             {
                 pieceAnimator.Play(h_Idle, indexEyeMouthLayer);
@@ -143,7 +231,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void PlayWinAnimation(float delay)
         {
-            ShowOutline(false);
+            AnimateOutline(0f, 1f, 1f, .0015f);
 
             StartRoutine("winAnimation", delay, () =>
             {
@@ -167,12 +255,12 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             CancelRoutine("jumping");
             StartRoutine("jumping", JumpRoutine(3));
 
-            ShowOutline(true);
+            AnimateOutline(0f, 1f, 1f, .0015f, repeat: true);
         }
 
         public void StopTurnAnimation()
         {
-            HideOutline(false);
+            AnimateOutlineFrom(0f, 1f, .0015f, 1.15f);
 
             Sleep();
             pieceAnimator.CrossFade(h_Idle, 0.35f, indexBaseLayer);
@@ -239,22 +327,49 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             this.piece = piece;
         }
 
-        public override void OnBeforeMoveAction(bool startTurn, params BoardLocation[] locations)
+        public override void OnBeforeMoveActions(bool startTurn, BoardLocation from, BoardLocation to)
         {
-            base.OnBeforeMoveAction(startTurn, locations);
+            base.OnBeforeMoveActions(startTurn, from, to);
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(moveSfx);
-
-            if (locations.Length < 2) return;
-
-            PutMovementDirection(locations.GetDirectionFromLocations());
         }
 
-        public override void OnAfterMove(bool startTurn, params BoardLocation[] actionsMoves)
+        public override void OnAfterMoveAction(bool startTurn, BoardLocation from, BoardLocation to)
         {
-            base.OnAfterMove(startTurn, actionsMoves);
+            Direction direction = Utils.GetDirectionFromLocations(from, to);
+            BoardLocation _next = to.Neighbor(direction);
 
-            PlayFinishMovement(actionsMoves.Length > 1);
+            bool playSmash = false;
+            if (speedMltp >= 1.0f)
+            {
+                if (_next.OnBoard(gameboard.game._State.Board))
+                {
+                    //check next
+                    if (gameboard.BoardTokensAt(_next).Any(_token => !_token.Token.pieceCanEnter && !_token.Token.pieceCanEndMoveOn))
+                    {
+                        playSmash = true;
+                    }
+                }
+            }
+
+            if (playSmash)
+            {
+                PlaySmashAnimation(direction);
+            }
+            else
+            {
+                PlayFinishMovement(true);
+            }
+
+            base.OnAfterMoveAction(startTurn, from, to);
+        }
+
+        public override float StartMoveRoutine(bool startMove, BoardLocation from, BoardLocation to)
+        {
+            PutMovementDirection(Utils.GetDirectionFromLocations(from, to));
+            speedMltp += .15f;
+
+            return base.StartMoveRoutine(startMove, from, to);
         }
 
         public override float _Destroy(DestroyType reason)
@@ -268,25 +383,6 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             }
 
             return base._Destroy(reason);
-        }
-
-        public void PlaySubtleMove(Vector2 direction, float time)
-        {
-            positionTween.from = transform.localPosition;
-            positionTween.to = positionTween.from + (Vector3)direction;
-
-            positionTween.repeat = Tween.RepeatType.PING_PONG;
-            positionTween.playbackTime = time;
-
-            positionTween.PlayForward(true);
-        }
-
-        public void StopSubtleMove(float time = .2f)
-        {
-            if (positionTween.isPlaying)
-            {
-                positionTween.StopTween(false);
-            }
         }
 
         private IEnumerator BlinkingRoutine()

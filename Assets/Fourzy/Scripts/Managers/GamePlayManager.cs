@@ -31,7 +31,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public static Action<IClientFourzy> onGameStarted;
         public static Action<IClientFourzy> onGameFinished;
         public static Action<IClientFourzy> onDraw;
-        public static Action<GamePieceView> onGamepiceSpawned;
         public static Action<ClientPlayerTurn, bool> onMoveStarted;
         public static Action<ClientPlayerTurn, PlayerTurnResult, bool> onMoveEnded;
 
@@ -44,6 +43,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public Transform bgParent;
         public GameObject noNetworkOverlay;
         public RectTransform hintBlocksParent;
+        public GameCameraManager gameCameraManager;
         public ButtonExtended backButton;
 
         [HideInInspector]
@@ -103,9 +103,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void Start()
         {
-            gameplayScreen = menuController.GetOrAddScreen<GameplayScreen>();
-            playerPickScreen = menuController.GetOrAddScreen<RandomPlayerPickScreen>();
-            gameWinLoseScreen = menuController.GetOrAddScreen<GameWinLoseScreen>();
+            gameplayScreen = menuController.GetScreen<GameplayScreen>();
+            playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
+            gameWinLoseScreen = menuController.GetScreen<GameWinLoseScreen>();
 
             touchZone.onPointerDownData += OnPointerDown;
             touchZone.onPointerUpData += OnPointerRelease;
@@ -138,7 +138,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 board.onDraw -= OnDraw;
                 board.onMoveStarted -= OnMoveStarted;
                 board.onMoveEnded -= OnMoveEnded;
-                board.onPieceSpawned -= OnGamepieceSpawned;
+                board.onGamepieceSmashed -= OnGamePieceSmashed;
             }
 
             GameManager.onNetworkAccess -= OnNetwork;
@@ -157,11 +157,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
-        }
-
-        private void OnGamepieceSpawned(GamePieceView gamepiece)
-        {
-            onGamepiceSpawned?.Invoke(gamepiece);
         }
 
         protected void OnApplicationQuit()
@@ -280,7 +275,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     case GameTypeLocal.LOCAL_GAME:
                         game = new ClientFourzyGame(
-                            GameContentManager.Instance.GetInstructionBoard("ICE_BLOCK"),
+                            GameContentManager.Instance.GetMiscBoard("SnowTokenInstruction"),
                             UserManager.Instance.meAsPlayer,
                             new Player(2, "Player Two"))
                         {
@@ -951,7 +946,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     [GameManager.PlacementStyle.EDGE_TAP] =
                     new Vector2[] { new Vector2(location.Column, location.Row) },
-                    [GameManager.PlacementStyle.TAP_AND_DRAG] =
+                    [GameManager.PlacementStyle.SWIPE_STYLE_2] =
                     new Vector2[] { new Vector2(location.Column, location.Row), new Vector2(next.Column, next.Row) }
                 },
             hintMessage);
@@ -985,7 +980,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     [GameManager.PlacementStyle.EDGE_TAP] =
                     new Rect(location.Column, location.Row, 1f, 1f),
-                    [GameManager.PlacementStyle.TAP_AND_DRAG] = swipeRect
+                    [GameManager.PlacementStyle.SWIPE_STYLE_2] = swipeRect
                 }, UI.Widgets.OnboardingScreenMaskObject.MaskStyle.PX_0);
 
             PersistantMenuController.Instance
@@ -1021,8 +1016,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.onDraw += OnDraw;
             board.onMoveStarted += OnMoveStarted;
             board.onMoveEnded += OnMoveEnded;
-            board.onPieceSpawned += OnGamepieceSpawned;
             board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
+            board.onGamepieceSmashed += OnGamePieceSmashed;
 
             //hide tokens/gamepieces
             board.FadeTokens(0f, 0f);
@@ -1778,6 +1773,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+        }
+
+        private void OnGamePieceSmashed(GamePieceView gamepiece)
+        {
+            gameCameraManager.Wiggle();
         }
 
         private IEnumerator GameInitRoutine()

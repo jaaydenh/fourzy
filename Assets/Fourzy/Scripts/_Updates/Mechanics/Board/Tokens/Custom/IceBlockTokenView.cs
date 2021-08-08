@@ -13,7 +13,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private Animator animator;
         private int h_IceBlockBreak = Animator.StringToHash("IceBlockBreak");
 
-        public IceBlockToken token { get; private set; }
+        public IceBlockToken token => Token as IceBlockToken;
 
         protected override void OnInitialized()
         {
@@ -24,12 +24,14 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public override TokenView SetData(IToken tokenData = null)
         {
-            token = tokenData as IceBlockToken;
+            base.SetData(tokenData);
 
             if (token.Broken)
+            {
                 _Destroy();
+            }
 
-            return base.SetData(tokenData);
+            return this;
         }
 
         public override void OnActivate()
@@ -43,17 +45,14 @@ namespace Fourzy._Updates.Mechanics.Board
             active = false;
 
             animator.Play(h_IceBlockBreak);
+
             yield return new WaitForEndOfFrame();
-
-            float length = animator.GetCurrentAnimatorStateInfo(indexBaseLayer).length;
-            StartRoutine("destroy", length, () => _Destroy());
-
-            yield return new WaitForSeconds(length);
+            yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(indexBaseLayer).length);
         }
 
-        public override float OnGameAction(params GameAction[] actions)
+        public override float OnGameAction(GameAction action)
         {
-            GameActionTokenTransition _transition = actions[0] as GameActionTokenTransition;
+            GameActionTokenTransition _transition = action as GameActionTokenTransition;
 
             if (_transition == null || _transition.Reason != TransitionType.BLOCK_ICE) return 0f;
 
@@ -64,12 +63,13 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private IEnumerator Transition(GameActionTokenTransition _transition)
         {
-            TokenView newToken = gameboard.SpawnToken<TokenView>(_transition.Location.Row, _transition.Location.Column, _transition.After.Type, true);
+            TokenView newToken = gameboard.SpawnToken(_transition.Location, _transition.After);
             newToken.SetAlpha(0f);
 
             yield return StartCoroutine(OnActivated());
 
             newToken.Show(.3f);
+            _Destroy();
         }
     }
 }

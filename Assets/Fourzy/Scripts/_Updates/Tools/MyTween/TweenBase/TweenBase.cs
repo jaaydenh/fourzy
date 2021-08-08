@@ -42,34 +42,52 @@ namespace Fourzy._Updates.Tween
 
         public virtual void PlayForward(bool resetValue)
         {
-            if (resetValue)
-                value = 0f;
+            playbackDirection = PlaybackDirection.FORWARD;
+            if (playbackTime == 0f)
+            {
+                Progress(1f, playbackDirection);
+            }
             else
             {
-                if (value != 0)
-                    value = 1f - value;
+                if (resetValue)
+                {
+                    value = 0f;
+                }
+                else
+                {
+                    if (value != 0)
+                    {
+                        value = 1f - value;
+                    }
+                }
+
+                isPlaying = true;
+                Progress(value, playbackDirection);
             }
-
-            isPlaying = true;
-            playbackDirection = PlaybackDirection.FORWARD;
-
-            Progress(value, playbackDirection);
         }
 
         public virtual void PlayBackward(bool resetValue)
         {
-            if (resetValue)
-                value = 0f;
+            playbackDirection = PlaybackDirection.BACKWARD;
+            if (playbackTime == 0f)
+            {
+                Progress(1f, playbackDirection);
+            }
             else
             {
-                if (value != 0f)
-                    value = 1f - value;
+                if (resetValue)
+                {
+                    value = 0f;
+                }
+                else
+                {
+                    if (value != 0f)
+                        value = 1f - value;
+                }
+
+                isPlaying = true;
+                Progress(value, playbackDirection);
             }
-
-            isPlaying = true;
-            playbackDirection = PlaybackDirection.BACKWARD;
-
-            Progress(value, playbackDirection);
         }
 
         public virtual void Toggle(bool reset)

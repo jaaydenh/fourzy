@@ -1,24 +1,16 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
-using static Fourzy.GameManager;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class DemoScreen : MenuScreen
     {
-        [SerializeField]
-        private CanvasGroup context;
-        [SerializeField]
-        private PositionTween buttonPositionTween;
-        [SerializeField]
-        private TMP_Dropdown inputMethodDropdown;
+        public CanvasGroup context;
+        public PositionTween buttonPositionTween;
 
         private bool isContextShown = false;
 
@@ -68,6 +60,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_MAGIC);
 
+        //public void OpenGrid()
+        //{
+        //    menuController.OpenScreen<PuzzleSelectionScreen>(true);
+        //    Toggle();
+        //}
+
         public void UnlockModes()
         {
             PlayerPrefsWrapper.SetRewardRewarded(Constants.GAME_MODE_FAST_PUZZLES, true);
@@ -108,9 +106,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             SettingsManager.onDemoMode += OnDemo;
-            inputMethodDropdown.ClearOptions();
-            inputMethodDropdown.AddOptions(((PlacementStyle[])Enum.GetValues(typeof(PlacementStyle))).Select(_style => _style.ToString()).ToList());
-            inputMethodDropdown.SetValueWithoutNotify((int)GameManager.Instance.placementStyle);
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
             {

@@ -6,32 +6,46 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class RotatingArrowTokenView : ArrowTokenView
     {
+        public RotatingArrowToken token => Token as RotatingArrowToken;
+
         public override TokenView SetData(IToken tokenData = null)
         {
-            if (tokenData.Type != TokenType.ROTATING_ARROW) return base.SetData(tokenData);
+            base.SetData(tokenData);
 
-            RotatingArrowToken rotatingArrow = tokenData as RotatingArrowToken;
-            frequency = rotatingArrow.Frequency;
-            currentCountdownValue = rotatingArrow.CountDown;
+            if (tokenData.Type != TokenType.ROTATING_ARROW)
+            {
+                return this;
+            }
 
-            SetValue(currentCountdownValue);
+            frequency = token.Frequency;
 
-            return base.SetData(tokenData);
+            SetValue(currentCountdownValue = token.CountDown);
+
+            return this;
         }
 
         public override void OnAfterTurn(bool startTurn)
         {
             base.OnAfterTurn(startTurn);
 
-            if (currentCountdownValue - 1 <= 0) currentCountdownValue = frequency;
-            else currentCountdownValue--;
+            if (currentCountdownValue - 1 <= 0)
+            {
+                currentCountdownValue = frequency;
+            }
+            else
+            {
+                currentCountdownValue--;
+            }
 
             SetValue(currentCountdownValue);
         }
 
         private void SetValue(int value)
         {
-            if (frequency != 1) countdown.SetValue(value);
+            if (frequency != 1)
+            {
+                countdown.SetValue(value);
+            }
         }
     }
 }

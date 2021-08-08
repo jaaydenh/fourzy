@@ -59,7 +59,7 @@ namespace Fourzy._Updates.Tween
         {
             spriteColorGroups = new List<GraphicsColorGroup>();
 
-            if (customObjects.Length != 0)
+            if (customObjects != null && customObjects.Length != 0)
                 foreach (Transform obj in customObjects)
                     Parse(obj);
             else

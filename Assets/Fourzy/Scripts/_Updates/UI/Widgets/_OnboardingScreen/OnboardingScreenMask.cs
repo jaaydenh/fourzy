@@ -47,7 +47,6 @@ namespace Fourzy._Updates.UI.Widgets
                 toUse = new Rect[] { task.areasByPlacement[GameManager.Instance.placementStyle] };
             }
 
-            MenuController menuController = GetComponentInParent<MenuController>();
             foreach (Rect area in toUse)
             {
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
@@ -58,6 +57,7 @@ namespace Fourzy._Updates.UI.Widgets
                             (Vector2)GamePlayManager.Instance.board.transform.position);
 
                         //figure size
+                        MenuController menuController = GetComponentInParent<MenuController>();
                         Vector2 size = menuController.WorldToCanvasSize(board.step);
 
                         AddMaskObject()
@@ -116,19 +116,17 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void Show(float time = .3f)
         {
-            if (canvasGroup.alpha == 0f)
+            if (time == 0f)
             {
-                if (time == 0f)
-                {
-                    alphaTween.SetAlpha(1f);
-                }
-                else
-                {
-                    alphaTween.playbackTime = time;
-                    alphaTween.PlayForward(true);
-                }
+                alphaTween.SetAlpha(1f);
+            }
+            else
+            {
+                alphaTween.playbackTime = time;
+                alphaTween.PlayForward(true);
             }
 
+            //canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
         }
 
@@ -161,6 +159,7 @@ namespace Fourzy._Updates.UI.Widgets
         public void Interactable(bool state)
         {
             canvasGroup.interactable = state;
+            //canvasGroup.blocksRaycasts = state;
         }
 
         private OnboardingScreenMaskObject AddMaskObject()
