@@ -52,6 +52,7 @@ namespace Fourzy._Updates.UI.Widgets
             //update board reference
             board = GamePlayManager.Instance.board;
 
+            CancelRoutine("pointerAnimation");
             StartRoutine("pointerAnimation", PointerAnimationRoutine(points));
 
             return this;

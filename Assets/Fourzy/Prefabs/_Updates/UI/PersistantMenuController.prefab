@@ -25075,12 +25075,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 14
+  m_fontSizeMax: 20
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -48933,7 +48933,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Edge Tap
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
@@ -60443,15 +60443,7 @@ MonoBehaviour:
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
-    m_Options:
-    - m_Text: Edge Tap
-      m_Image: {fileID: 0}
-    - m_Text: Tap To Drop
-      m_Image: {fileID: 0}
-    - m_Text: Swipe
-      m_Image: {fileID: 0}
-    - m_Text: Swipe Style 2
-      m_Image: {fileID: 0}
+    m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -64175,6 +64167,7 @@ MonoBehaviour:
   menuController: {fileID: 0}
   context: {fileID: 6303315139328017465}
   buttonPositionTween: {fileID: 8855367405572873564}
+  inputMethodDropdown: {fileID: 4432347509410249771}
 --- !u!225 &3735174963795141121
 CanvasGroup:
   m_ObjectHideFlags: 0

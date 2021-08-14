@@ -7,6 +7,7 @@ using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -572,7 +573,7 @@ namespace Fourzy._Updates.Mechanics
 
             float step;
             float t = 0f;
-			
+
             do
             {
                 step = Time.deltaTime * speed / distance;

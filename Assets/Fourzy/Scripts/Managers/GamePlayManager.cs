@@ -31,6 +31,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public static Action<IClientFourzy> onGameStarted;
         public static Action<IClientFourzy> onGameFinished;
         public static Action<IClientFourzy> onDraw;
+        public static Action<GamePieceView> onGamepiceSpawned;
         public static Action<ClientPlayerTurn, bool> onMoveStarted;
         public static Action<ClientPlayerTurn, PlayerTurnResult, bool> onMoveEnded;
 
@@ -139,6 +140,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 board.onMoveStarted -= OnMoveStarted;
                 board.onMoveEnded -= OnMoveEnded;
                 board.onGamepieceSmashed -= OnGamePieceSmashed;
+                board.onPieceSpawned -= OnGamepieceSpawned;
             }
 
             GameManager.onNetworkAccess -= OnNetwork;
@@ -157,6 +159,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
+        }
+
+        private void OnGamepieceSpawned(GamePieceView gamepiece)
+        {
+            onGamepiceSpawned?.Invoke(gamepiece);
         }
 
         protected void OnApplicationQuit()
@@ -275,7 +282,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     case GameTypeLocal.LOCAL_GAME:
                         game = new ClientFourzyGame(
-                            GameContentManager.Instance.GetMiscBoard("SnowTokenInstruction"),
+                            GameContentManager.Instance.GetInstructionBoard("ICE_BLOCK"),
                             UserManager.Instance.meAsPlayer,
                             new Player(2, "Player Two"))
                         {
@@ -946,7 +953,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     [GameManager.PlacementStyle.EDGE_TAP] =
                     new Vector2[] { new Vector2(location.Column, location.Row) },
-                    [GameManager.PlacementStyle.SWIPE_STYLE_2] =
+                    [GameManager.PlacementStyle.TAP_AND_DRAG] =
                     new Vector2[] { new Vector2(location.Column, location.Row), new Vector2(next.Column, next.Row) }
                 },
             hintMessage);
@@ -980,7 +987,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     [GameManager.PlacementStyle.EDGE_TAP] =
                     new Rect(location.Column, location.Row, 1f, 1f),
-                    [GameManager.PlacementStyle.SWIPE_STYLE_2] = swipeRect
+                    [GameManager.PlacementStyle.TAP_AND_DRAG] = swipeRect
                 }, UI.Widgets.OnboardingScreenMaskObject.MaskStyle.PX_0);
 
             PersistantMenuController.Instance
@@ -1018,6 +1025,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.onMoveEnded += OnMoveEnded;
             board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
             board.onGamepieceSmashed += OnGamePieceSmashed;
+            board.onPieceSpawned += OnGamepieceSpawned;
 
             //hide tokens/gamepieces
             board.FadeTokens(0f, 0f);

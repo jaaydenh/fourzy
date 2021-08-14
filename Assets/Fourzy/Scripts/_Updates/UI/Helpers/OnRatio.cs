@@ -9,6 +9,12 @@ namespace Fourzy._Updates.UI.Helpers
     [ExecuteInEditMode]
     public class OnRatio : MonoBehaviour
     {
+        public static float LANDSCAPE_IPHONEX = 1.85f;
+        public static float LANDSCAPE_IPHONE = 1.5f;
+        public static float LANDSCAPE_IPAD = 1f;
+        public static float PORTRAIT_IPAD = .7f;
+        public static float PORTRAIT_IPHONE = .51f;
+
         public bool continious = false;
 
         public DeviceOrientation orientation = DeviceOrientation.Portrait;
@@ -20,6 +26,8 @@ namespace Fourzy._Updates.UI.Helpers
         private DisplayRatioOption previousRatio = DisplayRatioOption.NONE;
 
         private float previousAspect;
+
+        private static float aspect => Screen.width / Screen.height;
 
         protected void Start()
         {
@@ -46,7 +54,9 @@ namespace Fourzy._Updates.UI.Helpers
             RectTransform rectTransform = GetComponent<RectTransform>();
 
             if (rectTransform)
+            {
                 rectTransform.sizeDelta = new Vector2(value, rectTransform.sizeDelta.y);
+            }
         }
 
         public void SetPaddingLeft(int value)
@@ -54,7 +64,9 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(value, layoutGroup.padding.right, layoutGroup.padding.top, layoutGroup.padding.bottom);
+            }
         }
 
         public void SetPaddingRight(int value)
@@ -62,7 +74,9 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(layoutGroup.padding.left, value, layoutGroup.padding.top, layoutGroup.padding.bottom);
+            }
         }
 
         public void SetPaddingTop(int value)
@@ -70,7 +84,9 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(layoutGroup.padding.left, layoutGroup.padding.right, value, layoutGroup.padding.bottom);
+            }
         }
 
         public void SetPaddingBottom(int value)
@@ -78,62 +94,60 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(layoutGroup.padding.left, layoutGroup.padding.right, layoutGroup.padding.top, value);
+            }
         }
 
-        public void CheckOrientation()
+        public static DisplayRatioOption GetRatio(DeviceOrientation orientation)
         {
-            Camera _camera = Camera.main;
-            if (!_camera) return;
-
-            //ratio check
             switch (orientation)
             {
                 case DeviceOrientation.LandscapeLeft:
                 case DeviceOrientation.LandscapeRight:
-                    if (_camera.aspect > 1.85f)
+                    if (aspect > LANDSCAPE_IPHONEX)
                     {
-                        ratio = DisplayRatioOption.IPHONEX;
-                        UpdatePrevious();
+                        return DisplayRatioOption.IPHONEX;
                     }
-                    else if (_camera.aspect > 1.5f)
+                    else if (aspect > LANDSCAPE_IPHONE)
                     {
-                        ratio = DisplayRatioOption.IPHONE;
-                        UpdatePrevious();
+                        return DisplayRatioOption.IPHONE;
                     }
-                    else if (_camera.aspect > 1f)
+                    else if (aspect > LANDSCAPE_IPAD)
                     {
-                        ratio = DisplayRatioOption.IPAD;
-                        UpdatePrevious();
+                        return DisplayRatioOption.IPAD;
                     }
 
                     break;
 
                 case DeviceOrientation.Portrait:
                 case DeviceOrientation.PortraitUpsideDown:
-                    if (_camera.aspect <= 1f)
+                    if (aspect <= 1f)
                     {
-                        if (_camera.aspect >= .7f)
+                        if (aspect >= PORTRAIT_IPAD)
                         {
-                            ratio = DisplayRatioOption.IPAD;
-                            UpdatePrevious();
+                            return DisplayRatioOption.IPAD;
                         }
-                        else if (_camera.aspect >= .51f)
+                        else if (aspect >= PORTRAIT_IPHONE)
                         {
-                            ratio = DisplayRatioOption.IPHONE;
-                            UpdatePrevious();
+                            return DisplayRatioOption.IPHONE;
                         }
                         else
                         {
-                            ratio = DisplayRatioOption.IPHONEX;
-                            UpdatePrevious();
+                            return DisplayRatioOption.IPHONEX;
                         }
                     }
 
                     break;
             }
 
-            previousAspect = _camera.aspect;
+            return DisplayRatioOption.NONE;
+        }
+
+        public void CheckOrientation()
+        {
+            ratio = GetRatio(orientation);
+            UpdatePrevious();
         }
 
         private void OnRatioChanged(DisplayRatioOption option)
@@ -144,14 +158,17 @@ namespace Fourzy._Updates.UI.Helpers
             {
                 case DisplayRatioOption.IPHONE:
                     onIphone.Invoke();
+
                     break;
 
                 case DisplayRatioOption.IPHONEX:
                     onIphoneX.Invoke();
+
                     break;
 
                 case DisplayRatioOption.IPAD:
                     onIpad.Invoke();
+
                     break;
             }
         }
@@ -160,7 +177,7 @@ namespace Fourzy._Updates.UI.Helpers
         {
             if (Application.isEditor)
             {
-                if (previousAspect != Camera.main.aspect)
+                if (previousAspect != aspect)
                 {
                     OnRatioChanged(ratio);
                     previousRatio = ratio;
