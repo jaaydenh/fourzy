@@ -17,20 +17,25 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public override TokenView SetData(IToken tokenData)
         {
+            base.SetData(tokenData);
+
             direction = tokenData.Orientation;
 
             switch (direction)
             {
                 case Direction.LEFT:
                     body.transform.localEulerAngles = new Vector3(0f, 0f, 90f);
+
                     break;
 
                 case Direction.RIGHT:
                     body.transform.localEulerAngles = new Vector3(0f, 0f, -90f);
+
                     break;
 
                 case Direction.DOWN:
                     body.transform.localEulerAngles = new Vector3(0f, 0f, -180f);
+
                     break;
             }
 

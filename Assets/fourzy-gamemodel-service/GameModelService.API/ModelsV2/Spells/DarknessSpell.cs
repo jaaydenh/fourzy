@@ -51,8 +51,10 @@ namespace FourzyGameModel.Model
             return true;
         }
 
-        public bool Cast(GameState State)
+        public bool Cast(GameState State, out List<IToken> tokens)
         {
+            tokens = new List<IToken>();
+
             BoardSpace s = State.Board.ContentsAt(Location);
             if (ValidTargetLocation(s))
             {
@@ -65,7 +67,10 @@ namespace FourzyGameModel.Model
                 }
                 else
                 {
-                    State.Board.ContentsAt(Location).AddToken(new DarknessToken(PlayerId, Duration));
+                    DarknessToken _token = new DarknessToken(PlayerId, Duration);
+
+                    tokens.Add(_token);
+                    State.Board.ContentsAt(Location).AddToken(_token);
                 }
                 State.Board.RecordGameAction(new GameActionTokenDrop(new DarknessToken(PlayerId,Duration), TransitionType.SPELL_CAST, Location, Location));
 

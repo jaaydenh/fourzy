@@ -3,7 +3,6 @@
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tween;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -108,6 +107,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             SettingsManager.onDemoMode += OnDemo;
+
             inputMethodDropdown.ClearOptions();
             inputMethodDropdown.AddOptions(((PlacementStyle[])Enum.GetValues(typeof(PlacementStyle))).Select(_style => _style.ToString()).ToList());
             inputMethodDropdown.SetValueWithoutNotify((int)GameManager.Instance.placementStyle);

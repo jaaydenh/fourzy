@@ -104,6 +104,7 @@ namespace Fourzy._Updates.UI.Menu
         protected virtual void Start()
         {
             size = new Vector2(widthAdjusted * transform.localScale.x, heightAdjusted * transform.localScale.y);
+            //print(size + " " + widthScaled + " " + heightScaled + " " + widthAdjusted + " " + heightAdjusted);
 
             StartCoroutine(InitializedRoutine());
         }

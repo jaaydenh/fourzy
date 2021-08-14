@@ -44,12 +44,18 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State)
+        public bool Cast(GameState State, out List<IToken> tokens)
         {
+            tokens = new List<IToken>();
+
             if (State.Board.ContentsAt(Location).ContainsPiece)
             {
                 State.Board.RecordGameAction(new GameActionTokenDrop(new HoldSpellToken(PlayerId, Duration), TransitionType.SPELL_CAST, Location, Location));
-                State.Board.ContentsAt(Location).AddToken(new HoldSpellToken(PlayerId, Duration));
+
+                HoldSpellToken _token = new HoldSpellToken(PlayerId, Duration);
+                State.Board.ContentsAt(Location).AddToken(_token);
+                tokens.Add(_token);
+
                 return true;
             }
             return false;
