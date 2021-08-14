@@ -1,4 +1,4 @@
-﻿//@vadym udod
+//@vadym udod
 
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Tools;
@@ -34,7 +34,6 @@ namespace Fourzy._Updates.Mechanics
 
         public bool active { get; set; }
         public float originalSpeed { get; private set; }
-
         public float speedMltp
         {
             get => _speedMltp;
@@ -91,7 +90,9 @@ namespace Fourzy._Updates.Mechanics
         protected void Update()
         {
             if (sortingGroup)
+            {
                 sortingGroup.sortingOrder = originalSortingOrder + location.Row;
+            }
         }
 
         protected void OnDrawGizmosSelected()
@@ -338,38 +339,14 @@ namespace Fourzy._Updates.Mechanics
             positionTween.to = to;
         }
 
-        public virtual float StartMoveRoutine(bool startMove, params GameAction[] actions)
+        public virtual float StartMoveRoutine(bool startMove, BoardLocation from, BoardLocation to)
         {
-            BoardLocation[] locations = actions.AsBoardLocations();
-            float distance = 0f;
+            StartCoroutine(MoveRoutine(startMove, from, to));
 
-            if (locations.Length > 1)
-            {
-                for (int index = 1; index < locations.Length; index++)
-                {
-                    distance += Vector2.Distance(gameboard.BoardLocationToVec2(locations[index - 1]), gameboard.BoardLocationToVec2(locations[index]));
-                }
-            }
-
-            StartCoroutine(MoveRoutine(startMove, locations));
-
-            return distance / speed;
+            return gameboard.BoardLocationsToBoardDistance(from, to) / speed;
         }
 
-        public virtual float ExecuteGameAction(bool startMove, params GameAction[] actions)
-        {
-            if (actions == null || actions.Length == 0) return 0f;
-
-            switch (actions[0].Type)
-            {
-                case GameActionType.MOVE_PIECE: 
-                    return StartMoveRoutine(startMove, actions);
-            }
-
-            return OnGameAction(actions);
-        }
-
-        public virtual float OnGameAction(params GameAction[] actions) { return 0f; }
+        public virtual float OnGameAction(GameAction action) { return 0f; }
 
         public virtual void OnBeforeTurn(bool startTurn)
         {
@@ -378,9 +355,12 @@ namespace Fourzy._Updates.Mechanics
 
         public virtual void OnAfterTurn(bool startTurn) { }
 
-        public virtual void OnBeforeMoveAction(bool startTurn, params BoardLocation[] actionsMoves) { }
+        public virtual void OnBeforeMoveActions(bool startTurn, BoardLocation from, BoardLocation to) { }
 
-        public virtual void OnAfterMove(bool startTurn, params BoardLocation[] actionsMoves) { }
+        public virtual void OnAfterMoveAction(bool startTurn, BoardLocation from, BoardLocation to)
+        {
+            speedMltp = 1f;
+        }
 
         /// <summary>
         /// When other enters our location
@@ -474,6 +454,20 @@ namespace Fourzy._Updates.Mechanics
             }
         }
 
+        public void SetAnchor(Vector2 anchor)
+        {
+            if (GetComponentInParent<Canvas>())
+            {
+                if (!rectTransform)
+                {
+                    rectTransform = gameObject.AddComponent<RectTransform>();
+                }
+
+                rectTransform.anchorMin = rectTransform.anchorMax = anchor;
+                rectTransform.anchoredPosition = Vector2.zero;
+            }
+        }
+
         public virtual float _Destroy(TransitionType transitionType)
         {
             switch (transitionType)
@@ -490,22 +484,6 @@ namespace Fourzy._Updates.Mechanics
                     _Destroy(.75f);
 
                     return .75f;
-            }
-        }
-
-        public float WaitTimeForDistance(float distance) => (distance * gameboard.step.x) / speed;
-
-        public void SetAnchor(Vector2 anchor)
-        {
-            if (GetComponentInParent<Canvas>())
-            {
-                if (!rectTransform)
-                {
-                    rectTransform = gameObject.AddComponent<RectTransform>();
-                }
-
-                rectTransform.anchorMin = rectTransform.anchorMax = anchor;
-                rectTransform.anchoredPosition = Vector2.zero;
             }
         }
 
@@ -591,6 +569,7 @@ namespace Fourzy._Updates.Mechanics
 
             Vector2 start = gameboard.BoardLocationToVec2(from);
             Vector2 end = gameboard.BoardLocationToVec2(to);
+            float distance = Vector2.Distance(start, end);
 
             float step;
             float t = 0f;
