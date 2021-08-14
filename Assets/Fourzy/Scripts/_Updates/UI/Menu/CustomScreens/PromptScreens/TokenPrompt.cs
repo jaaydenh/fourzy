@@ -48,7 +48,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public virtual void Prompt(TokenView tokenView)
         {
-            data = GameContentManager.Instance.tokensDataHolder.GetTokenData(tokenView.Token.Type);
+            data = GameContentManager.Instance.tokensDataHolder.GetTokenData(tokenView.tokenType);
 
             newTokenRibbon.gameObject.SetActive(false);
             tryItButton.SetActive(false);

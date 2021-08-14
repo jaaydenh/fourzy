@@ -13,6 +13,10 @@
       "value": "Desliza para finalizar tu movimiento"
     },
     {
+      "key": "instruction_02a",
+      "value": "Desliza para finalizar tu movimiento"
+    },
+    {
       "key": "instruction_03",
       "value": "Las piezas entran desde fuera del tablero"
     },
@@ -448,14 +452,6 @@
     {
       "key": "openrareportal",
       "value": "Abrir portal raro"
-    },
-    {
-      "key": "out_of_time",
-      "value": "¡Te has quedado sin tiempo!"
-    },
-    {
-      "key": "out_of_time_opponent",
-      "value": "El oponente se quedó sin tiempo!"
     },
     {
       "key": "pass",

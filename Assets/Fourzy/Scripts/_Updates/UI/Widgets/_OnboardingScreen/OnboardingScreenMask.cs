@@ -161,7 +161,6 @@ namespace Fourzy._Updates.UI.Widgets
         public void Interactable(bool state)
         {
             canvasGroup.interactable = state;
-            //canvasGroup.blocksRaycasts = state;
         }
 
         private OnboardingScreenMaskObject AddMaskObject()

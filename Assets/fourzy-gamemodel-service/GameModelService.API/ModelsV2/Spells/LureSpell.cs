@@ -59,10 +59,8 @@ namespace FourzyGameModel.Model
                 return true;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (!ValidTargetLocation(s))
             {
@@ -70,10 +68,7 @@ namespace FourzyGameModel.Model
             }
 
             State.Board.RecordGameAction(new GameActionTokenDrop(new LureToken(), TransitionType.SPELL_CAST, s.Location, s.Location));
-            LureToken _token = new LureToken();
-            State.Board.ContentsAt(Location).AddToken(_token);
-            tokens.Add(_token);
-
+            State.Board.ContentsAt(Location).AddToken(new LureToken());
             return true;
 
 

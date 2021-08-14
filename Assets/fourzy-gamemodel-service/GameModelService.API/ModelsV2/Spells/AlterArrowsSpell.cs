@@ -32,11 +32,9 @@ namespace FourzyGameModel.Model
             return Locations;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
-            foreach (IToken t in State.Board.FindTokens(TokenType.ARROW))
+            foreach(IToken t in State.Board.FindTokens(TokenType.ARROW))
             {
                 Direction d0 = t.Orientation; 
                 t.Orientation = Orientation;

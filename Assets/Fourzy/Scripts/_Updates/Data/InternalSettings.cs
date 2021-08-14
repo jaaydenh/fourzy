@@ -180,8 +180,7 @@ namespace Fourzy._Updates
                                 {
                                     if (Application.isEditor || Debug.isDebugBuild)
                                     {
-                                        Debug.LogWarning($"Unrecognized property in settings {keyPieces[1]} " +
-                                            $"found while receiving area progression from server.");
+                                        Debug.LogWarning($"Unrecognized property in settings {keyPieces[1]} found while receiving area progression from server.");
                                     }
                                 }
 

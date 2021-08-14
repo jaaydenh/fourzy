@@ -68,18 +68,13 @@ namespace FourzyGameModel.Model
             return true;
         }
 
-        public bool Cast(GameState State, out List<IToken> tokens)
+        public bool Cast(GameState State)
         {
-            tokens = new List<IToken>();
-
             BoardSpace s = State.Board.ContentsAt(Location);
             if (!GoodForDigging(s)) return false;
 
             State.Board.RecordGameAction(new GameActionTokenDrop(new PitToken(), TransitionType.SPELL_CAST, s.Location, s.Location));
-            PitToken _token = new PitToken();
-            State.Board.ContentsAt(Location).AddToken(_token);
-            tokens.Add(_token);
-
+            State.Board.ContentsAt(Location).AddToken(new PitToken());
             return true;
         }
 

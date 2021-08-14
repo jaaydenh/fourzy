@@ -49,6 +49,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GauntletGameScreen gauntletGameScreen { get; private set; }
         public float myTimerLeft => timersEnabled ? timerWidgets[0].TotalTimeLeft : -1f;
         public float opponentTimerLeft => timersEnabled ? timerWidgets[1].TotalTimeLeft : -1f;
+        public bool outOfTime { get; private set; }
         public int myMagicLeft => magicEnabled ? player1Widget.magic : -1;
 
         protected override void Awake()
@@ -147,6 +148,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             #region Timer usage
 
+            outOfTime = false;
             timersEnabled = Tools.Utils.GetTimerState(game);
 
             #endregion
@@ -658,6 +660,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnTimerEmpty(Player player)
         {
+            outOfTime = true;
+
             switch (game._Type)
             {
                 case GameType.PASSANDPLAY:

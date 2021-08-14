@@ -46,7 +46,9 @@ namespace Fourzy._Updates.UI.Helpers
             RectTransform rectTransform = GetComponent<RectTransform>();
 
             if (rectTransform)
+            {
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, value);
+            }
         }
 
         public void SetWidth(float value)
