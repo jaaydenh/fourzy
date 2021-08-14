@@ -52,7 +52,7 @@ namespace Fourzy._Updates._Tutorial
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02"), new Vector2(.5f, .15f)),
 
-                    //two step swipe tutorial part
+                     //two step swipe tutorial part
                     new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_SWIPE },
 
                     new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},

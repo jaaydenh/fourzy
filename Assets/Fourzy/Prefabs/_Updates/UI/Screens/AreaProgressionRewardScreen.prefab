@@ -40188,6 +40188,7 @@ MonoBehaviour:
   rewardTitle: {fileID: 6527753384885093217}
   rewardName: {fileID: 6527753385054307934}
   okButton: {fileID: 6527753384835877242}
+  fgStarsParticles: {fileID: 6527753384894094720}
 --- !u!114 &6527753386061954447
 MonoBehaviour:
   m_ObjectHideFlags: 0

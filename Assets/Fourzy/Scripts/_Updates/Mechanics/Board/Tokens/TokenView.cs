@@ -11,7 +11,7 @@ namespace Fourzy._Updates.Mechanics.Board
     public class TokenView : BoardBit
     {
         public new string name;
-        public TokenType tokenType;
+        public IToken Token;
         [Range(0f, 1f)]
         public float volume = 1f;
         public string onGamePieceEnter;
@@ -29,6 +29,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public virtual TokenView SetData(IToken tokenData = null)
         {
+            Token = tokenData;
+
             return this;
         }
 

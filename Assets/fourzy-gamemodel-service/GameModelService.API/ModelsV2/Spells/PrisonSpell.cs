@@ -51,14 +51,20 @@ namespace FourzyGameModel.Model
 
         }
 
-        public bool Cast(GameState State)
+        public bool Cast(GameState State, out List<IToken> tokens)
         {
+            tokens = new List<IToken>();
+
             BoardSpace s = State.Board.ContentsAt(Location);
             if (s.ContainsSpell
                 || !s.ContainsPiece) return false;
 
             State.Board.RecordGameAction(new GameActionTokenDrop(new PrisonToken(PlayerId, Duration), TransitionType.SPELL_CAST, Location, Location));
-            State.Board.ContentsAt(Location).AddToken(new PrisonToken(PlayerId, Duration));
+
+            PrisonToken _token = new PrisonToken(PlayerId, Duration);
+            State.Board.ContentsAt(Location).AddToken(_token);
+            tokens.Add(_token);
+
             return true;
         }
 

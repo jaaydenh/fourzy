@@ -1,4 +1,4 @@
-//@vadym udod
+﻿//@vadym udod
 
 using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
