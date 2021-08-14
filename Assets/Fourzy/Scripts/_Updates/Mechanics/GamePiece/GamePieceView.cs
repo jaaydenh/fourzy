@@ -1,4 +1,4 @@
-﻿//modded @vadym udod
+//modded @vadym udod
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Mechanics.Board;

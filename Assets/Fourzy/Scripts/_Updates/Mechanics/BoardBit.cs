@@ -1,4 +1,4 @@
-﻿//@vadym udod
+//@vadym udod
 
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Tools;

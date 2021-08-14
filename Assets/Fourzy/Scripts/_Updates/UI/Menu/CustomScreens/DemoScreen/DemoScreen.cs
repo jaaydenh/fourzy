@@ -112,6 +112,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             inputMethodDropdown.AddOptions(((PlacementStyle[])Enum.GetValues(typeof(PlacementStyle))).Select(_style => _style.ToString()).ToList());
             inputMethodDropdown.SetValueWithoutNotify((int)GameManager.Instance.placementStyle);
 
+            inputMethodDropdown.ClearOptions();
+            inputMethodDropdown.AddOptions(((PlacementStyle[])Enum.GetValues(typeof(PlacementStyle))).Select(_style => _style.ToString()).ToList());
+            inputMethodDropdown.SetValueWithoutNotify((int)GameManager.Instance.placementStyle);
+
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
             {
                 OnDemo(true);
