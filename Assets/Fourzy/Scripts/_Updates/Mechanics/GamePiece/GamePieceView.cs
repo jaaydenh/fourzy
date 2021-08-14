@@ -325,7 +325,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             positionTween.PlayForward(true);
         }
 
-        public void StopSubtleMove(float time = .2f)
+        public void StopSubtleMove()
         {
             if (positionTween.isPlaying)
             {

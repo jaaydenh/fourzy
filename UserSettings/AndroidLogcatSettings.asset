@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "420036ead6cba4ad",
+    "m_SelectedDeviceId": "RF8M21C3DME",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "RF8M21C3DME",
+        "name": "com.supermove.fourzy",
+        "processId": 26649,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -12,12 +12,6 @@
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 26649,
-            "exited": false
-        },
-        {
-            "deviceId": "420036ead6cba4ad",
-            "name": "com.samsung.android.MtpApplication",
-            "processId": 1637,
             "exited": false
         }
     ],

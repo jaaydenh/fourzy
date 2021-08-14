@@ -8,6 +8,10 @@
       "key": "instruction_02",
       "value": "Toca para seleccionar adónde moverte "
     },
+	{
+      "key": "instruction_02a",
+      "value": "Desliza para finalizar tu movimiento"
+    },
     {
       "key": "instruction_02a",
       "value": "Desliza para finalizar tu movimiento"

@@ -138,6 +138,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 board.onDraw -= OnDraw;
                 board.onMoveStarted -= OnMoveStarted;
                 board.onMoveEnded -= OnMoveEnded;
+                board.onGamepieceSmashed -= OnGamePieceSmashed;
                 board.onPieceSpawned -= OnGamepieceSpawned;
             }
 
@@ -1023,6 +1024,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.onMoveEnded += OnMoveEnded;
             board.onPieceSpawned += OnGamepieceSpawned;
             board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
+            board.onGamepieceSmashed += OnGamePieceSmashed;
+            board.onPieceSpawned += OnGamepieceSpawned;
 
             //hide tokens/gamepieces
             board.FadeTokens(0f, 0f);
