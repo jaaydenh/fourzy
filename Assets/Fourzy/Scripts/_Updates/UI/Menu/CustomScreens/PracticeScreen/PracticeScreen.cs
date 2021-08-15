@@ -23,7 +23,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public float landscapeBodyHeight;
 
         public OpponentWidget opponentWidgetPrefab;
-        public PracticeScreenAreaSelectWidget areaWidgetPrefab;
         public MiniGameboardWidget miniGameboardPrefab;
         public StringEventTrigger timerToggle;
         public ButtonExtended timerButton;
@@ -67,7 +66,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //load areas
             bool first = true;
-            foreach (Serialized.AreasDataHolder.GameArea areaData in GameContentManager.Instance.enabledAreas)
+            foreach (Serialized.AreasDataHolder.GameArea areaData in GameContentManager.Instance.areasDataHolder.areas)
             {
                 if (first)
                 {
@@ -132,23 +131,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SetArea(PracticeScreenAreaSelectWidget widget)
         {
-            if (currentAreaWidget)
+            if (currentAreaWidget && currentAreaWidget != widget)
             {
-                if (currentAreaWidget != widget)
-                {
-                    currentAreaWidget.Deselect();
-                    SetAreaWidget(widget);
-                }
+                currentAreaWidget.Deselect();
             }
-            else
-            {
-                SetAreaWidget(widget);
-            }
+
+            SetAreaWidget(widget);
         }
 
         public void NextBoard()
         {
-            if (currentBoard + 1 == gameboards[currentAreaWidget.area].Count)
+            if (currentBoard + 1 == gameboards[currentAreaWidget.Area].Count)
             {
                 currentBoard = -1;
             }
@@ -164,7 +157,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (currentBoard - 1 == -2)
             {
-                currentBoard = gameboards[currentAreaWidget.area].Count - 1;
+                currentBoard = gameboards[currentAreaWidget.Area].Count - 1;
             }
             else
             {
@@ -234,15 +227,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ClientFourzyGame game;
             if (currentBoard > -1)
             {
-                game = new ClientFourzyGame(gameboards[currentAreaWidget.area][currentBoard], player1, player2)
+                game = new ClientFourzyGame(gameboards[currentAreaWidget.Area][currentBoard], player1, player2)
                 {
-                    _Area = currentAreaWidget.area,
+                    _Area = currentAreaWidget.Area,
                     _Type = type,
                 };
             }
             else
             {
-                game = new ClientFourzyGame(currentAreaWidget.area, player1, player2, 1)
+                game = new ClientFourzyGame(currentAreaWidget.Area, player1, player2, 1)
                 {
                     _Type = type,
                 };
@@ -262,8 +255,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected PracticeScreenAreaSelectWidget AddAreaWidget(Area area)
         {
-            PracticeScreenAreaSelectWidget instance = Instantiate(areaWidgetPrefab, areasContainer.content)
-                .SetData(area);
+            PracticeScreenAreaSelectWidget instance = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), areasContainer.content)
+                .SetData(area, false);
             instance.button.onTap += data => SetArea(instance);
 
             return instance;
@@ -282,7 +275,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (currentGameboardWidget)
             {
-                currentGameboardWidget.SetArea(currentAreaWidget.area);
+                currentGameboardWidget.SetArea(currentAreaWidget.Area);
             }
 
             currentBoard = -1;
@@ -299,11 +292,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             MiniGameboardWidget gameboard = Instantiate(miniGameboardPrefab, gameboardParent);
             gameboard.ResetAnchors();
             gameboard.button.interactable = false;
-            gameboard.SetArea(currentAreaWidget.area);
+            gameboard.SetArea(currentAreaWidget.Area);
 
             if (index > -1)
             {
-                gameboard.QuickLoadBoard(gameboards[currentAreaWidget.area][index]);
+                gameboard.QuickLoadBoard(gameboards[currentAreaWidget.Area][index]);
             }
 
             currentGameboardWidget = gameboard;

@@ -1,13 +1,11 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates;
-using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Fourzy
@@ -41,10 +39,6 @@ namespace Fourzy
         public static int GetCurrentArea() =>
             PlayerPrefs.GetInt("currentTheme_", (int)InternalSettings.Current.DEFAULT_AREA);
 
-        public static bool GetAreaUnlocked(int area) => GetBool("themeUnlocked_" + area);
-
-        public static void SetAreaUnlocked(int area, bool state) => SetBool("themeUnlocked_" + area, state);
-
         public static void SetTutorialState(string name, bool state) => SetBool("tutorial_" + name, state);
 
         public static bool GetTutorialFinished(string name) => GetBool("tutorial_" + name);
@@ -64,7 +58,7 @@ namespace Fourzy
 
         public static void AddUnlockedTokens(IEnumerable<TokenType> tokens, TokenUnlockType unlockType)
         {
-            HashSet<(TokenType tokenType, TokenUnlockType unlockType)> unlocked = 
+            HashSet<(TokenType tokenType, TokenUnlockType unlockType)> unlocked =
                 new HashSet<(TokenType tokenType, TokenUnlockType unlockType)>(GetUnlockedTokens());
 
             foreach (TokenType type in tokens)
@@ -80,7 +74,7 @@ namespace Fourzy
                 PlayerPrefs.GetString("unlockedTokens", "[]"));
         }
 
-        public static bool IsDefaultTokensSet() => 
+        public static bool IsDefaultTokensSet() =>
             PlayerPrefs.GetString("unlockedTokens", "[]")
                 .Contains("\"Item2\":0");
 
@@ -91,7 +85,7 @@ namespace Fourzy
 
             //remove previous default tokens
             unlocked.RemoveWhere(_data => _data.unlockType == TokenUnlockType.DEFAULT);
-            
+
             foreach (TokenType _newDefault in tokens)
             {
                 unlocked.Add((_newDefault, TokenUnlockType.DEFAULT));

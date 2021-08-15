@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
 using System;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             randomArea.onClick += OnWidgetSelected;
-            foreach (AreasDataHolder.GameArea area in GameContentManager.Instance.enabledAreas)
+            foreach (AreasDataHolder.GameArea area in GameContentManager.Instance.areasDataHolder.areas)
             {
                 AreaWidgetLandscape newInstance = Instantiate(comingSoonArea, widgetsParent);
                 newInstance.SetData(area);

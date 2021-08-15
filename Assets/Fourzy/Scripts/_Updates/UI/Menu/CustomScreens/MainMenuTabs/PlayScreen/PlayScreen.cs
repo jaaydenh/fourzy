@@ -3,7 +3,6 @@
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
-using TMPro;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -142,7 +141,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             GamesToastsController.ShowTopToast(LocalizationManager.Value("wrong_room_code"));
         }
-        
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

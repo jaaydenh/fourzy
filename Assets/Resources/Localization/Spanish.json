@@ -374,12 +374,16 @@
       "value": "Token Nuevo"
     },
     {
+      "key": "new_area",
+      "value": "Nueva Área"
+    },
+    {
       "key": "new_gamepiece",
       "value": "Nuevo Fourzy"
     },
     {
       "key": "new_token_unlocked",
-      "value": "NUEVO TOKEN DESBLOQUEADO"
+      "value": "Nuevo TOKEN DESBLOQUEADO"
     },
     {
       "key": "news",

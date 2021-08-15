@@ -49,13 +49,13 @@ namespace Fourzy
             UserManager.onPlayfabValuesLoaded -= OnPlayfabValueLoaded;
         }
 
-        private void OnPlayfabValueLoaded()
+        private void OnPlayfabValueLoaded(PlayfabValuesLoaded value)
         {
             int values = 0;
 
-            foreach (PlayfabValuesLoaded value in valuesToWaitFor)
+            foreach (PlayfabValuesLoaded _value in valuesToWaitFor)
             {
-                if (UserManager.Instance.IsPlayfabValueLoaded(value))
+                if (UserManager.Instance.IsPlayfabValueLoaded(_value))
                 {
                     values++;
                 }

@@ -137,7 +137,7 @@ namespace Fourzy._Updates.Serialized
                 {
                     foreach (ThemeTokenPrefabPair prefabData in themesTokens)
                     {
-                        if (prefabData.theme.HasFlag(value) && themesData.IsAreaEnabled((Area)value))
+                        if (prefabData.theme.HasFlag(value) && themesData[(Area)value] != null)
                         {
                             result.Add(themesData[(Area)value]);
                         }
@@ -148,7 +148,7 @@ namespace Fourzy._Updates.Serialized
             }
 
             public List<string> GetAreaNames(AreasDataHolder themesDataHolder) =>
-                GetTokenAreas(themesDataHolder)?.Select(area => LocalizationManager.Value(area.name)).ToList() ?? null;
+                GetTokenAreas(themesDataHolder)?.Select(area => area.Name).ToList() ?? null;
 
             public Sprite GetTokenSprite()
             {

@@ -52,9 +52,6 @@ namespace Fourzy._Updates
             PlayerPrefs.GetInt(PREFIX + "GAMES_BEFORE_RATING_DISPLAYED", Constants.GAMES_BEFORE_RATING_USED);
         internal float LOBBY_GAME_LOAD_DELAY { get; private set; } =
             PlayerPrefs.GetFloat(PREFIX + "LOBBY_GAME_LOAD_DELAY", Constants.LOBBY_GAME_LOAD_DELAY);
-        internal Area[] UNLOCKED_AREAS { get; private set; } =
-            AreasFromString(PlayerPrefs.GetString(PREFIX + "UNLOCKED_AREAS", "")) ??
-            Constants.UNLOCKED_AREAS;
         internal BotGameSettings BOT_SETTINGS { get; private set; } =
             BotSettingsFromString(PlayerPrefs.GetString(PREFIX + "BOT_SETTINGS", "")) ??
             Constants.BOT_SETTINGS;
@@ -133,31 +130,6 @@ namespace Fourzy._Updates
                                     BOT_SETTINGS = BotSettingsFromString(kvPair.Value);
 
                                     PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
-                                }
-
-                                break;
-
-                            case "area":
-                                Area[] areas = AreasFromString(kvPair.Value);
-
-                                equal = areas.Length == UNLOCKED_AREAS.Length;
-                                if (equal)
-                                {
-                                    //compare contents
-                                    foreach (Area area in areas)
-                                    {
-                                        if (!UNLOCKED_AREAS.Contains(area))
-                                        {
-                                            equal = false;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (!equal)
-                                {
-                                    newValues.Add(keyPieces[1], kvPair.Value);
-                                    UNLOCKED_AREAS = areas;
                                 }
 
                                 break;

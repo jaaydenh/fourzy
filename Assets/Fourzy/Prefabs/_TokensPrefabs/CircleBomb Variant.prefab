@@ -16,7 +16,6 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_circle_bomb
-  tokenType: 13
   volume: 1
   onGamePieceEnter: 
   onActivate: token_circle_bomb

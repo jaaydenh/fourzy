@@ -64,7 +64,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             GamePieceView _gamepiece = Instantiate(
                 GameContentManager.Instance.piecesDataHolder.GetGamePieceData(pieceID).player1Prefab,
-                transform.transform);
+                transform);
             _gamepiece.transform.localScale = Vector3.one * .5f;
             _gamepiece.StartBlinking();
         }
@@ -74,6 +74,18 @@ namespace Fourzy._Updates.UI.Widgets
             image.sprite = GameContentManager.Instance
                         .GetTokenData(type)
                         .GetTokenSprite();
+        }
+
+        public void ShowArea(Area area)
+        {
+            image.color = Color.clear;
+
+            PracticeScreenAreaSelectWidget areaWidget = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), transform);
+            areaWidget.SetData(area, false);
+            areaWidget.rectTransform.sizeDelta = Vector2.one;
+            areaWidget.SetLocalPosition(Vector2.zero);
+
+            Destroy(areaWidget.button);
         }
     }
 }

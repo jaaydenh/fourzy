@@ -22,7 +22,7 @@ namespace Fourzy
         public static Action<IEnumerable<TokenType>, TokenUnlockType> onTokenUnlocked;
         public static Action<Area, int> onAreaProgression;
 
-        public static Action onPlayfabValuesLoaded;
+        public static Action<PlayfabValuesLoaded> onPlayfabValuesLoaded;
 
         public static Action<CurrencyType> onCurrencyUpdate;
         public static Action<int, string> onHintsUpdate;
@@ -304,7 +304,7 @@ namespace Fourzy
         {
             _playfabValueLoaded |= playfabValue;
 
-            onPlayfabValuesLoaded?.Invoke();
+            onPlayfabValuesLoaded?.Invoke(playfabValue);
         }
 
         public bool IsPlayfabValueLoaded(params PlayfabValuesLoaded[] values)

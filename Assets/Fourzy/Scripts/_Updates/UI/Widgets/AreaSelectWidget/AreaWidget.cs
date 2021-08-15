@@ -29,7 +29,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.area = area;
 
-            themeNameField.text = area.name;
+            themeNameField.text = area.Name;
             themePreview.sprite = area._16X9;
 
             toggleExtended.group = toggleGroup;

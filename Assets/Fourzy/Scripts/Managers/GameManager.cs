@@ -573,6 +573,33 @@ namespace Fourzy
                                 }
 
                                 break;
+
+                            case Constants.PLAYFAB_GAMEPIECE_CLASS:
+                                GamePieceData gp = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(item.itemId);
+
+                                if (gp != null)
+                                {
+                                    gp.Pieces = item.count;
+                                }
+                                else
+                                {
+                                    string message = $"Gamepiece id {item.itemId} not found";
+
+                                    if (Application.isEditor || Debug.isDebugBuild)
+                                    {
+                                        Debug.LogWarning(message);
+                                    }
+
+                                    Instance.ReportPlayFabError(message);
+                                }
+
+                                break;
+
+                            case Constants.PLAYFAB_AREA_CLASS:
+                                Area _area = (Area)Enum.Parse(typeof(Area), item.itemId);
+                                GameContentManager.Instance.areasDataHolder.SetAreaUnlockedState(_area, true);
+
+                                break;
                         }
                     }
                 }
@@ -1000,11 +1027,14 @@ namespace Fourzy
             //check
             if (activeGame == null || (activeGame._Type != GameType.ONBOARDING && activeGame._Type != GameType.PRESENTATION))
             {
-                //start demo mode
-                StartGame(new ClientFourzyGame(GameContentManager.Instance.enabledAreas.Random().areaID,
+                ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.areasDataHolder.areas.Random().areaID,
                     new Player(1, "AI Player 1") { PlayerString = "1" },
                     new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
-                { _Type = GameType.PRESENTATION, }, GameTypeLocal.LOCAL_GAME);
+                { _Type = GameType.PRESENTATION, };
+                _game.UpdateFirstState();
+
+                //start demo mode
+                StartGame(_game, GameTypeLocal.LOCAL_GAME);
             }
         }
 

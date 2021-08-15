@@ -21,8 +21,6 @@ namespace Fourzy
         [BoxGroup("Misc data")]
         public Sprite profilePicture;
         [BoxGroup("Misc data")]
-        public Vector2 profilePictureOffset;
-        [BoxGroup("Misc data")]
         public Color outlineColor = Color.blue;
         [BoxGroup("Misc data")]
         public Color borderColor = Color.green;
@@ -36,6 +34,19 @@ namespace Fourzy
         [InfoBox("Actual value pulled from server")]
         [NonSerialized, ShowInInspector]
         public int PiecesToUnlock;
+
+        public Vector2 ProfilePicturePivot
+        {
+            get
+            {
+                if (profilePicture)
+                {
+                    return profilePicture.pivot / (profilePicture.bounds.size * profilePicture.pixelsPerUnit);
+                }
+
+                return Vector2.one * .5f;
+            }
+        }
 
         /// <summary>
         /// Temp returns these values

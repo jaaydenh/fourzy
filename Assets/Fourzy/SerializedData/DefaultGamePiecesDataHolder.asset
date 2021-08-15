@@ -20,11 +20,7 @@ MonoBehaviour:
       type: 3}
     Id: red_dragon
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 30
     profilePicture: {fileID: 21300000, guid: f6418452ef2f81a4791bc6980492754e, type: 3}
-    profilePictureOffset: {x: -66, y: 14}
     outlineColor: {r: 0, g: 0.4666667, b: 0.9960785, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Sir Knighty
@@ -34,11 +30,7 @@ MonoBehaviour:
       type: 3}
     Id: sir_knighty
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 30
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 0.9960785, g: 1, b: 0.11764707, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Masked
@@ -48,11 +40,7 @@ MonoBehaviour:
       type: 3}
     Id: masked
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 30
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 1, g: 0.5411765, b: 0, a: 1}
     borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
   - name: Night Owl
@@ -62,11 +50,7 @@ MonoBehaviour:
       type: 3}
     Id: night_owl
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 30
     profilePicture: {fileID: 21300000, guid: c73c4997af5cca34a9fb7180c31dfcfd, type: 3}
-    profilePictureOffset: {x: -3, y: -43}
     outlineColor: {r: 1, g: 1, b: 0.011764707, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Crossy
@@ -76,11 +60,7 @@ MonoBehaviour:
       type: 3}
     Id: crossy
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: fdb4f9674b360df478829d8929e5e9dc, type: 3}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: Triangry
@@ -90,11 +70,7 @@ MonoBehaviour:
       type: 3}
     Id: triangry
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: a75f294368bb04d47b950aeb0e806319, type: 3}
-    profilePictureOffset: {x: -15, y: -26}
     outlineColor: {r: 1, g: 0.7568628, b: 0, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: Mr. Bun
@@ -104,11 +80,7 @@ MonoBehaviour:
       type: 3}
     Id: mr_bun
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: c1d24a9606b58b742ba08f026865f926, type: 3}
-    profilePictureOffset: {x: 0, y: -50}
     outlineColor: {r: 1, g: 0.3921569, b: 1, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: Daisy
@@ -118,11 +90,7 @@ MonoBehaviour:
       type: 3}
     Id: daisy
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: eace5bed472eb3743ac90030a395310d, type: 3}
-    profilePictureOffset: {x: 0, y: -30}
     outlineColor: {r: 0, g: 0.8980393, b: 1, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: Spooked
@@ -132,11 +100,7 @@ MonoBehaviour:
       type: 3}
     Id: spooked
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 0.37254903, g: 1, b: 0.53333336, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: SquidMo
@@ -146,11 +110,7 @@ MonoBehaviour:
       type: 3}
     Id: squid_mo
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: 3ad17d444b486a040ae304bbe0839794, type: 3}
-    profilePictureOffset: {x: 7, y: -25}
     outlineColor: {r: 0.58431375, g: 1, b: 0, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: Ginger
@@ -160,11 +120,7 @@ MonoBehaviour:
       type: 3}
     Id: ginger
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 0.6392157, g: 0.41176474, b: 0.9960785, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: Blobby
@@ -174,11 +130,7 @@ MonoBehaviour:
       type: 3}
     Id: blobby
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 1, g: 1, b: 0.29411766, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: Sentinal
@@ -188,11 +140,7 @@ MonoBehaviour:
       type: 3}
     Id: sentinal
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: f7c08911bfd59784981d16a9f7166cc9, type: 3}
-    profilePictureOffset: {x: 0, y: -30}
     outlineColor: {r: 0.8117648, g: 0.9960785, b: 0, a: 1}
     borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
   - name: Droidz
@@ -202,11 +150,7 @@ MonoBehaviour:
       type: 3}
     Id: droidz
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: d0bf6693d52113042818892f0f9097f6, type: 3}
-    profilePictureOffset: {x: 14, y: 24}
     outlineColor: {r: 0, g: 1, b: 1, a: 1}
     borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
   - name: Cyclops
@@ -216,11 +160,7 @@ MonoBehaviour:
       type: 3}
     Id: cyclops
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: bab83e858a08f9d40b0b2f4dfc9eb70f, type: 3}
-    profilePictureOffset: {x: 11, y: -30}
     outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
   - name: The Bot
@@ -230,11 +170,7 @@ MonoBehaviour:
       type: 3}
     Id: the_bot
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: 4b92cfda188a7bf4788bb26d7b637be6, type: 3}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 1, g: 0.36862746, b: 1, a: 1}
     borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
   - name: MewWhiskey
@@ -244,11 +180,7 @@ MonoBehaviour:
       type: 3}
     Id: mew_whiskey
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 0.5882353, g: 0.9960785, b: 0.9960785, a: 1}
     borderColor: {r: 0.9960785, g: 0.6117647, b: 0, a: 1}
   - name: Furrzy
@@ -258,11 +190,7 @@ MonoBehaviour:
       type: 3}
     Id: furrzy
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 60
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: 21149a38a5e3ba148a7d134d2d0a1626, type: 3}
-    profilePictureOffset: {x: -1, y: -30}
     outlineColor: {r: 1, g: 1, b: 0.30588236, a: 1}
     borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
   - name: Eeek
@@ -272,11 +200,7 @@ MonoBehaviour:
       type: 3}
     Id: eeek
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 60
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: 298491a9f6dadb646a45618b15cd02c9, type: 3}
-    profilePictureOffset: {x: -20, y: -52}
     outlineColor: {r: 0.9843138, g: 0.38823533, b: 0.54901963, a: 1}
     borderColor: {r: 0.882353, g: 0.007843138, b: 0.9921569, a: 1}
   - name: Rainbow Bite
@@ -286,11 +210,7 @@ MonoBehaviour:
       type: 3}
     Id: rainbow_bite
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 30
     profilePicture: {fileID: 21300000, guid: f43d6947711d21841a30a77b5a300552, type: 3}
-    profilePictureOffset: {x: -38, y: 61}
     outlineColor: {r: 1, g: 0.33333334, b: 1, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Wizzle Wisp
@@ -300,11 +220,7 @@ MonoBehaviour:
       type: 3}
     Id: wizzle_wisp
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 60
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: c3503510c7fd65943a48d44c60cd1225, type: 3}
-    profilePictureOffset: {x: 0, y: 31}
     outlineColor: {r: 0, g: 1, b: 0.53333336, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Snow Person
@@ -314,11 +230,7 @@ MonoBehaviour:
       type: 3}
     Id: snow_person
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 60
-    pieces: 0
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 1, g: 0.5137255, b: 0.52156866, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Mecha Bunny
@@ -328,11 +240,7 @@ MonoBehaviour:
       type: 3}
     Id: mecha_bunny
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 60
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: 9a8d1e1655e0c1c40b11db96af5c5f22, type: 3}
-    profilePictureOffset: {x: -1, y: 61}
     outlineColor: {r: 1, g: 0.45882356, b: 1, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Techno Bug
@@ -342,11 +250,7 @@ MonoBehaviour:
       type: 3}
     Id: techno_bug
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 60
-    pieces: 0
-    profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
+    profilePicture: {fileID: 21300000, guid: 9db8f8370f420684cb60f65d689ead30, type: 3}
     outlineColor: {r: 0.003921569, g: 0.97647065, b: 0.49803925, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
   - name: Mr. Hatty
@@ -356,10 +260,6 @@ MonoBehaviour:
       type: 3}
     Id: mr_hatty
     enabled: 1
-    startingMagic: 100
-    piecesToUnlock: 60
-    pieces: 0
     profilePicture: {fileID: 21300000, guid: 0f77731c615de8340afe1a9f37be11df, type: 3}
-    profilePictureOffset: {x: 21, y: -28}
     outlineColor: {r: 0.654902, g: 0.43137258, b: 1, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 0, a: 1}

@@ -3,6 +3,7 @@
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using PlayFab.ClientModels;
 using System;
@@ -85,6 +86,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 case Constants.PLAYFAB_GAMEPIECE_CLASS:
                     tokenImage.color = Color.clear;
+
                     GamePieceData _pieceData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(item.ItemId);
                     gamepiece = Instantiate(_pieceData.player1Prefab, tokenImage.transform);
                     gamepiece.transform.localScale = Vector3.one * .5f;
@@ -92,6 +94,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     rewardTitle.text = LocalizationManager.Value("new_gamepiece");
                     rewardName.text = _pieceData.name;
+
+                    okButton.SetLabel(LocalizationManager.Value("ok"));
+                    fgStarsParticles.gameObject.SetActive(false);
+
+                    break;
+
+                case Constants.PLAYFAB_AREA_CLASS:
+                    tokenImage.color = Color.clear;
+
+                    AreasDataHolder.GameArea areaData = GameContentManager.Instance.areasDataHolder[(Area)Enum.Parse(typeof(Area), item.ItemId)];
+                    PracticeScreenAreaSelectWidget widget = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), tokenImage.transform)
+                        .SetData((Area)Enum.Parse(typeof(Area), item.ItemId), keepEnabled: true);
+                    widget.transform.localScale = Vector3.one * .005f;
+                    widget.transform.localPosition = Vector3.zero;
+
+                    rewardTitle.text = LocalizationManager.Value("new_area");
+                    rewardName.text = areaData.Name;
 
                     okButton.SetLabel(LocalizationManager.Value("ok"));
                     fgStarsParticles.gameObject.SetActive(false);
@@ -128,6 +147,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
 
                     break;
+
+                case Constants.PLAYFAB_AREA_CLASS:
+
+                    break;
             }
         }
 
@@ -154,6 +177,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         AnalyticsManager.AnalyticsProvider.ALL,
                         new System.Collections.Generic.KeyValuePair<string, object>("piece", reward.ItemId),
                         new System.Collections.Generic.KeyValuePair<string, object>("realtimeGamesCompleted", UserManager.Instance.realtimeGamesComplete));
+
+                    break;
+
+
+                case Constants.PLAYFAB_AREA_CLASS:
 
                     break;
             }

@@ -119,7 +119,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             previousXP = UserManager.Instance.xp;
 
-            title.text = GameContentManager.Instance.areasDataHolder[game._Area].name;
+            title.text = GameContentManager.Instance.areasDataHolder[game._Area].Name;
 
             SetInteractable(true);
             canvasGroup.blocksRaycasts = true;

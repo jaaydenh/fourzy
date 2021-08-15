@@ -147,7 +147,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             ClientFourzyGame game;
             Area _area = selectedArea == null ?
-                    GameContentManager.Instance.enabledAreas.Random().areaID :
+                    GameContentManager.Instance.areasDataHolder.areas.Random().areaID :
                     selectedArea.areaID;
 
             if (gameBoardDefinition == null)
