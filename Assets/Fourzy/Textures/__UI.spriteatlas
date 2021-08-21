@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: be044a4a46a3d1a4794d948d7e6d087b, type: 3}
-    totalSpriteSurfaceArea: 19350611
+    totalSpriteSurfaceArea: 19370048
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -58,6 +58,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 9134755065e90324381737bdff671a62, type: 3}
   - {fileID: 21300000, guid: 2a93c550c6fe54b7bb6b17da68d908df, type: 3}
   - {fileID: 21300000, guid: ec879060c18eb435483075a0576e6d0c, type: 3}
+  - {fileID: 21300000, guid: e9617c6098e9944e8bc66de8cdbfd7d5, type: 3}
   - {fileID: 21300000, guid: 8314c970340ae4f018fd1364d52a00fd, type: 3}
   - {fileID: 21300000, guid: 357f0e8058d4fd24b80b1beb1333926e, type: 3}
   - {fileID: 21300000, guid: b1123890bde60cb4eb33dd517ade108a, type: 3}
@@ -120,6 +121,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1509ba636f7111545b9be08e9babaf8d, type: 3}
   - {fileID: 21300000, guid: 15077c63d78c8694493df308706e2f14, type: 3}
   - {fileID: 21300000, guid: b0810173d445a57448dd0403ce33ad87, type: 3}
+  - {fileID: 21300000, guid: 6d4c98934f50e497c9e0f48aa21676ec, type: 3}
   - {fileID: 21300000, guid: c7b782a33ccfa4207bb8482cd36cde4e, type: 3}
   - {fileID: 21300000, guid: a6f6a1c341ef8b549ad07e9ccf2c99b6, type: 3}
   - {fileID: 21300000, guid: 8f3530e3f02930a45a60f72bb25f032d, type: 3}
@@ -208,6 +210,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 27b17c2892ee3f54db2ab98394451114, type: 3}
   - {fileID: 21300000, guid: cddff038b2840a948b55c4ff525b3f87, type: 3}
   - {fileID: 21300000, guid: dcd5a638558c58243b49c1a03d6e353b, type: 3}
+  - {fileID: 21300000, guid: 9ccd783837c310143930836a67323a1f, type: 3}
   - {fileID: 21300000, guid: 7b385b38e1f6cf545a59e65a29b8b5cf, type: 3}
   - {fileID: 21300000, guid: 0aff41489ca2441879fe4da19a0b8589, type: 3}
   - {fileID: 21300000, guid: 7c645e589f01bfd4c980710dee8ddb89, type: 3}
@@ -295,6 +298,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 0f128b9c2bb08f14d96f7cbcb5f6b629, type: 3}
   - {fileID: 21300000, guid: ca62ed9c002f40045a1ce400a372d245, type: 3}
   - {fileID: 21300000, guid: 079e16bce45e14ab2b4512c4e4d08d4a, type: 3}
+  - {fileID: 21300000, guid: fc6acdbcd47cec744bee7f5a1e09b34e, type: 3}
   - {fileID: 21300000, guid: 57fed0cc77c11c44d865024e20118edc, type: 3}
   - {fileID: 21300000, guid: dc0634cc52d567a4f9b82c54ea94a366, type: 3}
   - {fileID: 21300000, guid: 67740cec3c86ee146bb9aba5c75dd727, type: 3}
@@ -368,6 +372,7 @@ SpriteAtlas:
   - Portal-On
   - icon_coin_old
   - FrameBackground
+  - setting_reward_tip_bg
   - iconFbLogo
   - FrameBackground2
   - buttonYellowRoundedSmall
@@ -430,6 +435,7 @@ SpriteAtlas:
   - Portal-BoxOff
   - Background-Moves
   - Pack02-circle
+  - ranking_icon_trophy
   - ProfileMask
   - Icon-News
   - Bots-08-Violet
@@ -518,6 +524,7 @@ SpriteAtlas:
   - TabIcons-Leaderboard
   - icon_portal_small
   - Loading_Type_004_0
+  - setting_reward_tip_bg-90
   - Background-Grape
   - character_lv_bar_blue
   - Board-Arrows
@@ -605,6 +612,7 @@ SpriteAtlas:
   - yellow-200
   - yellow-160
   - character_lv_bar_yellow
+  - progressBarMarker
   - Button-Back
   - left_c_box
   - StarBackground

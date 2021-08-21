@@ -16,7 +16,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Sprite checkmarkOn;
         public Sprite checkmarkOff;
         public ScrollRect areasContainer;
-        public PracticeScreenAreaSelectWidget areaWidgetPrefab;
 
         private bool passwordEnabled = true;
         private LoadingPromptScreen _prompt;
@@ -49,7 +48,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //load areas
             bool first = true;
-            foreach (Serialized.AreasDataHolder.GameArea areaData in GameContentManager.Instance.enabledAreas)
+            foreach (Serialized.AreasDataHolder.GameArea areaData in GameContentManager.Instance.areasDataHolder.areas)
             {
                 if (first)
                 {
@@ -131,19 +130,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 SetAreaWidget(widget);
             }
 
-
             void SetAreaWidget(PracticeScreenAreaSelectWidget PracticeWidget)
             {
                 currentAreaWidget = PracticeWidget;
                 currentAreaWidget.Select();
 
-                PlayerPrefsWrapper.SetCurrentArea((int)PracticeWidget.area);
+                PlayerPrefsWrapper.SetCurrentArea((int)PracticeWidget.Area);
             }
         }
 
         protected PracticeScreenAreaSelectWidget AddAreaWidget(Area area)
         {
-            PracticeScreenAreaSelectWidget instance = Instantiate(areaWidgetPrefab, areasContainer.content)
+            PracticeScreenAreaSelectWidget instance = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), areasContainer.content)
                 .SetData(area);
             instance.button.onTap += data => SetArea(instance);
 

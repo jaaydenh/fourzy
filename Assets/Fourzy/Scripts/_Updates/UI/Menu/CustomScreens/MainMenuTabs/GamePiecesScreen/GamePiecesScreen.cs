@@ -49,7 +49,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected bool foundExpanded = true;
         protected bool lockedExpanded = true;
 
-        private bool userInventoryLoaded = false;
         private bool catalogLoaded = false;
 
         protected override void Awake()
@@ -284,12 +283,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             UpdateTokens();
         }
 
-        private void OnPlayfabValueLoaded()
+        private void OnPlayfabValueLoaded(PlayfabValuesLoaded value)
         {
-            if (UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.USER_INVENTORY_RECEIVED) && !userInventoryLoaded)
+            if (value == PlayfabValuesLoaded.USER_INVENTORY_RECEIVED)
             {
-                userInventoryLoaded = true;
-
                 UpdateTokens();
             }
 

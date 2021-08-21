@@ -18,7 +18,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class GeneratorTesterPrompt : MenuScreen
     {
         public ScrollRect areasContainer;
-        public PracticeScreenAreaSelectWidget areaWidgetPrefab;
         public GeneratorTesterTokenView generatorTesterTokenView;
         public RectTransform tokensParent;
         public Slider low;
@@ -120,13 +119,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             recipeDropdown.ClearOptions();
             recipeDropdown.AddOptions(BoardFactory.GetRecipeListForComplexityRange(
-                currentAreaWidget.area,
+                currentAreaWidget.Area,
                 (int)percentage.value));
         }
 
         public void GenerateAndTry()
         {
-            Area area = currentAreaWidget ? currentAreaWidget.area : Area.TRAINING_GARDEN;
+            Area area = currentAreaWidget ? currentAreaWidget.Area : Area.TRAINING_GARDEN;
 
             BoardGenerationPreferences preferences = new BoardGenerationPreferences(area, (int)percentage.value);
             GameOptions options = new GameOptions() { PlayersUseSpells = AllowMagic };
@@ -189,7 +188,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             currentAreaWidget = widget;
 
-            BoardGenerator Gen = BoardGeneratorFactory.CreateGenerator(currentAreaWidget.area);
+            BoardGenerator Gen = BoardGeneratorFactory.CreateGenerator(currentAreaWidget.Area);
             low.value = Gen.MinComplexity;
             high.value = Gen.MaxComplexity;
 
@@ -217,7 +216,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //areas
             bool first = true;
-            foreach (AreasDataHolder.GameArea areaData in GameContentManager.Instance.enabledAreas)
+            foreach (AreasDataHolder.GameArea areaData in GameContentManager.Instance.areasDataHolder.areas)
             {
                 if (first)
                 {
@@ -241,7 +240,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected PracticeScreenAreaSelectWidget AddAreaWidget(Area area)
         {
-            PracticeScreenAreaSelectWidget instance = Instantiate(areaWidgetPrefab, areasContainer.content)
+            PracticeScreenAreaSelectWidget instance = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), areasContainer.content)
                 .SetData(area);
             instance.button.onTap += data => OnAreaWidgetTap(instance);
 

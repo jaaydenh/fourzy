@@ -26,6 +26,7 @@ namespace Fourzy._Updates.UI.Helpers
                     image = gameObject.AddComponent<Image>();
                 }
                 image.color = spriteRenderer.color;
+                spriteRenderer.enabled = false;
 
                 rectTransform = gameObject.GetComponent<RectTransform>();
                 if (!rectTransform)
@@ -36,6 +37,7 @@ namespace Fourzy._Updates.UI.Helpers
 
             if (sortingGroup)
             {
+                Debug.Log(name);
                 sortingGroup.enabled = false;
             }
 

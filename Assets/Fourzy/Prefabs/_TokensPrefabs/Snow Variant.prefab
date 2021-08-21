@@ -16,7 +16,6 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_snow
-  tokenType: 18
   volume: 1
   onGamePieceEnter: 
   onActivate: token_ice_block

@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 916976b882de14d1789f3cebae0a243e, type: 3}
-    totalSpriteSurfaceArea: 280146
+    totalSpriteSurfaceArea: 280290
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -69,6 +69,8 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 2713668ca417246b8a2c388ae6e1a050, type: 3}
   - {fileID: 21300000, guid: 9f57a8adac99e4526a1986646a3be29a, type: 3}
   - {fileID: 21300000, guid: d8ec7bed8b86f4a3d905859476e40a84, type: 3}
+  - {fileID: 21300000, guid: dbf47ded2712620479576427cfb2cea3, type: 3}
+  - {fileID: 21300000, guid: ea50807e20952d340b26fdb84099cae0, type: 3}
   - {fileID: 21300000, guid: c036f3de1f1584b6eb35aa03cce9964c, type: 3}
   - {fileID: 21300000, guid: 5a5d5fbf2b0304fef8da8a584f9d46c6, type: 3}
   m_PackedSpriteNamesToIndex:
@@ -91,6 +93,8 @@ SpriteAtlas:
   - userinfo_lv_bar
   - userinfo_icon_win
   - userinfo_icon_skull
+  - userinfo_lv_bar_bg-flipped-1x
+  - userinfo_lv_bar-clipped-1x
   - profile_img_frame
   - userinfo_lv_bar_bg
   m_RenderDataMap: {}

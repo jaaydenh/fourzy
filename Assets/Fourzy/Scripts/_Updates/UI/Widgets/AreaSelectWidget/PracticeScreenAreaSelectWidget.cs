@@ -1,8 +1,8 @@
 ﻿//@vadym udod
 
 using ByteSheep.Events;
+using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,24 +10,45 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class PracticeScreenAreaSelectWidget : WidgetBase
     {
-        public Image icon;
-        public GameObject disabled;
+        [SerializeField]
+        private Image icon;
+        [SerializeField]
+        private GameObject disabled;
+
         public AdvancedEvent onSelect;
         public AdvancedEvent onDeselect;
 
-        public Area area { get; private set; }
+        public Area Area { get; private set; }
+        public bool Disabled => disabled.activeInHierarchy;
+        public AreasDataHolder.GameArea AreaData { get; private set; }
 
-        public PracticeScreenAreaSelectWidget SetData(Area area)
+        public PracticeScreenAreaSelectWidget SetData(Area area, bool updateUnlocked = true, bool keepEnabled = false)
         {
-            this.area = area;
+            Area = area;
 
-            icon.sprite = GameContentManager.Instance.areasDataHolder[area].square;
-            bool enabled = InternalSettings.Current.UNLOCKED_AREAS.Contains(area);
+            AreaData = GameContentManager.Instance.areasDataHolder[area];
+            icon.sprite = AreaData.square;
 
-            button.interactable = enabled;
-            disabled.SetActive(!enabled);
+            CheckArea(updateUnlocked, keepEnabled);
 
             return this;
+        }
+
+        public void CheckArea(bool updateUnlocked = true, bool keepEnabled = false)
+        {
+            if (Area == Area.NONE)
+            {
+                return;
+            }
+
+            if (updateUnlocked)
+            {
+                bool enabled = AreaData.unlocked;
+
+                button.interactable = enabled || keepEnabled;
+
+                disabled.SetActive(!enabled);
+            }
         }
 
         public void Select()

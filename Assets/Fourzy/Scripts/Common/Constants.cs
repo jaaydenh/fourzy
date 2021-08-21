@@ -78,6 +78,7 @@ namespace Fourzy
         public const string PLAYFAB_GAMEPIECE_CLASS = "gamepiece";
         public const string PLAYFAB_TOKEN_CLASS = "token";
         public const string PLAYFAB_BUNDLE_CLASS = "progressionReward";
+        public const string PLAYFAB_AREA_CLASS = "area";
         public const string PLAYFAB_SPELL_TAG = "spell";
         public const string HINTS_CURRENCY_KEY = "HI";
         public const string COINS_CURRENCY_KEY = "CO";

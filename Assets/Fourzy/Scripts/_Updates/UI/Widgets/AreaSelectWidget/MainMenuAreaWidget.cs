@@ -62,46 +62,64 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base._Update();
 
-            //this called ecverytime playScreen is opened
-            //so using code below i can pass unlocked rewards
-            //one by one even if we skipped thought them
-            if (cachedValue != 0)
+            AreasDataHolder.GameArea data = GameContentManager.Instance.currentArea;
+
+            if (data.areaID != currentArea)
             {
-                //cached rewards are set when we add value to progression, but this screen isn't visible
+                areaLabel.text = data.Name;
+                areaImage.sprite = data.square;
+                currentArea = data.areaID;
+                progressionData = ProgressionFromArea(currentArea);
 
-                //check if there is next reward for current amount of gamesPlayed (not same as cached value)
-                AreaProgressionEntry _next = progressionData.GetNext(gamesPlayed);
+                gamesPlayed = 0;
+                previousReward = null;
+                nextReward = null;
 
-                if (_next != null && cachedValue >= _next.gamesNumber)
+                OnAreaProgression(currentArea, UserManager.Instance.GetAreaProgression(currentArea));
+            }
+            else
+            {
+                //this called ecverytime playScreen is opened
+                //so using code below i can pass unlocked rewards
+                //one by one even if we skipped thought them
+                if (cachedValue != 0)
                 {
-                    //if there is next reward and our cached value is enough to unlock it, 
-                    //pass _next.gamesNumber into OnAreaProgression to trigger reward manually
-                    if (progressionSlider.value == 1f)
+                    //cached rewards are set when we add value to progression, but this screen isn't visible
+
+                    //check if there is next reward for current amount of gamesPlayed (not same as cached value)
+                    AreaProgressionEntry _next = progressionData.GetNext(gamesPlayed);
+
+                    if (_next != null && cachedValue >= _next.gamesNumber)
                     {
-                        UpdateSlider(false, 0f);
-                        UpdateBundleReward();
+                        //if there is next reward and our cached value is enough to unlock it, 
+                        //pass _next.gamesNumber into OnAreaProgression to trigger reward manually
+                        if (progressionSlider.value == 1f)
+                        {
+                            UpdateSlider(false, 0f);
+                            UpdateBundleReward();
+                        }
+
+                        OnAreaProgression(currentArea, _next.gamesNumber);
+
+                        return;
                     }
-
-                    OnAreaProgression(currentArea, _next.gamesNumber);
-
-                    return;
+                    else
+                    {
+                        //otherwise just progress to current value
+                        OnAreaProgression(currentArea, cachedValue);
+                        cachedValue = 0;
+                    }
                 }
-                else
+                else if (updateRewardOnOpen)
                 {
-                    //otherwise just progress to current value
-                    OnAreaProgression(currentArea, cachedValue);
-                    cachedValue = 0;
+                    CancelRoutine("delayed_update");
+                    StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, UpdateProgress, null);
                 }
-            }
-            else if (updateRewardOnOpen)
-            {
-                CancelRoutine("delayed_update");
-                StartRoutine("delayed_update", Constants.AREA_PROGRESSION_BEFORE_DELAY, UpdateProgress, null);
-            }
 
-            if (!displayedAfterLoad)
-            {
-                OnPlayfabValueLoaded();
+                if (!displayedAfterLoad)
+                {
+                    OnPlayfabValueLoaded(PlayfabValuesLoaded.NONE);
+                }
             }
         }
 
@@ -128,7 +146,17 @@ namespace Fourzy._Updates.UI.Widgets
                             GameContentManager.Instance.piecesDataHolder.GetGamePieceData(rewardItem.ItemId));
 
                     break;
+
+                case Constants.PLAYFAB_AREA_CLASS:
+                    FourzyMainMenuController.instance.GetScreen<AreasProgressionScreen>()._Open((Area)Enum.Parse(typeof(Area), rewardItem.ItemId));
+
+                    break;
             }
+        }
+
+        public void OpenAreaProgressionScreen()
+        {
+            FourzyMainMenuController.instance.GetScreen<AreasProgressionScreen>()._Open(currentArea);
         }
 
         protected override void OnInitialized()
@@ -137,7 +165,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             AreasDataHolder.GameArea data = GameContentManager.Instance.currentArea;
 
-            areaLabel.text = LocalizationManager.Value(data.name);
+            areaLabel.text = data.Name;
             areaImage.sprite = data.square;
             currentArea = data.areaID;
         }
@@ -169,34 +197,12 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        private void OnPlayfabValueLoaded()
+        private void OnPlayfabValueLoaded(PlayfabValuesLoaded value)
         {
-            //ini slider
+            //init slider
             if (!isPlayFabInitialized && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.TITLE_DATA_RECEIVED, PlayfabValuesLoaded.PLAYER_STATS_RECEIVED, PlayfabValuesLoaded.CATALOG_INFO_RECEIVED))
             {
-                switch (currentArea)
-                {
-                    case Area.TRAINING_GARDEN:
-                        progressionData = InternalSettings.Current.TRAINING_GARDEN;
-
-                        break;
-
-                    case Area.ENCHANTED_FOREST:
-                        progressionData = InternalSettings.Current.ENCHANTED_FOREST;
-
-                        break;
-
-                    case Area.SANDY_ISLAND:
-                        progressionData = InternalSettings.Current.SANDY_ISLAND;
-
-                        break;
-
-                    case Area.ICE_PALACE:
-                        progressionData = InternalSettings.Current.ICE_PALACE;
-
-                        break;
-                }
-
+                progressionData = ProgressionFromArea(currentArea);
                 isPlayFabInitialized = true;
                 displayedAfterLoad = true;
                 gamesPlayed = UserManager.Instance.GetAreaProgression(currentArea);
@@ -278,6 +284,26 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 rewardAnimation.AnimateProgress();
             }
+        }
+
+        private AreaProgression ProgressionFromArea(Area area)
+        {
+            switch (currentArea)
+            {
+                case Area.TRAINING_GARDEN:
+                    return InternalSettings.Current.TRAINING_GARDEN;
+
+                case Area.ENCHANTED_FOREST:
+                    return InternalSettings.Current.ENCHANTED_FOREST;
+
+                case Area.SANDY_ISLAND:
+                    return InternalSettings.Current.SANDY_ISLAND;
+
+                case Area.ICE_PALACE:
+                    return InternalSettings.Current.ICE_PALACE;
+            }
+
+            return null;
         }
 
         private void UpdateProgress()

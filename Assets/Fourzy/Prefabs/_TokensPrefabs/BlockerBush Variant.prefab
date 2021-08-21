@@ -16,7 +16,6 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_blocker_forest
-  tokenType: 1
   volume: 1
   onGamePieceEnter: 
   onActivate: 

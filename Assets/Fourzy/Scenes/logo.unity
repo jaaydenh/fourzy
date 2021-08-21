@@ -1264,7 +1264,7 @@ PrefabInstance:
     - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
         type: 3}
       propertyPath: forceDisplayTutorials
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
         type: 3}

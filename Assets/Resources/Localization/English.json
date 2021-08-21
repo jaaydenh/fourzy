@@ -366,6 +366,10 @@
       "value": "Music"
     },
     {
+      "key": "new_area",
+      "value": "New Area"
+    },
+    {
       "key": "new_token",
       "value": "New Token"
     },

@@ -71,6 +71,11 @@ namespace Fourzy._Updates.UI.Widgets
                     _currentReward.ShowToken((TokenType)Enum.Parse(typeof(TokenType), item.ItemId));
 
                     break;
+
+                case Constants.PLAYFAB_AREA_CLASS:
+                    _currentReward.ShowArea((Area)Enum.Parse(typeof(Area), item.ItemId));
+
+                    break;
             }
 
             _currentReward.PlayForward();

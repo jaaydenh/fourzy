@@ -343,6 +343,9 @@ MonoBehaviour:
   - type: GAME_PIECE_LANDSCAPE
     prefab: {fileID: 2811702351793752031, guid: 0735ca95e50fa9c4084566d206f3dfef,
       type: 3}
+  - type: AREA_SELECT_WIDGET_SMALL
+    prefab: {fileID: 7639883311486182490, guid: 4f5d8aca424898b4281ed4766a0df872,
+      type: 3}
   screens:
   - {fileID: 6186301521444083483, guid: 2e1e79e4b00875b4da8788ac7738c62e, type: 3}
   - {fileID: 114675544619200078, guid: 4bfd1264994f0c64db9d8a1231bfbe94, type: 3}

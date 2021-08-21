@@ -49,9 +49,6 @@ namespace Fourzy
             set => areasDataHolder.currentAreaData = value;
         }
 
-        internal List<AreasDataHolder.GameArea> enabledAreas =>
-            areasDataHolder.areas.Where(theme => theme.enabled).ToList();
-
         internal List<TokensDataHolder.TokenData> tokens => tokensDataHolder.tokens;
 
         internal List<string> bundlesInPlayerInventory { get; set; } = new List<string>();
@@ -499,6 +496,7 @@ namespace Fourzy
     {
         public string itemId;
         public string itemClass;
+        public int count;
     }
 }
 

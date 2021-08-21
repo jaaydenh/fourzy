@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 16267968efc2c4422b420a769220de70, type: 3}
-    totalSpriteSurfaceArea: 209119
+    totalSpriteSurfaceArea: 206228
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -54,7 +54,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a3f6ade06695e433b90d2395867e368a, type: 3}
   - {fileID: 21300000, guid: 840a54519d139421686eb868f94c36fc, type: 3}
   - {fileID: 21300000, guid: f55f3c82a540f4eed8ba9b3a418177d9, type: 3}
-  - {fileID: 21300000, guid: 6d4c98934f50e497c9e0f48aa21676ec, type: 3}
   - {fileID: 21300000, guid: c06fecf5f5c014aba8e7992f21a0cc8f, type: 3}
   - {fileID: 21300000, guid: 1c2bba071f5224ce38336312ab9e8871, type: 3}
   - {fileID: 21300000, guid: 46c193379f00e448fbe9b57ffa7a3cd8, type: 3}
@@ -73,7 +72,6 @@ SpriteAtlas:
   - ranking_medal_gold
   - ranking_list_me
   - ranking_profile_bg_mask
-  - ranking_icon_trophy
   - ranking_character_sample_1
   - ranking_character_sample_3
   - ranking_profile_bg_green

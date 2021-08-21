@@ -40,24 +40,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Prompt(_themeData.name, _themeData.description, null);
 
-            //get buy buttons
-            if (!InternalSettings.Current.UNLOCKED_AREAS.Contains(area))
-            {
-                foreach (ButtonExtended button in buyButtons) Destroy(button.gameObject);
-                buyButtons.Clear();
+            ////get buy buttons
+            //if (!InternalSettings.Current.UNLOCKED_AREAS.Contains(area))
+            //{
+            //    foreach (ButtonExtended button in buyButtons) Destroy(button.gameObject);
+            //    buyButtons.Clear();
 
-                foreach (AreasDataHolder.AreaUnlockRequirement unlockRequirement in 
-                    _themeData.unlockRequirements)
-                {
-                    ButtonExtended buttonInstance = Instantiate(buyButton, buttonsParent);
-                    buttonInstance
-                        .GetBadge(unlockRequirement.type.ToString()).badge
-                        .SetValue(unlockRequirement.quantity);
-                    buttonInstance.events.AddListener(() => Purchase(unlockRequirement.type));
+            //    foreach (AreasDataHolder.AreaUnlockRequirement unlockRequirement in 
+            //        _themeData.unlockRequirements)
+            //    {
+            //        ButtonExtended buttonInstance = Instantiate(buyButton, buttonsParent);
+            //        buttonInstance
+            //            .GetBadge(unlockRequirement.type.ToString()).badge
+            //            .SetValue(unlockRequirement.quantity);
+            //        buttonInstance.events.AddListener(() => Purchase(unlockRequirement.type));
 
-                    buyButtons.Add(buttonInstance);
-                }
-            }
+            //        buyButtons.Add(buttonInstance);
+            //    }
+            //}
 
             SetData(_themeData);
         }
@@ -66,20 +66,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (themeData.areaID == Area.NONE) return;
 
-            //refresh buttons
-            if (InternalSettings.Current.UNLOCKED_AREAS.Contains(themeData.areaID) || 
-                themeData.unlockRequirements.Count == 0)
-            {
-                buyButtons.ForEach(button => button.SetActive(false));
+            ////refresh buttons
+            //if (InternalSettings.Current.UNLOCKED_AREAS.Contains(themeData.areaID) || 
+            //    themeData.unlockRequirements.Count == 0)
+            //{
+            //    buyButtons.ForEach(button => button.SetActive(false));
 
-                selectButton.SetActive(true);
-            }
-            else
-            {
-                buyButtons.ForEach(button => button.SetActive(true));
+            //    selectButton.SetActive(true);
+            //}
+            //else
+            //{
+            //    buyButtons.ForEach(button => button.SetActive(true));
 
-                selectButton.SetActive(false);
-            }
+            //    selectButton.SetActive(false);
+            //}
 
             if (themeData == currentOpenedTheme) return;
 
@@ -176,7 +176,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //unlock
-            PlayerPrefsWrapper.SetAreaUnlocked((int)currentOpenedTheme.areaID, true);
+            //PlayerPrefsWrapper.SetAreaUnlocked((int)currentOpenedTheme.areaID, true);
 
             SetData(currentOpenedTheme);
         }

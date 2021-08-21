@@ -33,9 +33,11 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 data = widget.data;
 
-                profileImage.sprite = data != null ? data.profilePicture : null;
+                profileImage.sprite = data?.profilePicture;
                 profileImage.color = data != null ? Color.white : Color.clear;
-                profileImage.rectTransform.anchoredPosition = data != null ? data.profilePictureOffset : Vector2.zero;
+                profileImage.rectTransform.pivot = data?.ProfilePicturePivot ?? Vector2.one * .5f;
+                profileImage.rectTransform.anchoredPosition = Vector2.zero;
+
                 profileImage.SetNativeSize();
                 random.SetActive(data == null);
 

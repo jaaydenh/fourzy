@@ -2052,12 +2052,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.PRESENTATION:
                     yield return new WaitForSeconds(3f);
 
-                    LoadGame(new ClientFourzyGame(GameContentManager.Instance.enabledAreas.Random().areaID,
+                    ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.areasDataHolder.areas.Random().areaID,
                         new Player(1, "AI Player 1") { PlayerString = "1" },
                         new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
                     {
                         _Type = GameType.PRESENTATION,
-                    });
+                    };
+                    _game.UpdateFirstState();
+
+                    LoadGame(_game);
 
                     break;
             }

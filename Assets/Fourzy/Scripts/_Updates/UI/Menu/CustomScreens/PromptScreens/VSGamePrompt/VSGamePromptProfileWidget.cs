@@ -11,7 +11,7 @@ namespace Fourzy._Updates.UI.Widgets
     public class VSGamePromptProfileWidget : WidgetBase
     {
         public Image bg;
-        public RectTransform content;
+        public Image content;
         public TMP_Text nameLabel;
         public VSGamePromptBossPowerWidget bossPowerWidget;
 
@@ -26,13 +26,29 @@ namespace Fourzy._Updates.UI.Widgets
 
         public VSGamePromptProfileWidget SetProfile(Player profile)
         {
-            if (gamePiece) Destroy(gamePiece.gameObject);
+            if (gamePiece)
+            {
+                Destroy(gamePiece.gameObject);
+            }
 
-            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(profile.HerdId).player1Prefab, content);
+            GamePieceData data = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(profile.HerdId);
 
-            gamePiece.transform.localPosition = Vector3.zero;
-            gamePiece.transform.localScale = Vector3.one * 135f;
-            gamePiece.StartBlinking();
+            if (data.profilePicture != null)
+            {
+                content.color = Color.white;
+                content.rectTransform.pivot = data.ProfilePicturePivot;
+                content.sprite = data.profilePicture;
+            }
+            else
+            {
+                content.color = Color.clear;
+
+                gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(profile.HerdId).player1Prefab, content.rectTransform);
+
+                gamePiece.transform.localPosition = Vector3.zero;
+                gamePiece.transform.localScale = Vector3.one * .5f;
+                gamePiece.StartBlinking();
+            }
 
             SetName(profile.DisplayName);
 

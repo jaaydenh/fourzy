@@ -44,13 +44,12 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: c1a3a57470b7644c6a8600cf7324a065, type: 3}
-    totalSpriteSurfaceArea: 348897
+    totalSpriteSurfaceArea: 344144
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
-  - {fileID: 21300000, guid: e9617c6098e9944e8bc66de8cdbfd7d5, type: 3}
   - {fileID: 21300000, guid: ff744dd0a72d241b3946fcce5733a216, type: 3}
   - {fileID: 21300000, guid: eb165af05aa2e4ab2bcad217611774b8, type: 3}
   - {fileID: 21300000, guid: a1e436d26683241d787e58854a040e63, type: 3}
@@ -88,7 +87,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: aa6a848fa27124e199c5fbc6d6dbc0b4, type: 3}
   - {fileID: 21300000, guid: 18482cef099ba4c6fbf3d0d9b169dec6, type: 3}
   m_PackedSpriteNamesToIndex:
-  - setting_reward_tip_bg
   - language_small_ita
   - setting_icon_music_on
   - switch_off_bg

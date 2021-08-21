@@ -14,6 +14,8 @@ namespace Fourzy._Updates.Serialized
     [CreateAssetMenu(fileName = "DefaultAreasDataHolder", menuName = "Create Areas Data Holder")]
     public class AreasDataHolder : ScriptableObject
     {
+        public static Action<Area, bool> onAreaUnlockChanged;
+
         [ListDrawerSettings(NumberOfItemsPerPage = 10, ListElementLabelName = "name")]
         public List<GameArea> areas;
 
@@ -68,37 +70,37 @@ namespace Fourzy._Updates.Serialized
             return this[area].configurations.Find(configuration => configuration.type == value);
         }
 
-        public bool IsAreaEnabled(Area area) => this[area]?.enabled ?? false;
+        public void SetAreaUnlockedState(Area area, bool state)
+        {
+            this[area].SetUnlockedState(state);
+
+            onAreaUnlockChanged?.Invoke(area, state);
+        }
 
         [Serializable]
         public class GameArea
         {
             public string name;
-            public bool enabled = true;
-            [ShowIf("enabled")]
+            [NonSerialized]
+            public bool unlocked;
             public Color areaColor;
-            [ShowIf("enabled")]
             public string description;
-            [ShowIf("enabled")]
             public int levelToUnlock;
-            [ShowIf("enabled")]
             public Area areaID;
-            [ShowIf("enabled")]
             public string bgAudio;
-            [ShowIf("enabled"), PreviewField(70)]
             public Sprite _16X9;
-            [ShowIf("enabled"), PreviewField(70)]
+            [PreviewField(70)]
             public Sprite _4X3;
-            [ShowIf("enabled"), PreviewField(70)]
+            [PreviewField(70)]
             public Sprite square;
 
-            [ShowIf("enabled"), ListDrawerSettings(NumberOfItemsPerPage = 5)]
+            [ListDrawerSettings(NumberOfItemsPerPage = 5)]
             public List<GamePieceView> gamepieces;
-            [ShowIf("enabled"), ListDrawerSettings(NumberOfItemsPerPage = 5)]
+            [ListDrawerSettings(NumberOfItemsPerPage = 5)]
             public List<TokenType> tokens;
-            [ShowIf("enabled"), ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "type")]
+            [ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "type")]
             public List<AreaUnlockRequirement> unlockRequirements;
-            [ShowIf("enabled"), ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "type")]
+            [ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "type")]
             public List<BackgroundConfigurationData> configurations;
 
             /// <summary>
@@ -108,6 +110,11 @@ namespace Fourzy._Updates.Serialized
 
             public AreaUnlockRequirement GetRequirement(CurrencyType type) =>
                 unlockRequirements.Find(unlockRequirement => unlockRequirement.type == type);
+
+            public void SetUnlockedState(bool state)
+            {
+                unlocked = state;
+            }
         }
 
         [Serializable]

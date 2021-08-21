@@ -31,7 +31,6 @@ namespace Fourzy
         public static string masterAccountId;
 
         private bool isConnecting;
-        private bool loadingInventory = false;
 
         private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
 
@@ -438,18 +437,15 @@ namespace Fourzy
             }, AuthenticateWithPhoton, OnPlayFabError);
         }
 
-        private void OnPlayfabValueLoaded()
+        private void OnPlayfabValueLoaded(PlayfabValuesLoaded value)
         {
-            if (!loadingInventory && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.CATALOG_INFO_RECEIVED))
+            if (value == PlayfabValuesLoaded.CATALOG_INFO_RECEIVED)
             {
-                loadingInventory = true;
-
                 //get inventory
                 PlayFabClientAPI.GetUserInventory(
                     new GetUserInventoryRequest(),
                     OnUserInventoryFetched,
                     error => {
-                        loadingInventory = false;
                         OnPlayFabError(error);
                     });
             }
@@ -545,8 +541,6 @@ namespace Fourzy
 
         private void OnUserInventoryFetched(GetUserInventoryResult inventoryRequestResult)
         {
-            loadingInventory = false;
-
             //clear all tokens exept default
             PlayerPrefsWrapper.RemoveAllButDefault();
             List<TokenType> inventoryTokens = new List<TokenType>();
@@ -557,8 +551,7 @@ namespace Fourzy
                 switch (itemInstance.ItemClass)
                 {
                     case Constants.PLAYFAB_GAMEPIECE_CLASS:
-                        GamePieceData gp =
-                            GameContentManager.Instance.piecesDataHolder.GetGamePieceData(itemInstance.ItemId);
+                        GamePieceData gp = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(itemInstance.ItemId);
 
                         if (gp != null)
                         {
@@ -601,6 +594,12 @@ namespace Fourzy
 
                     case Constants.PLAYFAB_BUNDLE_CLASS:
                         GameContentManager.Instance.bundlesInPlayerInventory.Add(itemInstance.ItemId);
+
+                        break;
+
+                    case Constants.PLAYFAB_AREA_CLASS:
+                        Area _area = (Area)Enum.Parse(typeof(Area), itemInstance.ItemId);
+                        GameContentManager.Instance.areasDataHolder.SetAreaUnlockedState(_area, true);
 
                         break;
                 }
