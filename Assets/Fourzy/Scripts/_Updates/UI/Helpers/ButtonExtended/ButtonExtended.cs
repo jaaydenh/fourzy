@@ -300,7 +300,7 @@ namespace Fourzy._Updates.UI.Helpers
             onTap?.Invoke(eventData);
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             if (!Application.isPlaying || initialized) return;
 

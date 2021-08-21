@@ -154,6 +154,11 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
+        public void OpenAreaProgressionScreen()
+        {
+            FourzyMainMenuController.instance.GetScreen<AreasProgressionScreen>()._Open(currentArea);
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

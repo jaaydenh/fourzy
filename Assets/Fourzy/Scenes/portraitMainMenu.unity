@@ -10837,25 +10837,13 @@ MonoBehaviour:
     persistentCalls:
       calls:
       - genericMenuData:
-          selectedComponent: 5
-          selectedMember: 23
+          selectedComponent: 2
+          selectedMember: 27
           isDynamic: 0
-        target: {fileID: 169684871}
-        memberName: OpenScreen
+        target: {fileID: 188174583}
+        memberName: OpenAreaProgressionScreen
         memberType: 8
-        arguments:
-        - typeName: Fourzy._Updates.UI.Menu.MenuScreen, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 1
-          objectArgument: {fileID: 681280387}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
+        arguments: []
         isDynamic: 0
         isCallEnabled: 1
   onState:
@@ -11590,10 +11578,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 333.5, y: -225}
+  m_SizeDelta: {x: 667, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &209624568
 MonoBehaviour:
@@ -29490,6 +29478,7 @@ MonoBehaviour:
   defaultCalls: 1
   menuController: {fileID: 0}
   areasHolder: {fileID: 1070842393}
+  areaLabel: {fileID: 339726469}
   rewardsHolder: {fileID: 353065450}
   unlockConditionLabel: {fileID: 2032550742}
   worldLabel: {fileID: 1363206220}
@@ -31148,10 +31137,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 75}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 333.5, y: -112.5}
+  m_SizeDelta: {x: 667, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &707072625
 MonoBehaviour:
@@ -34110,10 +34099,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 333.5, y: -75}
+  m_SizeDelta: {x: 667, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &755983302
 MonoBehaviour:
@@ -41089,10 +41078,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 75}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 333.5, y: -37.5}
+  m_SizeDelta: {x: 667, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &916533445
 MonoBehaviour:
@@ -52649,10 +52638,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 333.5, y: -150}
+  m_SizeDelta: {x: 667, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1275983497
 MonoBehaviour:
@@ -66767,10 +66756,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 75}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 333.5, y: -187.5}
+  m_SizeDelta: {x: 667, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1569757642
 MonoBehaviour:

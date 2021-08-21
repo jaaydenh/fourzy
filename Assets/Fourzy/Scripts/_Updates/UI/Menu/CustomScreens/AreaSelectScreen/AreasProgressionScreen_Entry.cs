@@ -45,6 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (item.ItemClass)
             {
                 case Constants.PLAYFAB_TOKEN_CLASS:
+                    unlockTokenButton.Initialize();
                     unlockTokenButton.SetActive(true);
                     unlockTokenButton.SetState(fillAmount == 1f);
 
@@ -55,6 +56,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 case Constants.PLAYFAB_GAMEPIECE_CLASS:
+                    unlockFourzyButton.Initialize();
                     unlockFourzyButton.SetActive(true);
                     unlockFourzyButton.SetState(fillAmount == 1f);
 
@@ -79,6 +81,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 case Constants.PLAYFAB_AREA_CLASS:
+                    unlockAreaButton.Initialize();
                     unlockAreaButton.SetActive(true);
                     unlockAreaButton.SetState(fillAmount == 1f);
 

@@ -7,7 +7,6 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using PlayFab.ClientModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -20,6 +19,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         [SerializeField]
         private RectTransform areasHolder;
+        [SerializeField]
+        private TMP_Text areaLabel;
         [SerializeField]
         private RectTransform rewardsHolder;
         [SerializeField]
@@ -103,6 +104,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             currentAreaWidget = widget;
             currentAreaWidget.Select();
+            areaLabel.text = GameContentManager.Instance.areasDataHolder[currentAreaWidget.Area].Name;
 
             if (!currentAreaWidget.Disabled)
             {
@@ -149,6 +151,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void UpdateRewardsView()
         {
+            if (!gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
             foreach (AreasProgressionScreen_Entry entry in entriesList)
             {
                 Destroy(entry.gameObject);
@@ -178,7 +185,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //calc progressbar
             AreasProgressionScreen_Entry prev = null;
             float fillAmount = 0f;
-            fillParent.rectTransform.sizeDelta = new Vector2(fillParent.rectTransform.sizeDelta.x, - entriesList.Last().rectTransform.rect.height * .5f);
+            fillParent.rectTransform.sizeDelta = new Vector2(fillParent.rectTransform.sizeDelta.x, -entriesList.Last().rectTransform.rect.height * .5f);
             float totalHeight = fillParent.rectTransform.rect.height;
             for (int widgetIndex = 0; widgetIndex < entriesList.Count; widgetIndex++)
             {
@@ -250,7 +257,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             if (area.ToString() == bundleItem)
                             {
                                 AreaProgressionEntry result = InternalSettings.Current.TRAINING_GARDEN.progression.ToList().Find(_item => _item.id == item.ItemId);
-                                if(result != null)
+                                if (result != null)
                                 {
                                     return (Area.TRAINING_GARDEN, result);
                                 }
