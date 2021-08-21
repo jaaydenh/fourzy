@@ -55,6 +55,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         new System.Collections.Generic.KeyValuePair<string, object>("skipped", true));
 
                     break;
+
+                case Constants.PLAYFAB_AREA_CLASS:
+                    if (FourzyMainMenuController.instance.state)
+                    {
+                        CloseSelf();
+                        FourzyMainMenuController.instance.GetScreen<AreasProgressionScreen>()._Open((Area)Enum.Parse(typeof(Area), reward.ItemId));
+                        return;
+                    }
+
+                    break;
             }
 
             CloseSelf();
@@ -149,6 +159,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 case Constants.PLAYFAB_AREA_CLASS:
+                    if (FourzyMainMenuController.instance.state)
+                    {
+                        FourzyMainMenuController.instance.GetScreen<AreasProgressionScreen>()._Open((Area)Enum.Parse(typeof(Area), reward.ItemId));
+                    }
 
                     break;
             }
