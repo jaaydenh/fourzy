@@ -145,7 +145,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else
             {
-                unlockConditionLabel.SetValue($"WIN {unlockData.entry.gamesNumber} GAMES IN <color=#{ColorUtility.ToHtmlStringRGB(Color.yellow)}>{GameContentManager.Instance.areasDataHolder[unlockData.area].Name}</color> TO UNLOCK");
+                unlockConditionLabel.SetValue($"PLAY {unlockData.entry.gamesNumber} GAMES IN <color=#{ColorUtility.ToHtmlStringRGB(Color.yellow)}>{GameContentManager.Instance.areasDataHolder[unlockData.area].Name}</color> TO UNLOCK");
             }
         }
 
