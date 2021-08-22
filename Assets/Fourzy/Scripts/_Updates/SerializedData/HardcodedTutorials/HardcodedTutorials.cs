@@ -69,6 +69,8 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                    new OnboardingTask_Wait (2.2f),
                     new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_SWIPE },
 
                     // Tutorial Step 2 part B
@@ -144,17 +146,17 @@ namespace Fourzy._Updates._Tutorial
                     //---------------------------
 
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask_Wait (2f),
                     new OnboardingTask() { action = OnboardingActions.HIDE_BUBBLE_MESSAGE },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask_Wait (.5f),
                     new OnboardingTask() { action = OnboardingActions.SHOW_GRAPHICS, vector2value = new Vector2(.5f, .75f) },
                     new OnboardingTask_ShowBG(),
 
                     // Tutorial Step 6 - Explain other ways to win
                     new OnboardingTask_Log("winInstructionsMiniboard"),
-                    new OnboardingTask_ShowMiniboard(new Vector2(.5f, .35f), "TutorialBoard_02", "TutorialBoard_03", "TutorialBoard_04"),
+                    new OnboardingTask_ShowMiniboard(new Vector2(.5f, .35f), "TutorialBoard_03", "TutorialBoard_04", "TutorialBoard_02"),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("instruction_07"), new Vector2(.5f, .57f), 32f),
                     new OnboardingTask() { action = OnboardingActions.HIDE_MINIBOARD },
                     new OnboardingTask_Log("practiceGameIntro"),
