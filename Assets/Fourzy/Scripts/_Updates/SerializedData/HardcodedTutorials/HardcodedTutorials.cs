@@ -58,22 +58,25 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02a"), new Vector2(.5f, .15f)),
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
-                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 1f) },
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(4f, -1f), new Vector2(4f, 1f) },
                     }),
                     new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
-                        [PlacementStyle.TWO_STEP_SWIPE] = new Rect(4f, 0f, 1f, 2f),
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Rect(4f, -1f, 1f, 3f),
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
 
                     new OnboardingTask() { action = OnboardingActions.SKIP_TO},
                     //---------------------------
 
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                    new OnboardingTask_Wait (2.2f),
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_SWIPE },
 
                     // Tutorial Step 2 part B
                     new OnboardingTask_Log("pieceOriginInstructions"),
                     new OnboardingTask() { action = OnboardingActions.PAUSE_BOARD },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask_Wait (.5f),
                     new OnboardingTask_LimitInput(new Rect(0f, 0f, 1f, 1f)),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_03"), new Vector2(.5f, .15f)),
@@ -87,6 +90,7 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.HIDE_GAMEPIECES },
                     new OnboardingTask_Wait (1.6f),
 
+                    new OnboardingTask() { action = OnboardingActions.SKIP_TO},
                     // Tutorial Step 3 - Highlight Opponent Player Area
                     new OnboardingTask_Log("showOpponentInfo1"),
 
@@ -135,24 +139,24 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
-                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(7f, 4f), new Vector2(4f, 4f) },
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(7f, 4f), new Vector2(6f, 4f) },
                     }),
 
                     new OnboardingTask() { action = OnboardingActions.SKIP_TO},
                     //---------------------------
 
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask_Wait (2f),
                     new OnboardingTask() { action = OnboardingActions.HIDE_BUBBLE_MESSAGE },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask_Wait (.5f),
                     new OnboardingTask() { action = OnboardingActions.SHOW_GRAPHICS, vector2value = new Vector2(.5f, .75f) },
                     new OnboardingTask_ShowBG(),
 
                     // Tutorial Step 6 - Explain other ways to win
                     new OnboardingTask_Log("winInstructionsMiniboard"),
-                    new OnboardingTask_ShowMiniboard(new Vector2(.5f, .35f), "TutorialBoard_02", "TutorialBoard_03", "TutorialBoard_04"),
+                    new OnboardingTask_ShowMiniboard(new Vector2(.5f, .35f), "TutorialBoard_03", "TutorialBoard_04", "TutorialBoard_02"),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("instruction_07"), new Vector2(.5f, .57f), 32f),
                     new OnboardingTask() { action = OnboardingActions.HIDE_MINIBOARD },
                     new OnboardingTask_Log("practiceGameIntro"),
