@@ -43,12 +43,14 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (updateUnlocked)
             {
-                bool enabled = AreaData.unlocked;
-
-                button.interactable = enabled || keepEnabled;
-
-                disabled.SetActive(!enabled);
+                SetState(AreaData.unlocked, keepEnabled);
             }
+        }
+
+        public void SetState(bool value, bool keepEnabled)
+        {
+            button.interactable = value || keepEnabled;
+            disabled.SetActive(!value);
         }
 
         public void Select()

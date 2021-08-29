@@ -338,6 +338,10 @@
       "value": "Loading"
     },
     {
+      "key": "practice_locked_title",
+      "value": "{0} Locked"
+    },
+    {
       "key": "lost",
       "value": "Lost"
     },
@@ -464,6 +468,10 @@
     {
       "key": "play",
       "value": "Play"
+    },
+    {
+      "key": "unlock_practice_message",
+      "value": "Play {0} games to Unlock {1} World"
     },
     {
       "key": "player_one",
