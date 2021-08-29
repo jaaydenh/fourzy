@@ -5,6 +5,7 @@ using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,22 +16,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         private const string kPracticeScreenOpened = "practiceScreenOpened";
 
-        public ScrollRect player1select;
-        public ScrollRect player2select;
-        public ScrollRect areasContainer;
-        public RectTransform gameboardParent;
-        public RectTransform body;
-        public float landscapeBodyHeight;
+        [SerializeField]
+        private ScrollRect player1select;
+        [SerializeField]
+        private ScrollRect player2select;
+        [SerializeField]
+        private ScrollRect areasContainer;
+        [SerializeField]
+        private RectTransform gameboardParent;
+        [SerializeField]
+        private RectTransform body;
+        [SerializeField]
+        private float landscapeBodyHeight;
 
-        public OpponentWidget opponentWidgetPrefab;
-        public MiniGameboardWidget miniGameboardPrefab;
-        public StringEventTrigger timerToggle;
-        public ButtonExtended timerButton;
+        [SerializeField]
+        private OpponentWidget opponentWidgetPrefab;
+        [SerializeField]
+        private MiniGameboardWidget miniGameboardPrefab;
+        [SerializeField]
+        private StringEventTrigger timerToggle;
+        [SerializeField]
+        private ButtonExtended timerButton;
+        [SerializeField]
+        private ButtonExtended playButton;
 
-        private Dictionary<Area, List<GameBoardDefinition>> gameboards =
-            new Dictionary<Area, List<GameBoardDefinition>>();
+        private Dictionary<Area, List<GameBoardDefinition>> gameboards = new Dictionary<Area, List<GameBoardDefinition>>();
         private int currentBoard = -1;
         private MiniGameboardWidget currentGameboardWidget;
+        private List<PracticeScreenAreaSelectWidget> areaWidgets = new List<PracticeScreenAreaSelectWidget>();
 
         public OpponentWidget player1Profile { get; private set; }
         public OpponentWidget player2Profile { get; private set; }
@@ -100,11 +113,36 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 body.offsetMin = body.offsetMax = Vector2.zero;
             }
 
+            UserManager.onAreaProgression += OnAreaProgression;
+            UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
+            OnAreaSet();
+            UpdateAreasWidgets();
+
             base.Start();
+        }
+
+        private void OnAreaProgression(Area area, int progression)
+        {
+            OnAreaSet();
+            UpdateAreasWidgets();
+        }
+
+        private void OnPlayfabValueLoaded(PlayfabValuesLoaded value)
+        {
+            if (value == PlayfabValuesLoaded.PLAYER_STATS_RECEIVED)
+            {
+                OnAreaSet();
+                UpdateAreasWidgets();
+            }
         }
 
         public override void Open()
         {
+            if (!isOpened)
+            {
+                OnAreaSet(true);
+            }
+
             base.Open();
 
             HeaderScreen.Instance.Close();
@@ -255,8 +293,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected PracticeScreenAreaSelectWidget AddAreaWidget(Area area)
         {
-            PracticeScreenAreaSelectWidget instance = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), areasContainer.content)
-                .SetData(area, false);
+            PracticeScreenAreaSelectWidget instance = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), areasContainer.content).SetData(area, false);
+            areaWidgets.Add(instance);
             instance.button.onTap += data => SetArea(instance);
 
             return instance;
@@ -273,6 +311,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             currentAreaWidget = widget;
             currentAreaWidget.Select();
 
+            OnAreaSet();
+
             if (currentGameboardWidget)
             {
                 currentGameboardWidget.SetArea(currentAreaWidget.Area);
@@ -280,6 +320,83 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             currentBoard = -1;
             LoadBoard(currentBoard);
+        }
+
+        private void OnAreaSet(bool forcePopup = false)
+        {
+            if (!currentAreaWidget)
+            {
+                return;
+            }
+
+            bool enabled;
+            int gamesToPlay = 0;
+            switch (currentAreaWidget.Area)
+            {
+                case Area.TRAINING_GARDEN:
+                    gamesToPlay = Constants.UNLOCK_PRACTICE_TRAINING_GARDEN;
+
+                    break;
+
+                case Area.ENCHANTED_FOREST:
+                    gamesToPlay = Constants.UNLOCK_PRACTICE_ENCHANTED_FOREST;
+
+                    break;
+
+                case Area.SANDY_ISLAND:
+                    gamesToPlay = Constants.UNLOCK_PRACTICE_SANDY_ISLAND;
+
+                    break;
+
+                case Area.ICE_PALACE:
+                    gamesToPlay = Constants.UNLOCK_PRACTICE_ICE_PALACE;
+
+                    break;
+            }
+
+            int gamesPlayed = UserManager.Instance.GetAreaProgression(currentAreaWidget.Area);
+            enabled = gamesPlayed >= gamesToPlay;
+
+            if (!enabled && (isOpened || forcePopup))
+            {
+                string areaname = GameContentManager.Instance.areasDataHolder[currentAreaWidget.Area].Name;
+                menuController.GetOrAddScreen<PromptScreen>().Prompt(
+                    string.Format(LocalizationManager.Value("practice_locked_title"), areaname),
+                    string.Format(LocalizationManager.Value("unlock_practice_message"), gamesToPlay - gamesPlayed, areaname),
+                    null,
+                    LocalizationManager.Value("ok"));
+            }
+
+            playButton.SetState(enabled);
+        }
+
+        private void UpdateAreasWidgets()
+        {
+            foreach (PracticeScreenAreaSelectWidget widget in areaWidgets)
+            {
+                switch (widget.Area)
+                {
+                    case Area.TRAINING_GARDEN:
+                        widget.SetState(UserManager.Instance.GetAreaProgression(widget.Area) >= Constants.UNLOCK_PRACTICE_TRAINING_GARDEN, true);
+
+                        break;
+
+                    case Area.ENCHANTED_FOREST:
+                        widget.SetState(UserManager.Instance.GetAreaProgression(widget.Area) >= Constants.UNLOCK_PRACTICE_ENCHANTED_FOREST, true);
+
+                        break;
+
+                    case Area.SANDY_ISLAND:
+                        widget.SetState(UserManager.Instance.GetAreaProgression(widget.Area) >= Constants.UNLOCK_PRACTICE_SANDY_ISLAND, true);
+
+                        break;
+
+                    case Area.ICE_PALACE:
+                        widget.SetState(UserManager.Instance.GetAreaProgression(widget.Area) >= Constants.UNLOCK_PRACTICE_ICE_PALACE, true);
+
+                        break;
+                }
+            }
         }
 
         private void LoadBoard(int index)
