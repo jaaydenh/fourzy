@@ -27,7 +27,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private ParticleSystem fgStarsParticles;
 
         private CatalogItem reward;
-        private GamePieceView gamepiece;
+        private GameObject spawn;
 
         public override void Open()
         {
@@ -74,9 +74,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             reward = item;
 
-            if (gamepiece)
+            if (spawn)
             {
-                Destroy(gamepiece.gameObject);
+                Destroy(spawn);
             }
 
             switch (item.ItemClass)
@@ -98,9 +98,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     tokenImage.color = Color.clear;
 
                     GamePieceData _pieceData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(item.ItemId);
-                    gamepiece = Instantiate(_pieceData.player1Prefab, tokenImage.transform);
+                    GamePieceView gamepiece = Instantiate(_pieceData.player1Prefab, tokenImage.transform);
                     gamepiece.transform.localScale = Vector3.one * .5f;
                     gamepiece.StartBlinking();
+                    spawn = gamepiece.gameObject;
 
                     rewardTitle.text = LocalizationManager.Value("new_gamepiece");
                     rewardName.text = _pieceData.name;
@@ -115,9 +116,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     AreasDataHolder.GameArea areaData = GameContentManager.Instance.areasDataHolder[(Area)Enum.Parse(typeof(Area), item.ItemId)];
                     PracticeScreenAreaSelectWidget widget = Instantiate(GameContentManager.GetPrefab<PracticeScreenAreaSelectWidget>("AREA_SELECT_WIDGET_SMALL"), tokenImage.transform)
-                        .SetData((Area)Enum.Parse(typeof(Area), item.ItemId), keepEnabled: true);
+                        .SetData((Area)Enum.Parse(typeof(Area), item.ItemId), false, true);
                     widget.transform.localScale = Vector3.one * .005f;
                     widget.transform.localPosition = Vector3.zero;
+                    spawn = widget.gameObject;
 
                     rewardTitle.text = LocalizationManager.Value("new_area");
                     rewardName.text = areaData.Name;
