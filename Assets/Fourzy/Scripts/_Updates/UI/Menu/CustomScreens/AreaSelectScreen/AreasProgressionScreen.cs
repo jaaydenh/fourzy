@@ -300,6 +300,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 areasWidgets.Add(widget);
             }
+
+            OnPlayfabValueLoaded(PlayfabValuesLoaded.NONE);
         }
     }
 }
