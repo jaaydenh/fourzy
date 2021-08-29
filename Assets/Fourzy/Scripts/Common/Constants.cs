@@ -38,10 +38,10 @@ namespace Fourzy
         public const int MIN_COMPLEXCITY_SCORE = 1;
         public const int MAX_COMPLEXCITY_SCORE = 20000;
 
-        public const int UNLOCK_PRACTICE_TRAINING_GARDEN = 10;
-        public const int UNLOCK_PRACTICE_ENCHANTED_FOREST = 5;
-        public const int UNLOCK_PRACTICE_SANDY_ISLAND = 5;
-        public const int UNLOCK_PRACTICE_ICE_PALACE = 5;
+        public const int UNLOCK_PRACTICE_TRAINING_GARDEN = 20;
+        public const int UNLOCK_PRACTICE_ENCHANTED_FOREST = 30;
+        public const int UNLOCK_PRACTICE_SANDY_ISLAND = 30;
+        public const int UNLOCK_PRACTICE_ICE_PALACE = 30;
 
         /// <summary>
         /// This value is only used when bot match wait time is < 0f, so it will time out
