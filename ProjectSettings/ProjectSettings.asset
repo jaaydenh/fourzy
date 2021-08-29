@@ -79,7 +79,7 @@ PlayerSettings:
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
   Force IOS Speakers When Recording: 0
-  deferSystemGesturesMode: 0
+  deferSystemGesturesMode: 15
   hideHomeButton: 1
   submitAnalytics: 1
   usePlayerLog: 1
@@ -173,6 +173,8 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -194,7 +196,7 @@ PlayerSettings:
     iPhone: com.PartyTroll.Fourzy
   buildNumber:
     Standalone: 0
-    iPhone: 7
+    iPhone: 9
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 10413
@@ -934,7 +936,13 @@ PlayerSettings:
   activeInputHandler: 2
   cloudProjectId: 7750acfa-b2f8-453c-861e-a0c8ffa71cc6
   framebufferDepthMemorylessMode: 0
-  qualitySettingsNames: []
+  qualitySettingsNames:
+  - Very Low
+  - Low
+  - Medium
+  - High
+  - Very High
+  - Ultra
   projectName: Fourzy
   organizationId: supermove-games
   cloudEnabled: 0
