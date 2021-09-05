@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates._Tutorial;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
 using UnityEngine;
@@ -46,6 +47,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             menuController.GetOrAddScreen<GauntletIntroScreen>()._Prompt();
+        }
+
+        public void StartSkillz()
+        {
+            SkillzCrossPlatform.LaunchSkillz(new SkillzGameController());
         }
 
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);

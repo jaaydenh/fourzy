@@ -66,6 +66,7 @@ namespace Fourzy
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
         public BotGameType botGameType = BotGameType.NONE;
+        public BuildIntent buildIntent = BuildIntent.MOBILE_REGULAR;
         public string customUserId = "";
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
@@ -1143,5 +1144,12 @@ namespace Fourzy
         REALTIME_LOBBY_GAME,
         REALTIME_QUICKMATCH,
         REALTIME_BOT_GAME,
+    }
+
+    public enum BuildIntent
+    {
+        MOBILE_REGULAR,
+        DESKTOP_REGULAR,
+        MOBILE_SKILLZ,
     }
 }
