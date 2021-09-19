@@ -98,9 +98,23 @@ namespace Fourzy
         public Player Bot { get; set; }
         public string sessionId { get; private set; }
         public LocationInfo? lastLocation { get; private set; } = null;
-        public string MainMenuSceneName => Landscape ?
-            Constants.MAIN_MENU_L_SCENE_NAME :
-            Constants.MAIN_MENU_P_SCENE_NAME;
+        public string MainMenuSceneName
+        {
+            get
+            {
+                switch (buildIntent)
+                {
+                    case BuildIntent.MOBILE_SKILLZ:
+                        return Constants.MAIN_MENU_SKILLZ_SCENE_NAME;
+
+                    case BuildIntent.DESKTOP_REGULAR:
+                        return Constants.MAIN_MENU_L_SCENE_NAME;
+
+                    default:
+                        return Constants.MAIN_MENU_P_SCENE_NAME;
+                }
+            }
+        }
 
         private PlacementStyle _placementStyle;
         private string lastErrorMessage;
@@ -1144,6 +1158,7 @@ namespace Fourzy
         REALTIME_LOBBY_GAME,
         REALTIME_QUICKMATCH,
         REALTIME_BOT_GAME,
+        ASYNC_SKILLZ_GAME,
     }
 
     public enum BuildIntent

@@ -47,6 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RealtimeScreen realtimeScreen { get; private set; }
         public DemoGameScreen demoGameScreen { get; private set; }
         public GauntletGameScreen gauntletGameScreen { get; private set; }
+        public SkillzGameScreen skillzGameScreen { get; private set; }
         public float myTimerLeft => timersEnabled ? timerWidgets[0].TotalTimeLeft : -1f;
         public float opponentTimerLeft => timersEnabled ? timerWidgets[1].TotalTimeLeft : -1f;
         public int myMagicLeft => magicEnabled ? player1Widget.magic : -1;
@@ -61,6 +62,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             realtimeScreen = GetComponentInChildren<RealtimeScreen>();
             demoGameScreen = GetComponentInChildren<DemoGameScreen>();
             gauntletGameScreen = GetComponentInChildren<GauntletGameScreen>();
+            skillzGameScreen = GetComponentInChildren<SkillzGameScreen>();
 
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
@@ -114,6 +116,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //}
                         if (game.isOver)
                         {
+                            GamePlayManager.Instance.BackButtonOnClick();
+                        }
+
+                        break;
+
+                    case GameType.SKILLZ_ASYNC:
+                        if (SkillzGameController.Instance.OngoingMatch)
+                        {
+                            menuController.GetOrAddScreen<PromptScreen>()
+                                .Prompt(
+                                    LocalizationManager.Value("are_you_sure"),
+                                    LocalizationManager.Value("leave_skillz_game_message"),
+                                    LocalizationManager.Value("yes"),
+                                    LocalizationManager.Value("no"),
+                                    () =>
+                                    {
+                                        SkillzGameController.Instance.ForfeitMatch();
+                                    });
+                        }
+                        else
+                        {
+                            //if for some reason player stuck at gameplay scene after returning from skillz menu, they still can press back
                             GamePlayManager.Instance.BackButtonOnClick();
                         }
 
@@ -373,6 +397,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             realtimeScreen.Open(game);
             demoGameScreen.Open(game);
             gauntletGameScreen.Open(game);
+            skillzGameScreen.Open(game);
 
             gameWinLoseScreen.CloseIfOpened();
             puzzleWinLoseScreen.CloseIfOpened();

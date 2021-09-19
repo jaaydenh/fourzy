@@ -96,35 +96,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: Sirenix.Serialization.GlobalSerializationConfig, Sirenix.Serialization.Config,
       Version=3.0.4.0, Culture=neutral, PublicKeyToken=null
-  - name: AreasProgression
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: ENCHANTED_FOREST
-    ext: json
-    path: AreasProgression
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: ICE_PALACE
-    ext: json
-    path: AreasProgression
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: SANDY_ISLAND
-    ext: json
-    path: AreasProgression
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN
-    ext: json
-    path: AreasProgression
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: GameBoards
     ext: 
     path: 
@@ -3037,6 +3008,17 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: Skillz
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: skillz-settings
+    ext: asset
+    path: Skillz
+    type: 2
+    objectTypeName: SkillzSDK.Settings.SkillzSettings, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: Strings
     ext: 
     path: 
@@ -3135,6 +3117,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 477
+  m_FileCount: 474
   m_FolderCount: 52
   UpdateAutomatically: 0

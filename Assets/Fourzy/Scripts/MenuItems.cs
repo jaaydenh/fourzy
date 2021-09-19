@@ -3,6 +3,7 @@
 #if UNITY_EDITOR
 
 using System;
+using System.Collections.Generic;
 using Fourzy;
 using Fourzy._Updates;
 using FourzyGameModel.Model;
@@ -27,6 +28,44 @@ public class MenuItems : MonoBehaviour
         ClearInventory();
         ClearAreaProgress();
         ResetPlayerStats();
+    }
+
+    [MenuItem("Fourzy/Set For Mobile Regular")]
+    public static void SetMobileRegular()
+    {
+        SetBuildIntent(BuildIntent.MOBILE_REGULAR);
+    }
+
+    [MenuItem("Fourzy/Set For Mobile Skillz")]
+    public static void SetMobileSkillz()
+    {
+        SetBuildIntent(BuildIntent.MOBILE_SKILLZ);
+    }
+
+    [MenuItem("Fourzy/Set For Desktop")]
+    public static void SetMobileDesktop()
+    {
+        SetBuildIntent(BuildIntent.DESKTOP_REGULAR);
+    }
+
+    private static void SetBuildIntent(BuildIntent intent)
+    {
+        GameManagersDontDestroy managers = AssetDatabase.LoadAssetAtPath<GameManagersDontDestroy>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("GameManagers")[0]));
+
+        if (managers)
+        {
+            GameManager gameManager = managers.GetComponentInChildren<GameManager>();
+
+            if (gameManager)
+            {
+                SerializedObject so = new SerializedObject(gameManager);
+                so.FindProperty("buildIntent").enumValueIndex = (int)intent;
+                so.ApplyModifiedProperties();
+
+                SetScenesFromIntent(intent);
+                AssetDatabase.SaveAssets();
+            }
+        }
     }
 
     [MenuItem("Fourzy/DeleteAllPlayerPrefs")]
@@ -223,6 +262,38 @@ public class MenuItems : MonoBehaviour
         }
 
         return true;
+    }
+
+    public static void SetScenesFromIntent(BuildIntent intent)
+    {
+        List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene>();
+
+        //fix scenes
+        switch (intent)
+        {
+            case BuildIntent.DESKTOP_REGULAR:
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.MAIN_MENU_L_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.GAMEPLAY_SCENE_NAME)[0]), true));
+
+                break;
+
+            case BuildIntent.MOBILE_REGULAR:
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.MAIN_MENU_P_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.GAMEPLAY_SCENE_NAME)[0]), true));
+
+                break;
+
+            case BuildIntent.MOBILE_SKILLZ:
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SKILLZ_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.MAIN_MENU_SKILLZ_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.GAMEPLAY_SCENE_NAME)[0]), true));
+
+                break;
+        }
+
+        EditorBuildSettings.scenes = scenes.ToArray();
     }
 }
 

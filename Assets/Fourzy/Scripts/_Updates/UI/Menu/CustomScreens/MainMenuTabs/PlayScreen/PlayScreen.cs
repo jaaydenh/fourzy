@@ -49,11 +49,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.GetOrAddScreen<GauntletIntroScreen>()._Prompt();
         }
 
-        public void StartSkillz()
-        {
-            SkillzCrossPlatform.LaunchSkillz(new SkillzGameController());
-        }
-
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
         public void ResetTutorial() =>

@@ -61,6 +61,13 @@ namespace Fourzy
         public const int CIRCULAR_TIMER_SECONDS = 8;
         public const int RESET_TIMER_SECTIONS = 2;
 
+        //Skillz params
+        public const string SKILLZ_GAMES_COUNT_KEY = "Games";
+        public const string SKILLZ_GAME_TIMER_KEY = "Timer";
+        public const int SKILLZ_DEFAULT_GAMES_COUNT = 3;
+        public const float SKILLZ_DEFAULT_GAME_TIMER = 300f;
+        //
+
         // Adds additional time to timer after X turns
         public const int ADD_TIMER_BAR_EVERY_X_TURN = 0;
         public const int BARS_TO_ADD = 1;
@@ -73,10 +80,12 @@ namespace Fourzy
         public const string GAME_MODE_FAST_PUZZLES = "unlock_fast_puzzles_mode";
         public const string GAME_MODE_GAUNTLET_GAME = "unlock_gauntlet_mode";
 
-        public const string GAMEPLAY_SCENE_NAME = "gamePlayNew";
-        public const string MAIN_MENU_P_SCENE_NAME = "portraitMainMenu";
-        public const string MAIN_MENU_L_SCENE_NAME = "landscapeMainMenu";
-        public const string LOGO_SCENE_NAME = "logo";
+        public const string GAMEPLAY_SCENE_NAME = "DefaultGameplayScene";
+        public const string MAIN_MENU_P_SCENE_NAME = "MainMenuScenePortrait";
+        public const string MAIN_MENU_L_SCENE_NAME = "MainMenuSceneLandscape";
+        public const string MAIN_MENU_SKILLZ_SCENE_NAME = "MainMenuSkillz";
+        public const string LOGO_SCENE_NAME = "StartSceneDefault";
+        public const string LOGO_SKILLZ_SCENE_NAME = "StartSceneSkillz";
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";
 

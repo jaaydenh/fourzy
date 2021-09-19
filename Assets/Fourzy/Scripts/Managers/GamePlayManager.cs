@@ -764,6 +764,25 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
+                    Area area = Area.TRAINING_GARDEN;
+                    BoardGenerationPreferences preferences = new BoardGenerationPreferences(area, 10);
+                    GameOptions options = new GameOptions() { PlayersUseSpells = false };
+                    preferences.RequestedRecipe = SkillzGameController.Instance.CurrentMatch.ID.Value.ToString() ?? "";
+                    Debug.Log("Match id " + SkillzGameController.Instance.CurrentMatch.ID.Value.ToString());
+
+                    ClientFourzyGame game;
+                    GamePieceData random = GameContentManager.Instance.piecesDataHolder.random;
+                    Player opponent = new Player(2, "Player2", AIProfile.SimpleAI) { HerdId = random.Id };
+
+                    game = new ClientFourzyGame(area, UserManager.Instance.meAsPlayer, opponent, 1, options, preferences) { hideOpponent = true, };
+                    game._Type = GameType.SKILLZ_ASYNC;
+                    game.UpdateFirstState();
+
+                    LoadGame(game);
+
+                    break;
+
                 default:
                     LoadGame(GameManager.Instance.activeGame);
 
@@ -1495,6 +1514,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 ratingUpdated = true;
             }
+
+            #endregion
+
+            #region Skillz Game Check
 
             #endregion
 

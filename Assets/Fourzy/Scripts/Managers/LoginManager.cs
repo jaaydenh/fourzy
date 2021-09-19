@@ -40,6 +40,11 @@ namespace Fourzy
 
             if (InstanceExists) return;
 
+            if (GameManager.Instance.buildIntent == BuildIntent.MOBILE_SKILLZ)
+            {
+                return;
+            }
+
             GameManager.onNetworkAccess += OnNetworkAccess;
             UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
 
@@ -49,12 +54,22 @@ namespace Fourzy
 
         protected void Start()
         {
+            if (GameManager.Instance.buildIntent == BuildIntent.MOBILE_SKILLZ)
+            {
+                return;
+            }
+
             PlayFabAuthService.OnLoginSuccess += PlayFabLoginSuccess;
             PlayFabAuthService.OnPlayFabError += OnPlayFabError;
         }
 
         protected void OnDestroy()
         {
+            if (GameManager.Instance.buildIntent == BuildIntent.MOBILE_SKILLZ)
+            {
+                return;
+            }
+
             GameManager.onNetworkAccess -= OnNetworkAccess;
             UserManager.onPlayfabValuesLoaded -= OnPlayfabValueLoaded;
 

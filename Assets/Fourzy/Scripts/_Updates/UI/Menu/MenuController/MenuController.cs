@@ -63,8 +63,6 @@ namespace Fourzy._Updates.UI.Menu
         public float widthAdjusted => canvaseScaler.referenceResolution.x * widthRatioAdjusted;
         public float heightAdjusted => canvaseScaler.referenceResolution.y * heightRatioAdjusted;
         public Vector2 size { get; private set; }
-
-        //editor version of widthAdjusted
         public float _widthAdjusted
         {
             get

@@ -318,6 +318,10 @@
       "value": "Leaving the game will automatically forfeit and reduce your rating."
     },
     {
+      "key": "leave_skillz_game_message",
+      "value": "Leaving the game will automatically forfeit."
+    },
+    {
       "key": "level1_cpu",
       "value": "SIMPLE"
     },

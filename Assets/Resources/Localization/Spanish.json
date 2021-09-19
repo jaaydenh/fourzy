@@ -322,6 +322,10 @@
       "value": "Dejar el juego automáticamente perderá y reducirá su calificación."
     },
     {
+      "key": "leave_skillz_game_message",
+      "value": "Dejar el juego se perderá automáticamente."
+    },
+    {
       "key": "level1_cpu",
       "value": "FÁCIL"
     },
