@@ -16,12 +16,12 @@ MonoBehaviour:
   Environment: 0
   Orientation: 1
   MatchParameters:
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
+  - Key: Games
+    Value: 3
+  - Key: Timer
+    Value: 20
+  - Key: Moves
+    Value: 10
   - Key: 
     Value: 
   - Key: 

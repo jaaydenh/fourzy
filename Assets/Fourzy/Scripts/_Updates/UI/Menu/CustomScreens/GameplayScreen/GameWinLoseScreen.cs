@@ -2,6 +2,7 @@
 
 using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
@@ -70,23 +71,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameMode.GAUNTLET:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
-                            $"{LocalizationManager.Value("draw")}</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
                         bgTapText = LocalizationManager.Value("continue");
                     }
                     else
                     {
-                        if (game.IsWinner() &&
-                            (game.myMembers.Count > 0 || game.puzzleData.pack.complete))
+                        if (game.IsWinner() && (game.myMembers.Count > 0 || game.puzzleData.pack.complete))
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                $"{LocalizationManager.Value("won")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                             bgTapText = LocalizationManager.Value("continue");
                         }
                         else
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
-                                $"{LocalizationManager.Value("lost")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
 
                             if (game.myMembers.Count > 0)
                             {
@@ -104,25 +101,36 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameMode.VERSUS:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
-                            $"{LocalizationManager.Value("draw")}</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
                     }
                     else
                     {
                         switch (GameManager.Instance.ExpectedGameType)
                         {
+                            case GameTypeLocal.ASYNC_SKILLZ_GAME:
+                                if (game.IsWinner())
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                                }
+                                else if (game.myMembers.Count == 0)
+                                {
+                                    stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("out_of_moves")}</color>";
+                                }
+                                else if (gameplayScreen.myTimerLeft == 0f)
+                                {
+                                    stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("out_of_time")}</color>";
+                                }
+
+                                break;
+
                             case GameTypeLocal.LOCAL_GAME:
                                 if (game.IsWinner())
                                 {
-                                    stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
-                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                        $"{LocalizationManager.Value("won")}</color>";
+                                    stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                                 }
                                 else
                                 {
-                                    stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#" +
-                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                        $"{LocalizationManager.Value("won")}</color>";
+                                    stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                                 }
 
                                 if (gameplayScreen.myTimerLeft == 0f || gameplayScreen.opponentTimerLeft == 0f)
@@ -137,15 +145,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             case GameTypeLocal.REALTIME_QUICKMATCH:
                                 if (game.IsWinner())
                                 {
-                                    stateLabel.text = $"{game.me.DisplayName} <color=#" +
-                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                        $"{LocalizationManager.Value("won")}</color>";
+                                    stateLabel.text = $"{game.me.DisplayName} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                                 }
                                 else
                                 {
-                                    stateLabel.text = $"{game.opponent.DisplayName} <color=#" +
-                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                        $"{LocalizationManager.Value("won")}</color>";
+                                    stateLabel.text = $"{game.opponent.DisplayName} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                                 }
 
                                 if (gameplayScreen.myTimerLeft == 0f)
@@ -166,20 +170,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 default:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
-                            $"{LocalizationManager.Value("draw")}</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
                     }
                     else
                     {
                         if (game.IsWinner())
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                $"{LocalizationManager.Value("won")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                         }
                         else
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
-                                $"{LocalizationManager.Value("lost")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
                         }
                     }
 
@@ -187,8 +188,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             tapToContinue.AtProgress(0f);
-            if (RewardsScreen.WillDisplayRewardsScreen(game) ||
-                (game.puzzleData && game.puzzleData.pack))
+            if (RewardsScreen.WillDisplayRewardsScreen(game) || (game.puzzleData && game.puzzleData.pack) || game._Type == GameType.SKILLZ_ASYNC)
             {
                 //display 'tap to continue'
                 if (string.IsNullOrEmpty(bgTapText))
@@ -236,8 +236,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GamePieceView gamepieceView = Instantiate(winningGamepieces[index], piecesParent);
 
                 gamepieceView.transform.position = winningGamepieces[index].transform.position;
-                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) *
-                    Vector3.one;
+                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * Vector3.one;
                 gamepieceView.PlayWinAnimation(index * .15f + .15f);
 
                 gamePieces.Add(gamepieceView);
@@ -380,13 +379,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
+                case GameType.SKILLZ_ASYNC:
+                    if (SkillzGameController.Instance.HaveNextGame)
+                    {
+                        GamePlayManager.Instance.Rematch();
+                    }
+                    else
+                    {
+                        GamePlayManager.Instance.BackButtonOnClick();
+                    }
+
+                    break;
+
                 default:
                     GamePlayManager.Instance.LoadGame(game.Next());
 
                     break;
             }
 
-            if (isCurrent) menuController.CloseCurrentScreen(true);
+            if (isCurrent)
+            {
+                menuController.CloseCurrentScreen(true);
+            }
         }
 
         public void OnExitTap()
@@ -404,15 +418,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     if (game.IsWinner())
                     {
                         if (game.puzzleData.pack.complete)
+                        {
                             menuController.GetOrAddScreen<GauntletWinPrompt>()._Prompt(game);
+                        }
                         else
                         {
                             if (game.myMembers.Count == 0)
+                            {
                                 OnGauntletLost();
+                            }
                             else
+                            {
                                 menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
                                     game.puzzleData.pack,
                                     () => GamePlayManager.Instance.gameplayScreen.OnBack());
+                            }
                         }
                     }
                     else
@@ -494,37 +514,49 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 default:
-                    if (rematchButton.gameObject.activeInHierarchy)
+                    switch (game._Type)
                     {
-                        switch (game._Type)
-                        {
-                            case GameType.REALTIME:
-                                //GamePlayManager.Instance.BackButtonOnClick();
+                        case GameType.SKILLZ_ASYNC:
+                            //open skillz match result screen
+                            menuController.GetOrAddScreen<SkillzProgressionPromptScreen>().OpenSkillzprogressionPrompt(NextGame);
 
-                                break;
+                            break;
 
-                            default:
-                                Rematch();
+                        default:
+                            if (rematchButton.gameObject.activeInHierarchy)
+                            {
+                                switch (game._Type)
+                                {
+                                    case GameType.REALTIME:
+                                        //GamePlayManager.Instance.BackButtonOnClick();
 
-                                break;
-                        }
-                    }
-                    else if (nextGameButton.gameObject.activeInHierarchy)
-                    {
-                        NextGame();
-                    }
-                    else
-                    {
-                        if (game.puzzleData && !game.puzzleData.lastInPack)
-                        {
-                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
-                                game.puzzleData.pack,
-                                () => GamePlayManager.Instance.gameplayScreen.OnBack());
-                        }
-                        else
-                        {
-                            GamePlayManager.Instance.BackButtonOnClick();
-                        }
+                                        break;
+
+                                    default:
+                                        Rematch();
+
+                                        break;
+                                }
+                            }
+                            else if (nextGameButton.gameObject.activeInHierarchy)
+                            {
+                                NextGame();
+                            }
+                            else
+                            {
+                                if (game.puzzleData && !game.puzzleData.lastInPack)
+                                {
+                                    menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
+                                        game.puzzleData.pack,
+                                        () => GamePlayManager.Instance.gameplayScreen.OnBack());
+                                }
+                                else
+                                {
+                                    GamePlayManager.Instance.BackButtonOnClick();
+                                }
+                            }
+
+                            break;
                     }
 
                     break;
@@ -624,7 +656,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                                         break;
                                 }
+
                                 break;
+
                             default:
                                 nextGameButton.SetActive(false);
                                 exitButton.SetActive(false);

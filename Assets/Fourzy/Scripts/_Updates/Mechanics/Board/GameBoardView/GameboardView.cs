@@ -253,7 +253,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void OnPointerDown(Vector2 position)
         {
-            if (isAnimating || game.isOver) return;
+            if (isAnimating || game.IsOver) return;
 
             if (gameplayManager && gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
             {
@@ -1070,6 +1070,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         turn.AITurn = true;
 
                         StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(turnResults, false));
+                        SetPausedState("boardUpdateRoutine", Paused);
 
                         //manually reset noInput timer
                         StandaloneInputModuleExtended.instance.ResetNoInputTimer();
@@ -1140,7 +1141,10 @@ namespace Fourzy._Updates.Mechanics.Board
                 turnResults.Activity.RemoveAt(0);
             }
 
-            return StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(turnResults, false));
+            Coroutine boardUpdateRoutine = StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(turnResults, false));
+            SetPausedState("boardUpdateRoutine", Paused);
+
+            return boardUpdateRoutine;
         }
 
         /// <summary>
@@ -1374,6 +1378,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public void Pause()
         {
             Paused = true;
+            Debug.Log(Paused);
 
             SetPausedState(true);
             gamePieces.ForEach(_gp => _gp.SetPausedState(true));
@@ -1607,7 +1612,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (game._allTurnRecord.Count == 0)
             {
-                StartRoutine(game._State.UniqueId, BoardUpdateRoutine(game.StartTurn(), true));
+                StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(game.StartTurn(), true));
+                SetPausedState("boardUpdateRoutine", Paused);
             }
 
             return coroutine;
@@ -2093,7 +2099,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private void UpdateHintArea()
         {
-            if (hintBlocks == null || game.isOver) return;
+            if (hintBlocks == null || game.IsOver) return;
 
             List<BoardLocation> affected = new List<BoardLocation>();
 
@@ -2571,16 +2577,6 @@ namespace Fourzy._Updates.Mechanics.Board
             while (Paused) yield return null;
 
             game.CheckLost();
-
-            //check if gauntlet game finished
-            if (game._Mode == GameMode.GAUNTLET && turn != null && turn.PlayerId == game.me.PlayerId)
-            {
-                if (game._State.Herds[turn.PlayerId].Members.Count == 0 && game._State.WinningLocations == null)
-                {
-                    SetHintAreaColliderState(false);
-                    onGameFinished?.Invoke(game);
-                }
-            }
 
             //check if new spells are covered by gamepieces
             if (!startTurn)

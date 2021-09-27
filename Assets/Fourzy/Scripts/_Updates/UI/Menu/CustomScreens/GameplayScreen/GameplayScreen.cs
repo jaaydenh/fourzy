@@ -48,7 +48,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public DemoGameScreen demoGameScreen { get; private set; }
         public GauntletGameScreen gauntletGameScreen { get; private set; }
         public SkillzGameScreen skillzGameScreen { get; private set; }
-        public float myTimerLeft => timersEnabled ? timerWidgets[0].TotalTimeLeft : -1f;
+        public float myTimerLeft
+        {
+            get
+            {
+                if (game == null)
+                {
+                    return -1f;
+                }
+                else
+                {
+                    switch (game._Type)
+                    {
+                        case GameType.SKILLZ_ASYNC:
+                            return skillzGameScreen.Timer;
+
+                        default:
+                            return timersEnabled ? timerWidgets[0].TotalTimeLeft : -1f;
+                    }
+                }
+            }
+        }
         public float opponentTimerLeft => timersEnabled ? timerWidgets[1].TotalTimeLeft : -1f;
         public int myMagicLeft => magicEnabled ? player1Widget.magic : -1;
 
@@ -114,7 +134,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //            LocalizationManager.Value("no"),
                         //            () => GamePlayManager.Instance.BackButtonOnClick());
                         //}
-                        if (game.isOver)
+                        if (game.IsOver)
                         {
                             GamePlayManager.Instance.BackButtonOnClick();
                         }
@@ -144,7 +164,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     default:
-                        if (game.isOver)
+                        if (game.IsOver)
                         {
                             GamePlayManager.Instance.BackButtonOnClick();
                         }
@@ -549,6 +569,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         demoGameScreen.GameComplete();
 
                         break;
+
+                    case GameType.SKILLZ_ASYNC:
+                        skillzGameScreen.GameComplete();
+
+                        break;
                 }
 
                 //win/lose screen
@@ -577,14 +602,36 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnGamePaused()
         {
-            //pause timers
-            timerWidgets.ForEach(widget => widget.Pause());
+            switch (game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    skillzGameScreen.Pause();
+
+                    break;
+
+                default:
+                    //pause timers
+                    timerWidgets.ForEach(widget => widget.Pause());
+
+                    break;
+            }
         }
 
         public void OnGameUnpaused()
         {
-            //unpause timers
-            timerWidgets.ForEach(widget => widget.Unpause());
+            switch (game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    skillzGameScreen.Unpause();
+
+                    break;
+
+                default:
+                    //unpause timers
+                    timerWidgets.ForEach(widget => widget.Unpause());
+
+                    break;
+            }
         }
 
         private void OnMoveStarted(ClientPlayerTurn turn, bool startTurn)
@@ -593,6 +640,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             puzzleUI.OnMoveStarted();
             gauntletGameScreen.OnMoveStarted();
+            skillzGameScreen.OnMoveStarted();
 
             if (turn == null || turn.PlayerId < 1) return;
 
@@ -642,8 +690,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             puzzleUI.UpdatePlayerTurn();
             passAndPlayUI.UpdatePlayerTurn();
             gauntletGameScreen.UpdatePlayerTurn();
+            skillzGameScreen.UpdatePlayerTurn();
 
-            if (game.isOver) return;
+            if (game.IsOver) return;
 
             UpdatePlayerTurnGraphics();
 
@@ -792,7 +841,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case GameMode.GAUNTLET:
                     case GameMode.PUZZLE_FAST:
                     case GameMode.PUZZLE_PACK:
-                        if (game._allTurnRecord.Count == 1 && !game.isOver)
+                        if (game._allTurnRecord.Count == 1 && !game.IsOver)
                         {
                             rematchButton.SetState(true);
                             rematchButton.Show(.3f);

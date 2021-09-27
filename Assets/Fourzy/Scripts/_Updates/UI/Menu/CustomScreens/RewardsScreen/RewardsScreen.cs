@@ -81,7 +81,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
             }
 
-            if (game.draw || !game.isOver) return false;
+            if (game.draw || !game.IsOver) return false;
 
             if (game.puzzleData && game.puzzleData.pack)
             {

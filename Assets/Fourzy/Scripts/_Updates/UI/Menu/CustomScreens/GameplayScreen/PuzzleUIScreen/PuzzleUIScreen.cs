@@ -227,6 +227,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             prevHintsCount = UserManager.Instance.hints;
         }
 
-        private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);
+        private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.IsOver && game.isMyTurn);
     }
 }

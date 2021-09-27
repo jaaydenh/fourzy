@@ -462,6 +462,10 @@
       "value": "Abrir portal raro"
     },
     {
+      "key": "out_of_moves",
+      "value": "No se mueve a la izquierda"
+    },
+    {
       "key": "out_of_time",
       "value": "¡Te has quedado sin tiempo!"
     },
@@ -492,6 +496,10 @@
     {
       "key": "portalpoints",
       "value": "Puntos de portal"
+    },
+    {
+      "key": "points",
+      "value": "Puntos"
     },
     {
       "key": "practice",

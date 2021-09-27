@@ -121,11 +121,21 @@ namespace Fourzy._Updates.ClientModel
 
         public int LoseStreak { get; set; }
 
-        public bool isOver =>
-            Status == PuzzleStatus.SUCCESS ||
-            Status == PuzzleStatus.FAILED ||
-            playerTurnRecord.Count == puzzleData.MoveLimit ||
-            _State.WinnerId > 0;
+        public bool IsOver
+        {
+            get
+            {
+                return
+                    Status == PuzzleStatus.SUCCESS ||
+                    Status == PuzzleStatus.FAILED ||
+                    playerTurnRecord.Count == puzzleData.MoveLimit ||
+                    _State.WinnerId > 0;
+            }
+            set
+            {
+
+            }
+        }
 
         public bool draw { get; set; }
 

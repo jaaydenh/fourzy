@@ -38,7 +38,7 @@ namespace Fourzy._Updates.ClientModel
         int Columns { get; }
         int BossMoves { get; set; }
         int LoseStreak { get; set; }
-        bool isOver { get; }
+        bool IsOver { get; set; }
         bool draw { get; set; }
         bool hideOpponent { get; set; }
         Piece activePlayerPiece { get; }

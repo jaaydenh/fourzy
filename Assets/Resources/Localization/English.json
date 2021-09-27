@@ -458,6 +458,10 @@
       "value": "Open Rare Portal"
     },
     {
+      "key": "out_of_moves",
+      "value": "No Moves Left"
+    },
+    {
       "key": "out_of_time",
       "value": "You ran out of time!"
     },
@@ -488,6 +492,10 @@
     {
       "key": "portalpoints",
       "value": "Portal Points"
+    },
+    {
+      "key": "points",
+      "value": "Points"
     },
     {
       "key": "practice",
@@ -612,6 +620,22 @@
     {
       "key": "settings",
       "value": "Settings"
+    },
+    {
+      "key": "skillz_moves_left_points_key",
+      "value": "Moves left"
+    },
+    {
+      "key": "skillz_time_left_points_key",
+      "value": "Time left"
+    },
+    {
+      "key": "skillz_survival_moves_left_key",
+      "value": "Survival bonus"
+    },
+    {
+      "key": "skillz_win_points_key",
+      "value": "Victory"
     },
     {
       "key": "sound_effects",

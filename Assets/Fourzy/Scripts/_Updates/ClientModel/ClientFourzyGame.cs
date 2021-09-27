@@ -165,6 +165,10 @@ namespace Fourzy._Updates.ClientModel
         public GamePieceData playerTwoPrefabData { get; set; }
 
         private string gameID;
+        /// <summary>
+        /// When game is custom finished
+        /// </summary>
+        private bool isOver;
         private GameType _type;
 
         public List<SimpleMove> initialMoves { get; private set; } = new List<SimpleMove>();
@@ -218,10 +222,20 @@ namespace Fourzy._Updates.ClientModel
 
         public int Columns => State.Board.Columns;
 
-        public bool isOver =>
-            State.WinnerId > 0 ||
-            State.WinningLocations != null ||
-            (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && myMembers.Count == 0);
+        public bool IsOver
+        {
+            get
+            {
+                return isOver || 
+                    (State.WinnerId > 0 ||
+                    State.WinningLocations != null ||
+                    (State.Options.MovesReduceHerd && myMembers.Count == 0));
+            }
+            set
+            {
+                isOver = value;
+            }
+        }
 
         public bool draw { get; set; }
 

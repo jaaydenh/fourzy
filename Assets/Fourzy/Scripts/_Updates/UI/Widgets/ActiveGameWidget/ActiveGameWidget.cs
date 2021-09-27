@@ -42,7 +42,7 @@ namespace Fourzy._Updates.UI.Widgets
             gamePieceView.transform.localPosition = Vector3.zero;
             gamePieceView.StartBlinking();
 
-            if (game.isOver)
+            if (game.IsOver)
             {
                 rematchButton.SetActive(true);
                 rematchButton.SetLabel("Rematch");

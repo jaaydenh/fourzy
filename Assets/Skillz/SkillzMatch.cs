@@ -1,12 +1,10 @@
-using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.Collections;
-using SkillzSDK.Settings;
 using SkillzSDK.Extensions;
-
+using SkillzSDK.Settings;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using JSONDict = System.Collections.Generic.Dictionary<string, object>;
-using System.Linq;
 
 namespace SkillzSDK
 {
@@ -46,26 +44,27 @@ namespace SkillzSDK
         public readonly bool IsCurrentPlayer;
 
 
-    public Player(JSONDict playerJSON) {
-        #if UNITY_IOS
+        public Player(JSONDict playerJSON)
+        {
+#if UNITY_IOS
             ID = playerJSON.SafeGetUintValue("id");
             DisplayName = playerJSON.SafeGetStringValue("displayName");
             AvatarURL = playerJSON.SafeGetStringValue("avatarURL");
             FlagURL = playerJSON.SafeGetStringValue("flagURL");
-            IsCurrentPlayer = (bool)playerJSON.SafeGetBoolValue("isCurrentPlayer");
+            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer").GetValueOrDefault();
             TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
-        #elif UNITY_ANDROID
+#elif UNITY_ANDROID
             ID = playerJSON.SafeGetUintValue("userId");
             DisplayName = playerJSON.SafeGetStringValue("userName");
             AvatarURL = playerJSON.SafeGetStringValue("avatarUrl");
             FlagURL = playerJSON.SafeGetStringValue("flagUrl");
-            IsCurrentPlayer = (bool)playerJSON.SafeGetBoolValue("isCurrentPlayer");
+            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer").GetValueOrDefault();
             TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
-        #endif
-    }
+#endif
+        }
 
 
-        public override string ToString ()
+        public override string ToString()
         {
             return "Player: " +
             " ID: [" + ID + "]" +
@@ -162,22 +161,23 @@ namespace SkillzSDK
         /// </summary>
         public readonly Dictionary<string, string> GameParams;
 
-        public Match (JSONDict jsonData)
+        public Match(JSONDict jsonData)
         {
-            Description = jsonData.SafeGetStringValue ("matchDescription");
-            EntryCash = (float)jsonData.SafeGetDoubleValue ("entryCash");
-            EntryPoints = jsonData.SafeGetIntValue ("entryPoints");
-            ID = jsonData.SafeGetUlongValue ("id");
-            TemplateID = jsonData.SafeGetIntValue ("templateId");
-            Name = jsonData.SafeGetStringValue ("name");
-            IsCash = jsonData.SafeGetBoolValue ("isCash");
-            IsSynchronous = (bool)jsonData.SafeGetBoolValue ("isSynchronous");
+            Description = jsonData.SafeGetStringValue("matchDescription");
+            EntryCash = (float)jsonData.SafeGetDoubleValue("entryCash");
+            EntryPoints = jsonData.SafeGetIntValue("entryPoints");
+            ID = jsonData.SafeGetUlongValue("id");
+            TemplateID = jsonData.SafeGetIntValue("templateId");
+            Name = jsonData.SafeGetStringValue("name");
+            IsCash = jsonData.SafeGetBoolValue("isCash");
+            IsSynchronous = (bool)jsonData.SafeGetBoolValue("isSynchronous");
 
-            object players = jsonData.SafeGetValue ("players");
+            object players = jsonData.SafeGetValue("players");
             Players = new List<Player>();
 
             List<object> playerArray = (List<object>)players;
-            foreach (object player in playerArray) {
+            foreach (object player in playerArray)
+            {
                 Players.Add(new Player((Dictionary<string, object>)player));
             }
 
@@ -186,12 +186,10 @@ namespace SkillzSDK
                 ? new CustomServerConnectionInfo(connectionInfoJson)
                 : null;
 
-			if (Application.isEditor)
-			{
-				GameParams = LoadSimulatedMatchParameters();
-			}
+#if UNITY_EDITOR
+            GameParams = LoadSimulatedMatchParameters();
 
-#if UNITY_IOS
+#elif UNITY_IOS
             GameParams = new Dictionary<string, string>();
             object parameters = jsonData.SafeGetValue("gameParameters");
             if (parameters != null && parameters.GetType() == typeof(JSONDict)) {
@@ -214,11 +212,12 @@ namespace SkillzSDK
 #endif
         }
 
-        public override string ToString ()
+        public override string ToString()
         {
             string paramStr = "";
 
-            foreach (KeyValuePair<string, string> entry in GameParams) {
+            foreach (KeyValuePair<string, string> entry in GameParams)
+            {
                 paramStr += " " + entry.Key + ": " + entry.Value;
             }
 
@@ -244,34 +243,35 @@ namespace SkillzSDK
             return stringValue;
         }
 
-		private Dictionary<string, string> LoadSimulatedMatchParameters()
-		{
-			Debug.Log("Loading simulated match parameters:");
-
-			var simulatedMatchParameters = new Dictionary<string, string>();
-
-			foreach (var stringKeyValue in SkillzSettings.Instance.MatchParameters)
-			{
-				var trimmedKey = !string.IsNullOrWhiteSpace(stringKeyValue.Key) ? stringKeyValue.Key.Trim() : string.Empty;
-				var trimmedValue = !string.IsNullOrWhiteSpace(stringKeyValue.Value) ? stringKeyValue.Value.Trim() : stringKeyValue.Value;
-
-				if (string.IsNullOrWhiteSpace(trimmedKey))
-				{
-					continue;
-				}
-
-				Debug.Log($"\t'{trimmedKey}' : '{trimmedValue}'");
-				simulatedMatchParameters.Add(trimmedKey, trimmedValue);
-			}
-
-			return simulatedMatchParameters;
-		}
-
-		private static Dictionary<string, string> HashtableToDictionary (Hashtable gameParamsHashTable)
+        private Dictionary<string, string> LoadSimulatedMatchParameters()
         {
-            Dictionary<string,string> gameParamsdict = new Dictionary<string,string> ();
-            foreach (DictionaryEntry entry in gameParamsHashTable) {
-                gameParamsdict.Add ((string)entry.Key, (string)entry.Value);
+            Debug.Log("Loading simulated match parameters:");
+
+            var simulatedMatchParameters = new Dictionary<string, string>();
+
+            foreach (var stringKeyValue in SkillzSettings.Instance.MatchParameters)
+            {
+                var trimmedKey = !string.IsNullOrWhiteSpace(stringKeyValue.Key) ? stringKeyValue.Key.Trim() : string.Empty;
+                var trimmedValue = !string.IsNullOrWhiteSpace(stringKeyValue.Value) ? stringKeyValue.Value.Trim() : stringKeyValue.Value;
+
+                if (string.IsNullOrWhiteSpace(trimmedKey))
+                {
+                    continue;
+                }
+
+                Debug.Log($"\t'{trimmedKey}' : '{trimmedValue}'");
+                simulatedMatchParameters.Add(trimmedKey, trimmedValue);
+            }
+
+            return simulatedMatchParameters;
+        }
+
+        private static Dictionary<string, string> HashtableToDictionary(Hashtable gameParamsHashTable)
+        {
+            Dictionary<string, string> gameParamsdict = new Dictionary<string, string>();
+            foreach (DictionaryEntry entry in gameParamsHashTable)
+            {
+                gameParamsdict.Add((string)entry.Key, (string)entry.Value);
             }
 
             return gameParamsdict;

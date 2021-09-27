@@ -109,7 +109,7 @@ namespace Fourzy._Updates.ClientModel
 
         public static void CheckLost(IClientFourzy game)
         {
-            if (game.isOver)
+            if (game.IsOver)
             {
                 if (game.IsWinner())
                 {

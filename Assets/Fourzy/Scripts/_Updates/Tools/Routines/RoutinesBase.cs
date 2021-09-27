@@ -23,7 +23,7 @@ namespace Fourzy._Updates.Tools
         /// <param name="routine"></param>
         /// <param name="onEnd"></param>
         /// <param name="onCanceled"></param>
-        public Coroutine StartRoutine(string name, IEnumerator routine, Action onEnd = null, Action onCanceled = null)
+        public virtual Coroutine StartRoutine(string name, IEnumerator routine, Action onEnd = null, Action onCanceled = null)
         {
             if (!routines.ContainsKey(name))
             {
@@ -40,7 +40,7 @@ namespace Fourzy._Updates.Tools
             return null;
         }
 
-        public Coroutine StartRoutine(string name, IEnumerator routine, Action both) => StartRoutine(name, routine, both, both);
+        public virtual Coroutine StartRoutine(string name, IEnumerator routine, Action both) => StartRoutine(name, routine, both, both);
 
         /// <summary>
         /// Start a routine with time value
@@ -49,7 +49,7 @@ namespace Fourzy._Updates.Tools
         /// <param name="time"></param>
         /// <param name="onEnd"></param>
         /// <param name="onCanceled"></param>
-        public Coroutine StartRoutine(string name, float time, Action onEnd = null, Action onCanceled = null)
+        public virtual Coroutine StartRoutine(string name, float time, Action onEnd = null, Action onCanceled = null)
         {
             if (!routines.ContainsKey(name))
             {
@@ -66,16 +66,16 @@ namespace Fourzy._Updates.Tools
             return null;
         }
 
-        public Coroutine StartRoutine(string name, float time, Action both) => StartRoutine(name, time, both, both);
+        public virtual Coroutine StartRoutine(string name, float time, Action both) => StartRoutine(name, time, both, both);
 
         /// <summary>
         /// Is specified routine active?
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool IsRoutineActive(string name) => routines.ContainsKey(name);
+        public virtual bool IsRoutineActive(string name) => routines.ContainsKey(name);
 
-        public void SetPausedState(string routineName, bool state)
+        public virtual void SetPausedState(string routineName, bool state)
         {
             if (IsRoutineActive(routineName))
             {
@@ -87,12 +87,22 @@ namespace Fourzy._Updates.Tools
         /// Set paused state to all routines
         /// </summary>
         /// <param name="state"></param>
-        public void SetPausedState(bool state)
+        public virtual void SetPausedState(bool state)
         {
             foreach (var entry in routines)
             {
                 entry.Value.paused = state;
             }
+        }
+
+        public virtual bool CheckPausedState(string routineName)
+        {
+            if (IsRoutineActive(routineName))
+            {
+                return routines[routineName].paused;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -101,7 +111,7 @@ namespace Fourzy._Updates.Tools
         /// <param name="name"></param>
         /// <param name="callEnded"></param>
         /// <returns></returns>
-        public bool StopRoutine(string name, bool callEnded)
+        public virtual bool StopRoutine(string name, bool callEnded)
         {
             if (routines.ContainsKey(name))
             {
@@ -117,7 +127,7 @@ namespace Fourzy._Updates.Tools
         /// Stops all routines
         /// </summary>
         /// <param name="callEnded"></param>
-        public void StopAllRoutines(bool callEnded)
+        public virtual void StopAllRoutines(bool callEnded)
         {
             List<string> keys = new List<string>(routines.Keys);
 
@@ -132,7 +142,7 @@ namespace Fourzy._Updates.Tools
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool CancelRoutine(string name)
+        public virtual bool CancelRoutine(string name)
         {
             if (routines.ContainsKey(name))
             {
@@ -148,7 +158,7 @@ namespace Fourzy._Updates.Tools
         /// Removing this routine entry wont stop coroutine, so make sure you did before calling this
         /// </summary>
         /// <param name="name"></param>
-        public void RemoveRoutine(string name)
+        public virtual void RemoveRoutine(string name)
         {
             if (routines.ContainsKey(name))
             {
