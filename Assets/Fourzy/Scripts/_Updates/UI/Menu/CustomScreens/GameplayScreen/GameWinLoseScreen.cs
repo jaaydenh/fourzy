@@ -120,6 +120,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 {
                                     stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("out_of_time")}</color>";
                                 }
+                                else
+                                {
+                                    //player lost
+                                    stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
+                                }
 
                                 break;
 
@@ -220,26 +225,36 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 SetButtonRowState(true);
             }
 
-            //gamepieces
-            foreach (GamePieceView gamepiece in gamePieces)
+            //gamepieces highlight
+            switch (game._Type)
             {
-                Destroy(gamepiece.gameObject);
-            }
-            gamePieces.Clear();
+                case GameType.SKILLZ_ASYNC:
 
-            //get winning gamepieces
-            List<GamePieceView> winningGamepieces = GamePlayManager.Instance.board.GetWinningPieces();
+                    break;
 
-            //move them to ui layer
-            for (int index = 0; index < winningGamepieces.Count; index++)
-            {
-                GamePieceView gamepieceView = Instantiate(winningGamepieces[index], piecesParent);
+                default:
+                    //remove prev gamepieces
+                    foreach (GamePieceView gamepiece in gamePieces)
+                    {
+                        Destroy(gamepiece.gameObject);
+                    }
+                    gamePieces.Clear();
 
-                gamepieceView.transform.position = winningGamepieces[index].transform.position;
-                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * Vector3.one;
-                gamepieceView.PlayWinAnimation(index * .15f + .15f);
+                    //get winning gamepieces
+                    List<GamePieceView> winningGamepieces = GamePlayManager.Instance.board.GetWinningPieces();
+                    //move them to ui layer
+                    for (int index = 0; index < winningGamepieces.Count; index++)
+                    {
+                        GamePieceView gamepieceView = Instantiate(winningGamepieces[index], piecesParent);
 
-                gamePieces.Add(gamepieceView);
+                        gamepieceView.transform.position = winningGamepieces[index].transform.position;
+                        gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * Vector3.one;
+                        gamepieceView.PlayWinAnimation(index * .15f + .15f);
+
+                        gamePieces.Add(gamepieceView);
+                    }
+
+                    break;
             }
         }
 

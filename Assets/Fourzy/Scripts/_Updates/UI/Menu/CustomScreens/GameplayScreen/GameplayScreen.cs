@@ -12,6 +12,7 @@ using Photon.Pun;
 using StackableDecorator;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -24,6 +25,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameInfoWidget gameInfoWidget;
         public ButtonExtended rematchButton;
         public ButtonExtended helpButton;
+        [SerializeField]
+        private TMP_Text matchId;
 
         public List<TimerSliderWidget> timerWidgets;
 
@@ -425,6 +428,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetResetButtonState(false);
             UpdateHelpButton();
             HideGameInfoWidget(false);
+        }
+
+        public void SetMatchID(string matchID)
+        {
+            matchId.text = matchID;
         }
 
         public void OnWrongTurn()

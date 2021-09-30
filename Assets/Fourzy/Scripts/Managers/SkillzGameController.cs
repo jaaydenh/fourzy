@@ -35,6 +35,7 @@ namespace Fourzy._Updates.Managers
         private int pointsPerMoveLeftWin;
         private int pointsPerMoveLeftLose;
         private int pointsPerMoveLeftDraw;
+        private int gameComplexity;
 
         internal Match CurrentMatch { get; set; }
         internal bool OngoingMatch { get; set; }
@@ -44,6 +45,7 @@ namespace Fourzy._Updates.Managers
         internal int PointsPerMoveLeftWin => random - pointsPerMoveLeftWin;
         internal int PointsPerMoveLeftLose => random - pointsPerMoveLeftLose;
         internal int PointsPerMoveLeftDraw => random - pointsPerMoveLeftDraw;
+        internal int GameComplexity => random - gameComplexity;
         internal int GamesToPlay => random - gamesToPlay;
         internal int MovesPerMatch => random - movesPerMatch;
         internal List<SkillzGameResult> GamesPlayed { get; } = new List<SkillzGameResult>();
@@ -72,6 +74,8 @@ namespace Fourzy._Updates.Managers
             pointsPerMoveLeftLose = GetMatchParamInt(Constants.SKILLZ_POINTS_PER_MOVE_LOSE_KEY, Constants.SKILLZ_POINTS_PER_MOVE_LEFT_LOSE);
             //points per move left draw
             pointsPerMoveLeftDraw = GetMatchParamInt(Constants.SKILLZ_POINTS_PER_MOVE_DRAW_KEY, Constants.SKILLZ_POINTS_PER_MOVE_LEFT_DRAW);
+            //game complexity
+            gameComplexity = GetMatchParamInt(Constants.SKILLZ_GAME_COMPLEXITY_KEY, Constants.SKILLZ_GAME_COMPLEXITY);
         }
 
         public void OnMatchWillBegin(Match matchInfo)

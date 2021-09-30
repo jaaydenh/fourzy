@@ -687,6 +687,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public void CheckGameMode()
         {
             GameManager.Instance.botGameType = GameManager.BotGameType.NONE;
+            string matchId = "";
 
             //auto load game if its not realtime mdoe
             switch (GameManager.Instance.ExpectedGameType)
@@ -774,18 +775,23 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case GameTypeLocal.ASYNC_SKILLZ_GAME:
                     Area area = Area.TRAINING_GARDEN;
-                    BoardGenerationPreferences preferences = new BoardGenerationPreferences(area, 10);
-                    GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
-                    preferences.RequestedRecipe = SkillzGameController.Instance.CurrentMatch.ID.Value.ToString() ?? "";
-                    preferences.RequestedRecipe += " " + SkillzCrossPlatform.Random.Value();
+                    BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
+                    string recipe = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzCrossPlatform.Random.Value();
+                    string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? "Player";
+                    string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? "Player 2";
+                    matchId = recipe;
 
-                    Debug.Log("Game recipe " + preferences.RequestedRecipe);
-
-                    ClientFourzyGame game;
+                    preferences.RequestedRecipe = recipe;
+                    preferences.RecipeSeed = recipe;
+                    preferences.TargetComplexityLow = SkillzGameController.Instance.GameComplexity;
+                    preferences.TargetComplexityHigh = SkillzGameController.Instance.GameComplexity;
+                    
                     GamePieceData random = GameContentManager.Instance.piecesDataHolder.random;
-                    Player opponent = new Player(2, "Player2", AIProfile.SimpleAI) { HerdId = random.Id };
+                    Player player = new Player(1, myName ) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceID };
+                    Player opponent = new Player(2, opponentName, AIProfile.SimpleAI) { HerdId = random.Id };
 
-                    game = new ClientFourzyGame(area, UserManager.Instance.meAsPlayer, opponent, 1, options, preferences) /*{ hideOpponent = true, }*/;
+                    GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
+                    ClientFourzyGame game = new ClientFourzyGame(area, player, opponent, 1, options, preferences);
                     game._Type = GameType.SKILLZ_ASYNC;
                     game.State.InitializeHerd(1, SkillzGameController.Instance.MovesPerMatch);
                     game.State.InitializeHerd(2, 999);
@@ -800,6 +806,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+
+            gameplayScreen.SetMatchID(matchId);
         }
 
         public void Rematch(bool sendResetEvent = false)
@@ -1401,10 +1409,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 points.Add(new PointsEntry("skillz_big_win_key", 2000));
             }
 
-            SkillzGameController.Instance.FinishGame(true, points.ToArray());
+            SkillzGameController.Instance.FinishGame(winner, points.ToArray());
 
             //report score
-            SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
+            if (!SkillzGameController.Instance.HaveNextGame)
+            {
+                SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
+            }
             #endregion
 
             gameplayScreen.OnGameFinished();
@@ -1943,10 +1954,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //instruction boards
             switch (game._Type)
             {
-                // Do not show token instructions popup for REALTIME, ONBOARDING, PRESENTATION games
+                // Do not show token instructions popup for these types
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
                 case GameType.PRESENTATION:
+                case GameType.SKILLZ_ASYNC:
                     break;
 
                 default:
