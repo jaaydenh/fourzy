@@ -307,8 +307,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 isSolved = PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID);
             }
 
-            Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: " +
-                $"{GameManager.Instance.ExpectedGameType} Opponent: {game.opponent.Profile}");
+            Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: {GameManager.Instance.ExpectedGameType} Opponent: {game.opponent.Profile}");
 
         }
 
@@ -785,9 +784,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     preferences.RecipeSeed = recipe;
                     preferences.TargetComplexityLow = SkillzGameController.Instance.GameComplexity;
                     preferences.TargetComplexityHigh = SkillzGameController.Instance.GameComplexity;
-                    
+
                     GamePieceData random = GameContentManager.Instance.piecesDataHolder.random;
-                    Player player = new Player(1, myName ) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceID };
+                    Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceID };
                     Player opponent = new Player(2, opponentName, AIProfile.SimpleAI) { HerdId = random.Id };
 
                     GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
@@ -1373,49 +1372,53 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             #region Skillz Game Check
 
-            int myMovesLeft = game.myMembers.Count;
-            int timerLeft = (int)gameplayScreen.myTimerLeft;
-            List<PointsEntry> points = new List<PointsEntry>();
-            if (winner)
+            if (game._Type == GameType.SKILLZ_ASYNC)
             {
-                points.Add(new PointsEntry("skillz_win_points_key", SkillzGameController.Instance.WinPoints));
-
-                if (myMovesLeft > 0)
+                int myMovesLeft = game.myMembers.Count;
+                int timerLeft = (int)gameplayScreen.myTimerLeft;
+                List<PointsEntry> points = new List<PointsEntry>();
+                if (winner)
                 {
-                    points.Add(new PointsEntry("skillz_moves_left_points_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftWin));
+                    points.Add(new PointsEntry("skillz_win_points_key", SkillzGameController.Instance.WinPoints));
+
+                    if (myMovesLeft > 0)
+                    {
+                        points.Add(new PointsEntry("skillz_moves_left_points_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftWin));
+                    }
+                }
+                else if (game.draw)
+                {
+                    if (myMovesLeft > 0)
+                    {
+                        points.Add(new PointsEntry("skillz_moves_left_points_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftDraw));
+                    }
+                }
+                else
+                {
+                    points.Add(new PointsEntry("skillz_survival_moves_left_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
+                }
+
+                //add timer bonus
+                if (timerLeft > 0)
+                {
+                    points.Add(new PointsEntry("skillz_time_left_points_key", timerLeft * SkillzGameController.Instance.PointsPerSecond));
+                }
+
+                //big win bonus
+                if (!SkillzGameController.Instance.HaveNextGame && SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state))
+                {
+                    points.Add(new PointsEntry("skillz_big_win_key", 2000));
+                }
+
+                SkillzGameController.Instance.FinishGame(winner, points.ToArray());
+
+                //report score
+                if (!SkillzGameController.Instance.HaveNextGame)
+                {
+                    SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
                 }
             }
-            else if (game.draw)
-            {
-                if (myMovesLeft > 0)
-                {
-                    points.Add(new PointsEntry("skillz_moves_left_points_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftDraw));
-                }
-            }
-            else
-            {
-                points.Add(new PointsEntry("skillz_survival_moves_left_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
-            }
 
-            //add timer bonus
-            if (timerLeft > 0)
-            {
-                points.Add(new PointsEntry("skillz_time_left_points_key", timerLeft * SkillzGameController.Instance.PointsPerSecond));
-            }
-
-            //big win bonus
-            if (!SkillzGameController.Instance.HaveNextGame && SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state))
-            {
-                points.Add(new PointsEntry("skillz_big_win_key", 2000));
-            }
-
-            SkillzGameController.Instance.FinishGame(winner, points.ToArray());
-
-            //report score
-            if (!SkillzGameController.Instance.HaveNextGame)
-            {
-                SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
-            }
             #endregion
 
             gameplayScreen.OnGameFinished();
@@ -1670,7 +1673,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             onMoveEnded?.Invoke(turn, turnResult, startTurn);
 
             //game lost due to "no_pieces" needs to be triggered manually, as it is not by model code
-            if (turn != null && turn.PlayerId == game.me.PlayerId && game.myMembers.Count == 0 && game._State.WinningLocations == null)
+            if (turn != null && turn.PlayerId == game.me.PlayerId && (game._State.Options.MovesReduceHerd && game.myMembers.Count == 0) && game._State.WinningLocations == null)
             {
                 switch (game._Mode)
                 {
@@ -1786,6 +1789,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.ONBOARDING:
                 case GameType.TRY_TOKEN:
                 case GameType.PRESENTATION:
+                case GameType.SKILLZ_ASYNC:
+
                     return;
             }
 

@@ -62,6 +62,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             if (pieceAnimator == null)
             {
                 pieceAnimator = GetComponent<Animator>();
+                pieceAnimator.keepAnimatorControllerStateOnDisable = true;
             }
 
             mouth = GetComponentInChildren<GamePieceMouth>();

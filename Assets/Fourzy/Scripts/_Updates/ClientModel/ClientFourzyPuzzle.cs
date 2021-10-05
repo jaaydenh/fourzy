@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
-using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
 using System;
 using System.Collections.Generic;
@@ -107,8 +106,8 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientFourzyHelper.AssignPrefabs(this);
 
-                return playerOnePrefabData.Id == playerTwoPrefabData.Id ? 
-                    playerTwoPrefabData.player2Prefab : 
+                return playerOnePrefabData.Id == playerTwoPrefabData.Id ?
+                    playerTwoPrefabData.player2Prefab :
                     playerTwoPrefabData.player1Prefab;
             }
         }
@@ -274,11 +273,6 @@ namespace Fourzy._Updates.ClientModel
 
         private void Initialize(bool resetFirstState = true)
         {
-            if (resetFirstState)
-            {
-                UpdateFirstState();
-            }
-
             collectedItems = new List<RewardsManager.Reward>();
             _allTurnRecord = new List<PlayerTurn>();
 
@@ -297,6 +291,17 @@ namespace Fourzy._Updates.ClientModel
             foreach (KeyValuePair<int, Player> player in State.Players)
             {
                 magic.Add(player.Key, player.Value.Magic);
+            }
+
+            State.Herds = new Dictionary<int, Herd>()
+            {
+                [1] = new Herd(player1.HerdId, player1 == me ? puzzleData.MoveLimit : 999),
+                [2] = new Herd(player2.HerdId, player2 == me ? puzzleData.MoveLimit : 999),
+            };
+
+            if (resetFirstState)
+            {
+                UpdateFirstState();
             }
         }
     }

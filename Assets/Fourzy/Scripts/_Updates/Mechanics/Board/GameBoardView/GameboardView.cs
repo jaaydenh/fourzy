@@ -1378,7 +1378,6 @@ namespace Fourzy._Updates.Mechanics.Board
         public void Pause()
         {
             Paused = true;
-            Debug.Log(Paused);
 
             SetPausedState(true);
             gamePieces.ForEach(_gp => _gp.SetPausedState(true));
