@@ -228,9 +228,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //gamepieces highlight
             switch (game._Type)
             {
-                case GameType.SKILLZ_ASYNC:
+                //case GameType.SKILLZ_ASYNC:
 
-                    break;
+                //    break;
 
                 default:
                     //remove prev gamepieces
