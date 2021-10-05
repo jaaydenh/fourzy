@@ -110,7 +110,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             case GameTypeLocal.ASYNC_SKILLZ_GAME:
                                 if (game.IsWinner())
                                 {
-                                    stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                                    stateLabel.text = $"{game.me.DisplayName} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                                 }
                                 else if (game.myMembers.Count == 0)
                                 {
