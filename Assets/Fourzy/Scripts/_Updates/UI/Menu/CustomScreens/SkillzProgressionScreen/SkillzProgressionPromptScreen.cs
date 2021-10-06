@@ -3,7 +3,7 @@
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Widgets;
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -34,8 +34,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private Sprite single;
 
-        private SkillzGameScreen skillzGameScreen;
         private List<SkillzProgressionScreenPointsEntry> pointsEntries = new List<SkillzProgressionScreenPointsEntry>();
+
+        public override void Close(bool animate = true)
+        {
+            base.Close(animate);
+
+            declineButton.GetBadge("timer").badge.SetState(false);
+            CancelRoutine("timer");
+        }
 
         public void OpenSkillzprogressionPrompt()
         {
@@ -71,8 +78,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                 }
 
-                AddProgressionWidget().SetSprite(sprite).SetChecked(gameIndex < SkillzGameController.Instance.GamesPlayed.Count ? 
-                    (SkillzGameController.Instance.GamesPlayed[gameIndex].state ? gameWonSprite : gameLostSprite) : 
+                AddProgressionWidget().SetSprite(sprite).SetChecked(gameIndex < SkillzGameController.Instance.GamesPlayed.Count ?
+                    (SkillzGameController.Instance.GamesPlayed[gameIndex].state ? gameWonSprite : gameLostSprite) :
                     null);
             }
 
@@ -99,28 +106,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
 
+            //if have next game
+            if (SkillzGameController.Instance.HaveNextGame)
+            {
+                //start timer routine
+                StartRoutine("timer", TimerRoutine(), () => Decline());
+            }
+
             //open screen
             Prompt("Game Complete", null, null, SkillzGameController.Instance.HaveNextGame ? LocalizationManager.Value("continue") : LocalizationManager.Value("submit_score"));
         }
 
         public override void Decline(bool force = false)
         {
-            if (SkillzGameController.Instance.HaveNextGame)
-            {
-                GamePlayManager.Instance.Rematch();
-            }
-            else
-            {
-                SkillzGameController.Instance.CloseGameOnBack = true;
-                SkillzCrossPlatform.ReturnToSkillz();
-            }
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            skillzGameScreen = menuController.GetScreen<SkillzGameScreen>();
+            GamePlayManager.Instance.Rematch();
         }
 
         private VSGamePromptProgressionWidget AddProgressionWidget()
@@ -140,6 +139,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             pointsEntries.Add(_entry);
 
             return _entry;
+        }
+
+        private IEnumerator TimerRoutine()
+        {
+            declineButton.GetBadge("timer").badge.SetValue(Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME);
+            for (int seconds = Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME; seconds >= 0; seconds--)
+            {
+                yield return new WaitForSeconds(1f);
+                declineButton.GetBadge("timer").badge.SetValue(seconds);
+            }
         }
     }
 }

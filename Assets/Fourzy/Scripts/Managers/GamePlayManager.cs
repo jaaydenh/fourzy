@@ -132,11 +132,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CheckGameMode();
         }
 
-        protected void Update()
-        {
-            
-        }
-
         protected void OnDestroy()
         {
             if (board)
@@ -174,24 +169,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 return;
             }
 
-            SkillzProgressionPromptScreen skillzProgressionScreen;
             switch (game._Type)
             {
                 case GameType.SKILLZ_ASYNC:
                     if (pause)
                     {
-                        skillzProgressionScreen = menuController.GetScreen<SkillzProgressionPromptScreen>();
-                        bool resultScreenActive = menuController.currentScreen == skillzProgressionScreen;
-
-                        if (resultScreenActive)
+                        if (game.IsOver)
                         {
                             if (SkillzGameController.Instance.HaveNextGame)
                             {
-                                skillzProgressionScreen.Decline();
+                                Rematch();
                             }
                         }
 
-                        if (gameState != GameState.PAUSED)
+                        if (SkillzGameController.Instance.MatchPausesLeft == 0)
                         {
                             inPauseTime = Time.realtimeSinceStartup;
                         }
@@ -199,10 +190,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     else
                     {
                         //deduct wait time
-                        if (gameState != GameState.PAUSED)
+                        if (SkillzGameController.Instance.MatchPausesLeft == 0)
                         {
                             inPauseTime = Time.realtimeSinceStartup - inPauseTime;
-
                             gameplayScreen.skillzGameScreen.DeductTimer(inPauseTime);
                         }
 
@@ -367,7 +357,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CancelRoutine("realtimeCountdownRoutine");
             CancelRoutine("postGameRoutine");
 
-            gameState = GameState.OPENNING_GAME;
+            if (gameState != GameState.PAUSED)
+            {
+                gameState = GameState.OPENNING_GAME;
+            }
+            else
+            {
+                previousGameState = GameState.OPENNING_GAME;
+            }
+
             gameStarted = false;
             isBoardReady = false;
             ratingUpdated = false;
@@ -552,7 +550,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (!gameStarted)
             {
-                gameState = GameState.GAME;
+                if (gameState != GameState.PAUSED)
+                {
+                    gameState = GameState.GAME;
+                }
+                else
+                {
+                    previousGameState = GameState.GAME;
+                }
                 gameStarted = true;
                 OnGameStarted();
             }
@@ -924,7 +929,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameType.SKILLZ_ASYNC:
-                    CheckGameMode();
+                    if (SkillzGameController.Instance.HaveNextGame)
+                    {
+                        CheckGameMode();
+                    }
+                    else
+                    {
+                        SkillzGameController.Instance.CloseGameOnBack = true;
+                        SkillzCrossPlatform.ReturnToSkillz();
+                    }
 
                     break;
             }
@@ -1010,8 +1023,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void UnpauseGame()
         {
-            if (gameState != GameState.PAUSED) return;
-
             gameState = previousGameState;
             gameplayScreen.OnGameUnpaused();
         }
