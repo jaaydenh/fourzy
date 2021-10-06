@@ -34,9 +34,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private Sprite single;
 
+        private SkillzGameScreen skillzGameScreen;
         private List<SkillzProgressionScreenPointsEntry> pointsEntries = new List<SkillzProgressionScreenPointsEntry>();
 
-        public void OpenSkillzprogressionPrompt(Action onClose = null)
+        public void OpenSkillzprogressionPrompt()
         {
             //clear prev widgets
             foreach (WidgetBase widget in GetWidgets<VSGamePromptProgressionWidget>())
@@ -75,7 +76,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     null);
             }
 
-            //clera prev
+            //clear prev
             foreach (SkillzProgressionScreenPointsEntry entry in pointsEntries)
             {
                 Destroy(entry.gameObject);
@@ -83,18 +84,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
             pointsEntries.Clear();
 
             //display points
+            if (!SkillzGameController.Instance.HaveNextGame)
+            {
+                AddPointsWidget("Game 1", SkillzGameController.Instance.GamesPlayed[0].Points);
+                AddPointsWidget("Game 2", SkillzGameController.Instance.GamesPlayed[1].Points);
+            }
             foreach (PointsEntry pointsEntry in SkillzGameController.Instance.GamesPlayed.Last().pointsEntries)
             {
                 AddPointsWidget(LocalizationManager.Value(pointsEntry.name), pointsEntry.amount);
             }
-            AddPointsWidget("Total", SkillzGameController.Instance.Points)
+            AddPointsWidget(SkillzGameController.Instance.HaveNextGame ? "" : "Total", SkillzGameController.Instance.HaveNextGame ? SkillzGameController.Instance.GamesPlayed.Last().Points : SkillzGameController.Instance.Points)
                 .SetSize(48)
                 .SetColor(Color.green);
 
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
 
             //open screen
-            Prompt("Game Complete", null, null, onClose);
+            Prompt("Game Complete", null, null, SkillzGameController.Instance.HaveNextGame ? LocalizationManager.Value("continue") : LocalizationManager.Value("submit_score"));
         }
 
         public override void Decline(bool force = false)
@@ -106,9 +112,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
             {
                 SkillzGameController.Instance.CloseGameOnBack = true;
-                SkillzGameController.Instance.OnMatchFinished();
                 SkillzCrossPlatform.ReturnToSkillz();
             }
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            skillzGameScreen = menuController.GetScreen<SkillzGameScreen>();
         }
 
         private VSGamePromptProgressionWidget AddProgressionWidget()

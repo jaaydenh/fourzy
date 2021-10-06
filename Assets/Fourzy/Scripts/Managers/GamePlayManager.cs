@@ -58,6 +58,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         /// <summary>
         /// for adventure map
         /// </summary>
+        private float inPauseTime;
         private bool isSolved = false;
         private GameState previousGameState;
         private int gauntletRechargedViaGems = 0;
@@ -131,6 +132,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CheckGameMode();
         }
 
+        protected void Update()
+        {
+            
+        }
+
         protected void OnDestroy()
         {
             if (board)
@@ -161,9 +167,53 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
         }
 
-        private void OnGamepieceSpawned(GamePieceView gamepiece)
+        private void OnApplicationPause(bool pause)
         {
-            onGamepiceSpawned?.Invoke(gamepiece);
+            if (game == null)
+            {
+                return;
+            }
+
+            SkillzProgressionPromptScreen skillzProgressionScreen;
+            switch (game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    if (pause)
+                    {
+                        skillzProgressionScreen = menuController.GetScreen<SkillzProgressionPromptScreen>();
+                        bool resultScreenActive = menuController.currentScreen == skillzProgressionScreen;
+
+                        if (resultScreenActive)
+                        {
+                            if (SkillzGameController.Instance.HaveNextGame)
+                            {
+                                skillzProgressionScreen.Decline();
+                            }
+                        }
+
+                        if (gameState != GameState.PAUSED)
+                        {
+                            inPauseTime = Time.realtimeSinceStartup;
+                        }
+                    }
+                    else
+                    {
+                        //deduct wait time
+                        if (gameState != GameState.PAUSED)
+                        {
+                            inPauseTime = Time.realtimeSinceStartup - inPauseTime;
+
+                            gameplayScreen.skillzGameScreen.DeductTimer(inPauseTime);
+                        }
+
+                        if (gameplayScreen.skillzGameScreen.Timer > 0f)
+                        {
+                            menuController.GetOrAddScreen<SkillzPauseMenuScreen>()._Open();
+                        }
+                    }
+
+                    break;
+            }
         }
 
         protected void OnApplicationQuit()
@@ -308,7 +358,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: {GameManager.Instance.ExpectedGameType} Opponent: {game.opponent.Profile}");
-
         }
 
         public void LoadGame(IClientFourzy _game)
@@ -1075,6 +1124,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.FadeGamepieces(0f, 0f);
         }
 
+        private void OnGamepieceSpawned(GamePieceView gamepiece)
+        {
+            onGamepiceSpawned?.Invoke(gamepiece);
+        }
+
         private void UnloadBoard()
         {
             if (board) Destroy(board.gameObject);
@@ -1412,9 +1466,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 SkillzGameController.Instance.FinishGame(winner, points.ToArray());
 
+                //force end game due to empty timer
+                if (gameplayScreen.skillzGameScreen.Timer == 0)
+                {
+                    while (SkillzGameController.Instance.HaveNextGame)
+                    {
+                        SkillzGameController.Instance.FinishGame(false);
+                    }
+                }
+
                 //report score
                 if (!SkillzGameController.Instance.HaveNextGame)
                 {
+                    SkillzGameController.Instance.OnMatchFinished();
                     SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
                 }
             }

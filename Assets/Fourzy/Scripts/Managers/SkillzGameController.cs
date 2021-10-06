@@ -36,6 +36,7 @@ namespace Fourzy._Updates.Managers
         private int pointsPerMoveLeftLose;
         private int pointsPerMoveLeftDraw;
         private int gameComplexity;
+        private int matchPausesLeft;
 
         internal Match CurrentMatch { get; set; }
         internal bool OngoingMatch { get; set; }
@@ -48,8 +49,9 @@ namespace Fourzy._Updates.Managers
         internal int GameComplexity => random - gameComplexity;
         internal int GamesToPlay => random - gamesToPlay;
         internal int MovesPerMatch => random - movesPerMatch;
+        internal int MatchPausesLeft => random - matchPausesLeft;
         internal List<SkillzGameResult> GamesPlayed { get; } = new List<SkillzGameResult>();
-        internal int Points => GamesPlayed.Sum(game => game.pointsEntries.Sum(entry => entry.amount));
+        internal int Points => GamesPlayed.Sum(game => game.Points);
         internal bool HaveNextGame => GamesPlayed.Count < GamesToPlay;
         internal bool CloseGameOnBack { get; set; }
 
@@ -76,6 +78,8 @@ namespace Fourzy._Updates.Managers
             pointsPerMoveLeftDraw = GetMatchParamInt(Constants.SKILLZ_POINTS_PER_MOVE_DRAW_KEY, Constants.SKILLZ_POINTS_PER_MOVE_LEFT_DRAW);
             //game complexity
             gameComplexity = GetMatchParamInt(Constants.SKILLZ_GAME_COMPLEXITY_KEY, Constants.SKILLZ_GAME_COMPLEXITY);
+            //match pauses left
+            matchPausesLeft = GetMatchParamInt(Constants.SKILLZ_MATCH_PAUSES_KEY, Constants.SKILLZ_PAUSES_COUNT_PER_MATCH);
         }
 
         public void OnMatchWillBegin(Match matchInfo)
@@ -120,6 +124,11 @@ namespace Fourzy._Updates.Managers
             SkillzCrossPlatform.AbortMatch();
         }
 
+        public void UsePause()
+        {
+            matchPausesLeft++;
+        }
+
         private int GetMatchParamInt(string key, int defaultValue)
         {
             if (CurrentMatch == null)
@@ -142,6 +151,8 @@ namespace Fourzy._Updates.Managers
     {
         internal bool state;
         internal List<PointsEntry> pointsEntries = new List<PointsEntry>();
+
+        internal int Points => pointsEntries.Sum(_entry => _entry.amount);
     }
 
     public class PointsEntry

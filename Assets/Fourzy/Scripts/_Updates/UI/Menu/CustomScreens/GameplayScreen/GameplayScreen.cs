@@ -145,24 +145,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case GameType.SKILLZ_ASYNC:
-                        if (SkillzGameController.Instance.OngoingMatch)
-                        {
-                            menuController.GetOrAddScreen<PromptScreen>()
-                                .Prompt(
-                                    LocalizationManager.Value("are_you_sure"),
-                                    LocalizationManager.Value("leave_skillz_game_message"),
-                                    LocalizationManager.Value("yes"),
-                                    LocalizationManager.Value("no"),
-                                    () =>
-                                    {
-                                        SkillzGameController.Instance.ForfeitMatch();
-                                    });
-                        }
-                        else
-                        {
-                            //if for some reason player stuck at gameplay scene after returning from skillz menu, they still can press back
-                            GamePlayManager.Instance.BackButtonOnClick();
-                        }
+                        menuController.GetOrAddScreen<SkillzPauseMenuScreen>()._Open();
 
                         break;
 
@@ -579,6 +562,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case GameType.SKILLZ_ASYNC:
+                        SkillzPauseMenuScreen pauseMenu = menuController.GetScreen<SkillzPauseMenuScreen>();
+                        if (pauseMenu && pauseMenu.isOpened)
+                        {
+                            pauseMenu._Close();
+                        }
+
                         skillzGameScreen.GameComplete();
 
                         break;

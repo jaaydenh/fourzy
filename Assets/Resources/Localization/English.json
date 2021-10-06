@@ -202,6 +202,10 @@
       "value": "for"
     },
     {
+      "key": "forfeit",
+      "value": "Forfeit"
+    },
+    {
       "key": "found",
       "value": "Found"
     },
@@ -474,6 +478,10 @@
       "value": "Pass"
     },
     {
+      "key": "pause_menu",
+      "value": "Pause Menu"
+    },
+    {
       "key": "play",
       "value": "Play"
     },
@@ -610,6 +618,10 @@
       "value": "Select the outer square to move!"
     },
     {
+      "key": "rules",
+      "value": "Rules"
+    },
+    {
       "key": "select",
       "value": "Select"
     },
@@ -620,6 +632,10 @@
     {
       "key": "settings",
       "value": "Settings"
+    },
+    {
+      "key": "score",
+      "value": "Score"
     },
     {
       "key": "skillz_moves_left_points_key",
@@ -644,6 +660,10 @@
     {
       "key": "store",
       "value": "Store"
+    },
+    {
+      "key": "submit_score",
+      "value": "Submit Score"
     },
     {
       "key": "suggest_hint_use",

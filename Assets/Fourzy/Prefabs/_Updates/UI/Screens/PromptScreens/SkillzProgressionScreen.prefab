@@ -1153,7 +1153,7 @@ GameObject:
   - component: {fileID: 6862333134489674744}
   - component: {fileID: 6862333134489674751}
   m_Layer: 10
-  m_Name: Accept
+  m_Name: Continue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1610,7 +1610,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6862333135147822530}
   - component: {fileID: 6862333135147822557}
-  - component: {fileID: 6862333135147822556}
   - component: {fileID: 6862333135147822531}
   m_Layer: 10
   m_Name: Text
@@ -1646,20 +1645,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6862333135147822529}
   m_CullTransparentMesh: 0
---- !u!114 &6862333135147822556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6862333135147822529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: ok
-  updateOnStart: 1
 --- !u!114 &6862333135147822531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1822,7 +1807,7 @@ MonoBehaviour:
   promptTitle: {fileID: 6862333134117309569}
   promptText: {fileID: 0}
   acceptButton: {fileID: 0}
-  declineButton: {fileID: 0}
+  declineButton: {fileID: 6862333134489674745}
   progressContainer: {fileID: 6862333134763722801}
   progressPrefab: {fileID: 6862333134868497940}
   pointsEntryPrefab: {fileID: 1476263870950087433}

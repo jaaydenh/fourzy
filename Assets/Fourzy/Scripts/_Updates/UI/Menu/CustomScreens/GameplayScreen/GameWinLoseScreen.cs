@@ -394,18 +394,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
-                case GameType.SKILLZ_ASYNC:
-                    if (SkillzGameController.Instance.HaveNextGame)
-                    {
-                        GamePlayManager.Instance.Rematch();
-                    }
-                    else
-                    {
-                        GamePlayManager.Instance.BackButtonOnClick();
-                    }
-
-                    break;
-
                 default:
                     GamePlayManager.Instance.LoadGame(game.Next());
 
@@ -533,7 +521,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         case GameType.SKILLZ_ASYNC:
                             //open skillz match result screen
-                            menuController.GetOrAddScreen<SkillzProgressionPromptScreen>().OpenSkillzprogressionPrompt(NextGame);
+                            menuController.GetOrAddScreen<SkillzProgressionPromptScreen>().OpenSkillzprogressionPrompt();
 
                             break;
 

@@ -22,7 +22,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private RectTransform gamepieceParent;
 
-        private float inPauseTime;
         private float gameTimer;
         private GamePieceView currentGamepiece;
 
@@ -35,21 +34,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 gameTimer = value;
                 TimeSpan time = TimeSpan.FromSeconds(Mathf.CeilToInt(gameTimer));
                 timerLabel.text = time.ToString("mm':'ss");
-            }
-        }
-
-        private void OnApplicationPause(bool pause)
-        {
-            if (!CheckPausedState("timer"))
-            {
-                if (pause)
-                {
-                    inPauseTime = Time.realtimeSinceStartup;
-                }
-                else
-                {
-                    inPauseTime = Time.realtimeSinceStartup - inPauseTime;
-                }
             }
         }
 
@@ -74,7 +58,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
 
-            gameTimer = SkillzGameController.Instance.GameInitialTimerValue;
+            //only reset timer when it's first game
+            if (SkillzGameController.Instance.GamesPlayed.Count == 0)
+            {
+                gameTimer = SkillzGameController.Instance.GameInitialTimerValue;
+            }
+
             SetMovesLeft(game.myMembers.Count);
             SetPoints(SkillzGameController.Instance.Points);
 
@@ -91,7 +80,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void GameComplete()
         {
-            CancelRoutine("timer");
+            SetPausedState("timer", true);
         }
 
         public void OnMoveStarted()
@@ -136,16 +125,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetPausedState("timer", false);
         }
 
+        public void DeductTimer(float value)
+        {
+            Timer = Mathf.Max(0f, Timer - Mathf.Abs(value));
+        }
+
         private IEnumerator GameTimerRoutine()
         {
             while (Timer > 0f)
             {
-                if (inPauseTime > 0f)
-                {
-                    Timer -= inPauseTime;
-                    inPauseTime = 0f;
-                }
-
                 Timer -= Time.deltaTime;
 
                 yield return null;
