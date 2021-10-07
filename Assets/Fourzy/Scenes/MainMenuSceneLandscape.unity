@@ -27728,7 +27728,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 678526985}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Fourzy._Updates.UI.Menu.Screens.RankingScreen,
+          Assembly-CSharp
         m_MethodName: OnScrollValueChanged
         m_Mode: 0
         m_Arguments:
@@ -31514,13 +31515,6 @@ MonoBehaviour:
   autoAdjustSize: 0
   discordButton: {fileID: 1070942762}
   body: {fileID: 0}
-  pieceParent: {fileID: 0}
-  playerNameLabel: {fileID: 0}
-  pieceNameLabel: {fileID: 0}
-  ratingLabel: {fileID: 0}
-  winsLabel: {fileID: 0}
-  losesLabel: {fileID: 0}
-  drawsLabel: {fileID: 0}
 --- !u!225 &1739894149
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -37992,7 +37986,7 @@ PrefabInstance:
     - target: {fileID: 1403091811040868988, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 356.00015
+      value: -0.00016211765
       objectReference: {fileID: 0}
     - target: {fileID: 1482282029826171176, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
@@ -40891,6 +40885,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5157298072131113150}
+  - component: {fileID: 5157298072131113152}
   m_Layer: 5
   m_Name: Footer
   m_TagString: Untagged
@@ -40898,6 +40893,98 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5157298072131113152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5157298072131113151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  continious: 0
+  orientation: 3
+  onIphone:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 11
+          isDynamic: 0
+        target: {fileID: 5157298072131113150}
+        memberName: localScale
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 8
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 1, y: 1, z: 1}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  onIphoneX:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 11
+          isDynamic: 0
+        target: {fileID: 5157298072131113150}
+        memberName: localScale
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 8
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 1, y: 1, z: 1}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  onIpad:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 11
+          isDynamic: 0
+        target: {fileID: 5157298072131113150}
+        memberName: localScale
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 8
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0.8, y: 0.8, z: 1}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
 --- !u!1 &5157298072224100832
 GameObject:
   m_ObjectHideFlags: 0
@@ -42283,6 +42370,7 @@ GameObject:
   - component: {fileID: 5157298072942827508}
   - component: {fileID: 5157298072942827509}
   - component: {fileID: 5157298072942827506}
+  - component: {fileID: 5157298072942827505}
   m_Layer: 5
   m_Name: VSLandscapeScreen
   m_TagString: Untagged
@@ -42290,6 +42378,95 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5157298072942827505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5157298072942827504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  continious: 0
+  orientation: 3
+  onIphone:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 15
+          isDynamic: 0
+        target: {fileID: 5157298072942827508}
+        memberName: optimalColumnCount
+        memberType: 4
+        arguments:
+        - typeName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          supportedType: 3
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 6
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  onIphoneX:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 15
+          isDynamic: 0
+        target: {fileID: 5157298072942827508}
+        memberName: optimalColumnCount
+        memberType: 4
+        arguments:
+        - typeName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          supportedType: 3
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 6
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  onIpad:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 15
+          isDynamic: 0
+        target: {fileID: 5157298072942827508}
+        memberName: optimalColumnCount
+        memberType: 4
+        arguments:
+        - typeName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          supportedType: 3
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 4
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
 --- !u!114 &5157298072942827506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42405,8 +42582,7 @@ MonoBehaviour:
   profiles:
   - {fileID: 5157298071736118740}
   - {fileID: 5157298072780988726}
-  optimalColumnCount: 5
-  maxGridWidth: 2000
+  optimalColumnCount: 6
 --- !u!225 &5157298072942827509
 CanvasGroup:
   m_ObjectHideFlags: 0

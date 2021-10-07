@@ -27,7 +27,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         private float previousAspect;
 
-        private static float aspect => Screen.width / Screen.height;
+        private static float aspect => (float)Screen.width / Screen.height;
 
         protected void Start()
         {

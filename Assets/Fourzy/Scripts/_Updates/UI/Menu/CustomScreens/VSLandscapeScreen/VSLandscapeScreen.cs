@@ -28,7 +28,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Sprite randomAreaIcon;
         public VSScreenPlayerWidget[] profiles;
         public int optimalColumnCount = 5;
-        public int maxGridWidth = 2000;
 
         private List<GamePieceWidgetLandscape> gamePieceWidgets = new List<GamePieceWidgetLandscape>();
         private IEnumerable<GamePieceData> unlockedGamepieces;
@@ -263,25 +262,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     return;
                 }
             }
-            //switch (StandaloneInputModuleExtended.BackCallerId)
-            //{
-            //    case 0:
-            //    case 1:
-                    
-
-            //        break;
-
-            //    default:
-                    
-
-            //        break;
-            //}
 
             readyButton.SetState(selectedPlayers.ToList().TrueForAll(_widget => _widget != null));
         }
 
-        public void PickBoard() => 
-            menuController
+        public void PickBoard() => menuController
             .GetScreen<LandscapeGameboardSelectionScreen>()
             .Open(selectedArea.areaID);
 
@@ -368,8 +353,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             gamePieceWidgets.Clear();
 
-            unlockedGamepieces = GameContentManager.Instance.piecesDataHolder.gamePieces.Where(
-                _widget => _widget.profilePicture);
+            unlockedGamepieces = GameContentManager.Instance.piecesDataHolder.gamePieces.Where(_widget => _widget.profilePicture);
             int piecesCount = unlockedGamepieces.Count();
 
             Columns = optimalColumnCount;
@@ -396,17 +380,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
             }
 
-            float _maxGridSize = maxGridWidth > rectTransform.rect.width ?
-                rectTransform.rect.width - 100f : 
-                maxGridWidth;
-            gamePiecesRectTransform.sizeDelta = new Vector2(
-                (WidgetSize.x * Columns) + (gamepiecesParent.SpacingX * (Columns - 1)), 
-                (WidgetSize.y * Rows) + (gamepiecesParent.SpacingY * (Rows - 1)));
+            //float _maxGridSize = maxGridWidth > rectTransform.rect.width ? rectTransform.rect.width - 100f : maxGridWidth;
+            float _maxGridSize = rectTransform.rect.width - 50f;
+            gamePiecesRectTransform.sizeDelta = new Vector2((WidgetSize.x * Columns) + (gamepiecesParent.SpacingX * (Columns - 1)), (WidgetSize.y * Rows) + (gamepiecesParent.SpacingY * (Rows - 1)));
             if (gamePiecesRectTransform.sizeDelta.x > _maxGridSize)
             {
-                gamePiecesRectTransform.localScale = new Vector3(
-                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x,
-                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x);
+                gamePiecesRectTransform.localScale = new Vector3(_maxGridSize / gamePiecesRectTransform.sizeDelta.x, _maxGridSize / gamePiecesRectTransform.sizeDelta.x);
             }
 
             foreach (GamePieceData prefabData in unlockedGamepieces)
@@ -420,9 +399,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private GamePieceWidgetLandscape CreateGamepieceWidget(GamePieceData data)
         {
-            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>(
-                "GAME_PIECE_LANDSCAPE", 
-                gamePiecesRectTransform);
+            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>("GAME_PIECE_LANDSCAPE", gamePiecesRectTransform);
 
             widget
                 .SetData(data)
