@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates._Tutorial;
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
 using UnityEngine;
@@ -12,14 +11,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         private const string kLobbyScreenOpened = "lobbyScreenOpened";
 
-        public ButtonExtended discordButton;
-        public RectTransform body;
+        [SerializeField]
+        private ButtonExtended discordButton;
+        [SerializeField]
+        private RectTransform body;
 
         private OnIPhoneX onIPhoneX;
         private InputFieldPrompt inputPromptScreen;
 
         private bool fastPuzzlesUnlocked;
-        private bool gauntletGameUnlocked;
+        private bool gauntletGameUnlocked = false;
 
         public override void OnBack()
         {
@@ -151,6 +152,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 onIPhoneX = body.GetComponent<OnIPhoneX>();
             }
+
             if (onIPhoneX)
             {
                 onIPhoneX.CheckPlatform();
