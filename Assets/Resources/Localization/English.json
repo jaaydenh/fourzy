@@ -402,6 +402,10 @@
       "value": "Next"
     },
     {
+      "key": "next_game",
+      "value": "Next Game"
+    },
+    {
       "key": "no",
       "value": "No"
     },

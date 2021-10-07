@@ -77,13 +77,14 @@ namespace Fourzy
         public const int SKILLZ_MOVES_PER_MATCH = 30;
         public const int SKILLZ_WIN_POINTS = 2000;
         public const int SKILLZ_POINTS_PER_SECOND_REMAINING = 10;
-        public const int SKILLZ_POINTS_PER_MOVE_LEFT_WIN = 100;
-        public const int SKILLZ_POINTS_PER_MOVE_LEFT_LOSE = 50;
-        public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 100;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_WIN = 50;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_LOSE = 25;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 40;
         public const int SKILLZ_GAME_COMPLEXITY = 10;
         public const int SKILLZ_PAUSES_COUNT_PER_MATCH = 3;
 
         public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 5;
+        public const int SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME = 10;
         //
 
         // Adds additional time to timer after X turns

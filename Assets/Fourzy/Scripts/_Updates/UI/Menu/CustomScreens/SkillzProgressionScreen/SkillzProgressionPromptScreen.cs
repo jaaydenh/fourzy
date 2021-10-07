@@ -106,15 +106,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
 
-            //if have next game
-            if (SkillzGameController.Instance.HaveNextGame)
-            {
-                //start timer routine
-                StartRoutine("timer", TimerRoutine(), () => Decline());
-            }
+            //start timer routine
+            StartRoutine("timer", TimerRoutine(SkillzGameController.Instance.HaveNextGame ? Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME : Constants.SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME), () => Decline());
 
             //open screen
-            Prompt("Game Complete", null, null, SkillzGameController.Instance.HaveNextGame ? LocalizationManager.Value("continue") : LocalizationManager.Value("submit_score"));
+            Prompt("Game Complete", null, null, SkillzGameController.Instance.HaveNextGame ? LocalizationManager.Value("next_game") : LocalizationManager.Value("submit_score"));
         }
 
         public override void Decline(bool force = false)
@@ -141,10 +137,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             return _entry;
         }
 
-        private IEnumerator TimerRoutine()
+        private IEnumerator TimerRoutine(int time)
         {
-            declineButton.GetBadge("timer").badge.SetValue(Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME);
-            for (int seconds = Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME; seconds >= 0; seconds--)
+            declineButton.GetBadge("timer").badge.SetValue(time);
+            for (int seconds = time; seconds >= 0; seconds--)
             {
                 yield return new WaitForSeconds(1f);
                 declineButton.GetBadge("timer").badge.SetValue(seconds);

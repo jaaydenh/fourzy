@@ -1463,16 +1463,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     points.Add(new PointsEntry("skillz_survival_moves_left_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
                 }
 
-                //add timer bonus
-                if (timerLeft > 0)
+                if (!SkillzGameController.Instance.HaveNextGame)
                 {
-                    points.Add(new PointsEntry("skillz_time_left_points_key", timerLeft * SkillzGameController.Instance.PointsPerSecond));
-                }
+                    //add timer bonus
+                    if (timerLeft > 0)
+                    {
+                        points.Add(new PointsEntry("skillz_time_left_points_key", timerLeft * SkillzGameController.Instance.PointsPerSecond));
+                    }
 
-                //big win bonus
-                if (!SkillzGameController.Instance.HaveNextGame && SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state))
-                {
-                    points.Add(new PointsEntry("skillz_big_win_key", 2000));
+                    //big win bonus
+                    if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state))
+                    {
+                        points.Add(new PointsEntry("skillz_big_win_key", 2000));
+                    }
                 }
 
                 SkillzGameController.Instance.FinishGame(winner, points.ToArray());

@@ -406,6 +406,10 @@
       "value": "Próximo"
     },
     {
+      "key": "next_game",
+      "value": "Siguiente Juego"
+    },
+    {
       "key": "no",
       "value": "No"
     },

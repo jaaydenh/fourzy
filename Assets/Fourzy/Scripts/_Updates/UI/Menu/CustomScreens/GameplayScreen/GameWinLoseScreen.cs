@@ -2,7 +2,6 @@
 
 using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
@@ -11,26 +10,41 @@ using Photon.Pun;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class GameWinLoseScreen : MenuScreen
     {
-        public Color winColor;
-        public Color loseColor;
-        public TMP_Text stateLabel;
-        public TMP_Text infoLabel;
-        public TMP_Text tapToContinueLabel;
-        public RectTransform piecesParent;
+        [SerializeField]
+        private Color winColor;
+        [SerializeField]
+        private Color loseColor;
+        [SerializeField]
+        private TMP_Text stateLabel;
+        [SerializeField]
+        private TMP_Text infoLabel;
+        [SerializeField]
+        private TMP_Text tapToContinueLabel;
+        [SerializeField]
+        private RectTransform piecesParent;
+        [SerializeField]
+        private Image loaderBar;
 
-        public GameObject buttonsRow;
-        public ButtonExtended nextGameButton;
-        public ButtonExtended rematchButton;
-        public ButtonExtended exitButton;
+        [SerializeField]
+        private GameObject buttonsRow;
+        [SerializeField]
+        private ButtonExtended nextGameButton;
+        [SerializeField]
+        private ButtonExtended rematchButton;
+        [SerializeField]
+        private ButtonExtended exitButton;
 
-        public AlphaTween tapToContinue;
+        [SerializeField]
+        private AlphaTween tapToContinue;
 
         private IClientFourzy game;
+        private Color defaultColor;
         private PromptScreen waitingScreen;
         private GameplayScreen gameplayScreen;
         private TurnBaseScreen turnBasedTab;
@@ -44,6 +58,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Awake();
 
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
+            defaultColor = loaderBar.color;
         }
 
         protected override void Start()
@@ -56,6 +71,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected void OnDestroy()
         {
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
+        }
+
+        public override void Close(bool animate = true)
+        {
+            base.Close(animate);
+
+            CancelRoutine("autoClose");
+            loaderBar.color = Color.clear;
         }
 
         public void Open(IClientFourzy game)
@@ -125,6 +148,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     //player lost
                                     stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
                                 }
+
+                                CloseAfter(3f);
 
                                 break;
 
@@ -256,6 +281,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+        }
+
+        /// <summary>
+        /// Will auto close after 
+        /// </summary>
+        /// <param name="duration"></param>
+        public void CloseAfter(float duration)
+        {
+            loaderBar.color = defaultColor;
+            StartRoutine("autoClose", CloseBarAnimation(duration), OnBGTap);
         }
 
         public void SetInfoLabel(string text)
@@ -612,9 +647,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case GameType.REALTIME:
-                        if (GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_LOBBY_GAME) {
+                        if (GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_LOBBY_GAME)
+                        {
                             rematchButton.SetActive(true);
-                        } else {
+                        }
+                        else
+                        {
                             rematchButton.SetActive(false);
                         }
                         exitButton.SetActive(true);
@@ -696,6 +734,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             turnBasedTab = menuController.GetOrAddScreen<TurnBaseScreen>();
             botRematchesLeft = InternalSettings.Current.BOT_SETTINGS.randomRematchTimes;
+        }
+
+        private System.Collections.IEnumerator CloseBarAnimation(float time)
+        {
+            loaderBar.fillAmount = 1f;
+            float timer = time;
+            while ((timer -= Time.deltaTime) > 0f)
+            {
+                loaderBar.fillAmount = timer / time;
+                yield return null;
+            }
+            loaderBar.fillAmount = 0f;
         }
     }
 }
