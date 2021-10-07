@@ -98,7 +98,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             foreach (PointsEntry pointsEntry in SkillzGameController.Instance.GamesPlayed.Last().pointsEntries)
             {
-                AddPointsWidget(LocalizationManager.Value(pointsEntry.name), pointsEntry.amount);
+                AddPointsWidget(pointsEntry.name, pointsEntry.amount);
             }
             AddPointsWidget(SkillzGameController.Instance.HaveNextGame ? "" : "Total", SkillzGameController.Instance.HaveNextGame ? SkillzGameController.Instance.GamesPlayed.Last().Points : SkillzGameController.Instance.Points)
                 .SetSize(48)

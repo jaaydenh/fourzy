@@ -630,6 +630,10 @@
       "value": "Normas"
     },
     {
+      "key": "second",
+      "value": "segunda"
+    },
+    {
       "key": "select",
       "value": "Elegir"
     },
@@ -644,6 +648,26 @@
     {
       "key": "score",
       "value": "Puntaje"
+    },
+    {
+      "key": "skillz_big_win_key",
+      "value": "Bono de gran ganancia"
+    },
+    {
+      "key": "skillz_moves_left_points_key",
+      "value": "Mueve a la izquierda"
+    },
+    {
+      "key": "skillz_time_left_points_key",
+      "value": "Tiempo restante"
+    },
+    {
+      "key": "skillz_survival_moves_left_key",
+      "value": "Bono de supervivencia"
+    },
+    {
+      "key": "skillz_win_points_key",
+      "value": "Victoria"
     },
     {
       "key": "sound_effects",

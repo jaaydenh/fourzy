@@ -44,7 +44,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private AlphaTween tapToContinue;
 
         private IClientFourzy game;
-        private Color defaultColor;
         private PromptScreen waitingScreen;
         private GameplayScreen gameplayScreen;
         private TurnBaseScreen turnBasedTab;
@@ -58,7 +57,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Awake();
 
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
-            defaultColor = loaderBar.color;
+            loaderBar.gameObject.SetActive(false);
         }
 
         protected override void Start()
@@ -78,7 +77,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Close(animate);
 
             CancelRoutine("autoClose");
-            loaderBar.color = Color.clear;
+            loaderBar.gameObject.SetActive(false);
         }
 
         public void Open(IClientFourzy game)
@@ -289,7 +288,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         /// <param name="duration"></param>
         public void CloseAfter(float duration)
         {
-            loaderBar.color = defaultColor;
+            loaderBar.gameObject.SetActive(true);
             StartRoutine("autoClose", CloseBarAnimation(duration), OnBGTap);
         }
 

@@ -1444,37 +1444,45 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 List<PointsEntry> points = new List<PointsEntry>();
                 if (winner)
                 {
-                    points.Add(new PointsEntry("skillz_win_points_key", SkillzGameController.Instance.WinPoints));
+                    points.Add(new PointsEntry(LocalizationManager.Value("skillz_win_points_key"), SkillzGameController.Instance.WinPoints));
 
                     if (myMovesLeft > 0)
                     {
-                        points.Add(new PointsEntry("skillz_moves_left_points_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftWin));
+                        points.Add(new PointsEntry(
+                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftWin}/{LocalizationManager.Value("move")})", 
+                            myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftWin));
                     }
                 }
                 else if (game.draw)
                 {
                     if (myMovesLeft > 0)
                     {
-                        points.Add(new PointsEntry("skillz_moves_left_points_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftDraw));
+                        points.Add(new PointsEntry(
+                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftDraw}/{LocalizationManager.Value("move")})", 
+                            myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftDraw));
                     }
                 }
                 else
                 {
-                    points.Add(new PointsEntry("skillz_survival_moves_left_key", myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
+                    points.Add(new PointsEntry(
+                        $"{LocalizationManager.Value("skillz_survival_moves_left_key")} ({SkillzGameController.Instance.PointsPerMoveLeftLose}/{LocalizationManager.Value("move")})", 
+                        myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
                 }
 
-                if (!SkillzGameController.Instance.HaveNextGame)
+                if (SkillzGameController.Instance.GamesPlayed.Count == SkillzGameController.Instance.GamesToPlay - 1)
                 {
                     //add timer bonus
                     if (timerLeft > 0)
                     {
-                        points.Add(new PointsEntry("skillz_time_left_points_key", timerLeft * SkillzGameController.Instance.PointsPerSecond));
+                        points.Add(new PointsEntry(
+                            $"{LocalizationManager.Value("skillz_time_left_points_key")} ({SkillzGameController.Instance.PointsPerSecond}/{LocalizationManager.Value("second")})", 
+                            timerLeft * SkillzGameController.Instance.PointsPerSecond));
                     }
 
                     //big win bonus
-                    if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state))
+                    if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state) && winner)
                     {
-                        points.Add(new PointsEntry("skillz_big_win_key", 2000));
+                        points.Add(new PointsEntry(LocalizationManager.Value("skillz_big_win_key"), 2000));
                     }
                 }
 

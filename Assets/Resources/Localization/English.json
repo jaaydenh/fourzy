@@ -626,6 +626,10 @@
       "value": "Rules"
     },
     {
+      "key": "second",
+      "value": "second"
+    },
+    {
       "key": "select",
       "value": "Select"
     },
@@ -640,6 +644,10 @@
     {
       "key": "score",
       "value": "Score"
+    },
+    {
+      "key": "skillz_big_win_key",
+      "value": "Big Win Bonus"
     },
     {
       "key": "skillz_moves_left_points_key",
