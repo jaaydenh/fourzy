@@ -18,6 +18,11 @@ namespace Fourzy._Updates.UI
             FourzyPhotonManager.onJoinedRoom += OnRoomJoined;
         }
 
+        private void Start()
+        {
+            button.SetState(PhotonNetwork.CurrentLobby != null && PhotonNetwork.CurrentRoom == null);
+        }
+
         private void OnDestroy()
         {
             FourzyPhotonManager.onJoinedLobby -= OnLobbyJoined;
@@ -26,10 +31,7 @@ namespace Fourzy._Updates.UI
 
         private void OnLobbyJoined(string lobby)
         {
-            if (PhotonNetwork.CurrentLobby == null || FourzyPhotonManager.InDefaultLobby)
-            {
-                button.SetState(true);
-            }
+            button.SetState(true);
         }
 
         private void OnRoomJoined(string roomName)

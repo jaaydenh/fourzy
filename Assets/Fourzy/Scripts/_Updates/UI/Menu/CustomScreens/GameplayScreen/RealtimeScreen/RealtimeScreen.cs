@@ -69,7 +69,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public Coroutine StartCountdown(float duration)
         {
-            if (menuController.currentScreen != this) menuController.OpenScreen(this);
+            if (menuController.currentScreen != this)
+            {
+                menuController.OpenScreen(this);
+            }
 
             return StartRoutine("countdownRoutine", CountdownRoutine(duration));
         }

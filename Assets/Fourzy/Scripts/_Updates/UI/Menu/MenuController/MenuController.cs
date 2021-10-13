@@ -222,10 +222,7 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OpenScreen(MenuScreen screen)
         {
-            if (currentScreen &&
-                currentScreen != screen &&
-                currentScreen.isOpened &&
-                screen.closePreviousWhenOpened)
+            if (currentScreen && currentScreen != screen && currentScreen.isOpened && screen.closePreviousWhenOpened)
             {
                 currentScreen.Close();
             }

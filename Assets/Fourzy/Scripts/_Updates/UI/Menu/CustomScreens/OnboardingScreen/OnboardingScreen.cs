@@ -297,7 +297,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.PAUSE_BOARD:
-                        board = GamePlayManager.Instance.board;
+                        board = GamePlayManager.Instance.BoardView;
                         if (board == null) break;
 
                         board.Pause();
@@ -305,7 +305,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.RESUME_BOARD:
-                        board = GamePlayManager.Instance.board;
+                        board = GamePlayManager.Instance.BoardView;
                         if (board == null) break;
 
                         board.Resume();
@@ -336,7 +336,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     //pointer
                     case OnboardingActions.POINT_AT:
-                        board = GamePlayManager.Instance.board;
+                        board = GamePlayManager.Instance.BoardView;
                         if (board == null) break;
 
                         OnboardingTask_PointAt pointAtTask = currentTask as OnboardingTask_PointAt;
@@ -377,7 +377,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SHOW_BOARD_HINT_AREA:
-                        board = GamePlayManager.Instance.board;
+                        board = GamePlayManager.Instance.BoardView;
                         board.SetHintAreaSelectableState(false);
                         board.ShowHintArea(GameboardView.HintAreaStyle.ANIMATION_LOOP, GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
@@ -386,7 +386,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.HIDE_BOARD_HINT_AREA:
-                        board = GamePlayManager.Instance.board;
+                        board = GamePlayManager.Instance.BoardView;
                         board.SetHintAreaSelectableState(true);
                         board.HideHintArea(GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
@@ -406,12 +406,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.LIMIT_BOARD_INPUT:
-                        GamePlayManager.Instance.board.LimitInput(currentTask.areas);
+                        GamePlayManager.Instance.BoardView.LimitInput(currentTask.areas);
 
                         break;
 
                     case OnboardingActions.RESET_BOARD_INPUT:
-                        GamePlayManager.Instance.board.SetInputMap(true);
+                        GamePlayManager.Instance.BoardView.SetInputMap(true);
 
                         break;
 
@@ -430,7 +430,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case OnboardingActions.PLAY_INITIAL_MOVES:
                         if (GamePlayManager.Instance)
                         {
-                            GamePlayManager.Instance.board.PlayInitialMoves();
+                            GamePlayManager.Instance.BoardView.PlayInitialMoves();
                         }
 
                         break;
@@ -495,13 +495,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     //player1 make move
                     case OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
-                        GamePlayManager.Instance.board.TakeTurn(
+                        GamePlayManager.Instance.BoardView.TakeTurn(
                             new SimpleMove(GameManager.Instance.activeGame.playerPiece, currentTask.direction, currentTask.intValue));
 
                         break;
 
                     case OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
-                        GamePlayManager.Instance.board.TakeTurn(
+                        GamePlayManager.Instance.BoardView.TakeTurn(
                             new SimpleMove(GameManager.Instance.activeGame.opponentPiece, currentTask.direction, currentTask.intValue));
 
                         break;

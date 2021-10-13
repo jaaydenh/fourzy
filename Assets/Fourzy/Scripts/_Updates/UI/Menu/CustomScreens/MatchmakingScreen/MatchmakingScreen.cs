@@ -91,10 +91,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             state = MatchmakingScreenState.NONE;
             timerLabel.text = string.Empty;
 
-            if (FourzyPhotonManager.IsQMLobby)
-            {
-                FourzyPhotonManager.TryLeaveRoom();
-            }
+            FourzyPhotonManager.TryLeaveRoom();
         }
 
         public override void OnBack()
@@ -108,34 +105,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenRealtime()
         {
-            //if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) ==
-            //    RoomType.LOBBY_ROOM)
-            //{
-            //    menuController
-            //        .GetOrAddScreen<PromptScreen>()
-            //        .Prompt("Leave room?", "To enter the quickmatch you have to leave the room you'r currently in.", () =>
-            //        {
-            //            state = MatchmakingScreenState.WAITTING_ROOM_LEFT;
-            //            FourzyPhotonManager.TryLeaveRoom();
-
-            //            _prompt
-            //                .Prompt(
-            //                "Leaving room...",
-            //                "",
-            //                null,
-            //                "Back",
-            //                null,
-            //                () => state = MatchmakingScreenState.NONE)
-            //                .CloseOnDecline();
-            //        }, null)
-            //        .CloseOnDecline()
-            //        .CloseOnAccept();
-            //}
-            //else
-            //{
-                state = MatchmakingScreenState.REALTIME;
-                menuController.OpenScreen(this);
-            //}
+            state = MatchmakingScreenState.REALTIME;
+            menuController.OpenScreen(this);
         }
 
         public override void Open()
@@ -188,7 +159,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (_needRoom)
                         {
-
                             FourzyPhotonManager.JoinRandomRoom();
                         }
                     }, () =>
@@ -263,10 +233,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 StartMatch(GameTypeLocal.REALTIME_BOT_GAME);
 
-                if (FourzyPhotonManager.IsQMLobby)
-                {
-                    FourzyPhotonManager.TryLeaveRoom();
-                }
+                FourzyPhotonManager.TryLeaveRoom();
             },
             (error) =>
             {
@@ -284,7 +251,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!isOpened) return;
 
             Debug.Log("Failed to join random room, creating new one...");
-
             FourzyPhotonManager.CreateRoom(RoomType.QUICKMATCH);
         }
 

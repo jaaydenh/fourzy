@@ -62,7 +62,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void Continue()
         {
-            if (GamePlayManager.Instance.gameState == GameState.PAUSED)
+            if (GamePlayManager.Instance.GameState == GameState.PAUSED)
             {
                 GamePlayManager.Instance.UnpauseGame();
             }

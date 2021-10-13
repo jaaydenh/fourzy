@@ -180,10 +180,7 @@ public class MenuItems : MonoBehaviour
 
             GameManager.Instance.StartGame(GameTypeLocal.REALTIME_BOT_GAME);
 
-            if (FourzyPhotonManager.IsQMLobby)
-            {
-                FourzyPhotonManager.TryLeaveRoom();
-            }
+            FourzyPhotonManager.TryLeaveRoom();
         },
         (error) =>
         {

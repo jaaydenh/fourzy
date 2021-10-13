@@ -255,14 +255,14 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (isAnimating || game.IsOver) return;
 
-            if (gameplayManager && gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+            if (gameplayManager && gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
             {
                 BoardLocation _location =
                     Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
                 IEnumerable<TokenView> _tokens = BoardBitsAt<TokenView>(_location);
                 if (_tokens.Count() == 0)
                 {
-                    if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                    if (gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
                     {
                         gameplayManager.ToggleHelpState();
                     }
@@ -272,7 +272,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(_tokens.First());
 
-                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                if (gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
                 {
                     gameplayManager.ToggleHelpState();
                 }
@@ -482,7 +482,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public void OnPointerMove(Vector2 position)
         {
             if (!interactable || !touched) return;
-            if (gameplayManager && gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) return;
+            if (gameplayManager && gameplayManager.GameState == GameplayScene.GameState.HELP_STATE) return;
 
             Vector2 positionToWorldPosition = Camera.main.ScreenToWorldPoint(position) - transform.localPosition;
 
@@ -1016,7 +1016,7 @@ namespace Fourzy._Updates.Mechanics.Board
             //change help state
             if (gameplayManager)
             {
-                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                if (gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
                 {
                     gameplayManager.ToggleHelpState();
                 }
@@ -1057,7 +1057,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     {
                         if (GameManager.Instance.activeGame == null ||
                             GameManager.Instance.activeGame.BoardID != gameId ||
-                            gameplayManager.board != _board)
+                            gameplayManager.BoardView != _board)
                         {
                             return;
                         }
@@ -1117,7 +1117,7 @@ namespace Fourzy._Updates.Mechanics.Board
             //change help state
             if (gameplayManager)
             {
-                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                if (gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
                 {
                     gameplayManager.ToggleHelpState();
                 }
@@ -1135,6 +1135,24 @@ namespace Fourzy._Updates.Mechanics.Board
                 return null;
             }
             PlayerTurnResult turnResults = game.TakeTurn(turn, true);
+            //record new state for realtime games
+            if (turn.createdOnThisDevice)
+            {
+                switch (game._Type)
+                {
+                    case GameType.REALTIME:
+                        switch (GameManager.Instance.ExpectedGameType)
+                        {
+                            case GameTypeLocal.REALTIME_LOBBY_GAME:
+                            case GameTypeLocal.REALTIME_QUICKMATCH:
+                                gameplayManager.RecordLastBoardStateAsRoomProperty(false);
+
+                                break;
+                        }
+
+                        break;
+                }
+            }
 
             while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE)
             {
@@ -1571,8 +1589,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             ClientPlayerTurn turnToSend = new ClientPlayerTurn(_movesToSend);
                             //add local timer data
-                            turnToSend.playerTimerLeft = gameplayManager.gameplayScreen.myTimerLeft;
-                            turnToSend.magicLeft = gameplayManager.gameplayScreen.myMagicLeft;
+                            turnToSend.playerTimerLeft = gameplayManager.GameplayScreen.MyTimerLeft;
+                            turnToSend.magicLeft = gameplayManager.GameplayScreen.MyMagicLeft;
                             turnToSend.PlayerId = _move.Piece.PlayerId;
 
                             bool result = PhotonNetwork.RaiseEvent(
@@ -2300,7 +2318,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     case GameActionType.BOSS_POWER:
                         GameActionBossPower bossPowerAction = turnResults.Activity[actionIndex] as GameActionBossPower;
 
-                        gameplayManager.gameplayScreen.gameInfoWidget.DisplayPower(bossPowerAction.Power.PowerType);
+                        gameplayManager.GameplayScreen.gameInfoWidget.DisplayPower(bossPowerAction.Power.PowerType);
                         game.BossMoves++;
 
                         actionIndex++;
@@ -2549,7 +2567,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     case GameActionType.PASS:
                         float turnPassDuration = 1.8f;
 
-                        gameplayManager.gameplayScreen.gameInfoWidget.PassTurn(turnPassDuration);
+                        gameplayManager.GameplayScreen.gameInfoWidget.PassTurn(turnPassDuration);
 
                         //use some delay
                         yield return new WaitForSeconds(turnPassDuration);

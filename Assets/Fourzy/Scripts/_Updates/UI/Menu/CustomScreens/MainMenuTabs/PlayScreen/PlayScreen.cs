@@ -3,6 +3,7 @@
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -127,7 +128,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 .CloseOnAccept();
         }
 
-        public void StartRealtimeQuickmatch() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
+        public void StartRealtimeQuickmatch()
+        {
+            GameManager.Instance.StartRealtimeQuickGame();
+        }
 
         public void ChangeName() =>
             menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
@@ -135,8 +139,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void OnJoinedRoom(string roomName)
         {
             inputPromptScreen.Decline();
-
-            Debug.Log("joined");
         }
 
         private void OnJoinRoomFailed(string roomName)

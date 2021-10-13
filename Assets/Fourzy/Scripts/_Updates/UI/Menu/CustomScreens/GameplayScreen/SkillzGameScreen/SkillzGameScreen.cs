@@ -142,7 +142,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Timer = 0f;
             game.IsOver = true;
 
-            GamePlayManager.Instance.board.Pause();
+            GamePlayManager.Instance.BoardView.Pause();
             GamePlayManager.Instance.OnGameFinished(game);
         }
     }

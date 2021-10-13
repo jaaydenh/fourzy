@@ -35,6 +35,7 @@ namespace Fourzy
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
         public const int REALTIME_COUNTDOWN_SECONDS = 4;
+        public const int REALTIME_TTL_SECONDS = 120;
         public const int MIN_COMPLEXCITY_SCORE = 1;
         public const int MAX_COMPLEXCITY_SCORE = 20000;
 

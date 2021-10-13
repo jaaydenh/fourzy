@@ -390,10 +390,7 @@ namespace Fourzy._Updates.ClientModel
 
         public bool IsWinner() => me.PlayerId == State.WinnerId;
 
-        public override PlayerTurnResult TakeTurn(
-            PlayerTurn Turn,
-            bool ReturnStartOfNextTurn = false,
-            bool TriggerEndOfTurn = true)
+        public override PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn = false, bool TriggerEndOfTurn = true)
         {
             if (State.Players.ContainsKey(State.ActivePlayerId))
             {

@@ -137,8 +137,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinedRoom(string roomName)
         {
-            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
-                & displayable) == 0) return;
+            if (GameManager.Instance.RejoinAbandonedGame) return;
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) == 0) return;
 
             lobbyCreatedAt = Time.time;
 
