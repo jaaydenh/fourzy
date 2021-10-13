@@ -202,6 +202,10 @@
       "value": "Puzles"
     },
     {
+      "key": "final_score",
+      "value": "Puntuación Final"
+    },
+    {
       "key": "for",
       "value": "para"
     },
@@ -216,6 +220,10 @@
     {
       "key": "fourzies",
       "value": "Fourzies"
+    },
+    {
+      "key": "game_complete",
+      "value": "Juego Completa"
     },
     {
       "key": "game_options",
@@ -290,6 +298,10 @@
       "value": "Juagador\nhumano"
     },
     {
+      "key": "realtime_player_left_message",
+      "value": "Si otro jugador no se une a esta partida, ¡automáticamente se convertirá en un ganador!"
+    },
+    {
       "key": "in",
       "value": "en"
     },
@@ -308,6 +320,10 @@
     {
       "key": "joining_room",
       "value": "Uniéndose a la sala ..."
+    },
+    {
+      "key": "leave",
+      "value": "Dejar"
     },
     {
       "key": "leaving_room",

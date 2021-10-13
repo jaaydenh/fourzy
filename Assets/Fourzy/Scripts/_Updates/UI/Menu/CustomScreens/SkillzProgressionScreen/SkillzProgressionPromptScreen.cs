@@ -110,7 +110,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             StartRoutine("timer", TimerRoutine(SkillzGameController.Instance.HaveNextGame ? Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME : Constants.SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME), () => Decline());
 
             //open screen
-            Prompt("Game Complete", null, null, SkillzGameController.Instance.HaveNextGame ? LocalizationManager.Value("next_game") : LocalizationManager.Value("submit_score"));
+            Prompt(LocalizationManager.Value(SkillzGameController.Instance.HaveNextGame ? "game_complete" : "final_score"), null, null, LocalizationManager.Value(SkillzGameController.Instance.HaveNextGame ? "next_game" : "submit_score"));
         }
 
         public override void Decline(bool force = false)

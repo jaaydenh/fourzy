@@ -198,6 +198,10 @@
       "value": "Puzzles"
     },
     {
+      "key": "final_score",
+      "value": "Final Score"
+    },
+    {
       "key": "for",
       "value": "for"
     },
@@ -212,6 +216,10 @@
     {
       "key": "fourzies",
       "value": "Fourzies"
+    },
+    {
+      "key": "game_complete",
+      "value": "Game Complete"
     },
     {
       "key": "game_options",
@@ -286,6 +294,10 @@
       "value": "Human\nplayer"
     },
     {
+      "key": "realtime_player_left_message",
+      "value": "If Other Player fails to join this match you will automatically become a winner!"
+    },
+    {
       "key": "in",
       "value": "in"
     },
@@ -304,6 +316,10 @@
     {
       "key": "joining_room",
       "value": "Joining room..."
+    },
+    {
+      "key": "leave",
+      "value": "Leave"
     },
     {
       "key": "leaving_room",
