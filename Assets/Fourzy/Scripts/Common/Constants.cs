@@ -74,7 +74,7 @@ namespace Fourzy
         public const string SKILLZ_GAME_COMPLEXITY_KEY = "Complexity";
         public const string SKILLZ_MATCH_PAUSES_KEY = "Pauses";
         public const int SKILLZ_DEFAULT_GAMES_COUNT = 3;
-        public const int SKILLZ_DEFAULT_GAME_TIMER = 300;
+        public const int SKILLZ_DEFAULT_GAME_TIMER = 180;
         public const int SKILLZ_MOVES_PER_MATCH = 30;
         public const int SKILLZ_WIN_POINTS = 2000;
         public const int SKILLZ_POINTS_PER_SECOND_REMAINING = 10;
