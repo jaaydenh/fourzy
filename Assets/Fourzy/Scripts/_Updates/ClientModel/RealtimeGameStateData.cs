@@ -20,6 +20,8 @@ namespace Fourzy._Updates.ClientModel
         public int player1Magic;
         [JsonProperty("player2Magic")]
         public int player2Magic;
+        [JsonProperty("player1Id")]
+        public string player1Id;
 
         public RealtimeGameStateData() { }
 
@@ -42,13 +44,13 @@ namespace Fourzy._Updates.ClientModel
             if (gameplayManager.Game.me == gameplayManager.Game.player1 || both)
             {
                 player1Timer = gameplayManager.GameplayScreen.Player1TimeLeft;
-                player1Magic = gameplayManager.GameplayScreen.Player1Magic;
+                player1Magic = gameplayManager.GameplayScreen.Player1MagicLeft;
             }
             
             if (gameplayManager.Game.me == gameplayManager.Game.player2 || both)
             {
                 player2Timer = gameplayManager.GameplayScreen.Player2TimeLeft;
-                player2Magic = gameplayManager.GameplayScreen.Player2Magic;
+                player2Magic = gameplayManager.GameplayScreen.Player1MagicLeft;
             }
         }
     }

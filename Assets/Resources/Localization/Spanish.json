@@ -38,6 +38,14 @@
     },
 	
     {
+      "key": "abandoned_room_available",
+      "value": "Lugar abandonado disponible"
+    },
+    {
+      "key": "abandoned_room_join_message",
+      "value": "Puedes unirte a un lugar previamente abandonado"
+    },
+    {
       "key": "adventure",
       "value": "Puzzle Aventuras"
     },
@@ -300,6 +308,10 @@
     {
       "key": "realtime_player_left_message",
       "value": "Si otro jugador no se une a esta partida, ¡automáticamente se convertirá en un ganador!"
+    },
+    {
+      "key": "ignore",
+      "value": "Ignorar"
     },
     {
       "key": "in",
@@ -596,6 +608,10 @@
     {
       "key": "rematch",
       "value": "Revancha"
+    },
+    {
+      "key": "rematch_request",
+      "value": "¡{0} solicita la revancha! "
     },
     {
       "key": "replay_tutorial",
@@ -994,8 +1010,16 @@
       "value": "Versus"
     },
     {
-      "key": "waiting_for_opponent",
-      "value": "Invite Code"
+      "key": "invite_code",
+      "value": "Codigo de invitacion"
+    },
+    {
+      "key": "waiting_for_game",
+      "value": "Esperando el juego..."
+    },
+    {
+      "key": "waiting_for_player",
+      "value": "Esperando a otra jugadora..."
     },
     {
       "key": "watch_ad",

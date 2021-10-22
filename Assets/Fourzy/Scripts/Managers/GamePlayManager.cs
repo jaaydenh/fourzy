@@ -439,29 +439,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //only continue if master
             if (PhotonNetwork.IsMasterClient)
             {
-                Area _area = FourzyPhotonManager.GetRoomProperty(
-                    Constants.REALTIME_ROOM_AREA,
-                    InternalSettings.Current.DEFAULT_AREA);
+                Area _area = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_AREA, InternalSettings.Current.DEFAULT_AREA);
 
                 //get percent
                 int myPercent = UserManager.Instance.MyComplexityPercent();
                 int opponentPercent = UserManager.GetComplexityPercent(
                     FourzyPhotonManager.GetOpponentTotalGames(),
-                    FourzyPhotonManager.GetOpponentProperty(
-                        Constants.REALTIME_RATING_KEY,
-                        UserManager.Instance.lastCachedRating));
+                    FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, UserManager.Instance.lastCachedRating));
 
                 //get complexity scores
-                Tuple<int, int> myMinMax = BoardFactory.NormalizeComplexity(
-                    _area,
-                    myPercent);
-                Tuple<int, int> oppMinMax = BoardFactory.NormalizeComplexity(
-                    _area,
-                    opponentPercent);
+                Tuple<int, int> myMinMax = BoardFactory.NormalizeComplexity(_area, myPercent);
+                Tuple<int, int> oppMinMax = BoardFactory.NormalizeComplexity(_area, opponentPercent);
 
-                (int, int) actualMinMax = (
-                    Mathf.Min(myMinMax.Item1, oppMinMax.Item1),
-                    Mathf.Min(myMinMax.Item2, oppMinMax.Item2));
+                (int, int) actualMinMax = (Mathf.Min(myMinMax.Item1, oppMinMax.Item1), Mathf.Min(myMinMax.Item2, oppMinMax.Item2));
 
                 BoardGenerationPreferences preferences = new BoardGenerationPreferences();
                 preferences.TargetComplexityLow = actualMinMax.Item1;
@@ -471,10 +461,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 Player opponent =
                     new Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
                     {
-                        HerdId = FourzyPhotonManager.GetOpponentProperty(
-                            Constants.REALTIME_ROOM_GAMEPIECE_KEY,
-                            Constants.REALTIME_DEFAULT_GAMEPIECE_KEY),
-                        PlayerString = "2"
+                        HerdId = FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, Constants.REALTIME_DEFAULT_GAMEPIECE_KEY),
+                        PlayerString = PhotonNetwork.PlayerListOthers[0].UserId
                     };
 
                 Player me = UserManager.Instance.meAsPlayer;
@@ -498,6 +486,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 RealtimeGameStateData gameStateData = _game.toGameStateData;
                 gameStateData.createdEpoch = Utils.EpochMilliseconds();
+                gameStateData.player1Id = _game.player1.PlayerString;
 
                 var eventOptions = new Photon.Realtime.RaiseEventOptions();
                 eventOptions.Flags.HttpForward = true;
@@ -789,18 +778,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         ClientFourzyGame _realtimeGame = new ClientFourzyGame(lastState);
 
                         LoadGame(_realtimeGame);
-
-                        Debug.Log(FourzyPhotonManager.GetRoomProperty("latestState", "").ToString());
-                        //update timer/magic values
-                        GameplayScreen.Player1TimeLeft = lastState.player1Timer;
-                        GameplayScreen.Player1Magic = lastState.player1Magic;
-                        GameplayScreen.Player2TimeLeft = lastState.player2Timer;
-                        GameplayScreen.Player2Magic = lastState.player2Magic;
+                        GameplayScreen.UpdateFromRealtimeState(lastState);
                     }
 
                     //notify that this client is ready
                     FourzyPhotonManager.SetClientReadyState(true);
-                    GameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for other player...");
+                    GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_player"));
 
                     break;
 
@@ -884,7 +867,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     preferences.TargetComplexityHigh = SkillzGameController.Instance.GameComplexity;
 
                     GamePieceData random = GameContentManager.Instance.piecesDataHolder.random;
-                    Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceID };
+                    Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
                     Player opponent = new Player(2, opponentName, AIProfile.SimpleAI) { HerdId = random.Id };
 
                     GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
@@ -1197,7 +1180,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void UnloadBoard()
         {
-            if (BoardView) Destroy(BoardView.gameObject);
+            if (BoardView)
+            {
+                Debug.Log("unload");
+                Destroy(BoardView.gameObject);
+            }
         }
 
         private void LoadBG(Area area)
@@ -1350,19 +1337,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             waitingForPlayerRejoinReady = false;
 
-                            CloseWaitingPrompt();
+                            CloseRealtimeScreen();
                             UnpauseGame();
+                            UpdatePlayerTurn();
                         }
                         else
                         {
-                            if (realtimeWaitingOtherScreen && realtimeWaitingOtherScreen.isOpened)
-                            {
-                                realtimeWaitingOtherScreen.CloseSelf();
-                            }
-                            realtimeWaitingOtherScreen = null;
-
-                            //gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
-
                             CreateRealtimeGame();
                         }
 
@@ -1373,14 +1353,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     if (FourzyPhotonManager.CheckPlayersRematchReady())
                     {
-                        if (realtimeWaitingOtherScreen && realtimeWaitingOtherScreen.isOpened)
-                        {
-                            realtimeWaitingOtherScreen.CloseSelf();
-                        }
-                        realtimeWaitingOtherScreen = null;
-
-                        GameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
                         CreateRealtimeGame();
+                        GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_game"));
                     }
                 }
             }
@@ -1390,13 +1364,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     if (FourzyPhotonManager.CheckPlayersReady())
                     {
-                        CloseWaitingPrompt();
+                        CloseRealtimeScreen();
                         UpdatePlayerTurn();
                     }
                 }
             }
 
-            void CloseWaitingPrompt()
+            void CloseRealtimeScreen()
             {
                 if (GameplayScreen.realtimeScreen.isOpened)
                 {
@@ -1430,13 +1404,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case Constants.REMATCH_REQUEST:
                     realtimeWaitingOtherScreen = menuController.GetOrAddScreen<PromptScreen>()
-                        .Prompt($"{Game.opponent.DisplayName} wants to play again with you!", "Accept?",
+                        .Prompt(string.Format(LocalizationManager.Value("rematch_request"), Game.opponent.DisplayName), LocalizationManager.Value("play"),
                         () =>
                         {
                             ReportRematchResult(true);
 
                             FourzyPhotonManager.SetClientRematchReady();
-                            GameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
+                            GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_game"));
                         },
                         () =>
                         {
@@ -1520,12 +1494,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (Game._Type)
             {
                 case GameType.REALTIME:
-                    //UnpauseGame();
                     CancelRoutine("playerLeft");
 
                     waitingForPlayerRejoinReady = true;
                     FourzyPhotonManager.SetClientReadyState(true);
-                    GameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for other player...");
+                    GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_player"));
 
                     break;
             }
@@ -1895,11 +1868,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             UpdatePlayerTurn();
 
-            //slow opponents timer
-            if (turn.PlayerId != Game._State.ActivePlayerId)
-            {
-                GameplayScreen.timerWidgets[1].Pause(realtimeTimerDelay);
-            }
+            ////pause opponents timer
+            //if (turn.PlayerId != Game._State.ActivePlayerId)
+            //{
+            //    GameplayScreen.timerWidgets[1].Pause(realtimeTimerDelay);
+            //}
         }
 
         private void OnNetwork(bool state)
@@ -2236,11 +2209,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             UpdatePlayerTurn();
 
-            //adjust opponent timer value
-            if (!PhotonNetwork.IsMasterClient)
-            {
-                GameplayScreen.timerWidgets[1].SmallTimerValue -= realtimeTimerDelay;
-            }
+            ////adjust opponent timer value
+            //if (!PhotonNetwork.IsMasterClient)
+            //{
+            //    GameplayScreen.timerWidgets[1].SmallTimerValue -= realtimeTimerDelay;
+            //}
         }
 
         //private IEnumerator PlayTurnBaseTurn(ChallengeData gameData)

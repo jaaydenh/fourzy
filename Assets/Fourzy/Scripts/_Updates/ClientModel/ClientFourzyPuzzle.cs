@@ -167,9 +167,9 @@ namespace Fourzy._Updates.ClientModel
 
         public Player unactivePlayer => isMyTurn ? opponent : me;
 
-        public Player player1 => State.Players[(_FirstState == null ? _State : _FirstState).ActivePlayerId];
+        public Player player1 => State.Players[1];
 
-        public Player player2 => ClientFourzyHelper.Other(this, player1);
+        public Player player2 => State.Players[2];
 
         public bool isMyTurn => me.PlayerId == State.ActivePlayerId;
 

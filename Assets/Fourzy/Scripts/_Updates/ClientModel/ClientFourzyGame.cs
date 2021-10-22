@@ -249,17 +249,13 @@ namespace Fourzy._Updates.ClientModel
 
         public List<BoardSpace> boardContent => ClientFourzyHelper.BoardContent(this);
 
-        public GamePieceView myGamePiece =>
-            me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView myGamePiece => me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        public GamePieceView opponentGamePiece =>
-            opponent.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView opponentGamePiece => opponent.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        public GamePieceView activePlayerGamePiece =>
-            State.ActivePlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView activePlayerGamePiece => State.ActivePlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        public Player me => State.Players[1].PlayerString == UserManager.Instance.userId ?
-                    State.Players[1] : State.Players[2];
+        public Player me => State.Players[1].PlayerString == UserManager.Instance.userId ? State.Players[1] : State.Players[2];
 
         public Player opponent => ClientFourzyHelper.Other(this, me);
 
@@ -267,15 +263,15 @@ namespace Fourzy._Updates.ClientModel
 
         public Player unactivePlayer => isMyTurn ? opponent : me;
 
-        public Player player1 => State.Players[(_FirstState == null ? _State : _FirstState).ActivePlayerId];
+        public Player player1 => State.Players[1];
 
-        public Player player2 => ClientFourzyHelper.Other(this, player1);
+        public Player player2 => State.Players[2];
 
         public ClientPuzzleData puzzleData { get; set; }
 
         public bool isMyTurn => me.PlayerId == State.ActivePlayerId;
 
-        public bool haveMoves => State.TurnCount > 0;
+        public bool turnsNotZero => State.TurnCount > 0;
 
         public TurnEvaluator turnEvaluator => new TurnEvaluator(State);
 

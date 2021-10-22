@@ -30,6 +30,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private bool useBotMatch;
 
         public AlphaTween alphaTween { get; private set; }
+        private bool IsOpened => isOpened && MenuController.activeMenu == menuController;
 
         protected override void Awake()
         {
@@ -169,15 +170,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     });
 
                     break;
-
-                //case MatchmakingScreenState.TURNBASED:
-                //    messageLabel.text = LocalizationManager.Value("searching_for_opponent");
-
-                //    Area selectedArea = GameContentManager.Instance.currentArea.areaID;
-                //    Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentArea.areaID);
-                //    // ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
-
-                //    break;
             }
 
             StartRoutine("randomText", ShowRandomTextRoutine(3.5f));
@@ -248,7 +240,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinRandomFailed()
         {
-            if (!isOpened) return;
+            if (!IsOpened) return;
 
             Debug.Log("Failed to join random room, creating new one...");
             FourzyPhotonManager.CreateRoom(RoomType.QUICKMATCH);
@@ -256,7 +248,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnRoomCreated(string roomName)
         {
-            if (!isOpened) return;
+            if (!IsOpened) return;
 
             messageLabel.text = LocalizationManager.Value("searching_for_opponent");
 
@@ -278,7 +270,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnCreateRoomFailed(string error)
         {
-            if (!isOpened) return;
+            if (!IsOpened) return;
 
             messageLabel.text = $"Failed to create new room. {error}";
 
@@ -287,7 +279,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnPlayerEnteredRoom(Photon.Realtime.Player otherPlayer)
         {
-            if (!isOpened) return;
+            if (!IsOpened) return;
 
             GameManager.Instance.RealtimeOpponent = new OpponentData(otherPlayer);
             //other player connected, open to gameplay scene
@@ -296,7 +288,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnRoomJoined(string roomName)
         {
-            if (!isOpened) return;
+            if (!IsOpened) return;
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
@@ -342,6 +334,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnConnectionTimeOut()
         {
+            if (!IsOpened) return;
+
             //unblock input
             SetInteractable(true);
             backButton.SetActive(true);

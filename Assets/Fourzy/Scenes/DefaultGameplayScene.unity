@@ -2484,16 +2484,13 @@ MonoBehaviour:
   isOpened: 0
   defaultCalls: 1
   menuController: {fileID: 0}
-  player1Widget: {fileID: 667688347}
-  player2Widget: {fileID: 1501097912}
+  myWidget: {fileID: 667688347}
+  opponentWidget: {fileID: 1501097912}
   opponentMessagesWidget: {fileID: 1389285278}
   gameInfoWidget: {fileID: 141039651}
   rematchButton: {fileID: 305274627}
   helpButton: {fileID: 1523515889}
   matchId: {fileID: 495377598}
-  timerWidgets:
-  - {fileID: 111286087}
-  - {fileID: 1639664762}
   puzzleWinLoseScreen: {fileID: 1690463457}
   gameWinLoseScreen: {fileID: 783680541}
   tapToStartOverlay: {fileID: 1743460222}

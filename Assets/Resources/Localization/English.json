@@ -38,6 +38,14 @@
     },
   
     {
+      "key": "abandoned_room_available",
+      "value": "Abandoned Room Available"
+    },
+    {
+      "key": "abandoned_room_join_message",
+      "value": "You can join previously abandoned room"
+    },
+    {
       "key": "adventure",
       "value": "Puzzle Adventure"
     },
@@ -298,8 +306,16 @@
       "value": "If Other Player fails to join this match you will automatically become a winner!"
     },
     {
+      "key": "ignore",
+      "value": "Ignore"
+    },
+    {
       "key": "in",
       "value": "in"
+    },
+    {
+      "key": "invite_code",
+      "value": "Invite Code"
     },
     {
       "key": "join",
@@ -592,6 +608,10 @@
     {
       "key": "rematch",
       "value": "Rematch"
+    },
+    {
+      "key": "rematch_request",
+      "value": "{0} requests rematch!"
     },
     {
       "key": "replay_tutorial",
@@ -982,8 +1002,12 @@
       "value": "Local"
     },
     {
-      "key": "waiting_for_opponent",
-      "value": "Invite Code"
+      "key": "waiting_for_game",
+      "value": "Waiting for game..."
+    },
+    {
+      "key": "waiting_for_player",
+      "value": "Waiting for other player..."
     },
     {
       "key": "watch_ad",

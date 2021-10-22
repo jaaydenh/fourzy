@@ -38,7 +38,24 @@ namespace Fourzy
 
         public bool currentlyChangingName => settingRandomName;
 
-        public string userId { get; set; }
+        public string userId
+        {
+            get
+            {
+                string id = LoginManager.playfabId;
+                if (string.IsNullOrEmpty(id))
+                {
+                    id = PlayerPrefs.GetString("mapReferenceSeed", "");
+                    if (string.IsNullOrEmpty(id))
+                    {
+                        id = SystemInfo.deviceUniqueIdentifier;
+                        PlayerPrefs.SetString("mapReferenceSeed", id);
+                    }
+                }
+
+                return id;
+            }
+        }
 
         public string userName
         {
@@ -50,7 +67,7 @@ namespace Fourzy
             }
         }
 
-        public string gamePieceID
+        public string gamePieceId
         {
             get => PlayerPrefsWrapper.GetSelectedGamePiece();
 
@@ -59,10 +76,7 @@ namespace Fourzy
                 PlayerPrefsWrapper.SetSelectedGamePiece(value);
                 FourzyPhotonManager.SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, value);
 
-                PlayFabClientAPI.UpdateAvatarUrl(
-                    new UpdateAvatarUrlRequest() { ImageUrl = value, },
-                    OnAvatarUrlUpdate,
-                    OnChangeNamePlayfabError);
+                PlayFabClientAPI.UpdateAvatarUrl(new UpdateAvatarUrlRequest() { ImageUrl = value, }, OnAvatarUrlUpdate, OnChangeNamePlayfabError);
                 Amplitude.Instance.setUserProperty("gamePieceId", value);
             }
         }
@@ -254,7 +268,7 @@ namespace Fourzy
 
         public float levelProgress => GetProgression(xp);
 
-        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID };
+        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceId };
 
         private int _lastCachedRating = -1;
         private int _lastCachedWins = 0;
@@ -276,7 +290,6 @@ namespace Fourzy
 
             if (InstanceExists) return;
 
-            userId = SystemInfo.deviceUniqueIdentifier;
             GameManager.onNetworkAccess += OnNetworkAccess;
         }
 
@@ -499,9 +512,9 @@ namespace Fourzy
 
         public void UpdateSelectedGamePiece(string _gamePieceID)
         {
-            gamePieceID = _gamePieceID;
+            gamePieceId = _gamePieceID;
 
-            OnUpdateUserGamePieceID?.Invoke(gamePieceID);
+            OnUpdateUserGamePieceID?.Invoke(gamePieceId);
 
             AnalyticsManager.Instance.LogEvent(
                 AnalyticsManager.AnalyticsEvents.selectGamepiece,

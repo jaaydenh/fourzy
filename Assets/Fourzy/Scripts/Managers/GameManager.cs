@@ -12,6 +12,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Hellmade.Net;
 using MoreMountains.NiceVibrations;
@@ -120,6 +121,7 @@ namespace Fourzy
 
         private PlacementStyle _placementStyle;
         private string lastErrorMessage;
+        private InputFieldPrompt inputPromptScreen;
 
         public bool isMainMenuLoaded
         {
@@ -187,9 +189,7 @@ namespace Fourzy
             }
         }
 
-        public List<TitleNewsItem> unreadNews =>
-            latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ??
-            new List<TitleNewsItem>();
+        public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
 
         protected override void Awake()
         {
@@ -509,8 +509,7 @@ namespace Fourzy
             },
             (result) =>
             {
-                RatingGameCompleteResult ratingGameResult =
-                    JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
+                RatingGameCompleteResult ratingGameResult = JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
                 OnRatingDataAquired(ratingGameResult);
 
                 if (RealtimeOpponent != null)
@@ -555,10 +554,7 @@ namespace Fourzy
             {
                 if (result.FunctionResult != null)
                 {
-                    ProgressionReward[] newItems =
-                        JsonConvert.DeserializeObject<ProgressionReward[]>(result.FunctionResult.ToString());
-
-                    bool rewardDisplayed = false;
+                    ProgressionReward[] newItems = JsonConvert.DeserializeObject<ProgressionReward[]>(result.FunctionResult.ToString());
 
                     foreach (var item in newItems)
                     {
@@ -743,8 +739,7 @@ namespace Fourzy
             onPurchaseComplete?.Invoke(product);
 
             //try get product data
-            MiscGameContentHolder.StoreItemExtraData _data =
-                GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
+            MiscGameContentHolder.StoreItemExtraData _data = GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
 
             if (!_data) return;
 
@@ -805,12 +800,16 @@ namespace Fourzy
             string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
             if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
             {
-                MenuController.activeMenu.GetOrAddScreen<PromptScreen>().Prompt("Abandoned Room Available", "You can join previously abandoned room", "Join", "Ignore", () =>
+                MenuController.activeMenu.GetOrAddScreen<PromptScreen>().Prompt(
+                    LocalizationManager.Value("abandoned_room_available"),
+                    LocalizationManager.Value("abandoned_room_join_message"),
+                    LocalizationManager.Value("join"),
+                    LocalizationManager.Value("ignore"), () =>
                 {
                     RejoinAbandonedGame = true;
                     FourzyPhotonManager.JoinRoom(roomName, true);
                     FourzyPhotonManager.onJoinedRoom += OnRoomJoinedRematch;
-                    FourzyPhotonManager.onJoinRoomFailed += OnRoomJoinFailed;
+                    FourzyPhotonManager.onJoinRoomFailed += OnRejoinRoomFailed;
                 }, () =>
                 {
                     MenuController.activeMenu.currentScreen.CloseSelf();
@@ -824,10 +823,85 @@ namespace Fourzy
             }
         }
 
-        private void OnRoomJoinFailed(string roomName)
+        public void OpenLobbyGame()
         {
-            RejoinAbandonedGame = false;
-            FourzyPhotonManager.onJoinRoomFailed -= OnRoomJoinFailed;
+            //private const string kLobbyScreenOpened = "lobbyScreenOpened";
+            //if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
+            //{
+            //    menuController.GetOrAddScreen<LobbyScreen>().CheckLobby();
+            //}
+            //else
+            //{
+            //    menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
+
+            //    PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
+            //}
+
+            //check if there is abandoned realtime game
+            string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
+            if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
+            {
+                MenuController.activeMenu.GetOrAddScreen<PromptScreen>().Prompt(
+                    LocalizationManager.Value("abandoned_room_available"),
+                    LocalizationManager.Value("abandoned_room_join_message"),
+                    LocalizationManager.Value("join"),
+                    LocalizationManager.Value("ignore"), () =>
+                {
+                    RejoinAbandonedGame = true;
+                    FourzyPhotonManager.JoinRoom(roomName, true);
+                    FourzyPhotonManager.onJoinedRoom += OnRoomJoinedRematch;
+                    FourzyPhotonManager.onJoinRoomFailed += OnRejoinRoomFailed;
+                }, () =>
+                {
+                    MenuController.activeMenu.currentScreen.CloseSelf();
+                    OpenLobbyPrompt();
+                })
+                    .CloseOnAccept();
+            }
+            else
+            {
+                OpenLobbyPrompt();
+            }
+
+            void OpenLobbyPrompt()
+            {
+                MenuController.activeMenu.GetOrAddScreen<TwoOptionsPromptScreen>()
+                    ._Prompt(LocalizationManager.Value("private_match"), "", LocalizationManager.Value("create_game"), LocalizationManager.Value("join_game"),
+                    () =>
+                    {
+                        PersistantMenuController.Instance.GetOrAddScreen<CreateRealtimeGamePrompt>().Prompt();
+                    },
+                    null,
+                    () =>
+                    {
+                        inputPromptScreen = MenuController.activeMenu.GetOrAddScreen<InputFieldPrompt>();
+                        inputPromptScreen._Prompt((value) =>
+                            {
+                                FourzyPhotonManager.onJoinRoomFailed += OnJoinRoomFailed;
+                                FourzyPhotonManager.onJoinedRoom += OnRoomJoined;
+
+                                //try join
+                                FourzyPhotonManager.JoinRoom(value);
+
+                            }, LocalizationManager.Value("room_code"), "", LocalizationManager.Value("join_game"), LocalizationManager.Value("close"), decline: () =>
+                            {
+                                FourzyPhotonManager.onJoinRoomFailed -= OnJoinRoomFailed;
+                                FourzyPhotonManager.onJoinedRoom -= OnRoomJoined;
+                            })
+                            .CloseOnDecline();
+                    })
+                    .CloseOnAccept();
+            }
+        }
+
+        private void OnRoomJoined(string roomName)
+        {
+            inputPromptScreen.Decline();
+        }
+
+        private void OnJoinRoomFailed(string roomName)
+        {
+            GamesToastsController.ShowTopToast(LocalizationManager.Value("wrong_room_code"));
         }
 
         private void OnRoomJoinedRematch(string roomName)
@@ -851,6 +925,12 @@ namespace Fourzy
 
             FourzyPhotonManager.onJoinedRoom -= OnRoomJoinedRematch;
             StartGame(ExpectedGameType);
+        }
+
+        private void OnRejoinRoomFailed(string roomName)
+        {
+            RejoinAbandonedGame = false;
+            FourzyPhotonManager.onJoinRoomFailed -= OnRejoinRoomFailed;
         }
 
         public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);

@@ -366,6 +366,8 @@ namespace Fourzy
         private void PlayFabLoginSuccess(LoginResult result)
         {
             playfabId = result.PlayFabId;
+            PlayerPrefs.SetString("mapReferenceSeed", playfabId);
+
             AnalyticsManager.SetUsetID(result.PlayFabId);
             AnalyticsManager.Instance.FlushPlayfabEvents();
 

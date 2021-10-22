@@ -11,7 +11,6 @@ using FourzyGameModel.Model;
 using Photon.Pun;
 using StackableDecorator;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -19,16 +18,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class GameplayScreen : MenuScreen
     {
-        public PlayerUIWidget player1Widget;
-        public PlayerUIWidget player2Widget;
+        [SerializeField]
+        private PlayerUIWidget myWidget;
+        [SerializeField]
+        private PlayerUIWidget opponentWidget;
+
         public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
         public ButtonExtended rematchButton;
         public ButtonExtended helpButton;
         [SerializeField]
         private TMP_Text matchId;
-
-        public List<TimerSliderWidget> timerWidgets;
 
         public PuzzleWinLoseScreen puzzleWinLoseScreen;
         public GameWinLoseScreen gameWinLoseScreen;
@@ -37,6 +37,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MenuScreen tapToStartOverlay;
 
         private IClientFourzy game;
+        private TimerSliderWidget myTimer;
+        private TimerSliderWidget opponentTimer;
+        private TimerSliderWidget player1Timer;
+        private TimerSliderWidget player2Timer;
+        private PlayerUIWidget player1Widget;
+        private PlayerUIWidget player2Widget;
         private GamePlayManager gameplayManager;
         private int gameTurnCounter;
         private UIOutline helpButtonOutline;
@@ -67,113 +73,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             return skillzGameScreen.Timer;
 
                         default:
-                            return timersEnabled ? timerWidgets[0].TotalTimeLeft : -1f;
+                            return timersEnabled ? myTimer.TotalTimeLeft : -1f;
                     }
                 }
             }
         }
-        public float OpponentTimerLeft => timersEnabled ? timerWidgets[1].TotalTimeLeft : -1f;
-        public int MyMagicLeft => magicEnabled ? player1Widget.magic : -1;
-        public float Player1TimeLeft
-        {
-            get
-            {
-                if (player1Widget.assignedPlayer == game.player1)
-                {
-                    return timerWidgets[0].TotalTimeLeft;
-                }
-                else
-                {
-                    return timerWidgets[1].TotalTimeLeft;
-                }
-            }
-            set
-            {
-                if (player1Widget.assignedPlayer == game.player1)
-                {
-                    timerWidgets[0].TotalTimeLeft = value;
-                }
-                else
-                {
-                    timerWidgets[1].TotalTimeLeft = value;
-                }
-            }
-        }
-        public float Player2TimeLeft
-        {
-            get
-            {
-                if (player2Widget.assignedPlayer == game.player2)
-                {
-                    return timerWidgets[1].TotalTimeLeft;
-                }
-                else
-                {
-                    return timerWidgets[0].TotalTimeLeft;
-                }
-            }
-            set
-            {
-                if (player2Widget.assignedPlayer == game.player2)
-                {
-                    timerWidgets[1].TotalTimeLeft = value;
-                }
-                else
-                {
-                    timerWidgets[0].TotalTimeLeft = value;
-                }
-            }
-        }
-        public int Player1Magic
-        {
-            get
-            {
-                if (player1Widget.assignedPlayer == game.player1)
-                {
-                    return player1Widget.magic;
-                }
-                else
-                {
-                    return player2Widget.magic;
-                }
-            }
-            set
-            {
-                if (player1Widget.assignedPlayer == game.player1)
-                {
-                    player1Widget.SetMagic(value);
-                }
-                else
-                {
-                    player2Widget.SetMagic(value);
-                }
-            }
-        }
-        public int Player2Magic
-        {
-            get
-            {
-                if (player2Widget.assignedPlayer == game.player2)
-                {
-                    return player2Widget.magic;
-                }
-                else
-                {
-                    return player1Widget.magic;
-                }
-            }
-            set
-            {
-                if (player2Widget.assignedPlayer == game.player2)
-                {
-                    player2Widget.SetMagic(value);
-                }
-                else
-                {
-                    player1Widget.SetMagic(value);
-                }
-            }
-        }
+        public float OpponentTimerLeft => timersEnabled ? opponentTimer.TotalTimeLeft : -1f;
+        public int MyMagicLeft => magicEnabled ? myWidget.magic : -1;
+        public int Player1MagicLeft => myWidget.magic;
+        public int Player2MagicLeft => opponentWidget.magic;
+        public float Player1TimeLeft => player1Timer.TotalTimeLeft;
+        public float Player2TimeLeft => player2Timer.TotalTimeLeft;
 
         protected override void Awake()
         {
@@ -189,7 +99,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
-            timerWidgets.ForEach(widget => widget.onValueEmpty += OnTimerEmpty);
+            myTimer = myWidget.GetComponentInChildren<TimerSliderWidget>();
+            opponentTimer = opponentWidget.GetComponentInChildren<TimerSliderWidget>();
+            myTimer.onValueEmpty += OnTimerEmpty;
+            opponentTimer.onValueEmpty += OnTimerEmpty;
 
             GamePlayManager.onMoveStarted += OnMoveStarted;
             GamePlayManager.onMoveEnded += OnMoveEnded;
@@ -275,9 +188,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             this.gameplayManager = gameplayManager;
             game = gameplayManager.Game;
 
+            player1Widget = game.me == game.player1 ? myWidget : opponentWidget;
+            player2Widget = game.me == game.player2 ? myWidget : opponentWidget;
+
             #region Timer usage
 
             timersEnabled = Tools.Utils.GetTimerState(game);
+            player1Timer = game.me == game.player1 ? myTimer : opponentTimer;
+            player2Timer = game.me == game.player2 ? myTimer : opponentTimer;
 
             #endregion
 
@@ -306,8 +224,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             break;
 
                         case GameTypeLocal.REALTIME_BOT_GAME:
-                            magicState = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC) ? 
-                                MagicState.BOTH : 
+                            magicState = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC) ?
+                                MagicState.BOTH :
                                 MagicState.DISABLED;
 
                             break;
@@ -335,36 +253,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (magicEnabled)
             {
-                player1Widget.spellsHolder.SetData(game, gameplayManager.BoardView, me);
-                player1Widget.SetMagicWidget(true);
+                myWidget.spellsHolder.SetData(game, gameplayManager.BoardView, me);
+                myWidget.SetMagicWidget(true);
             }
             else
             {
-                player1Widget.SetMagicWidget(false);
+                myWidget.SetMagicWidget(false);
             }
 
-            player1Widget.SetGame(game);
-            player2Widget.SetGame(game);
+            myWidget.SetGame(game);
+            opponentWidget.SetGame(game);
 
-            player1Widget.Initialize();
-            player2Widget.Initialize();
+            myWidget.Initialize();
+            opponentWidget.Initialize();
 
-            player1Widget.SetPlayer(me);
-            player1Widget.StopPlayerTurnAnimation();
+            myWidget.SetPlayer(me);
+            myWidget.StopPlayerTurnAnimation();
 
             #region Set P1 Rating
 
             switch (game._Type)
             {
                 case GameType.REALTIME:
-                    player1Widget.SetRating(
-                        UserManager.Instance.lastCachedRating,
-                        UserManager.Instance.totalRatedGames);
+                    myWidget.SetRating(UserManager.Instance.lastCachedRating, UserManager.Instance.totalRatedGames);
 
                     break;
 
                 default:
-                    player1Widget.SetExtraData("Wizard");
+                    myWidget.SetExtraData("Wizard");
 
                     break;
             }
@@ -374,8 +290,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Player opponent = game.opponent;
             if (opponent != null)
             {
-                player2Widget.SetPlayer(opponent);
-                player2Widget.StopPlayerTurnAnimation();
+                opponentWidget.SetPlayer(opponent);
+                opponentWidget.StopPlayerTurnAnimation();
 
                 #region Set P2 Rating
 
@@ -386,7 +302,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         {
                             case GameTypeLocal.REALTIME_LOBBY_GAME:
                             case GameTypeLocal.REALTIME_QUICKMATCH:
-                                player2Widget.SetRating(
+                                opponentWidget.SetRating(
                                     FourzyPhotonManager.GetOpponentProperty(
                                         Constants.REALTIME_RATING_KEY, -1),
                                     FourzyPhotonManager.GetOpponentTotalGames());
@@ -394,7 +310,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 break;
 
                             case GameTypeLocal.REALTIME_BOT_GAME:
-                                player2Widget.SetRating(
+                                opponentWidget.SetRating(
                                     GameManager.Instance.RealtimeOpponent.Rating,
                                     GameManager.Instance.RealtimeOpponent.TotalGames);
 
@@ -404,7 +320,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     default:
-                        player2Widget.SetExtraData("Wizard");
+                        opponentWidget.SetExtraData("Wizard");
 
                         break;
                 }
@@ -413,7 +329,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 if (game.hideOpponent)
                 {
-                    player2Widget.Hide(.1f);
+                    opponentWidget.Hide(.1f);
                 }
                 else
                 {
@@ -425,7 +341,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         }
                         else
                         {
-                            player2Widget.Hide(.1f);
+                            opponentWidget.Hide(.1f);
                         }
                     }
                     else
@@ -435,37 +351,39 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     void ShowPlayer2Magic()
                     {
-                        player2Widget.Show(.1f);
+                        opponentWidget.Show(.1f);
 
                         if (magicState == MagicState.BOTH)
                         {
-                            player2Widget.spellsHolder.SetData(game, gameplayManager.BoardView, opponent);
-                            player2Widget.SetMagicWidget(true);
+                            opponentWidget.spellsHolder.SetData(game, gameplayManager.BoardView, opponent);
+                            opponentWidget.SetMagicWidget(true);
                         }
                         else
                         {
-                            player2Widget.SetMagicWidget(false);
+                            opponentWidget.SetMagicWidget(false);
                         }
                     }
                 }
             }
             else
             {
-                player2Widget.Hide(.1f);
+                opponentWidget.Hide(.1f);
             }
 
             //initialize timer
             if (timersEnabled)
             {
-                timerWidgets[0].AssignPlayer(me);
-                timerWidgets[1].AssignPlayer(opponent);
+                myTimer.AssignPlayer(me);
+                opponentTimer.AssignPlayer(opponent);
             }
             //disable timer widgets if not needed
             else
             {
                 //close tap overlay of opened
                 CancelRoutine("waitFotTap");
-                timerWidgets.ForEach(widget => widget.Hide(0f));
+
+                myTimer.Hide(0f);
+                opponentTimer.Hide(0f);
             }
 
             //check if help button available
@@ -484,9 +402,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //position help button
-            Vector2 viewportPoint = Camera.main.WorldToViewportPoint(
-                gameplayManager.BoardView.BoardLocationToVec2(
-                    new BoardLocation(0, 0)) + (Vector2)GamePlayManager.Instance.BoardView.transform.position);
+            Vector2 viewportPoint = Camera.main.WorldToViewportPoint(gameplayManager.BoardView.BoardLocationToVec2( new BoardLocation(0, 0)) + (Vector2)GamePlayManager.Instance.BoardView.transform.position);
             helpButton.rectTransform.anchorMin = helpButton.rectTransform.anchorMax = viewportPoint;
             if (GameManager.Instance.Landscape)
             {
@@ -513,6 +429,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             HideGameInfoWidget(false);
         }
 
+        public void UpdateFromRealtimeState(RealtimeGameStateData realtimeGameStateData)
+        {
+            player1Timer.TotalTimeLeft = realtimeGameStateData.player1Timer;
+            player1Widget.SetMagic(realtimeGameStateData.player1Magic);
+            player2Timer.TotalTimeLeft = realtimeGameStateData.player2Timer;
+            player2Widget.SetMagic(realtimeGameStateData.player2Magic);
+        }
+
         public void SetMatchID(string matchID)
         {
             matchId.text = matchID;
@@ -527,11 +451,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (timersEnabled)
             {
-                timerWidgets[1].TotalTimeLeft = turn.playerTimerLeft;
+                opponentTimer.TotalTimeLeft = turn.playerTimerLeft;
             }
 
             //adjust magic
-            player2Widget.SetMagic(turn.magicLeft);
+            opponentWidget.SetMagic(turn.magicLeft);
         }
 
         public void UpdateHelpButton()
@@ -541,22 +465,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void UpdatePlayerTurnGraphics()
         {
-            if (game.activePlayer.PlayerId == player1Widget.assignedPlayer.PlayerId)
+            if (game.activePlayer.PlayerId == myWidget.assignedPlayer.PlayerId)
             {
-                player1Widget.ShowPlayerTurnAnimation();
+                myWidget.ShowPlayerTurnAnimation();
 
                 if (!game.hideOpponent)
                 {
-                    player2Widget.StopPlayerTurnAnimation();
+                    opponentWidget.StopPlayerTurnAnimation();
                 }
             }
             else
             {
-                player2Widget.ShowPlayerTurnAnimation();
+                opponentWidget.ShowPlayerTurnAnimation();
 
                 if (!game.hideOpponent)
                 {
-                    player1Widget.StopPlayerTurnAnimation();
+                    myWidget.StopPlayerTurnAnimation();
                 }
             }
         }
@@ -613,13 +537,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (!game.draw)
             {
-                if (game.IsWinner(player1Widget.assignedPlayer))
+                if (game.IsWinner(myWidget.assignedPlayer))
                 {
-                    player1Widget.StartWinJumps();
+                    myWidget.StartWinJumps();
                 }
                 else
                 {
-                    player2Widget.StartWinJumps();
+                    opponentWidget.StartWinJumps();
                 }
             }
 
@@ -708,7 +632,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 default:
                     //pause timers
-                    timerWidgets.ForEach(widget => widget.Pause());
+                    myTimer.Pause();
+                    opponentTimer.Pause();
 
                     break;
             }
@@ -725,7 +650,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 default:
                     //unpause timers
-                    timerWidgets.ForEach(widget => widget.Unpause());
+                    myTimer.Unpause();
+                    opponentTimer.Unpause();
 
                     break;
             }
@@ -752,32 +678,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     gameTurnCounter++;
                 }
 
-                //deactivate timers, add timer value
-                timerWidgets.ForEach(widget =>
-                {
-                    if (widget.player.PlayerId == turn.PlayerId)
-                    {
-                        widget.Deactivate();
-
-                        if (!widget.IsEmpty)
-                        {
-                            if (InternalSettings.Current.ADD_TIMER_BAR_EVERY_X_TURN > 0 &&
-                                gameTurnCounter % InternalSettings.Current.ADD_TIMER_BAR_EVERY_X_TURN == 0)
-                            {
-                                widget.AddTimerValue(InternalSettings.Current.BARS_TO_ADD, true, true);
-                            }
-                            else
-                            {
-                                widget.AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
-                            }
-                        }
-                    }
-                });
+                AdjustTimer(myTimer);
+                AdjustTimer(opponentTimer);
             }
 
             #endregion
 
             SetResetButtonState(true);
+
+            //deactivate timers, add timer value
+            void AdjustTimer(TimerSliderWidget widget)
+            {
+                if (widget.player.PlayerId == turn.PlayerId)
+                {
+                    widget.Deactivate();
+
+                    if (!widget.IsEmpty)
+                    {
+                        if (InternalSettings.Current.ADD_TIMER_BAR_EVERY_X_TURN > 0 && gameTurnCounter % InternalSettings.Current.ADD_TIMER_BAR_EVERY_X_TURN == 0)
+                        {
+                            widget.AddTimerValue(InternalSettings.Current.BARS_TO_ADD, true, true);
+                        }
+                        else
+                        {
+                            widget.AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+                        }
+                    }
+                }
+            }
         }
 
         private void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult, bool startTurn)
@@ -815,15 +743,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 ActivatePlayerTimer(game._State.ActivePlayerId);
 
                 //reset timers
-                timerWidgets.ForEach(widget =>
-                {
-                    if (widget.IsEmpty)
-                    {
-                        widget.AddTimerValue(InternalSettings.Current.RESET_TIMER_SECTIONS, true, true);
-                    }
-                });
+                ResetTimer(myTimer);
+                ResetTimer(opponentTimer);
             }
 
+            void ResetTimer(TimerSliderWidget widget)
+            {
+                if (widget.IsEmpty)
+                {
+                    widget.AddTimerValue(InternalSettings.Current.RESET_TIMER_SECTIONS, true, true);
+                }
+            }
             #endregion
         }
 
@@ -834,7 +764,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.PASSANDPLAY:
                     if (InternalSettings.Current.LOSE_ON_EMPTY_TIMER)
                     {
-                        timerWidgets.ForEach(_widget => _widget.Deactivate());
+                        myTimer.Deactivate();
+                        opponentTimer.Deactivate();
+
                         gameplayManager.OnGameFinished(game);
                     }
                     else
@@ -847,7 +779,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.REALTIME:
                     if (InternalSettings.Current.LOSE_ON_EMPTY_TIMER)
                     {
-                        timerWidgets.ForEach(_widget => _widget.Deactivate());
+                        myTimer.Deactivate();
+                        opponentTimer.Deactivate();
 
                         switch (GameManager.Instance.ExpectedGameType)
                         {
@@ -905,7 +838,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (playerId < 1) return;
 
-            timerWidgets.Find(widget => widget.player.PlayerId == playerId).Activate();
+            if (myTimer.player.PlayerId == playerId)
+            {
+                myTimer.Activate();
+            }
+            else
+            {
+                opponentTimer.Activate();
+            }
         }
 
         private void HideGameInfoWidget(bool checkType = true)

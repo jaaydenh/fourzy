@@ -2,23 +2,18 @@
 
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Helpers;
-using Fourzy._Updates.UI.Toasts;
-using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class PlayScreen : MenuTab
     {
-        private const string kLobbyScreenOpened = "lobbyScreenOpened";
-
         [SerializeField]
         private ButtonExtended discordButton;
         [SerializeField]
         private RectTransform body;
 
         private OnIPhoneX onIPhoneX;
-        private InputFieldPrompt inputPromptScreen;
 
         private bool fastPuzzlesUnlocked;
         private bool gauntletGameUnlocked = false;
@@ -88,44 +83,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenOnlineLobby()
         {
-            //if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
-            //{
-            //    menuController.GetOrAddScreen<LobbyScreen>().CheckLobby();
-            //}
-            //else
-            //{
-            //    menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
-
-            //    PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
-            //}
-
-            menuController.GetOrAddScreen<TwoOptionsPromptScreen>()
-                ._Prompt(LocalizationManager.Value("private_match"), "", LocalizationManager.Value("create_game"), LocalizationManager.Value("join_game"),
-                () =>
-                {
-                    PersistantMenuController.Instance.GetOrAddScreen<CreateRealtimeGamePrompt>().Prompt();
-                },
-                null,
-                () =>
-                {
-                    inputPromptScreen = menuController.GetOrAddScreen<InputFieldPrompt>();
-                    inputPromptScreen
-                        ._Prompt((value) =>
-                        {
-                            FourzyPhotonManager.onJoinRoomFailed += OnJoinRoomFailed;
-                            FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
-
-                            //try join
-                            FourzyPhotonManager.JoinRoom(value);
-
-                        }, LocalizationManager.Value("room_code"), "", LocalizationManager.Value("join_game"), LocalizationManager.Value("close"), decline: () =>
-                        {
-                            FourzyPhotonManager.onJoinRoomFailed -= OnJoinRoomFailed;
-                            FourzyPhotonManager.onJoinedRoom -= OnJoinedRoom;
-                        })
-                        .CloseOnDecline();
-                })
-                .CloseOnAccept();
+            GameManager.Instance.OpenLobbyGame();
         }
 
         public void StartRealtimeQuickmatch()
@@ -133,18 +91,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameManager.Instance.StartRealtimeQuickGame();
         }
 
-        public void ChangeName() =>
-            menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
-
-        private void OnJoinedRoom(string roomName)
-        {
-            inputPromptScreen.Decline();
-        }
-
-        private void OnJoinRoomFailed(string roomName)
-        {
-            GamesToastsController.ShowTopToast(LocalizationManager.Value("wrong_room_code"));
-        }
+        public void ChangeName() => menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
 
         protected override void OnInitialized()
         {

@@ -51,7 +51,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         }
 
-        public void CheckWaitingForOtherPlayer(string text)
+        public void SetMessage(string text)
         {
             if (PhotonNetwork.CurrentRoom == null) return;
 

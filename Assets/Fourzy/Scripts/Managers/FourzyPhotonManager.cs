@@ -123,7 +123,7 @@ namespace Fourzy
                 Debug.Log($"Connected to master.");
             }
 
-            SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, UserManager.Instance.gamePieceID);
+            SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, UserManager.Instance.gamePieceId);
             SetMyProperty(Constants.REALTIME_MID_KEY, LoginManager.masterAccountId);
 
             onConnectedToMaster?.Invoke();
@@ -574,7 +574,7 @@ namespace Fourzy
                 [Constants.REALTIME_ROOM_MAGIC_KEY] =
                     SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC) ? 2 : 0,
                 [Constants.REALTIME_ROOM_GAMEPIECE_KEY] =
-                    UserManager.Instance.gamePieceID,
+                    UserManager.Instance.gamePieceId,
                 [Constants.REALTIME_ROOM_AREA] =
                     PlayerPrefsWrapper.GetCurrentArea(),
                 [Constants.REALTIME_ROOM_RATING_KEY] =

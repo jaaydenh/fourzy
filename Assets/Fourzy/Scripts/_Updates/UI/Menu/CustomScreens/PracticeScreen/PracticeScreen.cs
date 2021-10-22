@@ -220,7 +220,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 player1 = new Player(1, LocalizationManager.Value("player_one"))
                 {
                     PlayerString = UserManager.Instance.userId,
-                    HerdId = UserManager.Instance.gamePieceID
+                    HerdId = UserManager.Instance.gamePieceId
                 };
             }
 
@@ -246,7 +246,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     player2 = new Player(2, LocalizationManager.Value("player_one"))
                     {
                         PlayerString = UserManager.Instance.userId,
-                        HerdId = UserManager.Instance.gamePieceID
+                        HerdId = UserManager.Instance.gamePieceId
                     };
                 }
             }

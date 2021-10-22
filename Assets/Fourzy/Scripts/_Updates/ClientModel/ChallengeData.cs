@@ -19,7 +19,7 @@ namespace Fourzy._Updates.ClientModel
 
         public PlayerTurn lastTurn => playerTurnRecord.Count == 0 ? null : playerTurnRecord[playerTurnRecord.Count - 1];
         public bool canBeNext => lastTurnGame.isMyTurn || (lastTurnGame.IsOver && !PlayerPrefsWrapper.GetGameViewed(challengeInstanceId));
-        public bool haveMoves => lastTurnGame.haveMoves || playerTurnRecord.Count > 0;
+        public bool haveMoves => lastTurnGame.turnsNotZero || playerTurnRecord.Count > 0;
 
         //constructor for when game is created by server
         public ChallengeData(GameStateData originalGameState, string challengeInstanceId)

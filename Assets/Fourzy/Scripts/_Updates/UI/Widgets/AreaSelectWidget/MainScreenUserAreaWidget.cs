@@ -98,7 +98,7 @@ namespace Fourzy._Updates.UI.Widgets
             base.OnInitialized();
 
             UserManager user = UserManager.Instance;
-            OnUpdateUserGamePieceID(user.gamePieceID);
+            OnUpdateUserGamePieceID(user.gamePieceId);
             OnUpdateUserInfo();
 
             OnRatingUpate(-1);
