@@ -1182,7 +1182,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (BoardView)
             {
-                Debug.Log("unload");
                 Destroy(BoardView.gameObject);
             }
         }

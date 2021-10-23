@@ -226,6 +226,10 @@
       "value": "Fourzies"
     },
     {
+      "key": "game",
+      "value": "Game"
+    },
+    {
       "key": "game_complete",
       "value": "Game Complete"
     },
@@ -980,6 +984,10 @@
     {
       "key": "too_short",
       "value": "Too short!"
+    },
+    {
+      "key": "total",
+      "value": "Total"
     },
     {
       "key": "turn_play_button",

@@ -53,7 +53,7 @@ MonoBehaviour:
   defaultPuzzlesState: 1
   resetGameOnClose: 0
   botGameType: 0
-  buildIntent: 0
+  buildIntent: 2
   customUserId: 
   fallbackLatitude: 37.7833
   fallbackLongitude: 122.4167

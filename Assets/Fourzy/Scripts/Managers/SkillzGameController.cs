@@ -1,7 +1,6 @@
 //@vadym udod
 
 using Fourzy._Updates.Mechanics.GameplayScene;
-using FourzyGameModel.Model;
 using SkillzSDK;
 using System.Collections.Generic;
 using System.Linq;

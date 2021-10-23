@@ -35,6 +35,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private Sprite single;
 
         private List<SkillzProgressionScreenPointsEntry> pointsEntries = new List<SkillzProgressionScreenPointsEntry>();
+        private bool openNextOnClose = false;
 
         public override void Close(bool animate = true)
         {
@@ -83,39 +84,49 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     null);
             }
 
-            //clear prev
-            foreach (SkillzProgressionScreenPointsEntry entry in pointsEntries)
-            {
-                Destroy(entry.gameObject);
-            }
-            pointsEntries.Clear();
+            ClearPointsEntries();
 
+            SkillzGameResult lastGameResult = SkillzGameController.Instance.GamesPlayed.FindLast(entries => entries.Points > 0);
             //display points
-            if (!SkillzGameController.Instance.HaveNextGame)
+            if (lastGameResult != null)
             {
-                AddPointsWidget("Game 1", SkillzGameController.Instance.GamesPlayed[0].Points);
-                AddPointsWidget("Game 2", SkillzGameController.Instance.GamesPlayed[1].Points);
+                foreach (PointsEntry pointsEntry in lastGameResult.pointsEntries)
+                {
+                    AddPointsWidget(pointsEntry.name, pointsEntry.amount);
+                }
+                AddPointsWidget("" , lastGameResult.Points)
+                    .SetSize(48)
+                    .SetColor(Color.green);
+
+                if (!SkillzGameController.Instance.HaveNextGame)
+                {
+                    openNextOnClose = true;
+                }
             }
-            foreach (PointsEntry pointsEntry in SkillzGameController.Instance.GamesPlayed.Last().pointsEntries)
+            else
             {
-                AddPointsWidget(pointsEntry.name, pointsEntry.amount);
+                AddTotalToPrompt();
             }
-            AddPointsWidget(SkillzGameController.Instance.HaveNextGame ? "" : "Total", SkillzGameController.Instance.HaveNextGame ? SkillzGameController.Instance.GamesPlayed.Last().Points : SkillzGameController.Instance.Points)
-                .SetSize(48)
-                .SetColor(Color.green);
 
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
 
             //start timer routine
-            StartRoutine("timer", TimerRoutine(SkillzGameController.Instance.HaveNextGame ? Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME : Constants.SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME), () => Decline());
+            StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME), () => Decline());
 
             //open screen
-            Prompt(LocalizationManager.Value(SkillzGameController.Instance.HaveNextGame ? "game_complete" : "final_score"), null, null, LocalizationManager.Value(SkillzGameController.Instance.HaveNextGame ? "next_game" : "submit_score"));
+            Prompt(LocalizationManager.Value("game_complete"), null, null, LocalizationManager.Value("next"));
         }
 
         public override void Decline(bool force = false)
         {
-            GamePlayManager.Instance.Rematch();
+            if (openNextOnClose)
+            {
+                StartCoroutine(CloseAndOpenTotal());
+            }
+            else
+            {
+                GamePlayManager.Instance.Rematch();
+            }
         }
 
         private VSGamePromptProgressionWidget AddProgressionWidget()
@@ -137,6 +148,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
             return _entry;
         }
 
+        private void ClearPointsEntries()
+        {
+            //clear prev
+            foreach (SkillzProgressionScreenPointsEntry entry in pointsEntries)
+            {
+                Destroy(entry.gameObject);
+            }
+            pointsEntries.Clear();
+        }
+
+        private void AddTotalToPrompt()
+        {
+            for (int gameIndex = 0; gameIndex < SkillzGameController.Instance.GamesPlayed.Count; gameIndex++)
+            {
+                AddPointsWidget($"{LocalizationManager.Value("game")} {gameIndex + 1}", SkillzGameController.Instance.GamesPlayed[gameIndex].Points);
+            }
+
+            AddPointsWidget(LocalizationManager.Value("total"), SkillzGameController.Instance.Points)
+                .SetSize(48)
+                .SetColor(Color.green);
+        }
+
         private IEnumerator TimerRoutine(int time)
         {
             declineButton.GetBadge("timer").badge.SetValue(time);
@@ -145,6 +178,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 yield return new WaitForSeconds(1f);
                 declineButton.GetBadge("timer").badge.SetValue(seconds);
             }
+        }
+
+        private IEnumerator CloseAndOpenTotal()
+        {
+            SetInteractable(false);
+            Close(true);
+
+            yield return new WaitForSeconds(.4f);
+
+            promptTitle.text = LocalizationManager.Value("final_score");
+            UpdateDeclineButton(LocalizationManager.Value("submit_score"));
+
+            SetInteractable(true);
+            ClearPointsEntries();
+            AddTotalToPrompt();
+            Open();
+
+            //start timer routine
+            StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME), () => Decline());
+
+            openNextOnClose = false;
         }
     }
 }
