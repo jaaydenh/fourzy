@@ -73,6 +73,7 @@ namespace Fourzy._Updates.Mechanics.Board
             CancelRoutine("glow");
             CancelRoutine("end");
             isShown = false;
+            _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
         public void Animate()
@@ -92,7 +93,6 @@ namespace Fourzy._Updates.Mechanics.Board
             StartRoutine("end", markerAlphaTween.playbackTime + .3f, () =>
             {
                 ParticleExplode();
-
                 Hide();
             });
         }
@@ -149,7 +149,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void ParticleExplode() => _particleSystem.Play();
 
-        public void Position(BoardLocation boardLocation) => transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.game));
+        public void Position(BoardLocation boardLocation)
+        {
+            transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.game));
+        }
 
         private void OnInitialized(IClientFourzy game)
         {

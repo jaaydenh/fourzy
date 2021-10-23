@@ -17,6 +17,7 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Fourzy._Updates.Serialized.AreasDataHolder;
@@ -563,6 +564,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (Game == null) return;
 
+            bool justStarted = false;
             if (!GameStarted)
             {
                 if (GameState != GameState.PAUSED)
@@ -574,6 +576,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     previousGameState = GameState.GAME;
                 }
                 GameStarted = true;
+                justStarted = true;
                 OnGameStarted();
             }
 
@@ -651,6 +654,61 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     break;
+            }
+
+            switch (GameManager.Instance.placementStyle)
+            {
+                case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                    if (!Game.IsOver)
+                    {
+                        switch (Game._Type)
+                        {
+                            case GameType.PASSANDPLAY:
+                                DropPiece(new BoardLocation(0, 4));
+
+                                break;
+
+                            default:
+                                if (Game.isMyTurn)
+                                {
+                                    DropPiece(new BoardLocation(0, 4));
+                                }
+
+                                break;
+                        }
+                    }
+
+                    break;
+            }
+
+            //location is only used as initial location
+            void DropPiece(BoardLocation location)
+            {
+                List<BoardLocation> possibleMoves = BoardView.GetPossibleMoves();
+
+                if (possibleMoves.Count == 0)
+                {
+                    return;
+                }
+
+                PlayerTurn lastTurn = Game._allTurnRecord.FindLast(_move => _move.PlayerId == Game._State.ActivePlayerId);
+                if (lastTurn != null)
+                {
+                    location = lastTurn.ToBoardLocation(Game);
+                }
+
+                if (!possibleMoves.Any(_location => _location.Equals(location)))
+                {
+                    //pick random one
+                    location = possibleMoves.Random();
+                }
+
+                Vector3 worldPosition = BoardView.transform.position + (Vector3)BoardView.BoardLocationToVec2(location);
+                Vector3 screenPos = menuController._camera.WorldToScreenPoint(worldPosition);
+
+                BoardView.OnPointerDown(screenPos);
+                BoardView.OnPointerMove(screenPos);
+                BoardView.OnPointerRelease(screenPos);
             }
         }
 

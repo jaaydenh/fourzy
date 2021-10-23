@@ -390,7 +390,8 @@ namespace Fourzy._Updates.Tools
                 case Direction.UP: return new BoardLocation(model.Rows - 1, move.Location);
                 case Direction.DOWN: return new BoardLocation(0, move.Location);
                 case Direction.LEFT: return new BoardLocation(move.Location, model.Columns - 1);
-                default: return new BoardLocation(move.Location, 0);
+                case Direction.RIGHT: return new BoardLocation(move.Location, 0);
+                default: return new BoardLocation(0, 0);
             }
         }
 
