@@ -3463,7 +3463,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 38
+          selectedMember: 41
           isDynamic: 0
         target: {fileID: 1899509752}
         memberName: Rematch
@@ -11475,6 +11475,7 @@ MonoBehaviour:
   defaultCalls: 1
   menuController: {fileID: 0}
   scoreLabel: {fileID: 400704617}
+  scorePanel: {fileID: 1100637890}
 --- !u!1 &593267566
 GameObject:
   m_ObjectHideFlags: 0
@@ -26180,7 +26181,7 @@ GameObject:
   - component: {fileID: 1633794818}
   - component: {fileID: 1633794817}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: PauseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26236,7 +26237,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 44
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -26367,7 +26368,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cbed2515e53714785840b9ebaa9a3c5a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8201a508122e74ddc88e4b280bb09d31, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

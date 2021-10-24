@@ -193,7 +193,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                         if (GameplayScreen.skillzGameScreen.Timer > 0f)
                         {
-                            menuController.GetOrAddScreen<SkillzPauseMenuScreen>()._Open();
+                            menuController.GetOrAddScreen<PauseMenuScreen>()._Open();
                         }
                     }
 
@@ -393,33 +393,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             //close other screens
             menuController.BackToRoot();
-
-            //back button
-            switch (Game._Type)
-            {
-                case GameType.ONBOARDING:
-                    backButton.SetActive(false);
-
-                    break;
-
-                default:
-                    switch (GameManager.Instance.ExpectedGameType)
-                    {
-                        case GameTypeLocal.LOCAL_GAME:
-                            backButton.SetActive(true);
-
-                            break;
-
-                        case GameTypeLocal.REALTIME_BOT_GAME:
-                        case GameTypeLocal.REALTIME_LOBBY_GAME:
-                        case GameTypeLocal.REALTIME_QUICKMATCH:
-                            backButton.SetActive(false);
-
-                            break;
-                    }
-
-                    break;
-            }
 
             winningParticleGenerator.HideParticles();
 

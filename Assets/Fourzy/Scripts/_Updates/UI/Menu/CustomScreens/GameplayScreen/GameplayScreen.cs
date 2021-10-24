@@ -124,62 +124,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else
             {
-                switch (game._Type)
-                {
-                    case GameType.PUZZLE:
-                    case GameType.TURN_BASED:
-                    case GameType.PRESENTATION:
-                        GamePlayManager.Instance.BackButtonOnClick();
-
-                        break;
-
-                    case GameType.REALTIME:
-                        //cant leave realtime game anymore
-
-                        //if (game.isOver)
-                        //{
-                        //    GamePlayManager.Instance.BackButtonOnClick();
-                        //}
-                        //else
-                        //{
-                        //    menuController.GetOrAddScreen<PromptScreen>()
-                        //        .Prompt(
-                        //            LocalizationManager.Value("are_you_sure"),
-                        //            LocalizationManager.Value("leave_realtime_game_message"),
-                        //            LocalizationManager.Value("yes"),
-                        //            LocalizationManager.Value("no"),
-                        //            () => GamePlayManager.Instance.BackButtonOnClick());
-                        //}
-                        if (game.IsOver)
-                        {
-                            GamePlayManager.Instance.BackButtonOnClick();
-                        }
-
-                        break;
-
-                    case GameType.SKILLZ_ASYNC:
-                        menuController.GetOrAddScreen<SkillzPauseMenuScreen>()._Open();
-
-                        break;
-
-                    default:
-                        if (game.IsOver)
-                        {
-                            GamePlayManager.Instance.BackButtonOnClick();
-                        }
-                        else
-                        {
-                            menuController.GetOrAddScreen<PromptScreen>()
-                                .Prompt(
-                                    LocalizationManager.Value("leave_game"),
-                                    "",
-                                    LocalizationManager.Value("yes"),
-                                    LocalizationManager.Value("no"),
-                                    () => GamePlayManager.Instance.BackButtonOnClick());
-                        }
-
-                        break;
-                }
+                menuController.GetOrAddScreen<PauseMenuScreen>()._Open();
             }
         }
 
@@ -586,7 +531,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case GameType.SKILLZ_ASYNC:
-                        SkillzPauseMenuScreen pauseMenu = menuController.GetScreen<SkillzPauseMenuScreen>();
+                        PauseMenuScreen pauseMenu = menuController.GetScreen<PauseMenuScreen>();
                         if (pauseMenu && pauseMenu.isOpened)
                         {
                             pauseMenu._Close();

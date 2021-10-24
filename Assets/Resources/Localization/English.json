@@ -666,6 +666,26 @@
       "value": "Rules"
     },
     {
+      "key": "rules_gauntlet_game",
+      "value": "Gauntlet game rules here"
+    },
+    {
+      "key": "rules_passandplay_game",
+      "value": "Passandplay game rules here"
+    },
+    {
+      "key": "rules_puzzlepack_game",
+      "value": "Puzzlepack game rules here"
+    },
+    {
+      "key": "rules_realtime_game",
+      "value": "Realtime game rules here"
+    },
+    {
+      "key": "rules_skillz_game",
+      "value": "Skillz game rules here"
+    },
+    {
       "key": "second",
       "value": "second"
     },
