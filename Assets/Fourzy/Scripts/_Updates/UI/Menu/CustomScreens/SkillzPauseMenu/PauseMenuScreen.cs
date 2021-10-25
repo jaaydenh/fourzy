@@ -38,11 +38,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public override void Close(bool animate = true)
-        {
-            base.Close(animate);
-        }
-
         public void _Open()
         {
             menuController.OpenScreen(this);
@@ -117,6 +112,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SettingsManager.Toggle(SettingsManager.KEY_SFX);
         }
 
+        /// <summary>
+        /// Invoked by contunie button
+        /// </summary>
         public void Continue()
         {
             switch (GamePlayManager.Instance.Game._Type)
@@ -134,6 +132,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             _Close();
         }
 
+        /// <summary>
+        /// Invoked by forfeit button
+        /// </summary>
         public void Forfeit()
         {
             switch (GamePlayManager.Instance.Game._Type)

@@ -62,6 +62,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private float inPauseTime;
         private bool isSolved = false;
         private bool waitingForPlayerRejoinReady;
+        private bool otherPlayerForfeit;
         private bool rejoinGame;
         private GameState previousGameState;
         private int gauntletRechargedViaGems = 0;
@@ -246,7 +247,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
-                    //for editor/pc
+                //for editor/pc
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                     if (Game != null && !Game.IsOver)
@@ -282,7 +283,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
-                    FourzyPhotonManager.TryLeaveRoom();
+                    if (PhotonNetwork.CurrentRoom != null)
+                    {
+                        //let other player know we forfeit
+                        var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                        eventOptions.Flags.HttpForward = true;
+                        eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                        PhotonNetwork.RaiseEvent(Constants.PLAYER_FORFEIT, UserManager.Instance.userId, eventOptions, SendOptions.SendReliable);
+
+                        FourzyPhotonManager.TryLeaveRoom();
+                    }
 
                     break;
             }
@@ -1460,6 +1470,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     OnGameFinished(Game);
 
                     break;
+
+                case Constants.PLAYER_FORFEIT:
+                    otherPlayerForfeit = true;
+
+                    break;
             }
         }
 
@@ -1472,43 +1487,63 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 return;
             }
 
-            switch (Game._Type)
+            if (otherPlayerForfeit)
             {
-                case GameType.REALTIME:
-                    if (Game != null)
-                    {
-                        if (Game.IsOver)
+                playerLeftScreen = PersistantMenuController.Instance
+                    .GetOrAddScreen<PromptScreen>()
+                    .Prompt(
+                        $"{other.NickName} {LocalizationManager.Value("left_game")}",
+                        null,
+                        null,
+                        LocalizationManager.Value("leave"),
+                        null,
+                        BackButtonOnClick)
+                    .CloseOnDecline();
+
+                OnRealtimeOpponentAbandoned();
+
+                otherPlayerForfeit = false;
+            }
+            else
+            {
+                switch (Game._Type)
+                {
+                    case GameType.REALTIME:
+                        if (Game != null)
                         {
-                            playerLeftScreen = PersistantMenuController.Instance
-                                .GetOrAddScreen<PromptScreen>()
-                                .Prompt(
-                                    $"{other.NickName} {LocalizationManager.Value("left_game")}",
-                                    null,
-                                    null,
-                                    LocalizationManager.Value("leave"),
-                                    null,
-                                    BackButtonOnClick)
-                                .CloseOnDecline();
+                            if (Game.IsOver)
+                            {
+                                playerLeftScreen = PersistantMenuController.Instance
+                                    .GetOrAddScreen<PromptScreen>()
+                                    .Prompt(
+                                        $"{other.NickName} {LocalizationManager.Value("left_game")}",
+                                        null,
+                                        null,
+                                        LocalizationManager.Value("leave"),
+                                        null,
+                                        BackButtonOnClick)
+                                    .CloseOnDecline();
+                            }
+                            else
+                            {
+                                FourzyPhotonManager.SetClientsReadyState(false);
+
+                                RecordLastBoardStateAsRoomProperty(true);
+                                PauseGame();
+                                StartRoutine("playerLeft", PlayerLeftRealtimeRoutine(other), () =>
+                                {
+                                    playerLeftScreen.CloseSelf();
+                                    playerLeftScreen = null;
+                                });
+                            }
                         }
                         else
                         {
-                            FourzyPhotonManager.SetClientsReadyState(false);
-
-                            RecordLastBoardStateAsRoomProperty(true);
-                            PauseGame();
-                            StartRoutine("playerLeft", PlayerLeftRealtimeRoutine(other), () =>
-                            {
-                                playerLeftScreen.CloseSelf();
-                                playerLeftScreen = null;
-                            });
+                            BackButtonOnClick();
                         }
-                    }
-                    else
-                    {
-                        BackButtonOnClick();
-                    }
 
-                    break;
+                        break;
+                }
             }
         }
 
@@ -2137,6 +2172,26 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             gameCameraManager.Wiggle();
         }
 
+        private void OnRealtimeOpponentAbandoned()
+        {
+            //reset game ttl
+            PhotonNetwork.CurrentRoom.EmptyRoomTtl = 0;
+            PhotonNetwork.CurrentRoom.PlayerTtl = 0;
+
+            //report score
+            if (!ratingUpdated)
+            {
+                GameManager.Instance.ReportRealtimeGameFinished(
+                    Game,
+                    LoginManager.playfabId,
+                    GameManager.Instance.RealtimeOpponent.Id,
+                    true);
+            }
+
+            PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
+            Amplitude.Instance.setUserProperty("totalRealtimeGamesOpponentAbandoned", PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
+        }
+
         private IEnumerator GameInitRoutine()
         {
             if (Game == null) yield break;
@@ -2425,18 +2480,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 yield return new WaitForSeconds(1f);
             }
 
-            //report score
-            if (!ratingUpdated)
-            {
-                GameManager.Instance.ReportRealtimeGameFinished(
-                    Game,
-                    LoginManager.playfabId,
-                    GameManager.Instance.RealtimeOpponent.Id,
-                    true);
-            }
-
-            PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
-            Amplitude.Instance.setUserProperty("totalRealtimeGamesOpponentAbandoned", PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
+            OnRealtimeOpponentAbandoned();
 
             //and close gameplay scene
             BackButtonOnClick();

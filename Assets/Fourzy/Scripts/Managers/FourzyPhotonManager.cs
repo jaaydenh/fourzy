@@ -447,8 +447,7 @@ namespace Fourzy
 
         public static void TryLeaveRoom()
         {
-            if (PhotonNetwork.CurrentRoom != null && 
-                PhotonNetwork.NetworkClientState != ClientState.Leaving)
+            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.NetworkClientState != ClientState.Leaving)
             {
                 PhotonNetwork.LeaveRoom();
             }
