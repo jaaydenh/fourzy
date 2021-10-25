@@ -144,8 +144,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 }
                                 else
                                 {
-                                    //player lost
-                                    stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
+                                    //player 2 won
+                                    stateLabel.text = $"{game.opponent.DisplayName} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                                 }
 
                                 CloseAfter(3f);
