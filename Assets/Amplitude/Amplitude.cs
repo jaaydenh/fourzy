@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 #endif
 
@@ -22,7 +22,7 @@ public class Amplitude {
 	public bool logging = false;
 	private string instanceName = null;
 
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 	[DllImport ("__Internal")]
 	private static extern void _Amplitude_init(string instanceName, string apiKey, string userId);
 	[DllImport ("__Internal")]
@@ -234,7 +234,7 @@ public class Amplitude {
 
 	public void init(string apiKey) {
 		Log (string.Format("C# init {0}", apiKey));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_init(instanceName, apiKey, null);
 		}
@@ -261,7 +261,7 @@ public class Amplitude {
 	/// <param name="userId">user Id</param>
 	public void init(string apiKey, string userId) {
 		Log (string.Format("C# init {0} with userId {1}", apiKey, userId));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_init(instanceName, apiKey, userId);
 		}
@@ -286,7 +286,7 @@ public class Amplitude {
 			string trackingOptionsJson = Json.Serialize(trackingOptions);
 
 			Log(string.Format("C# setting tracking options {0}", trackingOptionsJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 			if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 				_Amplitude_setTrackingOptions(instanceName, trackingOptionsJson);
 			}
@@ -307,7 +307,7 @@ public class Amplitude {
 	/// <param name="evt">event type</param>
 	public void logEvent(string evt) {
 		Log (string.Format("C# sendEvent {0}", evt));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_logEvent(instanceName, evt, null);
 		}
@@ -335,7 +335,7 @@ public class Amplitude {
 		}
 
 		Log(string.Format("C# sendEvent {0} with properties {1}", evt, propertiesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_logEvent(instanceName, evt, propertiesJson);
 		}
@@ -364,7 +364,7 @@ public class Amplitude {
 		}
 
 		Log(string.Format("C# sendEvent {0} with properties {1} and outOfSession {2}", evt, propertiesJson, outOfSession));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			if (outOfSession) {
 				_Amplitude_logOutOfSessionEvent(instanceName, evt, propertiesJson);
@@ -388,7 +388,7 @@ public class Amplitude {
 	/// <param name="offline"></param>
 	public void setOffline(bool offline) {
 		Log (string.Format("C# setOffline {0}", offline));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOffline(instanceName, offline);
 		}
@@ -407,7 +407,7 @@ public class Amplitude {
 	/// <param name="userId"></param>
 	public void setUserId(string userId) {
 		Log (string.Format("C# setUserId {0}", userId));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserId(instanceName, userId);
 		}
@@ -433,7 +433,7 @@ public class Amplitude {
 		}
 
 		Log (string.Format("C# setUserProperties {0}", propertiesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserProperties(instanceName, propertiesJson);
 		}
@@ -454,7 +454,7 @@ public class Amplitude {
 	/// <param name="enabled">enable opt out</param>
 	public void setOptOut(bool enabled) {
 		Log (string.Format("C# setOptOut {0}", enabled));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOptOut(instanceName, enabled);
 		}
@@ -475,7 +475,7 @@ public class Amplitude {
 	/// <param name="minTimeBetweenSessionsMillis">minimum time (milliseconds) between sessions</param>
 	public void setMinTimeBetweenSessionsMillis(long minTimeBetweenSessionsMillis) {
 		Log (string.Format("C# minTimeBetweenSessionsMillis {0}", minTimeBetweenSessionsMillis));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setMinTimeBetweenSessionsMillis(instanceName, minTimeBetweenSessionsMillis);
 		}
@@ -496,7 +496,7 @@ public class Amplitude {
 	/// <param name="deviceId">device Id</param>
 	public void setDeviceId(string deviceId) {
 		Log (string.Format("C# setDeviceId {0}", deviceId));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setDeviceId(instanceName, deviceId);
 		}
@@ -515,7 +515,7 @@ public class Amplitude {
 	/// </summary>
 	public void enableCoppaControl() {
 		Log ("C# enableCoppaControl");
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_enableCoppaControl(instanceName);
 		}
@@ -533,7 +533,7 @@ public class Amplitude {
 	/// </summary>
 	public void disableCoppaControl() {
 		Log (string.Format("C# disableCoppaControl"));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_disableCoppaControl(instanceName);
 		}
@@ -551,7 +551,7 @@ public class Amplitude {
 	/// </summary>
 	public void setServerUrl(string serverUrl) {
 		Log (string.Format("C# setServerUrl"));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setServerUrl(instanceName, serverUrl);
 		}
@@ -571,7 +571,7 @@ public class Amplitude {
 
 	public void logRevenue(double amount) {
 		Log (string.Format("C# logRevenue {0}", amount));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_logRevenueAmount(instanceName, amount);
 		}
@@ -586,7 +586,7 @@ public class Amplitude {
 
 	public void logRevenue(string productId, int quantity, double price) {
 		Log (string.Format("C# logRevenue {0}, {1}, {2}", productId, quantity, price));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_logRevenue(instanceName, productId, quantity, price);
 		}
@@ -601,7 +601,7 @@ public class Amplitude {
 	
 	public void logRevenue(string productId, int quantity, double price, string receipt, string receiptSignature) {
 		Log (string.Format("C# logRevenue {0}, {1}, {2} (with receipt)", productId, quantity, price));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_logRevenueWithReceipt(instanceName, productId, quantity, price, receipt);
 		}
@@ -623,7 +623,7 @@ public class Amplitude {
 		}
 
 		Log (string.Format("C# logRevenue {0}, {1}, {2}, {3}, {4} (with receipt)", productId, quantity, price, revenueType, propertiesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_logRevenueWithReceiptAndProperties(instanceName, productId, quantity, price, receipt, revenueType, propertiesJson);
 		}
@@ -641,7 +641,7 @@ public class Amplitude {
 	/// </summary>
 	/// <returns></returns>
 	public string getDeviceId() {
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			return _Amplitude_getDeviceId(instanceName);
 		}
@@ -662,7 +662,7 @@ public class Amplitude {
 	/// With a null userId and a completely new deviceId, the current user would appear as a brand new user in dashboard.
 	/// </summary>
 	public void regenerateDeviceId() {
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_regenerateDeviceId(instanceName);
 		}
@@ -686,7 +686,7 @@ public class Amplitude {
 	/// **NOTE:** Must be called before `initializeApiKey`.
 	/// </summary>
 	public void useAdvertisingIdForDeviceId() {
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_useAdvertisingIdForDeviceId(instanceName);
 		}
@@ -705,7 +705,7 @@ public class Amplitude {
 	/// <param name="enabled"></param>
 	public void trackSessionEvents(bool enabled) {
 		Log (string.Format("C# trackSessionEvents {0}", enabled));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_trackingSessionEvents(instanceName, enabled);
 		}
@@ -724,7 +724,7 @@ public class Amplitude {
 	/// <returns>sessionId</returns>
 	public long getSessionId() {
 
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			return _Amplitude_getSessionId(instanceName);
 		}
@@ -743,7 +743,7 @@ public class Amplitude {
 	/// Use this method to force the class to immediately upload all queued events.
 	/// </summary>
 	public void uploadEvents() {
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_uploadEvents(instanceName);
 		}
@@ -760,7 +760,7 @@ public class Amplitude {
 // ClearUserProperties
 	public void clearUserProperties() {
 		Log (string.Format("C# clearUserProperties"));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_clearUserProperties(instanceName);
 		}
@@ -776,7 +776,7 @@ public class Amplitude {
 // Unset
 	public void unsetUserProperty(string property) {
 		Log (string.Format("C# unsetUserProperty {0}", property));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_unsetUserProperty(instanceName, property);
 		}
@@ -792,7 +792,7 @@ public class Amplitude {
 // setOnce
 	public void setOnceUserProperty(string property, bool value) {
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyBool(instanceName, property, value);
 		}
@@ -807,7 +807,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, double value) {
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyDouble(instanceName, property, value);
 		}
@@ -822,7 +822,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, float value) {
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyFloat(instanceName, property, value);
 		}
@@ -837,7 +837,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, int value) {
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyInt(instanceName, property, value);
 		}
@@ -852,7 +852,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, long value) {
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyLong(instanceName, property, value);
 		}
@@ -867,7 +867,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, string value) {
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyString(instanceName, property, value);
 		}
@@ -887,7 +887,7 @@ public class Amplitude {
 
 		string valuesJson = Json.Serialize (values);
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, valuesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyDict(instanceName, property, valuesJson);
 		}
@@ -911,7 +911,7 @@ public class Amplitude {
 		};
 		string valuesJson = Json.Serialize (wrapper);
 		Log (string.Format("C# setOnceUserProperty {0}, {1}", property, valuesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyList(instanceName, property, valuesJson);
 		}
@@ -926,7 +926,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, bool[] array) {
 		Log ("C# setOnceUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyBoolArray(instanceName, property, array, array.Length);
 		}
@@ -941,7 +941,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, double[] array) {
 		Log ("C# setOnceUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyDoubleArray(instanceName, property, array, array.Length);
 		}
@@ -956,7 +956,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, float[] array) {
 		Log ("C# setOnceUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyFloatArray(instanceName, property, array, array.Length);
 		}
@@ -971,7 +971,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, int[] array) {
 		Log ("C# setOnceUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyIntArray(instanceName, property, array, array.Length);
 		}
@@ -986,7 +986,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, long[] array) {
 		Log ("C# setOnceUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyLongArray(instanceName, property, array, array.Length);
 		}
@@ -1001,7 +1001,7 @@ public class Amplitude {
 
 	public void setOnceUserProperty(string property, string[] array) {
 		Log ("C# setOnceUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setOnceUserPropertyStringArray(instanceName, property, array, array.Length);
 		}
@@ -1017,7 +1017,7 @@ public class Amplitude {
 // set
 	public void setUserProperty(string property, bool value) {
 		Log (string.Format("C# setUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyBool(instanceName, property, value);
 		}
@@ -1032,7 +1032,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, double value) {
 		Log (string.Format("C# setUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyDouble(instanceName, property, value);
 		}
@@ -1047,7 +1047,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, float value) {
 		Log (string.Format("C# setUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyFloat(instanceName, property, value);
 		}
@@ -1062,7 +1062,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, int value) {
 		Log (string.Format("C# setUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyInt(instanceName, property, value);
 		}
@@ -1077,7 +1077,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, long value) {
 		Log (string.Format("C# setUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyLong(instanceName, property, value);
 		}
@@ -1092,7 +1092,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, string value) {
 		Log (string.Format("C# setUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyString(instanceName, property, value);
 		}
@@ -1112,7 +1112,7 @@ public class Amplitude {
 
 		string valuesJson = Json.Serialize (values);
 		Log (string.Format("C# setUserProperty {0}, {1}", property, valuesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyDict(instanceName, property, valuesJson);
 		}
@@ -1136,7 +1136,7 @@ public class Amplitude {
 		};
 		string valuesJson = Json.Serialize (wrapper);
 		Log (string.Format("C# setUserProperty {0}, {1}", property, valuesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyList(instanceName, property, valuesJson);
 		}
@@ -1151,7 +1151,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, bool[] array) {
 		Log ("C# setUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyBoolArray(instanceName, property, array, array.Length);
 		}
@@ -1166,7 +1166,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, double[] array) {
 		Log ("C# setUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyDoubleArray(instanceName, property, array, array.Length);
 		}
@@ -1181,7 +1181,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, float[] array) {
 		Log ("C# setUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyFloatArray(instanceName, property, array, array.Length);
 		}
@@ -1196,7 +1196,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, int[] array) {
 		Log ("C# setUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyIntArray(instanceName, property, array, array.Length);
 		}
@@ -1211,7 +1211,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, long[] array) {
 		Log ("C# setUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyLongArray(instanceName, property, array, array.Length);
 		}
@@ -1226,7 +1226,7 @@ public class Amplitude {
 
 	public void setUserProperty(string property, string[] array) {
 		Log ("C# setUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setUserPropertyStringArray(instanceName, property, array, array.Length);
 		}
@@ -1243,7 +1243,7 @@ public class Amplitude {
 // add
 	public void addUserProperty(string property, double value) {
 		Log (string.Format("C# addUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_addUserPropertyDouble(instanceName, property, value);
 		}
@@ -1258,7 +1258,7 @@ public class Amplitude {
 
 	public void addUserProperty(string property, float value) {
 		Log (string.Format("C# addUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_addUserPropertyFloat(instanceName, property, value);
 		}
@@ -1273,7 +1273,7 @@ public class Amplitude {
 
 	public void addUserProperty(string property, int value) {
 		Log (string.Format("C# addUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_addUserPropertyInt(instanceName, property, value);
 		}
@@ -1288,7 +1288,7 @@ public class Amplitude {
 
 	public void addUserProperty(string property, long value) {
 		Log (string.Format("C# addUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_addUserPropertyLong(instanceName, property, value);
 		}
@@ -1303,7 +1303,7 @@ public class Amplitude {
 
 	public void addUserProperty(string property, string value) {
 		Log (string.Format("C# addUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_addUserPropertyString(instanceName, property, value);
 		}
@@ -1323,7 +1323,7 @@ public class Amplitude {
 
 		string valuesJson = Json.Serialize (values);
 		Log (string.Format("C# addUserProperty {0}, {1}", property, valuesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_addUserPropertyDict(instanceName, property, valuesJson);
 		}
@@ -1339,7 +1339,7 @@ public class Amplitude {
 // append
 	public void appendUserProperty(string property, bool value) {
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyBool(instanceName, property, value);
 		}
@@ -1354,7 +1354,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, double value) {
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyDouble(instanceName, property, value);
 		}
@@ -1369,7 +1369,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, float value) {
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyFloat(instanceName, property, value);
 		}
@@ -1384,7 +1384,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, int value) {
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyInt(instanceName, property, value);
 		}
@@ -1399,7 +1399,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, long value) {
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyLong(instanceName, property, value);
 		}
@@ -1414,7 +1414,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, string value) {
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, value));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyString(instanceName, property, value);
 		}
@@ -1434,7 +1434,7 @@ public class Amplitude {
 
 		string valuesJson = Json.Serialize (values);
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, valuesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyDict(instanceName, property, valuesJson);
 		}
@@ -1458,7 +1458,7 @@ public class Amplitude {
 		};
 		string valuesJson = Json.Serialize (wrapper);
 		Log (string.Format("C# appendUserProperty {0}, {1}", property, valuesJson));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyList(instanceName, property, valuesJson);
 		}
@@ -1473,7 +1473,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, bool[] array) {
 		Log ("C# appendUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyBoolArray(instanceName, property, array, array.Length);
 		}
@@ -1488,7 +1488,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, double[] array) {
 		Log ("C# appendUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyDoubleArray(instanceName, property, array, array.Length);
 		}
@@ -1503,7 +1503,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, float[] array) {
 		Log ("C# appendUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyFloatArray(instanceName, property, array, array.Length);
 		}
@@ -1518,7 +1518,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, int[] array) {
 		Log ("C# appendUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyIntArray(instanceName, property, array, array.Length);
 		}
@@ -1533,7 +1533,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, long[] array) {
 		Log ("C# appendUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyLongArray(instanceName, property, array, array.Length);
 		}
@@ -1548,7 +1548,7 @@ public class Amplitude {
 
 	public void appendUserProperty(string property, string[] array) {
 		Log ("C# appendUserProperty", property, array);
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_appendUserPropertyStringArray(instanceName, property, array, array.Length);
 		}
@@ -1563,7 +1563,7 @@ public class Amplitude {
 
 	private void setLibraryName(string libraryName) {
 		Log (string.Format("C# setLibraryName {0}", libraryName));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setLibraryName(instanceName, libraryName);
 		}
@@ -1578,7 +1578,7 @@ public class Amplitude {
 
 	private void setLibraryVersion(string libraryVersion) {
 		Log (string.Format("C# setLibraryVersion {0}", libraryVersion));
-#if (UNITY_IPHONE || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.tvOS) {
 			_Amplitude_setLibraryVersion(instanceName, libraryVersion);
 		}

@@ -7150,8 +7150,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -7763,8 +7762,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -8056,8 +8054,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -8179,8 +8176,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 1556829146974156003, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -8370,8 +8366,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 6136279554806606520, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -8683,8 +8678,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -8976,8 +8970,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_characterSpacing
@@ -9289,8 +9282,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -9412,8 +9404,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 1556829146974156003, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -9623,8 +9614,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 6136279554806606520, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -9988,8 +9978,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 1556829146974156003, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -10224,8 +10213,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 6136279554806606520, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -10290,6 +10278,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7985992237642333800, guid: 2e5b2ce658ef82341b6a4c3689c52669,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 8243287188483320576, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
@@ -10769,8 +10762,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_characterSpacing
@@ -10902,8 +10894,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 1556829146974156003, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_characterSpacing
@@ -11138,8 +11129,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 6136279554806606520, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_characterSpacing
@@ -11179,6 +11169,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7985992237642333800, guid: 2e5b2ce658ef82341b6a4c3689c52669,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 8243287188483320576, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
@@ -11436,8 +11431,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -11729,8 +11723,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -12022,8 +12015,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_characterSpacing
@@ -12160,8 +12152,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 1556829146974156003, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -12371,8 +12362,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 6136279554806606520, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_TextStyleHashCode
@@ -12674,8 +12664,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
-        type: 2}
+      objectReference: {fileID: 2100000, guid: 5b6bdac7fac992a4f9a52b4b45253017, type: 2}
     - target: {fileID: 2145759720895278337, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_TextStyleHashCode
