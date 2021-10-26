@@ -1,12 +1,11 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Mechanics.GameplayScene;
 using UnityEngine;
 
 namespace Fourzy._Updates.Tools
 {
     [RequireComponent(typeof(LineRenderer))]
-    public class LineRendererWave : MonoBehaviour, IGameplayBGPart
+    public class LineRendererWave : MonoBehaviour
     {
         [Range(5, 20)]
         public int positionCount = 10;

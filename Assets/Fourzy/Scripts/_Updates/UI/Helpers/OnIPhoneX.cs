@@ -86,7 +86,9 @@ namespace Fourzy._Updates.UI.Helpers
             RectTransform rectTransform = GetComponent<RectTransform>();
 
             if (rectTransform)
+            {
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, value);
+            }
         }
 
         public void SetWidth(float value)
@@ -94,7 +96,9 @@ namespace Fourzy._Updates.UI.Helpers
             RectTransform rectTransform = GetComponent<RectTransform>();
 
             if (rectTransform)
+            {
                 rectTransform.sizeDelta = new Vector2(value, rectTransform.sizeDelta.y);
+            }
         }
 
         public void SetPaddingLeft(int value)
@@ -102,7 +106,9 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(value, layoutGroup.padding.right, layoutGroup.padding.top, layoutGroup.padding.bottom);
+            }
         }
 
         public void SetPaddingRight(int value)
@@ -110,7 +116,9 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(layoutGroup.padding.left, value, layoutGroup.padding.top, layoutGroup.padding.bottom);
+            }
         }
 
         public void SetPaddingTop(int value)
@@ -118,7 +126,9 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(layoutGroup.padding.left, layoutGroup.padding.right, value, layoutGroup.padding.bottom);
+            }
         }
 
         public void SetPaddingBottom(int value)
@@ -126,7 +136,9 @@ namespace Fourzy._Updates.UI.Helpers
             LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
 
             if (layoutGroup)
+            {
                 layoutGroup.padding = new RectOffset(layoutGroup.padding.left, layoutGroup.padding.right, layoutGroup.padding.top, value);
+            }
         }
 
         public void AnchoredPositionY(float value)
@@ -134,7 +146,9 @@ namespace Fourzy._Updates.UI.Helpers
             RectTransform rectTransform = GetComponent<RectTransform>();
 
             if (rectTransform)
+            {
                 rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, value);
+            }
         }
 
         public void AnchoredPositionX(float value)
@@ -142,17 +156,25 @@ namespace Fourzy._Updates.UI.Helpers
             RectTransform rectTransform = GetComponent<RectTransform>();
 
             if (rectTransform)
+            {
                 rectTransform.anchoredPosition = new Vector2(value, rectTransform.anchoredPosition.y);
+            }
         }
 
         public void ForceAll()
         {
-            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>()) _controller.forceIPhoneX = true;
+            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>())
+            {
+                _controller.forceIPhoneX = true;
+            }
         }
 
         public void ResetAll()
         {
-            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>()) _controller.forceIPhoneX = false;
+            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>())
+            {
+                _controller.forceIPhoneX = false;
+            }
         }
     }
 }

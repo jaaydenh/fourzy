@@ -6,16 +6,10 @@ using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Helpers
 {
-    [ExecuteInEditMode]
     public class OnRatio : MonoBehaviour
     {
-        public static float LANDSCAPE_IPHONEX = 1.85f;
-        public static float LANDSCAPE_IPHONE = 1.5f;
-        public static float LANDSCAPE_IPAD = 1f;
-        public static float PORTRAIT_IPAD = .7f;
-        public static float PORTRAIT_IPHONE = .51f;
-
-        public bool continious = false;
+        [SerializeField]
+        private bool configureAtStart = true;
 
         public DeviceOrientation orientation = DeviceOrientation.Portrait;
         public AdvancedEvent onIphone;
@@ -31,14 +25,10 @@ namespace Fourzy._Updates.UI.Helpers
 
         protected void Start()
         {
-            if (!Application.isPlaying) return;
-
-            CheckOrientation();
-        }
-
-        protected void Update()
-        {
-            if (continious || Application.isEditor) CheckOrientation();
+            if (configureAtStart)
+            {
+                CheckOrientation();
+            }
         }
 
         public void SetHeight(float value)
@@ -46,7 +36,9 @@ namespace Fourzy._Updates.UI.Helpers
             RectTransform rectTransform = GetComponent<RectTransform>();
 
             if (rectTransform)
+            {
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, value);
+            }
         }
 
         public void SetWidth(float value)
@@ -105,30 +97,28 @@ namespace Fourzy._Updates.UI.Helpers
             {
                 case DeviceOrientation.LandscapeLeft:
                 case DeviceOrientation.LandscapeRight:
-                    if (aspect > LANDSCAPE_IPHONEX)
+                    if (aspect > 1.78f)
                     {
                         return DisplayRatioOption.IPHONEX;
                     }
-                    else if (aspect > LANDSCAPE_IPHONE)
+                    else if (aspect >= 1.34f)
                     {
                         return DisplayRatioOption.IPHONE;
                     }
-                    else if (aspect > LANDSCAPE_IPAD)
+                    else
                     {
                         return DisplayRatioOption.IPAD;
                     }
-
-                    break;
 
                 case DeviceOrientation.Portrait:
                 case DeviceOrientation.PortraitUpsideDown:
                     if (aspect <= 1f)
                     {
-                        if (aspect >= PORTRAIT_IPAD)
+                        if (aspect > .74f)
                         {
                             return DisplayRatioOption.IPAD;
                         }
-                        else if (aspect >= PORTRAIT_IPHONE)
+                        else if (aspect > .55f)
                         {
                             return DisplayRatioOption.IPHONE;
                         }

@@ -35,11 +35,6 @@ namespace Fourzy._Updates.Serialized
             get => areas.Find((_areaData) => _areaData.areaID == (Area)value);
         }
 
-        public BackgroundConfigurationData GetCurrentAreaBGConfiguration(Camera _camera)
-        {
-            return GetAreaBGConfiguration(currentAreaData.areaID, _camera);
-        }
-
         public BackgroundConfigurationData GetAreaBGConfiguration(Area area, Camera _camera)
         {
             BackgroundConfiguration value = BackgroundConfiguration.IPHONEX;
@@ -52,15 +47,17 @@ namespace Fourzy._Updates.Serialized
             }
             else
             {
-                //portrait
-                if (_camera.aspect > .7f)
+                //ipad
+                if (_camera.aspect > .74f)
                 {
                     value = BackgroundConfiguration.IPAD;
                 }
-                else if (_camera.aspect >= .5f)
+                //iphone
+                else if (_camera.aspect > .55f)
                 {
                     value = BackgroundConfiguration.IPHONE;
                 }
+                //iphonex
                 else
                 {
                     value = BackgroundConfiguration.IPHONEX;

@@ -765,7 +765,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
+      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
+        type: 2}
     - target: {fileID: 5819137696156123351, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_RootOrder
@@ -840,7 +841,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
+      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
+        type: 2}
     - target: {fileID: 6201788421735979070, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1784,7 +1786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -1873,7 +1875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -2086,7 +2088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 0
   orientation: 3
   onIphone:
     inspectorListHeight: 83
@@ -2181,7 +2183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 0
   orientation: 1
   onIphone:
     inspectorListHeight: 83
