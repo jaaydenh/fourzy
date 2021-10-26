@@ -73,6 +73,9 @@ namespace Fourzy
         public const string SKILLZ_POINTS_PER_MOVE_DRAW_KEY = "PointsPerMoveDraw";
         public const string SKILLZ_GAME_COMPLEXITY_KEY = "Complexity";
         public const string SKILLZ_MATCH_PAUSES_KEY = "Pauses";
+        public const string SKILLZ_AIPROFILE_KEY = "AIProfile";
+        public const string SKILLZ_AREA_KEY = "Area";
+        public const string SKILLZ_OPP_HERD_KEY = "OppHerdId";
         public const int SKILLZ_DEFAULT_GAMES_COUNT = 3;
         public const int SKILLZ_DEFAULT_GAME_TIMER = 180;
         public const int SKILLZ_MOVES_PER_MATCH = 30;
@@ -83,6 +86,9 @@ namespace Fourzy
         public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 40;
         public const int SKILLZ_GAME_COMPLEXITY = 10;
         public const int SKILLZ_PAUSES_COUNT_PER_MATCH = 3;
+        public const int SKILL_DEFAULT_AIPROFILE = (int)AIProfile.SimpleAI;
+        public const int SKILL_DEFAULT_AREA = (int)Area.TRAINING_GARDEN;
+        public const string SKILL_DEFAULT_OPP_HERD_ID = "red_dragon";
 
         public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 5;
         public const int SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME = 10;

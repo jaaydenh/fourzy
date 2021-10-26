@@ -902,18 +902,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     Area area = Area.TRAINING_GARDEN;
                     BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
                     string recipe = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzCrossPlatform.Random.Value();
+                    matchId = recipe;
+
                     string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? "Player";
                     string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? "Player 2";
-                    matchId = recipe;
 
                     preferences.RequestedRecipe = recipe;
                     preferences.RecipeSeed = recipe;
                     preferences.TargetComplexityLow = SkillzGameController.Instance.GameComplexity;
                     preferences.TargetComplexityHigh = SkillzGameController.Instance.GameComplexity;
 
-                    GamePieceData random = GameContentManager.Instance.piecesDataHolder.random;
                     Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
-                    Player opponent = new Player(2, opponentName, AIProfile.SimpleAI) { HerdId = random.Id };
+                    Player opponent = new Player(2, opponentName, SkillzGameController.Instance.AIProfile) { HerdId = SkillzGameController.Instance.OpponentHerdId };
 
                     GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
                     ClientFourzyGame game = new ClientFourzyGame(area, player, opponent, 1, options, preferences);

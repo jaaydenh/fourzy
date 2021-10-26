@@ -1,6 +1,7 @@
 //@vadym udod
 
 using Fourzy._Updates.Mechanics.GameplayScene;
+using FourzyGameModel.Model;
 using SkillzSDK;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace Fourzy._Updates.Managers
         private int pointsPerMoveLeftDraw;
         private int gameComplexity;
         private int matchPausesLeft;
+        private int aiProfile;
+        private int areaId;
+        private string herdId;
 
         internal Match CurrentMatch { get; set; }
         internal bool OngoingMatch { get; set; }
@@ -52,6 +56,9 @@ namespace Fourzy._Updates.Managers
         internal List<SkillzGameResult> GamesPlayed { get; } = new List<SkillzGameResult>();
         internal int Points => GamesPlayed.Sum(game => game.Points);
         internal bool HaveNextGame => GamesPlayed.Count < GamesToPlay;
+        internal AIProfile AIProfile => (AIProfile)(random - aiProfile);
+        internal Area Area => (Area)(random - areaId);
+        internal string OpponentHerdId => herdId;
         internal bool CloseGameOnBack { get; set; }
 
         public void InitializeMatchData()
@@ -79,6 +86,12 @@ namespace Fourzy._Updates.Managers
             gameComplexity = GetMatchParamInt(Constants.SKILLZ_GAME_COMPLEXITY_KEY, Constants.SKILLZ_GAME_COMPLEXITY);
             //match pauses left
             matchPausesLeft = GetMatchParamInt(Constants.SKILLZ_MATCH_PAUSES_KEY, Constants.SKILLZ_PAUSES_COUNT_PER_MATCH);
+            //aiProfile
+            aiProfile = GetMatchParamInt(Constants.SKILLZ_AIPROFILE_KEY, Constants.SKILL_DEFAULT_AIPROFILE);
+            //area
+            areaId = GetMatchParamInt(Constants.SKILLZ_AREA_KEY, Constants.SKILL_DEFAULT_AREA);
+            //opponent herd id
+            herdId = GetMatchParamString(Constants.SKILLZ_OPP_HERD_KEY, Constants.SKILL_DEFAULT_OPP_HERD_ID);
         }
 
         public void OnMatchWillBegin(Match matchInfo)
@@ -142,6 +155,23 @@ namespace Fourzy._Updates.Managers
             else
             {
                 return random - defaultValue;
+            }
+        }
+
+        private string GetMatchParamString(string key, string defaultValue)
+        {
+            if (CurrentMatch == null)
+            {
+                return "";
+            }
+
+            if (CurrentMatch.GameParams.ContainsKey(key))
+            {
+                return CurrentMatch.GameParams[key];
+            }
+            else
+            {
+                return defaultValue;
             }
         }
     }
