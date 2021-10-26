@@ -17,6 +17,7 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Fourzy._Updates.Serialized.AreasDataHolder;
@@ -58,42 +59,36 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         /// <summary>
         /// for adventure map
         /// </summary>
+        private float inPauseTime;
         private bool isSolved = false;
+        private bool waitingForPlayerRejoinReady;
+        private bool otherPlayerForfeit;
+        private bool rejoinGame;
         private GameState previousGameState;
         private int gauntletRechargedViaGems = 0;
         private int gauntletRechargedViaAds = 0;
         private string hintRemovedToken;
 
-        public BackgroundConfigurationData currentConfiguration { get; private set; }
-        public GameboardView board { get; private set; }
-        public GameplayBG bg { get; private set; }
-        public GameplayScreen gameplayScreen { get; private set; }
-        public RandomPlayerPickScreen playerPickScreen { get; private set; }
-        public GameWinLoseScreen gameWinLoseScreen { get; private set; }
+        public BackgroundConfigurationData CurrentBGConfiguration { get; private set; }
+        public GameboardView BoardView { get; private set; }
+        public GameplayBG BG { get; private set; }
+        public GameplayScreen GameplayScreen { get; private set; }
+        public RandomPlayerPickScreen PlayerPickScreen { get; private set; }
+        public GameWinLoseScreen GameWinLoseScreen { get; private set; }
 
-        public IClientFourzy game { get; private set; }
-        public IClientFourzy prevGame { get; private set; }
+        public IClientFourzy Game { get; private set; }
+        public IClientFourzy PrevGame { get; private set; }
 
         public float realtimeTimerDelay
         {
             get
             {
-                return Mathf.Min(PhotonNetwork.GetPing() * .002f, .5f); ;
+                return Mathf.Min(PhotonNetwork.GetPing() * .002f, .5f);
             }
         }
-        public bool isBoardReady { get; private set; }
-        //public bool replayingLastTurn { get; private set; }
-        public bool gameStarted { get; private set; }
-        public GameState gameState { get; private set; }
-        private bool realtimeGameToBeRatedCondition
-        {
-            get
-            {
-                return !game.isOver;
-                //game.gameDuration > Constants.REALTIME_GAME_VALID_AFTER_X_SECONDS &&
-                //gameState == GameState.GAME;
-            }
-        }
+        public bool IsBoardReady { get; private set; }
+        public bool GameStarted { get; private set; }
+        public GameState GameState { get; private set; }
 
         protected override void Awake()
         {
@@ -104,9 +99,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void Start()
         {
-            gameplayScreen = menuController.GetScreen<GameplayScreen>();
-            playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
-            gameWinLoseScreen = menuController.GetScreen<GameWinLoseScreen>();
+            GameplayScreen = menuController.GetScreen<GameplayScreen>();
+            PlayerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
+            GameWinLoseScreen = menuController.GetScreen<GameWinLoseScreen>();
 
             touchZone.onPointerDownData += OnPointerDown;
             touchZone.onPointerUpData += OnPointerRelease;
@@ -118,6 +113,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             UserManager.onHintsUpdate += OnHintUpdate;
 
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
+            FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent += OnEventCall;
 
@@ -133,14 +129,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void OnDestroy()
         {
-            if (board)
+            if (BoardView)
             {
-                board.onGameFinished -= OnGameFinished;
-                board.onDraw -= OnDraw;
-                board.onMoveStarted -= OnMoveStarted;
-                board.onMoveEnded -= OnMoveEnded;
-                board.onGamepieceSmashed -= OnGamePieceSmashed;
-                board.onPieceSpawned -= OnGamepieceSpawned;
+                BoardView.onGameFinished -= OnGameFinished;
+                BoardView.onDraw -= OnDraw;
+                BoardView.onMoveStarted -= OnMoveStarted;
+                BoardView.onMoveEnded -= OnMoveEnded;
+                BoardView.onGamepieceSmashed -= OnGamePieceSmashed;
+                BoardView.onPieceSpawned -= OnGamepieceSpawned;
             }
 
             GameManager.onNetworkAccess -= OnNetwork;
@@ -150,6 +146,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             UserManager.onHintsUpdate -= OnHintUpdate;
 
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
+            FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent -= OnEventCall;
 
@@ -161,9 +158,60 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
         }
 
-        private void OnGamepieceSpawned(GamePieceView gamepiece)
+        private void OnApplicationPause(bool pause)
         {
-            onGamepiceSpawned?.Invoke(gamepiece);
+            if (Game == null)
+            {
+                return;
+            }
+
+            switch (Game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    if (pause)
+                    {
+                        if (Game.IsOver)
+                        {
+                            if (SkillzGameController.Instance.HaveNextGame)
+                            {
+                                Rematch();
+                            }
+                        }
+
+                        if (SkillzGameController.Instance.MatchPausesLeft == 0)
+                        {
+                            inPauseTime = Time.realtimeSinceStartup;
+                        }
+                    }
+                    else
+                    {
+                        //deduct wait time
+                        if (SkillzGameController.Instance.MatchPausesLeft == 0)
+                        {
+                            inPauseTime = Time.realtimeSinceStartup - inPauseTime;
+                            GameplayScreen.skillzGameScreen.DeductTimer(inPauseTime);
+                        }
+
+                        if (GameplayScreen.skillzGameScreen.Timer > 0f)
+                        {
+                            menuController.GetOrAddScreen<PauseMenuScreen>()._Open();
+                        }
+                    }
+
+                    break;
+            }
+
+            switch (GameManager.Instance.ExpectedGameType)
+            {
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
+                    if (Game != null && !Game.IsOver)
+                    {
+                        PlayerPrefsWrapper.SetAbandonedRealtimeRoomName(PhotonNetwork.CurrentRoom.Name);
+                    }
+
+                    break;
+            }
         }
 
         protected void OnApplicationQuit()
@@ -177,41 +225,47 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 //bot game to be reported by me, others will be reported by another client
                 case GameTypeLocal.REALTIME_BOT_GAME:
-                    if (realtimeGameToBeRatedCondition)
+                    switch (GameManager.Instance.botGameType)
                     {
-                        switch (GameManager.Instance.botGameType)
-                        {
-                            case GameManager.BotGameType.FTUE_RATED:
-                            case GameManager.BotGameType.REGULAR:
-                                GameManager.Instance.ReportBotGameFinished(game, true, true);
+                        case GameManager.BotGameType.FTUE_RATED:
+                        case GameManager.BotGameType.REGULAR:
+                            GameManager.Instance.ReportBotGameFinished(Game, true, true);
 
-                                //will get logged, but not with up to date rating values
-                                GameManager.Instance.LogGameComplete(game);
+                            //will get logged, but not with up to date rating values
+                            GameManager.Instance.LogGameComplete(Game);
 
-                                break;
+                            break;
 
-                            case GameManager.BotGameType.FTUE_NOT_RATED:
-                                GameManager.Instance.ReportBotGameFinished(game, false, true);
+                        case GameManager.BotGameType.FTUE_NOT_RATED:
+                            GameManager.Instance.ReportBotGameFinished(Game, false, true);
 
-                                //will get logged, but not with up to date rating values
-                                GameManager.Instance.LogGameComplete(game);
+                            //will get logged, but not with up to date rating values
+                            GameManager.Instance.LogGameComplete(Game);
 
-                                break;
-                        }
+                            break;
+                    }
+
+                    break;
+
+                //for editor/pc
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
+                    if (Game != null && !Game.IsOver)
+                    {
+                        PlayerPrefsWrapper.SetAbandonedRealtimeRoomName(PhotonNetwork.CurrentRoom.Name);
                     }
 
                     break;
             }
 
+            //for editor/pc
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                     PlayerPrefsWrapper.AddRealtimGamesAbandoned();
-                    Amplitude.Instance.setUserProperty(
-                        "totalRealtimeGamesAbandoned",
-                        PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
+                    Amplitude.Instance.setUserProperty("totalRealtimeGamesAbandoned", PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
 
                     break;
             }
@@ -229,7 +283,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
-                    FourzyPhotonManager.TryLeaveRoom();
+                    if (PhotonNetwork.CurrentRoom != null)
+                    {
+                        //let other player know we forfeit
+                        var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                        eventOptions.Flags.HttpForward = true;
+                        eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                        PhotonNetwork.RaiseEvent(Constants.PLAYER_FORFEIT, UserManager.Instance.userId, eventOptions, SendOptions.SendReliable);
+
+                        FourzyPhotonManager.TryLeaveRoom();
+                    }
 
                     break;
             }
@@ -300,16 +363,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 GameManager.Instance.activeGame = _game;
             }
 
-            game = GameManager.Instance.activeGame;
+            Game = GameManager.Instance.activeGame;
 
-            if (game.puzzleData)
+            if (Game.puzzleData)
             {
-                isSolved = PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID);
+                isSolved = PlayerPrefsWrapper.GetPuzzleChallengeComplete(Game.puzzleData.ID);
             }
 
-            Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: " +
-                $"{GameManager.Instance.ExpectedGameType} Opponent: {game.opponent.Profile}");
-
+            Debug.Log($"Type: {Game._Type} Mode: {Game._Mode} Expected Local Type: {GameManager.Instance.ExpectedGameType} Opponent: {Game.opponent.Profile}");
         }
 
         public void LoadGame(IClientFourzy _game)
@@ -319,9 +380,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CancelRoutine("realtimeCountdownRoutine");
             CancelRoutine("postGameRoutine");
 
-            gameState = GameState.OPENNING_GAME;
-            gameStarted = false;
-            isBoardReady = false;
+            if (GameState != GameState.PAUSED)
+            {
+                GameState = GameState.OPENNING_GAME;
+            }
+            else
+            {
+                previousGameState = GameState.OPENNING_GAME;
+            }
+
+            GameStarted = false;
+            IsBoardReady = false;
             ratingUpdated = false;
             gauntletRechargedViaAds = 0;
 
@@ -335,45 +404,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //close other screens
             menuController.BackToRoot();
 
-            //back button
-            switch (game._Type)
-            {
-                case GameType.ONBOARDING:
-                    backButton.SetActive(false);
-
-                    break;
-
-                default:
-                    switch (GameManager.Instance.ExpectedGameType)
-                    {
-                        case GameTypeLocal.LOCAL_GAME:
-                            backButton.SetActive(true);
-
-                            break;
-
-                        case GameTypeLocal.REALTIME_BOT_GAME:
-                        case GameTypeLocal.REALTIME_LOBBY_GAME:
-                        case GameTypeLocal.REALTIME_QUICKMATCH:
-                            backButton.SetActive(false);
-
-                            break;
-                    }
-
-                    break;
-            }
-
             winningParticleGenerator.HideParticles();
 
-            playerPickScreen.SetData(game);
+            PlayerPickScreen.SetData(Game);
 
-            LoadBG(game._Area);
+            LoadBG(Game._Area);
             LoadBoard();
 
-            gameplayScreen.InitializeUI(this);
+            GameplayScreen.InitializeUI(this);
 
             StartRoutine("gameInit", GameInitRoutine());
 
-            prevGame = game;
+            PrevGame = Game;
         }
 
         public void CreateRealtimeGame()
@@ -381,29 +423,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //only continue if master
             if (PhotonNetwork.IsMasterClient)
             {
-                Area _area = FourzyPhotonManager.GetRoomProperty(
-                    Constants.REALTIME_ROOM_AREA,
-                    InternalSettings.Current.DEFAULT_AREA);
+                Area _area = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_AREA, InternalSettings.Current.DEFAULT_AREA);
 
                 //get percent
                 int myPercent = UserManager.Instance.MyComplexityPercent();
                 int opponentPercent = UserManager.GetComplexityPercent(
                     FourzyPhotonManager.GetOpponentTotalGames(),
-                    FourzyPhotonManager.GetOpponentProperty(
-                        Constants.REALTIME_RATING_KEY,
-                        UserManager.Instance.lastCachedRating));
+                    FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, UserManager.Instance.lastCachedRating));
 
                 //get complexity scores
-                Tuple<int, int> myMinMax = BoardFactory.NormalizeComplexity(
-                    _area,
-                    myPercent);
-                Tuple<int, int> oppMinMax = BoardFactory.NormalizeComplexity(
-                    _area,
-                    opponentPercent);
+                Tuple<int, int> myMinMax = BoardFactory.NormalizeComplexity(_area, myPercent);
+                Tuple<int, int> oppMinMax = BoardFactory.NormalizeComplexity(_area, opponentPercent);
 
-                (int, int) actualMinMax = (
-                    Mathf.Min(myMinMax.Item1, oppMinMax.Item1),
-                    Mathf.Min(myMinMax.Item2, oppMinMax.Item2));
+                (int, int) actualMinMax = (Mathf.Min(myMinMax.Item1, oppMinMax.Item1), Mathf.Min(myMinMax.Item2, oppMinMax.Item2));
 
                 BoardGenerationPreferences preferences = new BoardGenerationPreferences();
                 preferences.TargetComplexityLow = actualMinMax.Item1;
@@ -413,10 +445,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 Player opponent =
                     new Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
                     {
-                        HerdId = FourzyPhotonManager.GetOpponentProperty(
-                            Constants.REALTIME_ROOM_GAMEPIECE_KEY,
-                            Constants.REALTIME_DEFAULT_GAMEPIECE_KEY),
-                        PlayerString = "2"
+                        HerdId = FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, Constants.REALTIME_DEFAULT_GAMEPIECE_KEY),
+                        PlayerString = PhotonNetwork.PlayerListOthers[0].UserId
                     };
 
                 Player me = UserManager.Instance.meAsPlayer;
@@ -435,22 +465,26 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 if (Application.isEditor || Debug.isDebugBuild)
                 {
-                    Debug.Log($"Realtime game created: min/max: " +
-                        $"{actualMinMax.Item1}/{actualMinMax.Item2}");
+                    Debug.Log($"Realtime game created: min/max: {actualMinMax.Item1}/{actualMinMax.Item2}");
                 }
 
                 RealtimeGameStateData gameStateData = _game.toGameStateData;
                 gameStateData.createdEpoch = Utils.EpochMilliseconds();
+                gameStateData.player1Id = _game.player1.PlayerString;
 
                 var eventOptions = new Photon.Realtime.RaiseEventOptions();
                 eventOptions.Flags.HttpForward = true;
                 eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
-                var result = PhotonNetwork.RaiseEvent(
-                    Constants.GAME_DATA,
-                    JsonConvert.SerializeObject(gameStateData),
-                    eventOptions,
-                    SendOptions.SendReliable);
+                string serializedGameState = JsonConvert.SerializeObject(gameStateData);
+                var result = PhotonNetwork.RaiseEvent(Constants.GAME_DATA, serializedGameState, eventOptions, SendOptions.SendReliable);
                 Debug.Log("Photon create game event result: " + result);
+
+                //update lastest state
+                FourzyPhotonManager.SetRoomProperty("latestState", serializedGameState);
+
+                //set ttl
+                PhotonNetwork.CurrentRoom.EmptyRoomTtl = Constants.REALTIME_TTL_SECONDS * 1000;
+                PhotonNetwork.CurrentRoom.PlayerTtl = Constants.REALTIME_TTL_SECONDS * 1000;
 
                 LoadGame(_game);
             }
@@ -458,98 +492,126 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerDown(Vector2 position, int pointerId)
         {
-            if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && game._State.ActivePlayerId != (pointerId + 1))
+            if (GameState != GameState.GAME)
             {
-                gameplayScreen.OnWrongTurn();
+                return;
+            }
+
+            if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && Game._State.ActivePlayerId != (pointerId + 1))
+            {
+                GameplayScreen.OnWrongTurn();
 
                 return;
             }
 
-            if (gameplayScreen != menuController.currentScreen) return;
+            if (GameplayScreen != menuController.currentScreen) return;
 
-            board.OnPointerDown(position);
+            BoardView.OnPointerDown(position);
         }
 
         public void OnPointerMove(Vector2 position)
         {
-            if (gameplayScreen != menuController.currentScreen || gameState != GameState.GAME)
+            if (GameState != GameState.GAME)
+            {
+                return;
+            }
+
+            if (GameplayScreen != menuController.currentScreen || GameState != GameState.GAME)
             {
                 OnPointerRelease(position, -1);
 
                 return;
             }
 
-            board.OnPointerMove(position);
+            BoardView.OnPointerMove(position);
         }
 
         public void OnPointerRelease(Vector2 position, int pointerId)
         {
-            if (CustomInputManager.GamepadCount == 2 &&
-                pointerId > -1 &&
-                game._State.ActivePlayerId != (pointerId + 1))
-            {
-                return;
-            }
-            if (gameState != GameState.GAME)
+            if (GameState != GameState.GAME)
             {
                 return;
             }
 
-            board.OnPointerRelease(position);
+            if (CustomInputManager.GamepadCount == 2 &&
+                pointerId > -1 &&
+                Game._State.ActivePlayerId != (pointerId + 1))
+            {
+                return;
+            }
+
+            BoardView.OnPointerRelease(position);
         }
 
         public void UpdatePlayerTurn()
         {
-            if (game == null) return;
+            if (Game == null) return;
 
-            if (!gameStarted)
+            bool justStarted = false;
+            if (!GameStarted)
             {
-                gameState = GameState.GAME;
-                gameStarted = true;
+                if (GameState != GameState.PAUSED)
+                {
+                    GameState = GameState.GAME;
+                }
+                else
+                {
+                    previousGameState = GameState.GAME;
+                }
+                GameStarted = true;
+                justStarted = true;
                 OnGameStarted();
             }
 
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.AI:
-                    if (!game.isOver && !game.isMyTurn)
+                    if (!Game.IsOver && !Game.isMyTurn)
                     {
-                        board.TakeAITurn();
+                        BoardView.TakeAITurn();
+                    }
+
+                    break;
+
+                case GameType.SKILLZ_ASYNC:
+                    if (!Game.IsOver && !Game.isMyTurn)
+                    {
+                        BoardView.TakeAITurn();
                     }
 
                     break;
 
                 case GameType.PUZZLE:
-                    if (!game.isOver && !game.isMyTurn)
+                    if (!Game.IsOver && !Game.isMyTurn)
                     {
-                        board.TakeAITurn();
+                        BoardView.TakeAITurn();
                     }
 
                     break;
 
                 case GameType.TRY_TOKEN:
-                    if (!game.isOver && !game.isMyTurn)
+                    if (!Game.IsOver && !Game.isMyTurn)
                     {
-                        board.TakeAITurn();
+                        BoardView.TakeAITurn();
                     }
 
                     break;
 
                 case GameType.PRESENTATION:
-                    if (!game.isOver)
+                    if (!Game.IsOver)
                     {
-                        board.TakeAITurn();
+                        BoardView.TakeAITurn();
                     }
 
                     break;
 
                 case GameType.ONBOARDING:
-                    switch (game._Mode)
+                    switch (Game._Mode)
                     {
                         case GameMode.VERSUS:
-                            if (!game.isOver && !game.isMyTurn)
+                            if (!Game.IsOver && !Game.isMyTurn)
                             {
-                                board.TakeAITurn();
+                                BoardView.TakeAITurn();
                             }
 
                             break;
@@ -558,7 +620,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameType.PASSANDPLAY:
-                    StandaloneInputModuleExtended.GamepadID = game._State.ActivePlayerId == 1 ? 0 : 1;
+                    StandaloneInputModuleExtended.GamepadID = Game._State.ActivePlayerId == 1 ? 0 : 1;
 
                     break;
 
@@ -566,15 +628,74 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     switch (GameManager.Instance.ExpectedGameType)
                     {
                         case GameTypeLocal.REALTIME_BOT_GAME:
-                            if (!game.isOver && !game.isMyTurn)
+                            if (!Game.IsOver && !Game.isMyTurn)
                             {
-                                board.TakeAITurn(InternalSettings.Current.BOT_SETTINGS.randomTurnDelay);
+                                BoardView.TakeAITurn(InternalSettings.Current.BOT_SETTINGS.randomTurnDelay);
                             }
 
                             break;
                     }
 
                     break;
+            }
+
+            switch (GameManager.Instance.placementStyle)
+            {
+                case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                    if (!Game.IsOver)
+                    {
+                        switch (Game._Type)
+                        {
+                            case GameType.PASSANDPLAY:
+                                DropPiece(new BoardLocation(0, 4));
+
+                                break;
+
+                                //don nothing for onboarding
+                            case GameType.ONBOARDING:
+                                break;
+
+                            default:
+                                if (Game.isMyTurn)
+                                {
+                                    DropPiece(new BoardLocation(0, 4));
+                                }
+
+                                break;
+                        }
+                    }
+
+                    break;
+            }
+
+            //location is only used as initial location
+            void DropPiece(BoardLocation location)
+            {
+                List<BoardLocation> possibleMoves = BoardView.GetPossibleMoves();
+
+                if (possibleMoves.Count == 0)
+                {
+                    return;
+                }
+
+                PlayerTurn lastTurn = Game._allTurnRecord.FindLast(_move => _move.PlayerId == Game._State.ActivePlayerId);
+                if (lastTurn != null)
+                {
+                    location = lastTurn.ToBoardLocation(Game);
+                }
+
+                if (!possibleMoves.Any(_location => _location.Equals(location)))
+                {
+                    //pick random one
+                    location = possibleMoves.Random();
+                }
+
+                Vector3 worldPosition = BoardView.transform.position + (Vector3)BoardView.BoardLocationToVec2(location);
+                Vector3 screenPos = menuController._camera.WorldToScreenPoint(worldPosition);
+
+                BoardView.OnPointerDown(screenPos);
+                BoardView.OnPointerMove(screenPos);
+                BoardView.OnPointerRelease(screenPos);
             }
         }
 
@@ -585,7 +706,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             AnalyticsManager.Instance.LogEvent(
                 result ? "acceptRealtimeRematch" : "declineRealtimeRematch",
                 AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("isWinner", game.isOver),
+                new KeyValuePair<string, object>("isWinner", Game.IsOver),
                 new KeyValuePair<string, object>(
                     "isBotOpponent",
                     GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_BOT_GAME),
@@ -597,15 +718,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         /// </summary>
         private void OnGameStarted()
         {
-            onGameStarted?.Invoke(game);
+            onGameStarted?.Invoke(Game);
 
-            gameplayScreen.OnGameStarted();
+            GameplayScreen.OnGameStarted();
 
-            board.interactable = true;
-            board.OnPlayManagerReady();
-            game.SetInitialTime(Time.time);
+            BoardView.interactable = true;
+            BoardView.OnPlayManagerReady();
+            Game.SetInitialTime(Time.time);
 
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.REALTIME:
                     FourzyPhotonManager.ResetRematchState();
@@ -616,11 +737,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
         {
-            if (game == null || game._Type == GameType.ONBOARDING) yield break;
+            if (Game == null || Game._Type == GameType.ONBOARDING) yield break;
 
             HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
 
-            foreach (BoardSpace boardSpace in game.boardContent)
+            foreach (BoardSpace boardSpace in Game.boardContent)
             {
                 foreach (IToken token in boardSpace.Tokens.Values)
                 {
@@ -634,7 +755,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (tokens.Count > 0)
             {
-                gameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
+                GameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
             }
 
             foreach (TokensDataHolder.TokenData token in tokens)
@@ -650,7 +771,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private IEnumerator FadeGameScreen(float alpha, float fadeTime)
         {
-            board.Fade(alpha, fadeTime);
+            BoardView.Fade(alpha, fadeTime);
             yield return new WaitForSeconds(fadeTime - .2f);
 
             FadeTokens(alpha, fadeTime);
@@ -662,23 +783,24 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void FadeTokens(float alpha, float fadeTime)
         {
-            if (board.tokens.Count > 0)
+            if (BoardView.tokens.Count > 0)
             {
-                board.FadeTokens(alpha, fadeTime);
+                BoardView.FadeTokens(alpha, fadeTime);
             }
         }
 
         private void FadePieces(float alpha, float fadeTime)
         {
-            if (board.gamePieces.Count > 0)
+            if (BoardView.gamePieces.Count > 0)
             {
-                board.FadeGamepieces(alpha, fadeTime);
+                BoardView.FadeGamepieces(alpha, fadeTime);
             }
         }
 
         public void CheckGameMode()
         {
             GameManager.Instance.botGameType = GameManager.BotGameType.NONE;
+            string matchId = "";
 
             //auto load game if its not realtime mdoe
             switch (GameManager.Instance.ExpectedGameType)
@@ -691,10 +813,22 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     UnloadBoard();
                     UnloadBG();
 
+                    rejoinGame = GameManager.Instance.RejoinAbandonedGame;
+                    GameManager.Instance.RejoinAbandonedGame = false;
+
+                    if (rejoinGame)
+                    {
+                        RealtimeGameStateData lastState = JsonConvert.DeserializeObject<RealtimeGameStateData>(FourzyPhotonManager.GetRoomProperty("latestState", ""));
+                        //load board from last saved state 
+                        ClientFourzyGame _realtimeGame = new ClientFourzyGame(lastState);
+
+                        LoadGame(_realtimeGame);
+                        GameplayScreen.UpdateFromRealtimeState(lastState);
+                    }
+
                     //notify that this client is ready
-                    FourzyPhotonManager.SetClientReady();
-                    gameplayScreen.realtimeScreen
-                        .CheckWaitingForOtherPlayer("Waiting for other player...");
+                    FourzyPhotonManager.SetClientReadyState(true);
+                    GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_player"));
 
                     break;
 
@@ -764,20 +898,50 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
+                    Area area = Area.TRAINING_GARDEN;
+                    BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
+                    string recipe = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzCrossPlatform.Random.Value();
+                    string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? "Player";
+                    string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? "Player 2";
+                    matchId = recipe;
+
+                    preferences.RequestedRecipe = recipe;
+                    preferences.RecipeSeed = recipe;
+                    preferences.TargetComplexityLow = SkillzGameController.Instance.GameComplexity;
+                    preferences.TargetComplexityHigh = SkillzGameController.Instance.GameComplexity;
+
+                    GamePieceData random = GameContentManager.Instance.piecesDataHolder.random;
+                    Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
+                    Player opponent = new Player(2, opponentName, AIProfile.SimpleAI) { HerdId = random.Id };
+
+                    GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
+                    ClientFourzyGame game = new ClientFourzyGame(area, player, opponent, 1, options, preferences);
+                    game._Type = GameType.SKILLZ_ASYNC;
+                    game.State.InitializeHerd(1, SkillzGameController.Instance.MovesPerMatch);
+                    game.State.InitializeHerd(2, 999);
+                    game.UpdateFirstState();
+
+                    LoadGame(game);
+
+                    break;
+
                 default:
                     LoadGame(GameManager.Instance.activeGame);
 
                     break;
             }
+
+            GameplayScreen.SetMatchID(matchId);
         }
 
         public void Rematch(bool sendResetEvent = false)
         {
-            if (game == null) return;
+            if (Game == null) return;
 
             if (sendResetEvent)
             {
-                switch (game._Type)
+                switch (Game._Type)
                 {
                     case GameType.ONBOARDING:
                     case GameType.TRY_TOKEN:
@@ -787,8 +951,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     default:
                         AnalyticsManager.Instance.LogGame(
-                            game.GameToAnalyticsEvent(false),
-                            game,
+                            Game.GameToAnalyticsEvent(false),
+                            Game,
                             values: new KeyValuePair<string, object>(
                                 AnalyticsManager.GAME_RESULT_KEY,
                                 AnalyticsManager.GameResultType.reset));
@@ -797,42 +961,55 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
             }
 
-            board.StopAIThread();
-            switch (game._Type)
+            BoardView.StopAIThread();
+            switch (Game._Type)
             {
                 case GameType.AI:
                 case GameType.PUZZLE:
                 case GameType.ONBOARDING:
                 case GameType.TRY_TOKEN:
-                    game._Reset();
+                    Game._Reset();
 
-                    LoadGame(game);
+                    LoadGame(Game);
 
                     break;
 
                 case GameType.PASSANDPLAY:
                     //create new game if random board
-                    if (game.asFourzyGame.isBoardRandom)
+                    if (Game.asFourzyGame.isBoardRandom)
                     {
-                        game = new ClientFourzyGame(
-                            game._Area,
+                        Game = new ClientFourzyGame(
+                            Game._Area,
                             UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
                             UserManager.Instance.meAsPlayer.PlayerId)
                         { _Type = GameType.PASSANDPLAY };
                     }
                     else
                     {
-                        game._Reset();
+                        Game._Reset();
                     }
 
-                    LoadGame(game);
+                    LoadGame(Game);
 
                     break;
 
                 case GameType.REALTIME:
-                    game._Reset();
+                    Game._Reset();
 
-                    LoadGame(game);
+                    LoadGame(Game);
+
+                    break;
+
+                case GameType.SKILLZ_ASYNC:
+                    if (SkillzGameController.Instance.HaveNextGame)
+                    {
+                        CheckGameMode();
+                    }
+                    else
+                    {
+                        SkillzGameController.Instance.CloseGameOnBack = true;
+                        SkillzCrossPlatform.ReturnToSkillz();
+                    }
 
                     break;
             }
@@ -840,7 +1017,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void RechargeByAd()
         {
-            switch (game._Mode)
+            switch (Game._Mode)
             {
                 case GameMode.GAUNTLET:
                     gauntletRechargedViaAds++;
@@ -853,7 +1030,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void RechargeByGem()
         {
-            switch (game._Mode)
+            switch (Game._Mode)
             {
                 case GameMode.GAUNTLET:
                     gauntletRechargedViaGems++;
@@ -866,10 +1043,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void Recharge()
         {
-            game.AddMembers(Constants.GAUNTLET_RECHARGE_AMOUNT);
+            Game.AddMembers(Constants.GAUNTLET_RECHARGE_AMOUNT);
 
             UpdatePlayerTurn();
-            gameplayScreen.gauntletGameScreen.UpdateCounter();
+            GameplayScreen.gauntletGameScreen.UpdateCounter();
         }
 
         public int GetGauntletRechargePrice()
@@ -879,11 +1056,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void PlayHint()
         {
-            if (game == null ||
-                !game.isMyTurn ||
-                game.isOver ||
-                !game.puzzleData ||
-                game.puzzleData.Solution.Count == 0) return;
+            if (Game == null ||
+                !Game.isMyTurn ||
+                Game.IsOver ||
+                !Game.puzzleData ||
+                Game.puzzleData.Solution.Count == 0) return;
 
             if (UserManager.Instance.hints <= 0)
             {
@@ -909,43 +1086,52 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void PauseGame()
         {
-            if (gameState == GameState.PAUSED) return;
+            if (GameState == GameState.PAUSED) return;
 
-            previousGameState = gameState;
-            gameState = GameState.PAUSED;
-            gameplayScreen.OnGamePaused();
+            previousGameState = GameState;
+            GameState = GameState.PAUSED;
+            GameplayScreen.OnGamePaused();
         }
 
         public void UnpauseGame()
         {
-            if (gameState != GameState.PAUSED) return;
+            GameState = previousGameState;
+            GameplayScreen.OnGameUnpaused();
+        }
 
-            gameState = previousGameState;
-            gameplayScreen.OnGameUnpaused();
+        public void RecordLastBoardStateAsRoomProperty(bool bothPlayers)
+        {
+            RealtimeGameStateData gameStateData = Game.toGameStateData;
+            gameStateData.UpdateWithGameplayData(this, bothPlayers);
+
+            string serializedGameState = JsonConvert.SerializeObject(gameStateData);
+            FourzyPhotonManager.SetRoomProperty("latestState", serializedGameState);
+
+            Debug.Log("Recording state");
         }
 
         public void ToggleHelpState()
         {
-            if (gameState != GameState.HELP_STATE)
+            if (GameState != GameState.HELP_STATE)
             {
-                previousGameState = gameState;
-                gameState = GameState.HELP_STATE;
+                previousGameState = GameState;
+                GameState = GameState.HELP_STATE;
 
-                board.SetHelpState(true);
+                BoardView.SetHelpState(true);
             }
             else
             {
-                gameState = previousGameState;
+                GameState = previousGameState;
 
-                board.SetHelpState(false);
+                BoardView.SetHelpState(false);
             }
 
-            gameplayScreen.UpdateHelpButton();
+            GameplayScreen.UpdateHelpButton();
         }
 
         public void DisplayHint(PlayerTurn turn, string hintMessage = "")
         {
-            BoardLocation location = turn.GetMove().ToBoardLocation(game);
+            BoardLocation location = turn.GetMove().ToBoardLocation(Game);
             BoardLocation next = location.Neighbor(turn.GetMove().Direction, 2);
 
             _Tutorial.OnboardingTask_PointAt pointAtTask =
@@ -1013,47 +1199,55 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             UnloadBoard();
 
-            board = Instantiate(currentConfiguration.gameboardPrefab, transform);
-            board.Initialize(game);
-            board.gameplayManager = this;
-            board.transform.localPosition = currentConfiguration.gameboardPrefab.transform.position;
-            board.interactable = false;
+            BoardView = Instantiate(CurrentBGConfiguration.gameboardPrefab, transform);
+            BoardView.Initialize(Game);
+            BoardView.gameplayManager = this;
+            BoardView.transform.localPosition = CurrentBGConfiguration.gameboardPrefab.transform.position;
+            BoardView.interactable = false;
 
-            board.onGameFinished += OnGameFinished;
-            board.onDraw += OnDraw;
-            board.onMoveStarted += OnMoveStarted;
-            board.onMoveEnded += OnMoveEnded;
-            board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
-            board.onGamepieceSmashed += OnGamePieceSmashed;
-            board.onPieceSpawned += OnGamepieceSpawned;
+            BoardView.onGameFinished += OnGameFinished;
+            BoardView.onDraw += OnDraw;
+            BoardView.onMoveStarted += OnMoveStarted;
+            BoardView.onMoveEnded += OnMoveEnded;
+            BoardView.onWrongTurn += () => GameplayScreen.OnWrongTurn();
+            BoardView.onGamepieceSmashed += OnGamePieceSmashed;
+            BoardView.onPieceSpawned += OnGamepieceSpawned;
 
             //hide tokens/gamepieces
-            board.FadeTokens(0f, 0f);
-            board.FadeGamepieces(0f, 0f);
+            BoardView.FadeTokens(0f, 0f);
+            BoardView.FadeGamepieces(0f, 0f);
+        }
+
+        private void OnGamepieceSpawned(GamePieceView gamepiece)
+        {
+            onGamepiceSpawned?.Invoke(gamepiece);
         }
 
         private void UnloadBoard()
         {
-            if (board) Destroy(board.gameObject);
+            if (BoardView)
+            {
+                Destroy(BoardView.gameObject);
+            }
         }
 
         private void LoadBG(Area area)
         {
             UnloadBG();
 
-            currentConfiguration = GameContentManager
+            CurrentBGConfiguration = GameContentManager
                 .Instance
                 .areasDataHolder
                 .GetAreaBGConfiguration(area, Camera.main);
-            bg = Instantiate(currentConfiguration.backgroundPrefab, bgParent);
-            bg.transform.localPosition = Vector3.zero;
+            BG = Instantiate(CurrentBGConfiguration.backgroundPrefab, bgParent);
+            BG.transform.localPosition = Vector3.zero;
         }
 
         private void UnloadBG()
         {
-            if (bg)
+            if (BG)
             {
-                Destroy(bg.gameObject);
+                Destroy(BG.gameObject);
             }
         }
 
@@ -1062,7 +1256,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         /// </summary>
         private void GamepadCheck()
         {
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.PASSANDPLAY:
                 case GameType.REALTIME:
@@ -1071,7 +1265,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         StandaloneInputModuleExtended.GamepadFilter =
                             StandaloneInputModuleExtended.GamepadControlFilter.SPECIFIC_GAMEPAD;
                         StandaloneInputModuleExtended.GamepadID =
-                            game._State.ActivePlayerId == 1 ? 0 : 1;
+                            Game._State.ActivePlayerId == 1 ? 0 : 1;
                     }
 
                     break;
@@ -1080,12 +1274,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void PlayBGAudio()
         {
-            switch (game._Type)
+            switch (Game._Type)
             {
                 default:
                     string gameBGAudio = GameContentManager
                         .Instance
-                        .areasDataHolder[game._Area].bgAudio;
+                        .areasDataHolder[Game._Area].bgAudio;
 
                     if (gameplayBGAudio != null)
                     {
@@ -1106,7 +1300,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void GameOpenedCheck()
         {
-            switch (game._Type)
+            switch (Game._Type)
             {
                 // case GameType.TURN_BASED:
                 //     //if game was over and havent been viewed yet, set it to viewed
@@ -1120,11 +1314,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 default:
                     //if current game have puzzle data assigned, set puzzlepack as opened
-                    if (game.puzzleData)
+                    if (Game.puzzleData)
                     {
-                        if (game.puzzleData.pack)
+                        if (Game.puzzleData.pack)
                         {
-                            PlayerPrefsWrapper.SetPuzzlePackOpened(game.puzzleData.pack.packId, true);
+                            PlayerPrefsWrapper.SetPuzzlePackOpened(Game.puzzleData.pack.packId, true);
                         }
                     }
 
@@ -1177,28 +1371,55 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable values)
         {
-            if (values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_1_READY) ||
-                values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_2_READY))
+            if (PhotonNetwork.IsMasterClient)
             {
-                if (PhotonNetwork.IsMasterClient)
+                if (values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_1_READY) || values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_2_READY))
                 {
                     if (FourzyPhotonManager.CheckPlayersReady())
                     {
+                        if (waitingForPlayerRejoinReady)
+                        {
+                            waitingForPlayerRejoinReady = false;
+
+                            CloseRealtimeScreen();
+                            UnpauseGame();
+                            UpdatePlayerTurn();
+                        }
+                        else
+                        {
+                            CreateRealtimeGame();
+                        }
+
+                        FourzyPhotonManager.SetClientsReadyState(false);
+                    }
+                }
+                else if (values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_1_REMATCH) || values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_2_REMATCH))
+                {
+                    if (FourzyPhotonManager.CheckPlayersRematchReady())
+                    {
                         CreateRealtimeGame();
+                        GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_game"));
+                    }
+                }
+            }
+            else
+            {
+                if (values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_1_READY) || values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_2_READY))
+                {
+                    if (FourzyPhotonManager.CheckPlayersReady())
+                    {
+                        CloseRealtimeScreen();
+                        UpdatePlayerTurn();
                     }
                 }
             }
 
-            if (FourzyPhotonManager.CheckPlayersRematchReady())
+            void CloseRealtimeScreen()
             {
-                if (realtimeWaitingOtherScreen && realtimeWaitingOtherScreen.isOpened)
+                if (GameplayScreen.realtimeScreen.isOpened)
                 {
-                    realtimeWaitingOtherScreen.CloseSelf();
+                    GameplayScreen.realtimeScreen.CloseSelf();
                 }
-                realtimeWaitingOtherScreen = null;
-
-                gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
-                CreateRealtimeGame();
             }
         }
 
@@ -1227,13 +1448,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case Constants.REMATCH_REQUEST:
                     realtimeWaitingOtherScreen = menuController.GetOrAddScreen<PromptScreen>()
-                        .Prompt($"{game.opponent.DisplayName} wants to play again with you!", "Accept?",
+                        .Prompt(string.Format(LocalizationManager.Value("rematch_request"), Game.opponent.DisplayName), LocalizationManager.Value("play"),
                         () =>
                         {
                             ReportRematchResult(true);
 
                             FourzyPhotonManager.SetClientRematchReady();
-                            gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
+                            GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_game"));
                         },
                         () =>
                         {
@@ -1249,72 +1470,104 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case Constants.RATING_GAME_OTHER_LOST:
-                    game._State.WinnerId = game.me.PlayerId;
-                    OnGameFinished(game);
+                    Game._State.WinnerId = Game.me.PlayerId;
+                    OnGameFinished(Game);
+
+                    break;
+
+                case Constants.PLAYER_FORFEIT:
+                    otherPlayerForfeit = true;
 
                     break;
             }
         }
 
-        private void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+        private void OnPlayerLeftRoom(Photon.Realtime.Player other)
         {
-            if (game == null)
+            if (Game == null)
             {
                 BackButtonOnClick();
 
                 return;
             }
 
-            switch (game._Type)
+            if (otherPlayerForfeit)
             {
-                case GameType.REALTIME:
-                    //if more than X seconds passed, player who left the game loses
-                    if (realtimeGameToBeRatedCondition)
-                    {
-                        if (!ratingUpdated)
+                playerLeftScreen = PersistantMenuController.Instance
+                    .GetOrAddScreen<PromptScreen>()
+                    .Prompt(
+                        $"{other.NickName} {LocalizationManager.Value("left_game")}",
+                        null,
+                        null,
+                        LocalizationManager.Value("leave"),
+                        null,
+                        BackButtonOnClick)
+                    .CloseOnDecline();
+
+                OnRealtimeOpponentAbandoned();
+
+                otherPlayerForfeit = false;
+            }
+            else
+            {
+                switch (Game._Type)
+                {
+                    case GameType.REALTIME:
+                        if (Game != null)
                         {
-                            GameManager.Instance.ReportRealtimeGameFinished(
-                                game,
-                                LoginManager.playfabId,
-                                GameManager.Instance.RealtimeOpponent.Id,
-                                true);
+                            if (Game.IsOver)
+                            {
+                                playerLeftScreen = PersistantMenuController.Instance
+                                    .GetOrAddScreen<PromptScreen>()
+                                    .Prompt(
+                                        $"{other.NickName} {LocalizationManager.Value("left_game")}",
+                                        null,
+                                        null,
+                                        LocalizationManager.Value("leave"),
+                                        null,
+                                        BackButtonOnClick)
+                                    .CloseOnDecline();
+                            }
+                            else
+                            {
+                                FourzyPhotonManager.SetClientsReadyState(false);
+
+                                RecordLastBoardStateAsRoomProperty(true);
+                                PauseGame();
+                                StartRoutine("playerLeft", PlayerLeftRealtimeRoutine(other), () =>
+                                {
+                                    playerLeftScreen.CloseSelf();
+                                    playerLeftScreen = null;
+                                });
+                            }
+                        }
+                        else
+                        {
+                            BackButtonOnClick();
                         }
 
-                        PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
-                        Amplitude.Instance.setUserProperty(
-                            "totalRealtimeGamesOpponentAbandoned",
-                            PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
+                        break;
+                }
+            }
+        }
 
-                        //display prompt
-                        playerLeftScreen = PersistantMenuController.Instance
-                            .GetOrAddScreen<PromptScreen>()
-                            .Prompt(
-                                $"{otherPlayer.NickName} {LocalizationManager.Value("left_game")}",
-                                $"{otherPlayer.NickName} {LocalizationManager.Value("disconnected_and_forfeits")}",
-                                null,
-                                LocalizationManager.Value("back"),
-                                null,
-                                BackButtonOnClick)
-                            .CloseOnDecline();
-                    }
-                    else
-                    {
-                        playerLeftScreen = PersistantMenuController.Instance
-                            .GetOrAddScreen<PromptScreen>()
-                            .Prompt(
-                                $"{otherPlayer.NickName} {LocalizationManager.Value("left_game")}",
-                                null,
-                                null,
-                                "Back",
-                                null,
-                                BackButtonOnClick)
-                            .CloseOnDecline();
-                    }
+        private void OnPlayerEnteredRoom(Photon.Realtime.Player other)
+        {
+            if (Game == null)
+            {
+                BackButtonOnClick();
 
-                    //pause game
-                    PauseGame();
+                return;
+            }
 
-                    FourzyPhotonManager.TryLeaveRoom();
+            switch (Game._Type)
+            {
+                case GameType.REALTIME:
+                    CancelRoutine("playerLeft");
+
+                    waitingForPlayerRejoinReady = true;
+                    FourzyPhotonManager.SetClientReadyState(true);
+                    GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_player"));
 
                     break;
             }
@@ -1325,10 +1578,81 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         internal void OnGameFinished(IClientFourzy game)
         {
             onGameFinished?.Invoke(game);
-
-            gameplayScreen.OnGameFinished();
-
             bool winner = game.IsWinner();
+
+            #region Skillz Game Check
+
+            if (game._Type == GameType.SKILLZ_ASYNC)
+            {
+                int myMovesLeft = game.myMembers.Count;
+                int timerLeft = (int)GameplayScreen.MyTimerLeft;
+                List<PointsEntry> points = new List<PointsEntry>();
+                if (winner)
+                {
+                    points.Add(new PointsEntry(LocalizationManager.Value("skillz_win_points_key"), SkillzGameController.Instance.WinPoints));
+
+                    if (myMovesLeft > 0)
+                    {
+                        points.Add(new PointsEntry(
+                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftWin}/{LocalizationManager.Value("move")})",
+                            myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftWin));
+                    }
+                }
+                else if (game.draw)
+                {
+                    if (myMovesLeft > 0)
+                    {
+                        points.Add(new PointsEntry(
+                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftDraw}/{LocalizationManager.Value("move")})",
+                            myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftDraw));
+                    }
+                }
+                else
+                {
+                    points.Add(new PointsEntry(
+                        $"{LocalizationManager.Value("skillz_survival_moves_left_key")} ({SkillzGameController.Instance.PointsPerMoveLeftLose}/{LocalizationManager.Value("move")})",
+                        myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
+                }
+
+                if (SkillzGameController.Instance.GamesPlayed.Count == SkillzGameController.Instance.GamesToPlay - 1)
+                {
+                    //add timer bonus
+                    if (timerLeft > 0)
+                    {
+                        points.Add(new PointsEntry(
+                            $"{LocalizationManager.Value("skillz_time_left_points_key")} ({SkillzGameController.Instance.PointsPerSecond}/{LocalizationManager.Value("second")})",
+                            timerLeft * SkillzGameController.Instance.PointsPerSecond));
+                    }
+
+                    //big win bonus
+                    if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state) && winner)
+                    {
+                        points.Add(new PointsEntry(LocalizationManager.Value("skillz_big_win_key"), 2000));
+                    }
+                }
+
+                SkillzGameController.Instance.FinishGame(winner, points.ToArray());
+
+                //force end game due to empty timer
+                if (GameplayScreen.skillzGameScreen.Timer == 0)
+                {
+                    while (SkillzGameController.Instance.HaveNextGame)
+                    {
+                        SkillzGameController.Instance.FinishGame(false);
+                    }
+                }
+
+                //report score
+                if (!SkillzGameController.Instance.HaveNextGame)
+                {
+                    SkillzGameController.Instance.OnMatchFinished();
+                    SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
+                }
+            }
+
+            #endregion
+
+            GameplayScreen.OnGameFinished();
 
             #region Amplitude user properties update
 
@@ -1466,12 +1790,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                                     LoginManager.playfabId,
                                     false);
                             }
+
+                            //reset game ttl
+                            PhotonNetwork.CurrentRoom.EmptyRoomTtl = 0;
+                            PhotonNetwork.CurrentRoom.PlayerTtl = 0;
                         }
                         else
                         {
                             //for other player update value manually 
                             UserManager.Instance.realtimeGamesComplete += 1;
                         }
+                        rejoinGame = false;
+                        PlayerPrefsWrapper.SetAbandonedRealtimeRoomName("");
 
                         break;
 
@@ -1527,6 +1857,43 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             StartRoutine("postGameRoutine", PostGameFinished());
         }
 
+        private void OnSkillzScoreReported()
+        {
+            CancelRoutine("skillzScorehelper");
+        }
+
+        private void OnSkillzScoreReportedError(string error)
+        {
+            Debug.Log($"Failed to report Skillz score: {error}");
+            Debug.Log($"Starting up skillz score helper");
+
+            StartRoutine("skillzScorehelper", SkillzScoreReportHelper());
+        }
+
+        /// <summary>
+        /// When failed to report score
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator SkillzScoreReportHelper()
+        {
+            int tries = 3;
+
+            for (int _try = 0; _try < tries; _try++)
+            {
+                SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, null);
+
+                yield return new WaitForSeconds(2f);
+            }
+
+            if (!SkillzGameController.Instance.HaveNextGame)
+            {
+                Debug.Log("Failed to report score");
+                Debug.Log("Last effort, using DisplayTournamentResultsWithScore");
+
+                SkillzCrossPlatform.DisplayTournamentResultsWithScore(SkillzGameController.Instance.Points);
+            }
+        }
+
         private void OnDraw(IClientFourzy game)
         {
             //channel into gamefinished pipeline
@@ -1542,29 +1909,48 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             onMoveEnded?.Invoke(turn, turnResult, startTurn);
 
-            if (startTurn) return;
+            //game lost due to "no_pieces" needs to be triggered manually, as it is not by model code
+            if (turn != null && turn.PlayerId == Game.me.PlayerId && (Game._State.Options.MovesReduceHerd && Game.myMembers.Count == 0) && Game._State.WinningLocations == null)
+            {
+                switch (Game._Mode)
+                {
+                    case GameMode.GAUNTLET:
+                        //SetHintAreaColliderState(false);
+                        OnGameFinished(Game);
 
-            //if (replayingLastTurn)
-            //{
-            //    replayingLastTurn = false;
-            //}
+                        break;
+
+                    case GameMode.VERSUS:
+                        switch (Game._Type)
+                        {
+                            case GameType.SKILLZ_ASYNC:
+                                OnGameFinished(Game);
+
+                                break;
+                        }
+
+                        break;
+                }
+            }
+
+            if (startTurn) return;
 
             UpdatePlayerTurn();
 
-            //slow opponents timer
-            if (turn.PlayerId != game._State.ActivePlayerId)
-            {
-                gameplayScreen.timerWidgets[1].Pause(realtimeTimerDelay);
-            }
+            ////pause opponents timer
+            //if (turn.PlayerId != Game._State.ActivePlayerId)
+            //{
+            //    GameplayScreen.timerWidgets[1].Pause(realtimeTimerDelay);
+            //}
         }
 
         private void OnNetwork(bool state)
         {
-            if (game == null) return;
+            if (Game == null) return;
 
             if (!state)
             {
-                if (game._Type == GameType.REALTIME)
+                if (Game._Type == GameType.REALTIME)
                 {
                     PauseGame();
 
@@ -1579,7 +1965,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         });
                 }
 
-                switch (game._Type)
+                switch (Game._Type)
                 {
                     case GameType.FRIEND:
                     case GameType.LEADERBOARD:
@@ -1621,11 +2007,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         playerLeftScreen.promptText.text += $"\n{message}";
                         playerLeftScreen = null;
                     }
-                    else if (gameWinLoseScreen.isOpened)
+                    else if (GameWinLoseScreen.isOpened)
                     {
                         if (player.ratingChange != 0)
                         {
-                            gameWinLoseScreen.SetInfoLabel(message);
+                            GameWinLoseScreen.SetInfoLabel(message);
                         }
                     }
                 }
@@ -1635,34 +2021,36 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private void LogGameStart()
         {
             //skip for next game types
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.ONBOARDING:
                 case GameType.TRY_TOKEN:
                 case GameType.PRESENTATION:
+                case GameType.SKILLZ_ASYNC:
+
                     return;
             }
 
-            if (prevGame == null || (prevGame.BoardID != game.BoardID))
+            if (PrevGame == null || (PrevGame.BoardID != Game.BoardID))
             {
-                AnalyticsManager.Instance.LogGame(game.GameToAnalyticsEvent(true), game);
+                AnalyticsManager.Instance.LogGame(Game.GameToAnalyticsEvent(true), Game);
             }
         }
 
         private void LogGameComplete(bool abandoned)
         {
-            if (game._Type == GameType.ONBOARDING) return;
+            if (Game._Type == GameType.ONBOARDING) return;
 
-            AnalyticsManager.AnalyticsEvents _event = game.GameToAnalyticsEvent(false);
+            AnalyticsManager.AnalyticsEvents _event = Game.GameToAnalyticsEvent(false);
             AnalyticsManager.GameResultType gameResult = AnalyticsManager.GameResultType.none;
             Dictionary<string, object> extraParams = new Dictionary<string, object>();
 
-            bool isPlayer1 = game.me == game.player1;
+            bool isPlayer1 = Game.me == Game.player1;
 
-            if (gameplayScreen.timersEnabled)
+            if (GameplayScreen.timersEnabled)
             {
-                float player1TimeLeft = isPlayer1 ? gameplayScreen.myTimerLeft : gameplayScreen.opponentTimerLeft;
-                float player2TimeLeft = isPlayer1 ? gameplayScreen.opponentTimerLeft : gameplayScreen.myTimerLeft;
+                float player1TimeLeft = isPlayer1 ? GameplayScreen.MyTimerLeft : GameplayScreen.OpponentTimerLeft;
+                float player2TimeLeft = isPlayer1 ? GameplayScreen.OpponentTimerLeft : GameplayScreen.MyTimerLeft;
 
                 extraParams.Add("player1TimeRemaining", player1TimeLeft);
                 extraParams.Add("player2TimeRemaining", player2TimeLeft);
@@ -1688,25 +2076,25 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 if (gameResult == AnalyticsManager.GameResultType.none)
                 {
-                    if (!game.turnEvaluator.IsAvailableSimpleMove())
+                    if (!Game.turnEvaluator.IsAvailableSimpleMove())
                     {
                         gameResult = AnalyticsManager.GameResultType.noPossibleMoves;
                     }
-                    else if (game.draw)
+                    else if (Game.draw)
                     {
                         gameResult = AnalyticsManager.GameResultType.draw;
                     }
                     else
                     {
-                        if (game._Mode == GameMode.VERSUS)
+                        if (Game._Mode == GameMode.VERSUS)
                         {
-                            gameResult = game.IsWinner(game.player1) ?
+                            gameResult = Game.IsWinner(Game.player1) ?
                                 AnalyticsManager.GameResultType.player1Win :
                                 AnalyticsManager.GameResultType.player2Win;
                         }
                         else
                         {
-                            gameResult = game.IsWinner() ?
+                            gameResult = Game.IsWinner() ?
                                 AnalyticsManager.GameResultType.win :
                                 AnalyticsManager.GameResultType.lose;
                         }
@@ -1728,7 +2116,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (gameResult != AnalyticsManager.GameResultType.none)
             {
-                AnalyticsManager.Instance.LogGame(_event, game, extraParams);
+                AnalyticsManager.Instance.LogGame(_event, Game, extraParams);
             }
         }
 
@@ -1750,31 +2138,31 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)
         {
-            if (noInputFilter.Key != "highlightMoves" || !gameplayScreen.isCurrent) return;
+            if (noInputFilter.Key != "highlightMoves" || !GameplayScreen.isCurrent) return;
 
             //if its NOT my turn, exit
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.PASSANDPLAY:
 
                     break;
 
                 default:
-                    if (!game.isMyTurn) return;
+                    if (!Game.isMyTurn) return;
 
                     break;
             }
 
-            switch (board.actionState)
+            switch (BoardView.actionState)
             {
                 case GameboardView.BoardActionState.MOVE:
                     switch (GameManager.Instance.placementStyle)
                     {
                         case GameManager.PlacementStyle.EDGE_TAP:
-                            board.ShowHintArea(
+                            BoardView.ShowHintArea(
                                 GameboardView.HintAreaStyle.ANIMATION_LOOP,
                                 GameboardView.HintAreaAnimationPattern.NONE);
-                            board.SetHintAreaSelectableState(false);
+                            BoardView.SetHintAreaSelectableState(false);
 
                             break;
                     }
@@ -1788,9 +2176,29 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             gameCameraManager.Wiggle();
         }
 
+        private void OnRealtimeOpponentAbandoned()
+        {
+            //reset game ttl
+            PhotonNetwork.CurrentRoom.EmptyRoomTtl = 0;
+            PhotonNetwork.CurrentRoom.PlayerTtl = 0;
+
+            //report score
+            if (!ratingUpdated)
+            {
+                GameManager.Instance.ReportRealtimeGameFinished(
+                    Game,
+                    LoginManager.playfabId,
+                    GameManager.Instance.RealtimeOpponent.Id,
+                    true);
+            }
+
+            PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
+            Amplitude.Instance.setUserProperty("totalRealtimeGamesOpponentAbandoned", PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
+        }
+
         private IEnumerator GameInitRoutine()
         {
-            if (game == null) yield break;
+            if (Game == null) yield break;
 
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
 
@@ -1806,12 +2214,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             //instruction boards
-            switch (game._Type)
+            switch (Game._Type)
             {
-                // Do not show token instructions popup for REALTIME, ONBOARDING, PRESENTATION games
+                // Do not show token instructions popup for these types
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
                 case GameType.PRESENTATION:
+                case GameType.SKILLZ_ASYNC:
                     break;
 
                 default:
@@ -1820,29 +2229,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            switch (game._Type)
+            //first update player turn
+            switch (Game._Type)
             {
-                //case GameType.TURN_BASED:
-                //    if (!game.asFourzyGame.challengeData.haveMoves)
-                //    {
-                //        playerPickScreen._Open();
-                //    }
-                //    else
-                //    {
-                //        PlayerTurn lastTurn = game.asFourzyGame.challengeData.lastTurn;
-
-                //        replayingLastTurn = true;
-
-                //        UpdatePlayerTurn();
-
-                //        board.TakeTurn(lastTurn);
-                //    }
-
-                //    break;
-
-                //start timer
                 case GameType.REALTIME:
-                    StartRoutine("realtimeCountdownRoutine", StartRealtimeCountdown());
+                    if (!rejoinGame)
+                    {
+                        StartRoutine("realtimeCountdownRoutine", StartRealtimeCountdown());
+                    }
 
                     break;
 
@@ -1852,20 +2246,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            isBoardReady = true;
+            IsBoardReady = true;
         }
 
         private IEnumerator PlayHintRoutine()
         {
-            int lastHintIndex = PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID);
+            int lastHintIndex = PlayerPrefsWrapper.GetPuzzleHintProgress(Game.BoardID);
 
-            bool resetBoard = game._playerTurnRecord.Count != lastHintIndex;
+            bool resetBoard = Game._playerTurnRecord.Count != lastHintIndex;
 
             if (!resetBoard)
             {
-                for (int turnIndex = 0; turnIndex < game._playerTurnRecord.Count; turnIndex++)
+                for (int turnIndex = 0; turnIndex < Game._playerTurnRecord.Count; turnIndex++)
                 {
-                    if (game._playerTurnRecord[turnIndex].Notation != game.puzzleData.Solution[turnIndex].Notation)
+                    if (Game._playerTurnRecord[turnIndex].Notation != Game.puzzleData.Solution[turnIndex].Notation)
                     {
                         resetBoard = true;
                         break;
@@ -1875,15 +2269,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (resetBoard)
             {
-                game._Reset();
+                Game._Reset();
 
                 for (int turnIndex = 0; turnIndex < lastHintIndex; turnIndex++)
                 {
-                    game.TakeTurn(game.puzzleData.Solution[turnIndex], false);
-                    game.TakeAITurn(false);
+                    Game.TakeTurn(Game.puzzleData.Solution[turnIndex], false);
+                    Game.TakeAITurn(false);
                 }
 
-                LoadGame(game);
+                LoadGame(Game);
             }
 
             while (IsRoutineActive("gameInit")) yield return null;
@@ -1892,24 +2286,23 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //board.TakeTurn(game.puzzleData.Solution[lastHintIndex]);
 
             //display hint
-            DisplayHint(game.puzzleData.Solution[lastHintIndex]);
+            DisplayHint(Game.puzzleData.Solution[lastHintIndex]);
 
-            PlayerPrefsWrapper.SetPuzzleHintProgress(game.BoardID, lastHintIndex + 1 == game.puzzleData.Solution.Count ? 0 : lastHintIndex + 1);
+            PlayerPrefsWrapper.SetPuzzleHintProgress(Game.BoardID, lastHintIndex + 1 == Game.puzzleData.Solution.Count ? 0 : lastHintIndex + 1);
         }
 
         private IEnumerator StartRealtimeCountdown()
         {
             //start timer
-            yield return gameplayScreen.realtimeScreen
-                .StartCountdown(InternalSettings.Current.REALTIME_COUNTDOWN_SECONDS);
+            yield return GameplayScreen.realtimeScreen.StartCountdown(InternalSettings.Current.REALTIME_COUNTDOWN_SECONDS);
 
             UpdatePlayerTurn();
 
-            //adjust opponent timer value
-            if (!PhotonNetwork.IsMasterClient)
-            {
-                gameplayScreen.timerWidgets[1].SmallTimerValue -= realtimeTimerDelay;
-            }
+            ////adjust opponent timer value
+            //if (!PhotonNetwork.IsMasterClient)
+            //{
+            //    GameplayScreen.timerWidgets[1].SmallTimerValue -= realtimeTimerDelay;
+            //}
         }
 
         //private IEnumerator PlayTurnBaseTurn(ChallengeData gameData)
@@ -1932,11 +2325,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private IEnumerator PlayRealtimeTurn(ClientPlayerTurn turn)
         {
-            if (game._Type != GameType.REALTIME) yield break;
+            if (Game._Type != GameType.REALTIME) yield break;
 
-            yield return new WaitUntil(() => !board.isAnimating && isBoardReady);
+            yield return new WaitUntil(() => !BoardView.isAnimating && IsBoardReady);
 
-            gameplayScreen.OnRealtimeTurnRecieved(turn);
+            GameplayScreen.OnRealtimeTurnRecieved(turn);
             //since spell are not created as a result of TakeTurn, need to create them manually
             turn.Moves.ForEach(imove =>
             {
@@ -1947,17 +2340,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     switch (spell.SpellId)
                     {
                         case SpellId.HEX:
-                            board.CastSpell((spell as HexSpell).Location, spell.SpellId);
+                            BoardView.CastSpell((spell as HexSpell).Location, spell.SpellId);
 
                             break;
 
                         case SpellId.PLACE_LURE:
-                            board.CastSpell((spell as LureSpell).Location, spell.SpellId);
+                            BoardView.CastSpell((spell as LureSpell).Location, spell.SpellId);
 
                             break;
 
                         case SpellId.DARKNESS:
-                            board.CastSpell((spell as DarknessSpell).Location, spell.SpellId);
+                            BoardView.CastSpell((spell as DarknessSpell).Location, spell.SpellId);
 
                             break;
 
@@ -1965,7 +2358,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
             });
 
-            yield return board.TakeTurn(turn);
+            yield return BoardView.TakeTurn(turn);
         }
 
         private IEnumerator PostGameFinished()
@@ -1973,7 +2366,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             yield return new WaitForSeconds(.5f);
 
             //visuals + haptic
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.ONBOARDING:
                     break;
@@ -1985,7 +2378,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.TURN_BASED:
                 case GameType.REALTIME:
                 case GameType.TRY_TOKEN:
-                    if (game.IsWinner())
+                case GameType.SKILLZ_ASYNC:
+                    if (Game.IsWinner())
                     {
                         winningParticleGenerator.ShowParticles();
 
@@ -1995,7 +2389,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 default:
-                    if (!game.draw)
+                    if (!Game.draw)
                     {
                         winningParticleGenerator.ShowParticles();
                     }
@@ -2006,14 +2400,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             //sound
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.ONBOARDING:
                     break;
 
                 case GameType.PUZZLE:
                 case GameType.REALTIME:
-                    if (game.IsWinner())
+                    if (Game.IsWinner())
                     {
                         AudioHolder.instance.PlaySelfSfxOneShotTracked("game_won");
                     }
@@ -2029,7 +2423,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.AI:
                 case GameType.TRY_TOKEN:
                 case GameType.TURN_BASED:
-                    if (game.IsWinner())
+                    if (Game.IsWinner())
                     {
                         AudioHolder.instance.PlaySelfSfxOneShotTracked("game_turnbased_won");
                     }
@@ -2047,7 +2441,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             //if demo, restart
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.PRESENTATION:
                     yield return new WaitForSeconds(3f);
@@ -2064,6 +2458,36 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+        }
+
+        private IEnumerator PlayerLeftRealtimeRoutine(Photon.Realtime.Player otherPlayer)
+        {
+            int waitTime = Constants.REALTIME_TTL_SECONDS;
+
+            playerLeftScreen = PersistantMenuController.Instance
+                .GetOrAddScreen<PromptScreen>()
+                .Prompt(
+                    $"{otherPlayer.NickName} {LocalizationManager.Value("left_game")}",
+                    waitTime.ToString("mm':'ss") + "\n" + LocalizationManager.Value("realtime_player_left_message"),
+                    null,
+                    LocalizationManager.Value("leave"),
+                    null,
+                    BackButtonOnClick)
+                .CloseOnDecline();
+
+            int timer = waitTime;
+            while ((timer -= 1) > 0f)
+            {
+                TimeSpan time = TimeSpan.FromSeconds(timer);
+                playerLeftScreen.promptText.text = time.ToString("mm':'ss");
+
+                yield return new WaitForSeconds(1f);
+            }
+
+            OnRealtimeOpponentAbandoned();
+
+            //and close gameplay scene
+            BackButtonOnClick();
         }
     }
 

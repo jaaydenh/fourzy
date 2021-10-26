@@ -82,7 +82,8 @@ namespace Fourzy._Updates.ClientModel
             packType = PackType.AI_PACK;
             packId = Guid.NewGuid().ToString();
             unlockRequirement = UnlockRequirementsEnum.NONE;
-            herdID = "1";
+            GamePieceData randomGP = GameContentManager.Instance.piecesDataHolder.random;
+            herdID = randomGP.Id;
             aiPlayerName = "The Bot";
             puzzlePlayer = new Player(2, aiPlayerName) { HerdId = herdID };
 

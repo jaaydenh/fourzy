@@ -103,7 +103,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 return false;
             }
-            else if (FourzyPhotonManager.ConnectedAndReady && FourzyPhotonManager.InDefaultLobby)
+            else if (FourzyPhotonManager.ConnectedAndReady)
             {
                 if (!isCurrent)
                 {

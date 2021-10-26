@@ -51,7 +51,7 @@ namespace Fourzy._Updates.UI.Widgets
                 Destroy(view.gameboard);
             }
 
-            List<GamePieceView> toSpawn = GamePlayManager.Instance.board.gamePieces.Select(_piece => _piece as GamePieceView).ToList();
+            List<GamePieceView> toSpawn = GamePlayManager.Instance.BoardView.gamePieces.Select(_piece => _piece as GamePieceView).ToList();
 
             //move them to ui layer
             for (int index = 0; index < toSpawn.Count; index++)

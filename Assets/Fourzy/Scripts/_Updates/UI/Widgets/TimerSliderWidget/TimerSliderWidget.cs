@@ -81,21 +81,29 @@ namespace Fourzy._Updates.UI.Widgets
 
             set
             {
-                SetTimerValue(
-                    Mathf.Ceil(value / InternalSettings.Current.CIRCULAR_TIMER_SECONDS),
-                    value % InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+                float realSmallTimerValue = value % InternalSettings.Current.CIRCULAR_TIMER_SECONDS;
+
+                if (value > 0f)
+                {
+                    if (realSmallTimerValue == 0f)
+                    {
+                        realSmallTimerValue = InternalSettings.Current.CIRCULAR_TIMER_SECONDS;
+                    }
+                }
+
+                SetTimerValue(Mathf.Ceil(value / InternalSettings.Current.CIRCULAR_TIMER_SECONDS), realSmallTimerValue);
             }
         }
 
-        public bool isEmpty => timerValue <= 0f;
-        public bool active { get; private set; }
-        public bool isPaused { get; private set; }
+        public bool IsEmpty => timerValue <= 0f;
+        public bool Active { get; private set; }
+        public bool IsPaused { get; private set; }
 
         protected void Update()
         {
             if (smallTimerValueTween.isPlaying) return;
 
-            if (!active || isEmpty || isPaused) return;
+            if (!Active || IsEmpty || IsPaused) return;
 
             SmallTimerValue -= Time.deltaTime;
 
@@ -182,7 +190,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void Pause(float time = -1f)
         {
-            isPaused = true;
+            IsPaused = true;
 
             CancelRoutine("pause");
             if (time != -1f)
@@ -194,21 +202,21 @@ namespace Fourzy._Updates.UI.Widgets
         public void Unpause()
         {
             CancelRoutine("pause");
-            isPaused = false;
+            IsPaused = false;
         }
 
         public void Activate()
         {
-            if (active) return;
+            if (Active) return;
 
-            active = true;
+            Active = true;
         }
 
         public void Deactivate()
         {
-            if (!active) return;
+            if (!Active) return;
 
-            active = false;
+            Active = false;
         }
 
         protected override void OnInitialized()

@@ -11,6 +11,8 @@ using Fourzy._Updates.Threading;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
+using Fourzy._Updates.UI.Menu.Screens;
+using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Hellmade.Net;
 using MoreMountains.NiceVibrations;
@@ -66,6 +68,7 @@ namespace Fourzy
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
         public BotGameType botGameType = BotGameType.NONE;
+        public BuildIntent buildIntent = BuildIntent.MOBILE_REGULAR;
         public string customUserId = "";
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
@@ -94,15 +97,31 @@ namespace Fourzy
         public Camera3dItemProgressionMap currentMap { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public OpponentData RealtimeOpponent { get; set; }
+        public bool RejoinAbandonedGame { get; set; }
         public Player Bot { get; set; }
         public string sessionId { get; private set; }
         public LocationInfo? lastLocation { get; private set; } = null;
-        public string MainMenuSceneName => Landscape ?
-            Constants.MAIN_MENU_L_SCENE_NAME :
-            Constants.MAIN_MENU_P_SCENE_NAME;
+        public string MainMenuSceneName
+        {
+            get
+            {
+                switch (buildIntent)
+                {
+                    case BuildIntent.MOBILE_SKILLZ:
+                        return Constants.MAIN_MENU_SKILLZ_SCENE_NAME;
+
+                    case BuildIntent.DESKTOP_REGULAR:
+                        return Constants.MAIN_MENU_L_SCENE_NAME;
+
+                    default:
+                        return Constants.MAIN_MENU_P_SCENE_NAME;
+                }
+            }
+        }
 
         private PlacementStyle _placementStyle;
         private string lastErrorMessage;
+        private InputFieldPrompt inputPromptScreen;
 
         public bool isMainMenuLoaded
         {
@@ -170,9 +189,7 @@ namespace Fourzy
             }
         }
 
-        public List<TitleNewsItem> unreadNews =>
-            latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ??
-            new List<TitleNewsItem>();
+        public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
 
         protected override void Awake()
         {
@@ -492,8 +509,7 @@ namespace Fourzy
             },
             (result) =>
             {
-                RatingGameCompleteResult ratingGameResult =
-                    JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
+                RatingGameCompleteResult ratingGameResult = JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
                 OnRatingDataAquired(ratingGameResult);
 
                 if (RealtimeOpponent != null)
@@ -538,10 +554,7 @@ namespace Fourzy
             {
                 if (result.FunctionResult != null)
                 {
-                    ProgressionReward[] newItems =
-                        JsonConvert.DeserializeObject<ProgressionReward[]>(result.FunctionResult.ToString());
-
-                    bool rewardDisplayed = false;
+                    ProgressionReward[] newItems = JsonConvert.DeserializeObject<ProgressionReward[]>(result.FunctionResult.ToString());
 
                     foreach (var item in newItems)
                     {
@@ -630,14 +643,14 @@ namespace Fourzy
 
             if (GamePlayManager.Instance)
             {
-                if (GamePlayManager.Instance.gameplayScreen.timersEnabled)
+                if (GamePlayManager.Instance.GameplayScreen.timersEnabled)
                 {
                     float player1TimeLeft = isPlayer1 ?
-                        GamePlayManager.Instance.gameplayScreen.myTimerLeft :
-                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft;
+                        GamePlayManager.Instance.GameplayScreen.MyTimerLeft :
+                        GamePlayManager.Instance.GameplayScreen.OpponentTimerLeft;
                     float player2TimeLeft = isPlayer1 ?
-                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft :
-                        GamePlayManager.Instance.gameplayScreen.myTimerLeft;
+                        GamePlayManager.Instance.GameplayScreen.OpponentTimerLeft :
+                        GamePlayManager.Instance.GameplayScreen.MyTimerLeft;
 
                     if (player1TimeLeft <= 0f)
                     {
@@ -726,8 +739,7 @@ namespace Fourzy
             onPurchaseComplete?.Invoke(product);
 
             //try get product data
-            MiscGameContentHolder.StoreItemExtraData _data =
-                GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
+            MiscGameContentHolder.StoreItemExtraData _data = GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
 
             if (!_data) return;
 
@@ -780,6 +792,145 @@ namespace Fourzy
                 Debug.LogError(error.GenerateErrorReport());
                 ReportPlayFabError(error.ErrorMessage);
             });
+        }
+
+        public void StartRealtimeQuickGame()
+        {
+            //check if there is abandoned realtime game
+            string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
+            if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
+            {
+                MenuController.activeMenu.GetOrAddScreen<PromptScreen>().Prompt(
+                    LocalizationManager.Value("abandoned_room_available"),
+                    LocalizationManager.Value("abandoned_room_join_message"),
+                    LocalizationManager.Value("join"),
+                    LocalizationManager.Value("ignore"), () =>
+                {
+                    RejoinAbandonedGame = true;
+                    FourzyPhotonManager.JoinRoom(roomName, true);
+                    FourzyPhotonManager.onJoinedRoom += OnRoomJoinedRematch;
+                    FourzyPhotonManager.onJoinRoomFailed += OnRejoinRoomFailed;
+                }, () =>
+                {
+                    MenuController.activeMenu.currentScreen.CloseSelf();
+                    MenuController.activeMenu.GetScreen<MatchmakingScreen>().OpenRealtime();
+                })
+                    .CloseOnAccept();
+            }
+            else
+            {
+                MenuController.activeMenu.GetScreen<MatchmakingScreen>().OpenRealtime();
+            }
+        }
+
+        public void OpenLobbyGame()
+        {
+            //private const string kLobbyScreenOpened = "lobbyScreenOpened";
+            //if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
+            //{
+            //    menuController.GetOrAddScreen<LobbyScreen>().CheckLobby();
+            //}
+            //else
+            //{
+            //    menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
+
+            //    PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
+            //}
+
+            //check if there is abandoned realtime game
+            string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
+            if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
+            {
+                MenuController.activeMenu.GetOrAddScreen<PromptScreen>().Prompt(
+                    LocalizationManager.Value("abandoned_room_available"),
+                    LocalizationManager.Value("abandoned_room_join_message"),
+                    LocalizationManager.Value("join"),
+                    LocalizationManager.Value("ignore"), () =>
+                {
+                    RejoinAbandonedGame = true;
+                    FourzyPhotonManager.JoinRoom(roomName, true);
+                    FourzyPhotonManager.onJoinedRoom += OnRoomJoinedRematch;
+                    FourzyPhotonManager.onJoinRoomFailed += OnRejoinRoomFailed;
+                }, () =>
+                {
+                    MenuController.activeMenu.currentScreen.CloseSelf();
+                    OpenLobbyPrompt();
+                })
+                    .CloseOnAccept();
+            }
+            else
+            {
+                OpenLobbyPrompt();
+            }
+
+            void OpenLobbyPrompt()
+            {
+                MenuController.activeMenu.GetOrAddScreen<TwoOptionsPromptScreen>()
+                    ._Prompt(LocalizationManager.Value("private_match"), "", LocalizationManager.Value("create_game"), LocalizationManager.Value("join_game"),
+                    () =>
+                    {
+                        PersistantMenuController.Instance.GetOrAddScreen<CreateRealtimeGamePrompt>().Prompt();
+                    },
+                    null,
+                    () =>
+                    {
+                        inputPromptScreen = MenuController.activeMenu.GetOrAddScreen<InputFieldPrompt>();
+                        inputPromptScreen._Prompt((value) =>
+                            {
+                                FourzyPhotonManager.onJoinRoomFailed += OnJoinRoomFailed;
+                                FourzyPhotonManager.onJoinedRoom += OnRoomJoined;
+
+                                //try join
+                                FourzyPhotonManager.JoinRoom(value);
+
+                            }, LocalizationManager.Value("room_code"), "", LocalizationManager.Value("join_game"), LocalizationManager.Value("close"), decline: () =>
+                            {
+                                FourzyPhotonManager.onJoinRoomFailed -= OnJoinRoomFailed;
+                                FourzyPhotonManager.onJoinedRoom -= OnRoomJoined;
+                            })
+                            .CloseOnDecline();
+                    })
+                    .CloseOnAccept();
+            }
+        }
+
+        private void OnRoomJoined(string roomName)
+        {
+            inputPromptScreen.Decline();
+        }
+
+        private void OnJoinRoomFailed(string roomName)
+        {
+            GamesToastsController.ShowTopToast(LocalizationManager.Value("wrong_room_code"));
+        }
+
+        private void OnRoomJoinedRematch(string roomName)
+        {
+            RoomType roomType = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE);
+            switch (roomType)
+            {
+                case RoomType.LOBBY_ROOM:
+                case RoomType.DIRECT_INVITE:
+                    ExpectedGameType = GameTypeLocal.REALTIME_LOBBY_GAME;
+                    RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
+
+                    break;
+
+                case RoomType.QUICKMATCH:
+                    ExpectedGameType = GameTypeLocal.REALTIME_QUICKMATCH;
+                    RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
+
+                    break;
+            }
+
+            FourzyPhotonManager.onJoinedRoom -= OnRoomJoinedRematch;
+            StartGame(ExpectedGameType);
+        }
+
+        private void OnRejoinRoomFailed(string roomName)
+        {
+            RejoinAbandonedGame = false;
+            FourzyPhotonManager.onJoinRoomFailed -= OnRejoinRoomFailed;
         }
 
         public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
@@ -985,7 +1136,7 @@ namespace Fourzy
         private void OnPlayerEntered(Photon.Realtime.Player obj)
         {
             //lock room 
-            PhotonNetwork.CurrentRoom.IsVisible = false;
+            //PhotonNetwork.CurrentRoom.IsVisible = false;
         }
 
         private void OnPlayerPropertiesUpdate(
@@ -1052,7 +1203,7 @@ namespace Fourzy
 
         private IEnumerator StartingGameRoutine()
         {
-            while (!GamePlayManager.Instance || !GamePlayManager.Instance.isBoardReady) yield return null;
+            while (!GamePlayManager.Instance || !GamePlayManager.Instance.IsBoardReady) yield return null;
         }
 
 #if !UNITY_IOS && !UNITY_ANDROID
@@ -1143,5 +1294,13 @@ namespace Fourzy
         REALTIME_LOBBY_GAME,
         REALTIME_QUICKMATCH,
         REALTIME_BOT_GAME,
+        ASYNC_SKILLZ_GAME,
+    }
+
+    public enum BuildIntent
+    {
+        MOBILE_REGULAR,
+        DESKTOP_REGULAR,
+        MOBILE_SKILLZ,
     }
 }

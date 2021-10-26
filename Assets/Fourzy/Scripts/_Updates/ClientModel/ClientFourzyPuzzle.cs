@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
-using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
 using System;
 using System.Collections.Generic;
@@ -107,8 +106,8 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientFourzyHelper.AssignPrefabs(this);
 
-                return playerOnePrefabData.Id == playerTwoPrefabData.Id ? 
-                    playerTwoPrefabData.player2Prefab : 
+                return playerOnePrefabData.Id == playerTwoPrefabData.Id ?
+                    playerTwoPrefabData.player2Prefab :
                     playerTwoPrefabData.player1Prefab;
             }
         }
@@ -121,11 +120,21 @@ namespace Fourzy._Updates.ClientModel
 
         public int LoseStreak { get; set; }
 
-        public bool isOver =>
-            Status == PuzzleStatus.SUCCESS ||
-            Status == PuzzleStatus.FAILED ||
-            playerTurnRecord.Count == puzzleData.MoveLimit ||
-            _State.WinnerId > 0;
+        public bool IsOver
+        {
+            get
+            {
+                return
+                    Status == PuzzleStatus.SUCCESS ||
+                    Status == PuzzleStatus.FAILED ||
+                    playerTurnRecord.Count == puzzleData.MoveLimit ||
+                    _State.WinnerId > 0;
+            }
+            set
+            {
+
+            }
+        }
 
         public bool draw { get; set; }
 
@@ -158,9 +167,9 @@ namespace Fourzy._Updates.ClientModel
 
         public Player unactivePlayer => isMyTurn ? opponent : me;
 
-        public Player player1 => State.Players[(_FirstState == null ? _State : _FirstState).ActivePlayerId];
+        public Player player1 => State.Players[1];
 
-        public Player player2 => ClientFourzyHelper.Other(this, player1);
+        public Player player2 => State.Players[2];
 
         public bool isMyTurn => me.PlayerId == State.ActivePlayerId;
 
@@ -264,11 +273,6 @@ namespace Fourzy._Updates.ClientModel
 
         private void Initialize(bool resetFirstState = true)
         {
-            if (resetFirstState)
-            {
-                UpdateFirstState();
-            }
-
             collectedItems = new List<RewardsManager.Reward>();
             _allTurnRecord = new List<PlayerTurn>();
 
@@ -287,6 +291,17 @@ namespace Fourzy._Updates.ClientModel
             foreach (KeyValuePair<int, Player> player in State.Players)
             {
                 magic.Add(player.Key, player.Value.Magic);
+            }
+
+            State.Herds = new Dictionary<int, Herd>()
+            {
+                [1] = new Herd(player1.HerdId, player1 == me ? puzzleData.MoveLimit : 999),
+                [2] = new Herd(player2.HerdId, player2 == me ? puzzleData.MoveLimit : 999),
+            };
+
+            if (resetFirstState)
+            {
+                UpdateFirstState();
             }
         }
     }

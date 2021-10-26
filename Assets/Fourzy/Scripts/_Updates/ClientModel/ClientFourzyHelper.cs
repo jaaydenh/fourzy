@@ -109,7 +109,7 @@ namespace Fourzy._Updates.ClientModel
 
         public static void CheckLost(IClientFourzy game)
         {
-            if (game.isOver)
+            if (game.IsOver)
             {
                 if (game.IsWinner())
                 {
@@ -151,13 +151,11 @@ namespace Fourzy._Updates.ClientModel
 
                 if (game._State.Players.ContainsKey(1) && !string.IsNullOrEmpty(game._State.Players[1].HerdId))
                 {
-                    game.playerOnePrefabData =
-                        GameContentManager.Instance.piecesDataHolder.GetGamePieceData(herdId);
+                    game.playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(herdId);
                 }
                 else
                 {
-                    game.playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(
-                        UserManager.Instance.gamePieceID);
+                    game.playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(UserManager.Instance.gamePieceId);
                 }
             }
 
@@ -171,23 +169,16 @@ namespace Fourzy._Updates.ClientModel
 
                 if (game._State.Players.ContainsKey(2) && !string.IsNullOrEmpty(game._State.Players[2].HerdId))
                 {
-                    game.playerTwoPrefabData =
-                        GameContentManager.Instance.piecesDataHolder.GetGamePieceData(herdId);
+                    game.playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(herdId);
                 }
                 else
                 {
-                    game.playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(
-                        UserManager.Instance.gamePieceID);
+                    game.playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData( UserManager.Instance.gamePieceId);
                 }
             }
         }
 
-        public static Player Other(IClientFourzy game, Player player)
-        {
-            return game._State.Players[1].PlayerId == player.PlayerId ?
-                game._State.Players[2] :
-                game._State.Players[1];
-        }
+        public static Player Other(IClientFourzy game, Player player) => game._State.Players[1].PlayerId == player.PlayerId ? game._State.Players[2] : game._State.Players[1];
 
         //constructors
         public static ClientFourzyGame CreateTwoPlayerGame(

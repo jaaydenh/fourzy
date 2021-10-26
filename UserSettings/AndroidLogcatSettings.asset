@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "RF8M21C3DME",
         "name": "com.supermove.fourzy",
-        "processId": 26649,
+        "processId": 22877,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -12,6 +12,30 @@
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 26649,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.sec.android.app.launcher",
+            "processId": 2582,
+            "exited": false
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 31993,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 17644,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 22877,
             "exited": false
         }
     ],

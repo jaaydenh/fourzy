@@ -1,6 +1,7 @@
 //@vadym udod
 
 using Fourzy._Updates.UI.Helpers;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI
@@ -19,10 +20,7 @@ namespace Fourzy._Updates.UI
 
         private void Start()
         {
-            if (!FourzyPhotonManager.InDefaultLobby)
-            {
-                button.SetState(false);
-            }
+            button.SetState(PhotonNetwork.CurrentLobby != null && PhotonNetwork.CurrentRoom == null);
         }
 
         private void OnDestroy()
@@ -33,14 +31,7 @@ namespace Fourzy._Updates.UI
 
         private void OnLobbyJoined(string lobby)
         {
-            if (FourzyPhotonManager.InDefaultLobby)
-            {
-                button.SetState(true);
-            }
-            else
-            {
-                button.SetState(false);
-            }
+            button.SetState(true);
         }
 
         private void OnRoomJoined(string roomName)

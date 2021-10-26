@@ -2,7 +2,6 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Widgets;
@@ -88,8 +87,6 @@ namespace Fourzy._Updates.UI.Menu
             }
         }
 
-        //public virtual Selectable DefaultSelectable => defaultSelectable;
-
         protected override void Awake()
         {
             base.Awake();
@@ -141,7 +138,7 @@ namespace Fourzy._Updates.UI.Menu
 
                 SetInteractable(true);
                 canvasGroup.blocksRaycasts = true;
-            }   
+            }
         }
 
         /// <summary>

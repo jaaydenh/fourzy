@@ -2,23 +2,21 @@
 
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Helpers;
-using Fourzy._Updates.UI.Toasts;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class PlayScreen : MenuTab
     {
-        private const string kLobbyScreenOpened = "lobbyScreenOpened";
-
-        public ButtonExtended discordButton;
-        public RectTransform body;
+        [SerializeField]
+        private ButtonExtended discordButton;
+        [SerializeField]
+        private RectTransform body;
 
         private OnIPhoneX onIPhoneX;
-        private InputFieldPrompt inputPromptScreen;
 
         private bool fastPuzzlesUnlocked;
-        private bool gauntletGameUnlocked;
+        private bool gauntletGameUnlocked = false;
 
         public override void OnBack()
         {
@@ -52,9 +50,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ResetTutorial() =>
             PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>()
-                .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ?
-                    "OnboardingLandscape" :
-                    "Onboarding")));
+                //.OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
+                .OpenTutorial(HardcodedTutorials.GetByName("Onboarding"));
 
         public void OpenFastPuzzleScreen()
         {
@@ -85,62 +82,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenOnlineLobby()
         {
-            //if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
-            //{
-            //    menuController.GetOrAddScreen<LobbyScreen>().CheckLobby();
-            //}
-            //else
-            //{
-            //    menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
-
-            //    PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
-            //}
-
-            menuController.GetOrAddScreen<TwoOptionsPromptScreen>()
-                ._Prompt(LocalizationManager.Value("private_match"), "", LocalizationManager.Value("create_game"), LocalizationManager.Value("join_game"),
-                () =>
-                {
-                    PersistantMenuController.Instance.GetOrAddScreen<CreateRealtimeGamePrompt>().Prompt();
-                },
-                null,
-                () =>
-                {
-                    inputPromptScreen = menuController.GetOrAddScreen<InputFieldPrompt>();
-                    inputPromptScreen
-                        ._Prompt((value) =>
-                        {
-                            FourzyPhotonManager.onJoinRoomFailed += OnJoinRoomFailed;
-                            FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
-
-                            //try join
-                            FourzyPhotonManager.JoinRoom(value);
-
-                        }, LocalizationManager.Value("room_code"), "", LocalizationManager.Value("join_game"), LocalizationManager.Value("close"), decline: () =>
-                        {
-                            FourzyPhotonManager.onJoinRoomFailed -= OnJoinRoomFailed;
-                            FourzyPhotonManager.onJoinedRoom -= OnJoinedRoom;
-                        })
-                        .CloseOnDecline();
-                })
-                .CloseOnAccept();
+            GameManager.Instance.OpenLobbyGame();
         }
 
-        public void StartRealtimeQuickmatch() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
-
-        public void ChangeName() =>
-            menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
-
-        private void OnJoinedRoom(string roomName)
+        public void StartRealtimeQuickmatch()
         {
-            inputPromptScreen.Decline();
-
-            Debug.Log("joined");
+            GameManager.Instance.StartRealtimeQuickGame();
         }
 
-        private void OnJoinRoomFailed(string roomName)
-        {
-            GamesToastsController.ShowTopToast(LocalizationManager.Value("wrong_room_code"));
-        }
+        public void ChangeName() => menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
 
         protected override void OnInitialized()
         {
@@ -150,6 +100,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 onIPhoneX = body.GetComponent<OnIPhoneX>();
             }
+
             if (onIPhoneX)
             {
                 onIPhoneX.CheckPlatform();

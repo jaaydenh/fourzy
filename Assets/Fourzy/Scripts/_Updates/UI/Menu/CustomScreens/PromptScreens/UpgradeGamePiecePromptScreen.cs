@@ -59,7 +59,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void CheckSelected()
         {
             selectButton.SetActive(
-                UserManager.Instance.gamePieceID != data.Id &&
+                UserManager.Instance.gamePieceId != data.Id &&
                 data.State == GamePieceState.FoundAndUnlocked);
         }
     }

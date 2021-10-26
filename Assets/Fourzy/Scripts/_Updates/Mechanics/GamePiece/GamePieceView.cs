@@ -62,6 +62,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             if (pieceAnimator == null)
             {
                 pieceAnimator = GetComponent<Animator>();
+                pieceAnimator.keepAnimatorControllerStateOnDisable = true;
             }
 
             mouth = GetComponentInChildren<GamePieceMouth>();
@@ -253,7 +254,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             WakeUp();
 
             CancelRoutine("jumping");
-            StartRoutine("jumping", JumpRoutine(3));
+            StartRoutine("jumping", JumpRoutine(3), () => pieceAnimator.Play(h_Idle, indexBaseLayer), () => pieceAnimator.Play(h_Idle, indexBaseLayer));
 
             AnimateOutline(0f, 1f, 1f, .0015f, repeat: true);
         }
@@ -298,6 +299,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void Sleep()
         {
+            CancelRoutine("jumping");
             CancelRoutine("blinking");
 
             eyes.SetState(GamePieceEyes.EyesState.CLOSED);

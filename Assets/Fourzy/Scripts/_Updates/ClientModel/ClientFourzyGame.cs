@@ -165,6 +165,10 @@ namespace Fourzy._Updates.ClientModel
         public GamePieceData playerTwoPrefabData { get; set; }
 
         private string gameID;
+        /// <summary>
+        /// When game is custom finished
+        /// </summary>
+        private bool isOver;
         private GameType _type;
 
         public List<SimpleMove> initialMoves { get; private set; } = new List<SimpleMove>();
@@ -218,10 +222,20 @@ namespace Fourzy._Updates.ClientModel
 
         public int Columns => State.Board.Columns;
 
-        public bool isOver =>
-            State.WinnerId > 0 ||
-            State.WinningLocations != null ||
-            (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && myMembers.Count == 0);
+        public bool IsOver
+        {
+            get
+            {
+                return isOver || 
+                    (State.WinnerId > 0 ||
+                    State.WinningLocations != null ||
+                    (State.Options.MovesReduceHerd && myMembers.Count == 0));
+            }
+            set
+            {
+                isOver = value;
+            }
+        }
 
         public bool draw { get; set; }
 
@@ -235,17 +249,13 @@ namespace Fourzy._Updates.ClientModel
 
         public List<BoardSpace> boardContent => ClientFourzyHelper.BoardContent(this);
 
-        public GamePieceView myGamePiece =>
-            me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView myGamePiece => me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        public GamePieceView opponentGamePiece =>
-            opponent.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView opponentGamePiece => opponent.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        public GamePieceView activePlayerGamePiece =>
-            State.ActivePlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView activePlayerGamePiece => State.ActivePlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        public Player me => State.Players[1].PlayerString == UserManager.Instance.userId ?
-                    State.Players[1] : State.Players[2];
+        public Player me => State.Players[1].PlayerString == UserManager.Instance.userId ? State.Players[1] : State.Players[2];
 
         public Player opponent => ClientFourzyHelper.Other(this, me);
 
@@ -253,15 +263,15 @@ namespace Fourzy._Updates.ClientModel
 
         public Player unactivePlayer => isMyTurn ? opponent : me;
 
-        public Player player1 => State.Players[(_FirstState == null ? _State : _FirstState).ActivePlayerId];
+        public Player player1 => State.Players[1];
 
-        public Player player2 => ClientFourzyHelper.Other(this, player1);
+        public Player player2 => State.Players[2];
 
         public ClientPuzzleData puzzleData { get; set; }
 
         public bool isMyTurn => me.PlayerId == State.ActivePlayerId;
 
-        public bool haveMoves => State.TurnCount > 0;
+        public bool turnsNotZero => State.TurnCount > 0;
 
         public TurnEvaluator turnEvaluator => new TurnEvaluator(State);
 
@@ -376,10 +386,7 @@ namespace Fourzy._Updates.ClientModel
 
         public bool IsWinner() => me.PlayerId == State.WinnerId;
 
-        public override PlayerTurnResult TakeTurn(
-            PlayerTurn Turn,
-            bool ReturnStartOfNextTurn = false,
-            bool TriggerEndOfTurn = true)
+        public override PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn = false, bool TriggerEndOfTurn = true)
         {
             if (State.Players.ContainsKey(State.ActivePlayerId))
             {

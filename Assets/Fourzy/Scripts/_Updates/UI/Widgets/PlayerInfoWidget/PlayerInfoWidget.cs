@@ -50,7 +50,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             OnUpdateUserInfo();
             OnRatingUpate(0);
-            OnUpdateUserGamePieceID(user.gamePieceID);
+            OnUpdateUserGamePieceID(user.gamePieceId);
         }
 
         private void OnUpdateUserInfo()

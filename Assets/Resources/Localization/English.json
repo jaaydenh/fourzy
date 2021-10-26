@@ -38,6 +38,14 @@
     },
   
     {
+      "key": "abandoned_room_available",
+      "value": "Abandoned Room Available"
+    },
+    {
+      "key": "abandoned_room_join_message",
+      "value": "You can join previously abandoned room"
+    },
+    {
       "key": "adventure",
       "value": "Puzzle Adventure"
     },
@@ -179,7 +187,7 @@
     },
     {
       "key": "exit",
-      "value": "Ok"
+      "value": "Exit"
     },
     {
       "key": "failed",
@@ -198,8 +206,16 @@
       "value": "Puzzles"
     },
     {
+      "key": "final_score",
+      "value": "Final Score"
+    },
+    {
       "key": "for",
       "value": "for"
+    },
+    {
+      "key": "forfeit",
+      "value": "Forfeit"
     },
     {
       "key": "found",
@@ -208,6 +224,14 @@
     {
       "key": "fourzies",
       "value": "Fourzies"
+    },
+    {
+      "key": "game",
+      "value": "Game"
+    },
+    {
+      "key": "game_complete",
+      "value": "Game Complete"
     },
     {
       "key": "game_options",
@@ -282,8 +306,20 @@
       "value": "Human\nplayer"
     },
     {
+      "key": "realtime_player_left_message",
+      "value": "If Other Player fails to join this match you will automatically become a winner!"
+    },
+    {
+      "key": "ignore",
+      "value": "Ignore"
+    },
+    {
       "key": "in",
       "value": "in"
+    },
+    {
+      "key": "invite_code",
+      "value": "Invite Code"
     },
     {
       "key": "join",
@@ -302,6 +338,10 @@
       "value": "Joining room..."
     },
     {
+      "key": "leave",
+      "value": "Leave"
+    },
+    {
       "key": "leaving_room",
       "value": "Leaving room..."
     },
@@ -316,6 +356,10 @@
     {
       "key": "leave_realtime_game_message",
       "value": "Leaving the game will automatically forfeit and reduce your rating."
+    },
+    {
+      "key": "leave_skillz_game_message",
+      "value": "Leaving the game will automatically forfeit."
     },
     {
       "key": "level1_cpu",
@@ -394,6 +438,10 @@
       "value": "Next"
     },
     {
+      "key": "next_game",
+      "value": "Next Game"
+    },
+    {
       "key": "no",
       "value": "No"
     },
@@ -454,6 +502,10 @@
       "value": "Open Rare Portal"
     },
     {
+      "key": "out_of_moves",
+      "value": "No Moves Left"
+    },
+    {
       "key": "out_of_time",
       "value": "You ran out of time!"
     },
@@ -464,6 +516,10 @@
     {
       "key": "pass",
       "value": "Pass"
+    },
+    {
+      "key": "pause_menu",
+      "value": "Pause Menu"
     },
     {
       "key": "play",
@@ -484,6 +540,10 @@
     {
       "key": "portalpoints",
       "value": "Portal Points"
+    },
+    {
+      "key": "points",
+      "value": "Points"
     },
     {
       "key": "practice",
@@ -554,6 +614,10 @@
       "value": "Rematch"
     },
     {
+      "key": "rematch_request",
+      "value": "{0} requests rematch!"
+    },
+    {
       "key": "replay_tutorial",
       "value": "Replay Tutorial"
     },
@@ -598,6 +662,34 @@
       "value": "Select the outer square to move!"
     },
     {
+      "key": "rules",
+      "value": "Rules"
+    },
+    {
+      "key": "rules_gauntlet_game",
+      "value": "Gauntlet game rules here"
+    },
+    {
+      "key": "rules_passandplay_game",
+      "value": "Passandplay game rules here"
+    },
+    {
+      "key": "rules_puzzlepack_game",
+      "value": "Puzzlepack game rules here"
+    },
+    {
+      "key": "rules_realtime_game",
+      "value": "Realtime game rules here"
+    },
+    {
+      "key": "rules_skillz_game",
+      "value": "Skillz game rules here"
+    },
+    {
+      "key": "second",
+      "value": "second"
+    },
+    {
       "key": "select",
       "value": "Select"
     },
@@ -610,12 +702,40 @@
       "value": "Settings"
     },
     {
+      "key": "score",
+      "value": "Score"
+    },
+    {
+      "key": "skillz_big_win_key",
+      "value": "Big Win Bonus"
+    },
+    {
+      "key": "skillz_moves_left_points_key",
+      "value": "Moves left"
+    },
+    {
+      "key": "skillz_time_left_points_key",
+      "value": "Time left"
+    },
+    {
+      "key": "skillz_survival_moves_left_key",
+      "value": "Survival bonus"
+    },
+    {
+      "key": "skillz_win_points_key",
+      "value": "Victory"
+    },
+    {
       "key": "sound_effects",
       "value": "Sound Effects"
     },
     {
       "key": "store",
       "value": "Store"
+    },
+    {
+      "key": "submit_score",
+      "value": "Submit Score"
     },
     {
       "key": "suggest_hint_use",
@@ -886,6 +1006,10 @@
       "value": "Too short!"
     },
     {
+      "key": "total",
+      "value": "Total"
+    },
+    {
       "key": "turn_play_button",
       "value": "Online Game"
     },
@@ -906,8 +1030,12 @@
       "value": "Local"
     },
     {
-      "key": "waiting_for_opponent",
-      "value": "Invite Code"
+      "key": "waiting_for_game",
+      "value": "Waiting for game..."
+    },
+    {
+      "key": "waiting_for_player",
+      "value": "Waiting for other player..."
     },
     {
       "key": "watch_ad",

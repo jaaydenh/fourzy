@@ -35,6 +35,7 @@ namespace Fourzy
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
         public const int REALTIME_COUNTDOWN_SECONDS = 4;
+        public const int REALTIME_TTL_SECONDS = 120;
         public const int MIN_COMPLEXCITY_SCORE = 1;
         public const int MAX_COMPLEXCITY_SCORE = 20000;
 
@@ -61,6 +62,32 @@ namespace Fourzy
         public const int CIRCULAR_TIMER_SECONDS = 8;
         public const int RESET_TIMER_SECTIONS = 2;
 
+        //Skillz params
+        public const string SKILLZ_GAMES_COUNT_KEY = "Games";
+        public const string SKILLZ_GAME_TIMER_KEY = "Timer";
+        public const string SKILLZ_MOVES_PER_MATCH_KEY = "Moves";
+        public const string SKILLZ_WIN_POINTS_KEY = "WinPoints";
+        public const string SKILLZ_POINTS_PER_SECOND_KEY = "PointsPerSecond";
+        public const string SKILLZ_POINTS_PER_MOVE_WIN_KEY = "PointsPerMoveWin";
+        public const string SKILLZ_POINTS_PER_MOVE_LOSE_KEY = "PointsPerMoveLose";
+        public const string SKILLZ_POINTS_PER_MOVE_DRAW_KEY = "PointsPerMoveDraw";
+        public const string SKILLZ_GAME_COMPLEXITY_KEY = "Complexity";
+        public const string SKILLZ_MATCH_PAUSES_KEY = "Pauses";
+        public const int SKILLZ_DEFAULT_GAMES_COUNT = 3;
+        public const int SKILLZ_DEFAULT_GAME_TIMER = 180;
+        public const int SKILLZ_MOVES_PER_MATCH = 30;
+        public const int SKILLZ_WIN_POINTS = 2000;
+        public const int SKILLZ_POINTS_PER_SECOND_REMAINING = 10;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_WIN = 50;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_LOSE = 25;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 40;
+        public const int SKILLZ_GAME_COMPLEXITY = 10;
+        public const int SKILLZ_PAUSES_COUNT_PER_MATCH = 3;
+
+        public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 5;
+        public const int SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME = 10;
+        //
+
         // Adds additional time to timer after X turns
         public const int ADD_TIMER_BAR_EVERY_X_TURN = 0;
         public const int BARS_TO_ADD = 1;
@@ -73,10 +100,12 @@ namespace Fourzy
         public const string GAME_MODE_FAST_PUZZLES = "unlock_fast_puzzles_mode";
         public const string GAME_MODE_GAUNTLET_GAME = "unlock_gauntlet_mode";
 
-        public const string GAMEPLAY_SCENE_NAME = "gamePlayNew";
-        public const string MAIN_MENU_P_SCENE_NAME = "portraitMainMenu";
-        public const string MAIN_MENU_L_SCENE_NAME = "landscapeMainMenu";
-        public const string LOGO_SCENE_NAME = "logo";
+        public const string GAMEPLAY_SCENE_NAME = "DefaultGameplayScene";
+        public const string MAIN_MENU_P_SCENE_NAME = "MainMenuScenePortrait";
+        public const string MAIN_MENU_L_SCENE_NAME = "MainMenuSceneLandscape";
+        public const string MAIN_MENU_SKILLZ_SCENE_NAME = "MainMenuSkillz";
+        public const string LOGO_SCENE_NAME = "StartSceneDefault";
+        public const string LOGO_SKILLZ_SCENE_NAME = "StartSceneSkillz";
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";
 
@@ -151,6 +180,7 @@ namespace Fourzy
         public const byte REMATCH_REQUEST = 2;
         public const byte RATING_GAME_DATA = 3;
         public const byte RATING_GAME_OTHER_LOST = 4;
+        public const byte PLAYER_FORFEIT = 5;
 
         public const string CreateGameEndpoint = "http://fourzyfunctions.azurewebsites.net/api/CreateGame";
     }

@@ -38,7 +38,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         Destroy(gamepiece.gameObject);
                         gamepiece = AddGamepiece(game.me.HerdId);
                     }
-                    else if (!gamepiece) gamepiece = AddGamepiece(game.me.HerdId);
+                    else if (!gamepiece)
+                    {
+                        gamepiece = AddGamepiece(game.me.HerdId);
+                    }
 
                     Open();
 

@@ -63,8 +63,6 @@ namespace Fourzy._Updates.UI.Menu
         public float widthAdjusted => canvaseScaler.referenceResolution.x * widthRatioAdjusted;
         public float heightAdjusted => canvaseScaler.referenceResolution.y * heightRatioAdjusted;
         public Vector2 size { get; private set; }
-
-        //editor version of widthAdjusted
         public float _widthAdjusted
         {
             get
@@ -224,10 +222,7 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OpenScreen(MenuScreen screen)
         {
-            if (currentScreen &&
-                currentScreen != screen &&
-                currentScreen.isOpened &&
-                screen.closePreviousWhenOpened)
+            if (currentScreen && currentScreen != screen && currentScreen.isOpened && screen.closePreviousWhenOpened)
             {
                 currentScreen.Close();
             }

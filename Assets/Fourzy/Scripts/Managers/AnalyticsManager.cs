@@ -122,7 +122,13 @@ namespace Fourzy
 
         protected void OnApplicationQuit()
         {
-            Amplitude.Instance.setUserProperty("lastSeenDate", DateTime.Now.ToString());
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_REGULAR:
+                    Amplitude.Instance.setUserProperty("lastSeenDate", DateTime.Now.ToString());
+
+                    break;
+            }
         }
 
         public static void Initialize()

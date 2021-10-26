@@ -2,10 +2,8 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
-using Fourzy._Updates.UI.Helpers;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -25,7 +23,10 @@ namespace Fourzy._Updates.UI.Widgets
             _UpdateVisible();
 
             //clear
-            foreach (GameObject go in gamePieceHolders) Destroy(go);
+            foreach (GameObject go in gamePieceHolders)
+            {
+                Destroy(go);
+            }
             gamePieceHolders.Clear();
 
             //spawn
@@ -50,19 +51,30 @@ namespace Fourzy._Updates.UI.Widgets
             _UpdateVisible();
 
             for (int moveIndex = 0; moveIndex < puzzle.MoveLimit; moveIndex++)
+            {
                 if (moveIndex > puzzle.MoveLimit - puzzle._playerTurnRecord.Count - 1)
+                {
                     gamePieceHolders[moveIndex].GetComponentInChildren<GamePieceView>().SetMaterial(colorBlendMaterial);
+                }
+            }
         }
 
         public void _UpdateVisible()
         {
             if (puzzle.MoveLimit < 1)
             {
-                if (alphaTween._value > 0f) Hide(.3f);
+                if (alphaTween._value > 0f)
+                {
+                    Hide(.3f);
+                }
+
                 return;
             }
 
-            if (alphaTween._value < 1f) Show(.3f);
+            if (alphaTween._value < 1f)
+            {
+                Show(.3f);
+            }
         }
     }
 }

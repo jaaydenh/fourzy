@@ -51,7 +51,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         }
 
-        public void CheckWaitingForOtherPlayer(string text)
+        public void SetMessage(string text)
         {
             if (PhotonNetwork.CurrentRoom == null) return;
 
@@ -69,7 +69,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public Coroutine StartCountdown(float duration)
         {
-            if (menuController.currentScreen != this) menuController.OpenScreen(this);
+            if (menuController.currentScreen != this)
+            {
+                menuController.OpenScreen(this);
+            }
 
             return StartRoutine("countdownRoutine", CountdownRoutine(duration));
         }

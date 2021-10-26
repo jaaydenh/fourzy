@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private RoomType displayable = RoomType.DIRECT_INVITE | RoomType.LOBBY_ROOM;
         private GamePieceView playerGamepiece => GameContentManager.Instance.piecesDataHolder
-                    .GetGamePieceData(UserManager.Instance.gamePieceID).player1Prefab;
+                    .GetGamePieceData(UserManager.Instance.gamePieceId).player1Prefab;
         private GamePieceView opponentGamepiece => GameContentManager.Instance.piecesDataHolder
                     .GetGamePieceData(FourzyPhotonManager.GetOpponentProperty(
                         Constants.REALTIME_ROOM_GAMEPIECE_KEY,
@@ -118,7 +118,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (!isTwo)
                 {
                     lobbyButton.GetBadge().badge.SetColor(Color.white);
-                    lobbyButton.GetBadge().badge.SetValue(LocalizationManager.Value("waiting_for_opponent"));
+                    lobbyButton.GetBadge().badge.SetValue(LocalizationManager.Value("invite_code"));
                 }
             }
 
@@ -137,8 +137,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinedRoom(string roomName)
         {
-            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
-                & displayable) == 0) return;
+            if (GameManager.Instance.RejoinAbandonedGame) return;
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) == 0) return;
 
             lobbyCreatedAt = Time.time;
 

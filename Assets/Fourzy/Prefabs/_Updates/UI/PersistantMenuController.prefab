@@ -2418,8 +2418,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Thai
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 2df78b07fbfbc4234b2067921d1b81e2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 039df6059edacc74aa3426c151c05af8, type: 2}
+  m_sharedMaterial: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -25049,7 +25050,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Option A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 039df6059edacc74aa3426c151c05af8, type: 2}
   m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
     type: 2}
   m_fontSharedMaterials: []
@@ -25114,7 +25115,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3254460155308363349
@@ -42690,7 +42691,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 30, y: 0}
-  m_SizeDelta: {x: 230, y: 50}
+  m_SizeDelta: {x: 210, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &509218847086090077
 CanvasRenderer:
@@ -42722,8 +42723,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Tap to Place
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
+  m_fontAsset: {fileID: 11400000, guid: 039df6059edacc74aa3426c151c05af8, type: 2}
+  m_sharedMaterial: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -48723,8 +48724,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Spanish
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 2df78b07fbfbc4234b2067921d1b81e2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 039df6059edacc74aa3426c151c05af8, type: 2}
+  m_sharedMaterial: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -48935,8 +48937,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
+  m_fontAsset: {fileID: 11400000, guid: 039df6059edacc74aa3426c151c05af8, type: 2}
+  m_sharedMaterial: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -49642,8 +49644,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Eng
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 2df78b07fbfbc4234b2067921d1b81e2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 039df6059edacc74aa3426c151c05af8, type: 2}
+  m_sharedMaterial: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -60064,7 +60067,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 49
+          selectedMember: 46
           isDynamic: 0
         target: {fileID: 2108173250573518001}
         memberName: SetLanguageEng
@@ -60354,7 +60357,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -30, y: 0}
-  m_SizeDelta: {x: 250, y: 65}
+  m_SizeDelta: {x: 300, y: 65}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &2415846828034084671
 CanvasRenderer:
