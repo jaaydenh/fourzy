@@ -651,6 +651,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                                 break;
 
+                                //don nothing for onboarding
+                            case GameType.ONBOARDING:
+                                break;
+
                             default:
                                 if (Game.isMyTurn)
                                 {

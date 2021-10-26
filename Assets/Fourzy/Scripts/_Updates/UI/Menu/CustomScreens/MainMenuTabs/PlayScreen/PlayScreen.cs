@@ -50,9 +50,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ResetTutorial() =>
             PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>()
-                .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ?
-                    "OnboardingLandscape" :
-                    "Onboarding")));
+                //.OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
+                .OpenTutorial(HardcodedTutorials.GetByName("Onboarding"));
 
         public void OpenFastPuzzleScreen()
         {

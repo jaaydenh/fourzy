@@ -18039,7 +18039,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 32
+          selectedMember: 29
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: OnBack
@@ -40587,7 +40587,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 52
+          selectedMember: 53
           isDynamic: 0
         target: {fileID: 5157298072942827508}
         memberName: StartGame
