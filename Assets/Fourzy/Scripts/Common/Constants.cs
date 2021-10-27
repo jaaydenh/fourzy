@@ -2,7 +2,6 @@
 
 using Fourzy._Updates;
 using FourzyGameModel.Model;
-using System.Collections.Generic;
 
 namespace Fourzy
 {
@@ -129,7 +128,7 @@ namespace Fourzy
         public const string REALTIME_BOT_BOARDS_FOLDER = BOARDS_ROOT + "/FTUE_ProgressionBoards";
         public const string PUZZLE_PACKS_FOLDER = BOARDS_ROOT + "/PuzzlePacks";
         public const string PASS_AND_PLAY_BOARDS_FOLDER = BOARDS_ROOT + "/PassAndPlayBoards";
-        public const string INSTRUCTION_BOARDS_FOLDER  = BOARDS_ROOT + "/InstructionBoards";
+        public const string INSTRUCTION_BOARDS_FOLDER = BOARDS_ROOT + "/InstructionBoards";
         public const string TRY_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
         public const string MISC_BOARDS_FOLDER = BOARDS_ROOT + "/MiscBoards";
 

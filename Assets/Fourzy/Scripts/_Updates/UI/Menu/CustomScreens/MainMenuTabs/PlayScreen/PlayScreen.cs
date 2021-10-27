@@ -12,11 +12,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private ButtonExtended discordButton;
         [SerializeField]
         private RectTransform body;
+        [SerializeField]
+        private bool gauntletGameUnlocked = false;
 
         private OnIPhoneX onIPhoneX;
-
         private bool fastPuzzlesUnlocked;
-        private bool gauntletGameUnlocked = false;
 
         public override void OnBack()
         {
