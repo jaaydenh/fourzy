@@ -22,12 +22,15 @@ MonoBehaviour:
     Value: 20
   - Key: Moves
     Value: 5
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
+  - Key: Level0
+    Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 2, "oppHerdId":
+      "red_dragon", "aiProfile": 2 }'
+  - Key: Level1
+    Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 4, "oppHerdId":
+      "red_dragon", "aiProfile": 2 }'
+  - Key: Level2
+    Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 8, "oppHerdId":
+      "red_dragon", "aiProfile": 2 }'
   - Key: 
     Value: 
   - Key: 

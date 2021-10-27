@@ -2,7 +2,6 @@
 
 using Fourzy._Updates;
 using FourzyGameModel.Model;
-using System.Collections.Generic;
 
 namespace Fourzy
 {
@@ -71,11 +70,7 @@ namespace Fourzy
         public const string SKILLZ_POINTS_PER_MOVE_WIN_KEY = "PointsPerMoveWin";
         public const string SKILLZ_POINTS_PER_MOVE_LOSE_KEY = "PointsPerMoveLose";
         public const string SKILLZ_POINTS_PER_MOVE_DRAW_KEY = "PointsPerMoveDraw";
-        public const string SKILLZ_GAME_COMPLEXITY_KEY = "Complexity";
         public const string SKILLZ_MATCH_PAUSES_KEY = "Pauses";
-        public const string SKILLZ_AIPROFILE_KEY = "AIProfile";
-        public const string SKILLZ_AREA_KEY = "Area";
-        public const string SKILLZ_OPP_HERD_KEY = "OppHerdId";
         public const int SKILLZ_DEFAULT_GAMES_COUNT = 3;
         public const int SKILLZ_DEFAULT_GAME_TIMER = 180;
         public const int SKILLZ_MOVES_PER_MATCH = 30;
@@ -86,9 +81,9 @@ namespace Fourzy
         public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 40;
         public const int SKILLZ_GAME_COMPLEXITY = 10;
         public const int SKILLZ_PAUSES_COUNT_PER_MATCH = 3;
-        public const int SKILL_DEFAULT_AIPROFILE = (int)AIProfile.SimpleAI;
-        public const int SKILL_DEFAULT_AREA = (int)Area.TRAINING_GARDEN;
-        public const string SKILL_DEFAULT_OPP_HERD_ID = "red_dragon";
+        public const int SKILLZ_DEFAULT_AIPROFILE = (int)AIProfile.SimpleAI;
+        public const int SKILLZ_DEFAULT_AREA = (int)Area.TRAINING_GARDEN;
+        public const string SKILLZ_DEFAULT_OPP_HERD_ID = "red_dragon";
 
         public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 5;
         public const int SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME = 10;
@@ -135,7 +130,7 @@ namespace Fourzy
         public const string REALTIME_BOT_BOARDS_FOLDER = BOARDS_ROOT + "/FTUE_ProgressionBoards";
         public const string PUZZLE_PACKS_FOLDER = BOARDS_ROOT + "/PuzzlePacks";
         public const string PASS_AND_PLAY_BOARDS_FOLDER = BOARDS_ROOT + "/PassAndPlayBoards";
-        public const string INSTRUCTION_BOARDS_FOLDER  = BOARDS_ROOT + "/InstructionBoards";
+        public const string INSTRUCTION_BOARDS_FOLDER = BOARDS_ROOT + "/InstructionBoards";
         public const string TRY_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
         public const string MISC_BOARDS_FOLDER = BOARDS_ROOT + "/MiscBoards";
 
