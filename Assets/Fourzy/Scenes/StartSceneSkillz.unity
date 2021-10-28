@@ -1722,7 +1722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -1811,7 +1811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -2008,7 +2008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 0
   orientation: 3
   onIphone:
     inspectorListHeight: 83
@@ -2103,7 +2103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 0
   orientation: 1
   onIphone:
     inspectorListHeight: 83

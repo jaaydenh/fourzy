@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using ByteSheep.Events;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,8 +7,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 {
     public class GameplayBG : MonoBehaviour
     {
-        public SpriteRenderer background;
-        public bool configureAtStart = true;
+        [SerializeField]
+        private SpriteRenderer background;
+        [SerializeField]
+        private bool configureAtStart = true;
 
         [EnumToggleButtons]
         public MatchSide ipadMatch = MatchSide.HEIGHT;
@@ -20,42 +21,61 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void Awake()
         {
-            if (configureAtStart) Configure();
+            if (configureAtStart)
+            {
+                Configure();
+            }
         }
 
         public void Configure()
         {
             Camera _camera = Camera.main;
 
-            if (Screen.width > Screen.height)
+            bool matchHeight;
+            if (Screen.width > Screen.height) //landscape
             {
-                //widescreen
-                float scaleBy = _camera.orthographicSize / background.bounds.extents.y;
-                background.transform.localScale = new Vector3(scaleBy, scaleBy, 1f);
-
-                foreach (IGameplayBGPart gameplayBGPart in GetComponentsInChildren<IGameplayBGPart>()) gameplayBGPart.OnScale(scaleBy);
-            }
-            else
-            {
-                //portrait
-                if (_camera.aspect > .7f)
+                if (_camera.aspect > 1.78f)
                 {
-                    //ipad
-                    if (ipadMatch == MatchSide.HEIGHT) MatchHeight(_camera);
-                    else MatchWidth(_camera);
+                    //iphonex
+                    matchHeight = iphoneXMatch == MatchSide.HEIGHT;
                 }
-                else if (_camera.aspect >= .5f)
+                else if (_camera.aspect >= 1.34f)
                 {
                     //iphone
-                    if (iphoneMatch == MatchSide.HEIGHT) MatchHeight(_camera);
-                    else MatchWidth(_camera);
+                    matchHeight = iphoneMatch == MatchSide.HEIGHT;
+                }
+                else
+                {
+                    //ipad
+                    matchHeight = ipadMatch == MatchSide.HEIGHT;
+                }
+            }
+            else //portrait
+            {
+                if (_camera.aspect > .74f)
+                {
+                    //ipad
+                    matchHeight = ipadMatch == MatchSide.HEIGHT;
+                }
+                else if (_camera.aspect > .55f)
+                {
+                    //iphone
+                    matchHeight = iphoneMatch == MatchSide.HEIGHT;
                 }
                 else
                 {
                     //iphonex
-                    if (iphoneXMatch == MatchSide.HEIGHT) MatchHeight(_camera);
-                    else MatchWidth(_camera);
+                    matchHeight = iphoneXMatch == MatchSide.HEIGHT;
                 }
+            }
+
+            if (matchHeight)
+            {
+                MatchHeight(_camera);
+            }
+            else
+            {
+                MatchWidth(_camera);
             }
         }
 
@@ -68,10 +88,5 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             WIDTH,
             HEIGHT,
         }
-    }
-
-    public interface IGameplayBGPart
-    {
-        void OnScale(float value);
     }
 }

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1817477845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.84, y: 1.84, z: 1}
   m_Children:
   - {fileID: 7338879598665069811}
   - {fileID: 4224777659203539401}
@@ -52,6 +52,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -102,7 +103,7 @@ MonoBehaviour:
   background: {fileID: 1817477847}
   configureAtStart: 1
   ipadMatch: 1
-  iphoneMatch: 1
+  iphoneMatch: 0
   iphoneXMatch: 0
 --- !u!1 &1900680287
 GameObject:
@@ -149,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -218,6 +219,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -242,20 +244,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -5.67, y: -4.38, z: -0.5}
-  - {x: -5.6387353, y: -4.18, z: -0.5}
-  - {x: -5.637842, y: -3.9799998, z: -0.5}
-  - {x: -5.651394, y: -3.78, z: -0.5}
-  - {x: -5.5890937, y: -3.58, z: -0.5}
-  - {x: -5.5031533, y: -3.3799999, z: -0.5}
-  - {x: -5.571798, y: -3.1799998, z: -0.5}
-  - {x: -5.742364, y: -2.9799998, z: -0.5}
-  - {x: -5.9186153, y: -2.78, z: -0.5}
-  - {x: -5.7149386, y: -2.58, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -355,6 +347,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -463,7 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -532,6 +525,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -556,20 +550,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 6.8830004, y: 3.4320006, z: -0.5}
-  - {x: 6.9059033, y: 3.6320007, z: -0.5}
-  - {x: 6.9493804, y: 3.8320007, z: -0.5}
-  - {x: 6.9210477, y: 4.0320005, z: -0.5}
-  - {x: 6.8268266, y: 4.232001, z: -0.5}
-  - {x: 6.7450385, y: 4.4320006, z: -0.5}
-  - {x: 6.8756833, y: 4.6320004, z: -0.5}
-  - {x: 7.058563, y: 4.8320007, z: -0.5}
-  - {x: 7.122755, y: 5.0320005, z: -0.5}
-  - {x: 7.006043, y: 5.232001, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -739,6 +723,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -847,7 +832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -916,6 +901,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -940,20 +926,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -4.25, y: 3.4999995, z: -0.5}
-  - {x: -4.231954, y: 3.6999996, z: -0.5}
-  - {x: -4.185403, y: 3.8999996, z: -0.5}
-  - {x: -4.1933203, y: 4.0999994, z: -0.5}
-  - {x: -4.2246323, y: 4.2999997, z: -0.5}
-  - {x: -4.161654, y: 4.4999995, z: -0.5}
-  - {x: -4.051665, y: 4.6999993, z: -0.5}
-  - {x: -4.1075954, y: 4.8999996, z: -0.5}
-  - {x: -4.3000703, y: 5.0999994, z: -0.5}
-  - {x: -4.5369964, y: 5.2999997, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -1051,7 +1027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -1120,6 +1096,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1144,20 +1121,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -5.67, y: -4.38, z: -0.5}
-  - {x: -5.647097, y: -4.18, z: -0.5}
-  - {x: -5.60362, y: -3.9799998, z: -0.5}
-  - {x: -5.631953, y: -3.78, z: -0.5}
-  - {x: -5.726174, y: -3.58, z: -0.5}
-  - {x: -5.807962, y: -3.3799999, z: -0.5}
-  - {x: -5.677317, y: -3.1799998, z: -0.5}
-  - {x: -5.494437, y: -2.9799998, z: -0.5}
-  - {x: -5.4302454, y: -2.78, z: -0.5}
-  - {x: -5.5469575, y: -2.58, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -1255,7 +1222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -1324,6 +1291,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1348,20 +1316,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 2.64, y: -5.2, z: -0.5}
-  - {x: 2.662903, y: -5, z: -0.5}
-  - {x: 2.7063801, y: -4.7999997, z: -0.5}
-  - {x: 2.6780477, y: -4.6, z: -0.5}
-  - {x: 2.5838263, y: -4.3999996, z: -0.5}
-  - {x: 2.5020382, y: -4.2, z: -0.5}
-  - {x: 2.6326828, y: -3.9999998, z: -0.5}
-  - {x: 2.8155632, y: -3.7999997, z: -0.5}
-  - {x: 2.8797548, y: -3.6, z: -0.5}
-  - {x: 2.7630424, y: -3.3999999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -1461,6 +1419,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1609,6 +1568,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1717,7 +1677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -1786,6 +1746,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1810,20 +1771,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -7.26, y: 3.5269995, z: -0.5}
-  - {x: -7.238663, y: 3.7269995, z: -0.5}
-  - {x: -7.1956644, y: 3.9269996, z: -0.5}
-  - {x: -7.207975, y: 4.1269994, z: -0.5}
-  - {x: -7.232882, y: 4.3269997, z: -0.5}
-  - {x: -7.1588335, y: 4.5269995, z: -0.5}
-  - {x: -7.059905, y: 4.7269993, z: -0.5}
-  - {x: -7.1389194, y: 4.9269996, z: -0.5}
-  - {x: -7.3351293, y: 5.1269994, z: -0.5}
-  - {x: -7.546799, y: 5.3269997, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -1922,6 +1873,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2004,6 +1956,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2112,7 +2065,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -2181,6 +2134,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2205,20 +2159,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 2.64, y: -5.2, z: -0.5}
-  - {x: 2.6728284, y: -5, z: -0.5}
-  - {x: 2.6608808, y: -4.7999997, z: -0.5}
-  - {x: 2.5912247, y: -4.6, z: -0.5}
-  - {x: 2.539492, y: -4.3999996, z: -0.5}
-  - {x: 2.6469717, y: -4.2, z: -0.5}
-  - {x: 2.8042212, y: -3.9999998, z: -0.5}
-  - {x: 2.8434782, y: -3.7999997, z: -0.5}
-  - {x: 2.738972, y: -3.6, z: -0.5}
-  - {x: 2.7110255, y: -3.3999999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -2316,7 +2260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -2385,6 +2329,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2409,20 +2354,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -4.25, y: 3.4999995, z: -0.5}
-  - {x: -4.218735, y: 3.6999996, z: -0.5}
-  - {x: -4.217842, y: 3.8999996, z: -0.5}
-  - {x: -4.231394, y: 4.0999994, z: -0.5}
-  - {x: -4.1690936, y: 4.2999997, z: -0.5}
-  - {x: -4.0831532, y: 4.4999995, z: -0.5}
-  - {x: -4.151798, y: 4.6999993, z: -0.5}
-  - {x: -4.322364, y: 4.8999996, z: -0.5}
-  - {x: -4.4986153, y: 5.0999994, z: -0.5}
-  - {x: -4.2949386, y: 5.2999997, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -2520,7 +2455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -2589,6 +2524,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2613,20 +2549,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 6.8830004, y: 3.4320002, z: -0.5}
-  - {x: 6.9103317, y: 3.6320002, z: -0.5}
-  - {x: 6.9039903, y: 3.8320003, z: -0.5}
-  - {x: 6.9100823, y: 4.032, z: -0.5}
-  - {x: 6.9894896, y: 4.2320004, z: -0.5}
-  - {x: 7.040386, y: 4.432, z: -0.5}
-  - {x: 6.9261675, y: 4.632, z: -0.5}
-  - {x: 6.747043, y: 4.8320003, z: -0.5}
-  - {x: 6.7044067, y: 5.032, z: -0.5}
-  - {x: 6.92207, y: 5.2320004, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -2724,7 +2650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -2793,6 +2719,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2817,20 +2744,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 5.13, y: -4.45, z: -0.5}
-  - {x: 5.140026, y: -4.25, z: -0.5}
-  - {x: 5.148924, y: -4.0499997, z: -0.5}
-  - {x: 5.2115574, y: -3.85, z: -0.5}
-  - {x: 5.2540293, y: -3.6499999, z: -0.5}
-  - {x: 5.16141, y: -3.4499998, z: -0.5}
-  - {x: 5.0081944, y: -3.2499998, z: -0.5}
-  - {x: 4.979856, y: -3.0499997, z: -0.5}
-  - {x: 5.171991, y: -2.85, z: -0.5}
-  - {x: 5.3985214, y: -2.6499999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -2928,7 +2845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -2997,6 +2914,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3021,20 +2939,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 2.64, y: -5.2, z: -0.5}
-  - {x: 2.671265, y: -5, z: -0.5}
-  - {x: 2.672158, y: -4.7999997, z: -0.5}
-  - {x: 2.6586063, y: -4.6, z: -0.5}
-  - {x: 2.7209065, y: -4.3999996, z: -0.5}
-  - {x: 2.8068469, y: -4.2, z: -0.5}
-  - {x: 2.7382023, y: -3.9999998, z: -0.5}
-  - {x: 2.5676365, y: -3.7999997, z: -0.5}
-  - {x: 2.3913848, y: -3.6, z: -0.5}
-  - {x: 2.5950615, y: -3.3999999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -3132,7 +3040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -3201,6 +3109,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3225,20 +3134,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 4.27, y: 3.46, z: -0.5}
-  - {x: 4.277323, y: 3.66, z: -0.5}
-  - {x: 4.316126, y: 3.8600001, z: -0.5}
-  - {x: 4.3699756, y: 4.06, z: -0.5}
-  - {x: 4.322998, y: 4.26, z: -0.5}
-  - {x: 4.2026076, y: 4.46, z: -0.5}
-  - {x: 4.1020007, y: 4.66, z: -0.5}
-  - {x: 4.25837, y: 4.86, z: -0.5}
-  - {x: 4.467401, y: 5.06, z: -0.5}
-  - {x: 4.542134, y: 5.26, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -3336,7 +3235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -3405,6 +3304,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3429,20 +3329,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 5.13, y: -4.45, z: -0.5}
-  - {x: 5.161265, y: -4.25, z: -0.5}
-  - {x: 5.162158, y: -4.0499997, z: -0.5}
-  - {x: 5.1486063, y: -3.85, z: -0.5}
-  - {x: 5.2109065, y: -3.6499999, z: -0.5}
-  - {x: 5.296847, y: -3.4499998, z: -0.5}
-  - {x: 5.2282023, y: -3.2499998, z: -0.5}
-  - {x: 5.0576363, y: -3.0499997, z: -0.5}
-  - {x: 4.881385, y: -2.85, z: -0.5}
-  - {x: 5.0850616, y: -2.6499999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -3540,7 +3430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -3609,6 +3499,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3633,20 +3524,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -7.26, y: 3.5269995, z: -0.5}
-  - {x: -7.2287354, y: 3.7269995, z: -0.5}
-  - {x: -7.2278423, y: 3.9269996, z: -0.5}
-  - {x: -7.241394, y: 4.1269994, z: -0.5}
-  - {x: -7.179094, y: 4.3269997, z: -0.5}
-  - {x: -7.0931535, y: 4.5269995, z: -0.5}
-  - {x: -7.161798, y: 4.7269993, z: -0.5}
-  - {x: -7.332364, y: 4.9269996, z: -0.5}
-  - {x: -7.5086155, y: 5.1269994, z: -0.5}
-  - {x: -7.304939, y: 5.3269997, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -3746,6 +3627,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3855,6 +3737,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3935,7 +3818,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -4004,6 +3887,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4028,20 +3912,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -2.72, y: -5.2, z: -0.5}
-  - {x: -2.697097, y: -5, z: -0.5}
-  - {x: -2.65362, y: -4.7999997, z: -0.5}
-  - {x: -2.6819525, y: -4.6, z: -0.5}
-  - {x: -2.7761738, y: -4.3999996, z: -0.5}
-  - {x: -2.857962, y: -4.2, z: -0.5}
-  - {x: -2.7273173, y: -3.9999998, z: -0.5}
-  - {x: -2.544437, y: -3.7999997, z: -0.5}
-  - {x: -2.4802454, y: -3.6, z: -0.5}
-  - {x: -2.5969577, y: -3.3999999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -4139,7 +4013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -4208,6 +4082,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4232,20 +4107,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -7.26, y: 3.527, z: -0.5}
-  - {x: -7.2370973, y: 3.727, z: -0.5}
-  - {x: -7.19362, y: 3.927, z: -0.5}
-  - {x: -7.221953, y: 4.127, z: -0.5}
-  - {x: -7.316174, y: 4.327, z: -0.5}
-  - {x: -7.397962, y: 4.527, z: -0.5}
-  - {x: -7.2673173, y: 4.7269998, z: -0.5}
-  - {x: -7.0844374, y: 4.927, z: -0.5}
-  - {x: -7.0202456, y: 5.127, z: -0.5}
-  - {x: -7.1369576, y: 5.327, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -4345,6 +4210,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4453,7 +4319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -4522,6 +4388,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4546,20 +4413,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -2.72, y: -5.2, z: -0.5}
-  - {x: -2.6887352, y: -5, z: -0.5}
-  - {x: -2.6878421, y: -4.7999997, z: -0.5}
-  - {x: -2.7013938, y: -4.6, z: -0.5}
-  - {x: -2.6390936, y: -4.3999996, z: -0.5}
-  - {x: -2.5531533, y: -4.2, z: -0.5}
-  - {x: -2.6217978, y: -3.9999998, z: -0.5}
-  - {x: -2.7923636, y: -3.7999997, z: -0.5}
-  - {x: -2.9686153, y: -3.6, z: -0.5}
-  - {x: -2.7649386, y: -3.3999999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -4659,6 +4516,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4767,7 +4625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -4836,6 +4694,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4860,20 +4719,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 6.883, y: 3.4320002, z: -0.5}
-  - {x: 6.9142647, y: 3.6320002, z: -0.5}
-  - {x: 6.915158, y: 3.8320003, z: -0.5}
-  - {x: 6.901606, y: 4.032, z: -0.5}
-  - {x: 6.9639063, y: 4.2320004, z: -0.5}
-  - {x: 7.0498466, y: 4.432, z: -0.5}
-  - {x: 6.981202, y: 4.632, z: -0.5}
-  - {x: 6.810636, y: 4.8320003, z: -0.5}
-  - {x: 6.6343846, y: 5.032, z: -0.5}
-  - {x: 6.8380613, y: 5.2320004, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -4971,7 +4820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -5040,6 +4889,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5064,20 +4914,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -2.72, y: -5.2, z: -0.5}
-  - {x: -2.7464437, y: -5, z: -0.5}
-  - {x: -2.7200282, y: -4.7999997, z: -0.5}
-  - {x: -2.641357, y: -4.6, z: -0.5}
-  - {x: -2.600253, y: -4.3999996, z: -0.5}
-  - {x: -2.6526668, y: -4.2, z: -0.5}
-  - {x: -2.6748447, y: -3.9999998, z: -0.5}
-  - {x: -2.553109, y: -3.7999997, z: -0.5}
-  - {x: -2.4542687, y: -3.6, z: -0.5}
-  - {x: -2.6120055, y: -3.3999999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -5175,7 +5015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -5244,6 +5084,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5268,20 +5109,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 5.13, y: -4.45, z: -0.5}
-  - {x: 5.152903, y: -4.25, z: -0.5}
-  - {x: 5.19638, y: -4.0499997, z: -0.5}
-  - {x: 5.1680474, y: -3.85, z: -0.5}
-  - {x: 5.0738263, y: -3.6499999, z: -0.5}
-  - {x: 4.9920382, y: -3.4499998, z: -0.5}
-  - {x: 5.122683, y: -3.2499998, z: -0.5}
-  - {x: 5.305563, y: -3.0499997, z: -0.5}
-  - {x: 5.369755, y: -2.85, z: -0.5}
-  - {x: 5.2530427, y: -2.6499999, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -5379,7 +5210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -5448,6 +5279,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5472,20 +5304,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -5.67, y: -4.38, z: -0.5}
-  - {x: -5.64977, y: -4.18, z: -0.5}
-  - {x: -5.603302, y: -3.9799998, z: -0.5}
-  - {x: -5.618093, y: -3.78, z: -0.5}
-  - {x: -5.707544, y: -3.58, z: -0.5}
-  - {x: -5.8293543, y: -3.3799999, z: -0.5}
-  - {x: -5.70521, y: -3.1799998, z: -0.5}
-  - {x: -5.5249996, y: -2.9799998, z: -0.5}
-  - {x: -5.4175906, y: -2.78, z: -0.5}
-  - {x: -5.5194554, y: -2.58, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -5585,6 +5407,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5695,6 +5518,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5805,6 +5629,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5915,6 +5740,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6025,6 +5851,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6135,6 +5962,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6243,7 +6071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -6312,6 +6140,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6336,20 +6165,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: -4.25, y: 3.5, z: -0.5}
-  - {x: -4.227097, y: 3.7, z: -0.5}
-  - {x: -4.18362, y: 3.9, z: -0.5}
-  - {x: -4.2119527, y: 4.1, z: -0.5}
-  - {x: -4.306174, y: 4.3, z: -0.5}
-  - {x: -4.387962, y: 4.5, z: -0.5}
-  - {x: -4.257317, y: 4.7, z: -0.5}
-  - {x: -4.074437, y: 4.9, z: -0.5}
-  - {x: -4.0102453, y: 5.1, z: -0.5}
-  - {x: -4.1269574, y: 5.3, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -6447,7 +6266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -6516,6 +6335,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6540,20 +6360,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 4.27, y: 3.4600005, z: -0.5}
-  - {x: 4.292903, y: 3.6600006, z: -0.5}
-  - {x: 4.33638, y: 3.8600006, z: -0.5}
-  - {x: 4.3080473, y: 4.0600004, z: -0.5}
-  - {x: 4.213826, y: 4.2600007, z: -0.5}
-  - {x: 4.132038, y: 4.4600005, z: -0.5}
-  - {x: 4.262683, y: 4.6600003, z: -0.5}
-  - {x: 4.445563, y: 4.8600006, z: -0.5}
-  - {x: 4.5097547, y: 5.0600004, z: -0.5}
-  - {x: 4.3930426, y: 5.2600007, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -6645,7 +6455,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8551987009635207544}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
@@ -8749,6 +8559,62 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  LifetimeByEmitterSpeedModule:
+    enabled: 0
+    m_Curve:
+      serializedVersion: 2
+      minMaxState: 1
+      scalar: 1
+      minScalar: 1
+      maxCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: -0.8
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0.2
+          inSlope: -0.8
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    m_Range: {x: 0, y: 1}
   ForceModule:
     enabled: 1
     x:
@@ -10179,19 +10045,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -10365,17 +10232,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -11330,6 +11200,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -11372,6 +11243,8 @@ ParticleSystemRenderer:
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
+  m_FreeformStretching: 0
+  m_RotateWithStretchDirection: 1
   m_VertexStreams: 00010304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
@@ -11425,6 +11298,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -11535,6 +11409,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -11643,7 +11518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionCount: 10
-  height: 2
+  height: 4
   animationSpeed: 1
   fps: 30
   animationCurve:
@@ -11712,6 +11587,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -11736,20 +11612,10 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Positions:
-  - {x: 4.27, y: 3.46, z: -0.5}
-  - {x: 4.301265, y: 3.66, z: -0.5}
-  - {x: 4.302158, y: 3.8600001, z: -0.5}
-  - {x: 4.288606, y: 4.06, z: -0.5}
-  - {x: 4.3509064, y: 4.26, z: -0.5}
-  - {x: 4.4368467, y: 4.46, z: -0.5}
-  - {x: 4.368202, y: 4.66, z: -0.5}
-  - {x: 4.197636, y: 4.86, z: -0.5}
-  - {x: 4.0213847, y: 5.06, z: -0.5}
-  - {x: 4.2250614, y: 5.26, z: -0.5}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -11849,6 +11715,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

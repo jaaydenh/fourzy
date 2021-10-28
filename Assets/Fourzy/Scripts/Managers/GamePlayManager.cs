@@ -310,14 +310,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     case GameTypeLocal.REALTIME_BOT_GAME:
                         int percent = UserManager.Instance.MyComplexityPercent();
-                        Area _area = (Area)PlayerPrefsWrapper.GetCurrentArea();
 
-                        Tuple<int, int> minMax = BoardFactory.NormalizeComplexity(
-                            (Area)PlayerPrefsWrapper.GetCurrentArea(),
-                            percent);
+                        Tuple<int, int> minMax = BoardFactory.NormalizeComplexity((Area)PlayerPrefsWrapper.GetCurrentArea(), percent);
 
-                        BoardGenerationPreferences preferences =
-                            new BoardGenerationPreferences();
+                        BoardGenerationPreferences preferences = new BoardGenerationPreferences();
                         preferences.TargetComplexityLow = minMax.Item1;
                         preferences.TargetComplexityHigh = minMax.Item2;
 
@@ -335,19 +331,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         GameManager.Instance.botGameType = GameManager.BotGameType.REGULAR;
                         if (Debug.isDebugBuild)
                         {
-                            Debug.Log($"Starting {GameManager.Instance.botGameType} bot " +
-                                $"game: MinMax: {preferences.TargetComplexityLow}-" +
-                                $"{preferences.TargetComplexityHigh}, precent: " +
-                                $"{percent}");
+                            Debug.Log($"Starting {GameManager.Instance.botGameType} bot game: MinMax: {preferences.TargetComplexityLow}-{preferences.TargetComplexityHigh}, precent: {percent}");
                         }
 
                         break;
 
                     case GameTypeLocal.LOCAL_GAME:
-                        game = new ClientFourzyGame(
-                            GameContentManager.Instance.GetInstructionBoard("ICE_BLOCK"),
-                            UserManager.Instance.meAsPlayer,
-                            new Player(2, "Player Two"))
+                        game = new ClientFourzyGame(GameContentManager.Instance.GetInstructionBoard("BLOCKER"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"))
                         {
                             _Type = GameType.PASSANDPLAY
                         };
@@ -1236,10 +1226,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             UnloadBG();
 
-            CurrentBGConfiguration = GameContentManager
-                .Instance
-                .areasDataHolder
-                .GetAreaBGConfiguration(area, Camera.main);
+            CurrentBGConfiguration = GameContentManager.Instance.areasDataHolder.GetAreaBGConfiguration(area, Camera.main);
+
             BG = Instantiate(CurrentBGConfiguration.backgroundPrefab, bgParent);
             BG.transform.localPosition = Vector3.zero;
         }
