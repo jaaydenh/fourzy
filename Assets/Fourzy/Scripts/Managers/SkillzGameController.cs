@@ -1,7 +1,10 @@
 //@vadym udod
 
 using Fourzy._Updates.Mechanics.GameplayScene;
+using FourzyGameModel.Model;
+using Newtonsoft.Json;
 using SkillzSDK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -34,29 +37,30 @@ namespace Fourzy._Updates.Managers
         private int pointsPerMoveLeftWin;
         private int pointsPerMoveLeftLose;
         private int pointsPerMoveLeftDraw;
-        private int gameComplexity;
         private int matchPausesLeft;
+        private List<SkillzLevelParams> levelsInfo;
 
         internal Match CurrentMatch { get; set; }
         internal bool OngoingMatch { get; set; }
         internal float GameInitialTimerValue => random - timer;
+        internal int CurrentLevelIndex => GamesPlayed.Count;
         internal int WinPoints => random - winPoints;
         internal int PointsPerSecond => random - pointsPerSecond;
         internal int PointsPerMoveLeftWin => random - pointsPerMoveLeftWin;
         internal int PointsPerMoveLeftLose => random - pointsPerMoveLeftLose;
         internal int PointsPerMoveLeftDraw => random - pointsPerMoveLeftDraw;
-        internal int GameComplexity => random - gameComplexity;
         internal int GamesToPlay => random - gamesToPlay;
         internal int MovesPerMatch => random - movesPerMatch;
         internal int MatchPausesLeft => random - matchPausesLeft;
         internal List<SkillzGameResult> GamesPlayed { get; } = new List<SkillzGameResult>();
         internal int Points => GamesPlayed.Sum(game => game.Points);
-        internal bool HaveNextGame => GamesPlayed.Count < GamesToPlay;
+        internal bool HaveNextGame => CurrentLevelIndex < GamesToPlay;
         internal bool CloseGameOnBack { get; set; }
+        internal List<SkillzLevelParams> LevelsInfo => levelsInfo;
 
         public void InitializeMatchData()
         {
-            random = Random.Range(10000, 99999);
+            random = UnityEngine.Random.Range(10000, 99999);
             GamesPlayed.Clear();
 
             //assign timer value
@@ -75,10 +79,20 @@ namespace Fourzy._Updates.Managers
             pointsPerMoveLeftLose = GetMatchParamInt(Constants.SKILLZ_POINTS_PER_MOVE_LOSE_KEY, Constants.SKILLZ_POINTS_PER_MOVE_LEFT_LOSE);
             //points per move left draw
             pointsPerMoveLeftDraw = GetMatchParamInt(Constants.SKILLZ_POINTS_PER_MOVE_DRAW_KEY, Constants.SKILLZ_POINTS_PER_MOVE_LEFT_DRAW);
-            //game complexity
-            gameComplexity = GetMatchParamInt(Constants.SKILLZ_GAME_COMPLEXITY_KEY, Constants.SKILLZ_GAME_COMPLEXITY);
             //match pauses left
             matchPausesLeft = GetMatchParamInt(Constants.SKILLZ_MATCH_PAUSES_KEY, Constants.SKILLZ_PAUSES_COUNT_PER_MATCH);
+
+            levelsInfo = new List<SkillzLevelParams>();
+            //levels info
+            for (int levelIndex = 0; levelIndex < gamesToPlay; levelIndex++)
+            {
+                SkillzLevelParams info = 
+                    GetLevelInfo(levelIndex) ?? 
+                    levelsInfo.Last() ?? 
+                    new SkillzLevelParams() { areaId = Constants.SKILLZ_DEFAULT_AREA, complexityLow = Constants.SKILLZ_GAME_COMPLEXITY, complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY, oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID };
+
+                levelsInfo.Add(info);
+            }
         }
 
         public void OnMatchWillBegin(Match matchInfo)
@@ -144,6 +158,40 @@ namespace Fourzy._Updates.Managers
                 return random - defaultValue;
             }
         }
+
+        private string GetMatchParamString(string key, string defaultValue)
+        {
+            if (CurrentMatch == null)
+            {
+                return "";
+            }
+
+            if (CurrentMatch.GameParams.ContainsKey(key))
+            {
+                return CurrentMatch.GameParams[key];
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        private SkillzLevelParams GetLevelInfo(int levelIndex)
+        {
+            if (CurrentMatch == null || !CurrentMatch.GameParams.ContainsKey("Level" + levelIndex))
+            {
+                return null;
+            }
+
+            SkillzLevelParams result = null;
+            try
+            {
+                result = JsonConvert.DeserializeObject<SkillzLevelParams>(CurrentMatch.GameParams["Level" + levelIndex]);
+            }
+            catch (Exception) { }
+
+            return result;
+        }
     }
 
     public class SkillzGameResult
@@ -164,5 +212,15 @@ namespace Fourzy._Updates.Managers
             this.name = name;
             this.amount = amount;
         }
+    }
+
+    [Serializable]
+    public class SkillzLevelParams
+    {
+        public int complexityLow;
+        public int complexityHigh;
+        public int areaId;
+        public string oppHerdId;
+        public int aiProfile;
     }
 }
