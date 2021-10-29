@@ -113,6 +113,9 @@ namespace Fourzy
                     case BuildIntent.DESKTOP_REGULAR:
                         return Constants.MAIN_MENU_L_SCENE_NAME;
 
+                    case BuildIntent.MOBILE_INFINITY:
+                        return Constants.MAIN_MENU_INFINITY_SCENE_NAME;
+
                     default:
                         return Constants.MAIN_MENU_P_SCENE_NAME;
                 }
@@ -1302,5 +1305,6 @@ namespace Fourzy
         MOBILE_REGULAR,
         DESKTOP_REGULAR,
         MOBILE_SKILLZ,
+        MOBILE_INFINITY,
     }
 }

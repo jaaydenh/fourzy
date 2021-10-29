@@ -30,7 +30,7 @@ class FourzyPreBuld : IPreprocessBuildWithReport
 
             if (gameManager)
             {
-                MenuItems.SetScenesFromIntent(gameManager.buildIntent);
+                MenuItems.UpdateIntentRelatedValues(gameManager.buildIntent);
             }
         }
     }

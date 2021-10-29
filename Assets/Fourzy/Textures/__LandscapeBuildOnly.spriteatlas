@@ -6,7 +6,7 @@ SpriteAtlas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: __LandscapeBuild
+  m_Name: __LandscapeBuildOnly
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -58,8 +58,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 152fd4c19f9611d4ab89618506bc0e74, type: 3}
     - {fileID: 102900000, guid: 0935355c45445044991c766fb45724f9, type: 3}
     - {fileID: 102900000, guid: 792e441131412dd4ba3d994238c84e25, type: 3}
-    totalSpriteSurfaceArea: 26360244
-    bindAsDefault: 1
+    bindAsDefault: 0
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
@@ -190,5 +189,5 @@ SpriteAtlas:
   - Wizard-armL
   - Portal-rocks
   m_RenderDataMap: {}
-  m_Tag: __LandscapeBuild
+  m_Tag: __LandscapeBuildOnly
   m_IsVariant: 0

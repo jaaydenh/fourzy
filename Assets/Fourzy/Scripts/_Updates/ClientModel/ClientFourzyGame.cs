@@ -212,9 +212,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientFourzyHelper.AssignPrefabs(this);
 
-                return playerOnePrefabData.Id == playerTwoPrefabData.Id ?
-                    playerTwoPrefabData.player2Prefab :
-                    playerTwoPrefabData.player1Prefab;
+                return playerOnePrefabData.Id == playerTwoPrefabData.Id ? playerTwoPrefabData.player2Prefab : playerTwoPrefabData.player1Prefab;
             }
         }
 
