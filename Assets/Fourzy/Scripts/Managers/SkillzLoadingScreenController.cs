@@ -22,8 +22,6 @@ namespace Fourzy._Updates.Managers
         [SerializeField]
         private OnRatio portrait;
 
-        private float loadingTime = 2f;
-
         private IEnumerator Start()
         {
             if (GameManager.Instance.Landscape)
@@ -37,12 +35,18 @@ namespace Fourzy._Updates.Managers
 
             bg.Configure();
 
-            while (EazyNetChecker.Status != NetStatus.Connected)
+            switch (GameManager.Instance.buildIntent)
             {
-                yield return null;
+                case BuildIntent.MOBILE_SKILLZ:
+                    while (EazyNetChecker.Status != NetStatus.Connected)
+                    {
+                        yield return null;
+                    }
+
+                    break;
             }
 
-            AsyncOperation async = SceneManager.LoadSceneAsync(Constants.MAIN_MENU_SKILLZ_SCENE_NAME, LoadSceneMode.Single);
+            AsyncOperation async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
 
             if (async != null)
             {
