@@ -936,7 +936,30 @@ namespace Fourzy
             FourzyPhotonManager.onJoinRoomFailed -= OnRejoinRoomFailed;
         }
 
-        public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
+        public static void Vibrate(HapticTypes type)
+        {
+            switch (Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    int durationInMs = 100;
+#if UNITY_EDITOR
+                    Debug.Log($"Infinity Game Table: Rumble ({durationInMs}ms)");
+#elif UNITY_ANDROID
+                    using (var igtMotor = new AndroidJavaClass("com.arcade1up.igtsdk.IGTMotor"))
+                    {
+                        igtMotor.CallStatic("rumble", durationInMs);
+                    }
+#endif
+
+                    break;
+
+                case BuildIntent.DESKTOP_REGULAR:
+                case BuildIntent.MOBILE_SKILLZ:
+                    MMVibrationManager.Haptic(type);
+
+                    break;
+            }
+        }
 
         public static void Vibrate() => Vibrate(HapticTypes.Success);
 

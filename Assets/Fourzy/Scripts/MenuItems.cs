@@ -272,9 +272,32 @@ public class MenuItems : MonoBehaviour
 
     public static void UpdateIntentRelatedValues(BuildIntent intent)
     {
+        UpdateMiscAssets(intent);
         UpdateAtlasses(intent);
         SetScenesFromIntent(intent);
         SetBuildSettingsFromIntent(intent);
+    }
+
+    public static void UpdateMiscAssets(BuildIntent intent)
+    {
+        PluginImporter plugin = AssetImporter.GetAtPath("Assets/Plugins/Android/igtsdk.aar") as PluginImporter;
+        switch (intent)
+        {
+            case BuildIntent.MOBILE_INFINITY:
+                plugin.ClearSettings();
+                plugin.SetCompatibleWithPlatform(BuildTarget.Android, true);
+
+                break;
+
+            case BuildIntent.MOBILE_REGULAR:
+            case BuildIntent.MOBILE_SKILLZ:
+                plugin.SetCompatibleWithPlatform(BuildTarget.Android, false);
+
+                break;
+        }
+
+        EditorUtility.SetDirty(plugin);
+        plugin.SaveAndReimport();
     }
 
     public static void UpdateAtlasses(BuildIntent intent)
@@ -353,17 +376,23 @@ public class MenuItems : MonoBehaviour
         {
             case BuildIntent.MOBILE_INFINITY:
                 PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
+                PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel28;
+                PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
 
                 break;
 
             case BuildIntent.DESKTOP_REGULAR:
                 PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
+                PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
+                PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
 
                 break;
 
             case BuildIntent.MOBILE_REGULAR:
             case BuildIntent.MOBILE_SKILLZ:
                 PlayerSettings.defaultInterfaceOrientation = UIOrientation.Portrait;
+                PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
+                PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
 
                 break;
         }
