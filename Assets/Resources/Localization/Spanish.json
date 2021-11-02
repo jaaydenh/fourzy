@@ -538,6 +538,14 @@
       "value": "Jugador 2"
     },
     {
+      "key": "player_positioning_across",
+      "value": "A través de"
+    },
+    {
+      "key": "player_positioning_side_by_side",
+      "value": "Lado a lado"
+    },
+    {
       "key": "portalpoints",
       "value": "Puntos de portal"
     },
@@ -696,6 +704,10 @@
     {
       "key": "select_board",
       "value": "Selección de juego"
+    },
+    {
+      "key": "select_player_positioning",
+      "value": "Seleccionar posicionamiento de jugadoras"
     },
     {
       "key": "settings",

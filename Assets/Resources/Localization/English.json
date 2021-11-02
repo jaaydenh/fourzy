@@ -538,6 +538,14 @@
       "value": "Player 2"
     },
     {
+      "key": "player_positioning_across",
+      "value": "Across"
+    },
+    {
+      "key": "player_positioning_side_by_side",
+      "value": "Side By Side"
+    },
+    {
       "key": "portalpoints",
       "value": "Portal Points"
     },
@@ -696,6 +704,10 @@
     {
       "key": "select_board",
       "value": "Board Selection"
+    },
+    {
+      "key": "select_player_positioning",
+      "value": "Select Players Positioning"
     },
     {
       "key": "settings",

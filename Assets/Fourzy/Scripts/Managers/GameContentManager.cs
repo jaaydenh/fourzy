@@ -88,9 +88,17 @@ namespace Fourzy
 
             piecesDataHolder.Initialize();
 
-            LoadAllFastPuzzles();
-            LoadPuzzlePacks();
-            LoadTutorialBotGames();
+            //load fast puzzles
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_REGULAR:
+                    LoadAllFastPuzzles();
+                    LoadPuzzlePacks();
+                    LoadTutorialBotGames();
+
+                    break;
+            }
+
             LoadInstructionBoards();
             LoadMiscBoards();
             LoadPassAndPlayBoards();
@@ -376,6 +384,9 @@ namespace Fourzy
             }
         }
 
+        /// <summary>
+        /// Tutorial boards for realtime games
+        /// </summary>
         private void LoadTutorialBotGames()
         {
             realtimeBotBoards = new List<ResourceItem>(ResourceDB
@@ -387,6 +398,9 @@ namespace Fourzy
             Debug.Log($"Loaded {realtimeBotBoards.Count} tutorial bot games.");
         }
 
+        /// <summary>
+        /// Token instruction boards
+        /// </summary>
         private void LoadInstructionBoards()
         {
             instructionBoards = new List<ResourceItem>(ResourceDB
@@ -400,6 +414,9 @@ namespace Fourzy
             }
         }
 
+        /// <summary>
+        /// Onboarding boards
+        /// </summary>
         private void LoadMiscBoards()
         {
             miscBoards = new List<ResourceItem>(ResourceDB
@@ -413,6 +430,9 @@ namespace Fourzy
             }
         }
 
+        /// <summary>
+        /// Pass and play boards
+        /// </summary>
         private void LoadPassAndPlayBoards()
         {
             passAndPlayBoards = new List<GameBoardDefinition>(ResourceDB
