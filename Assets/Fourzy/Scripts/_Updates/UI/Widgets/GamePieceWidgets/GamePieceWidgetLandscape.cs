@@ -105,7 +105,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnPointerEnter(PointerEventData data)
         {
-            if (players != null || (_menuScreen.selectedPlayers[0] && _menuScreen.selectedPlayers[1])) return;
+            if (players != null || (_menuScreen.SelectedPlayers[0] && _menuScreen.SelectedPlayers[1])) return;
 
             if (CustomInputManager.GamepadCount > 1 && data.pointerId > -1)
             {
@@ -114,7 +114,7 @@ namespace Fourzy._Updates.UI.Widgets
                     case 1:
                         currentHighlight = p2Selection;
 
-                        p2Selection.sprite = _menuScreen.p2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
+                        p2Selection.sprite = _menuScreen.P2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
                         p2Selection.gameObject.SetActive(true);
                         p2Selection.fillAmount = 1f;
 
@@ -131,11 +131,11 @@ namespace Fourzy._Updates.UI.Widgets
             }
             else
             {
-                if (_menuScreen.selectedPlayers[0])
+                if (_menuScreen.SelectedPlayers[0])
                 {
                     currentHighlight = p2Selection;
 
-                    p2Selection.sprite = _menuScreen.p2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
+                    p2Selection.sprite = _menuScreen.P2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
                     p2Selection.gameObject.SetActive(true);
                     p2Selection.fillAmount = 1f;
                 }

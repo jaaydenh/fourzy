@@ -39,6 +39,7 @@ namespace Fourzy._Updates.UI.Menu
         public VSScreenDifficultyDropdown SetPosition(Transform _transform, Vector2 offset)
         {
             dropdownBody.transform.position = _transform.position + (Vector3)offset;
+            dropdownBody.transform.eulerAngles = _transform.eulerAngles;
 
             return this;
         }
