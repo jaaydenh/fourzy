@@ -33,6 +33,8 @@ namespace Fourzy
 {
     public class GameManager : RoutinesBase
     {
+        public static BuildIntent BuildIntent;
+
         public static Action<Product> onPurchaseComplete;
         public static Action<Product> onPurchaseFailed;
 

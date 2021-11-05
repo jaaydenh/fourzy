@@ -88,9 +88,7 @@ namespace Fourzy._Updates.UI.Widgets
                 Destroy(current.gameObject);
             }
 
-            current = Instantiate(player.PlayerId == 1 ?
-                game.playerOneGamepiece :
-                game.playerTwoGamepiece, pieceParent);
+            current = Instantiate(player.PlayerId == 1 ? game.playerOneGamepiece : game.playerTwoGamepiece, pieceParent);
             current.transform.localPosition = Vector3.zero;
             current.transform.localScale = Vector3.one * 94f;
 

@@ -107,7 +107,6 @@ namespace Fourzy
         public const string MAIN_MENU_INFINITY_SCENE_NAME = "MainMenuSceneInfinity";
         public const string MAIN_MENU_SKILLZ_SCENE_NAME = "MainMenuSkillz";
         public const string LOGO_SCENE_NAME = "StartSceneDefault";
-        public const string LOGO_SKILLZ_SCENE_NAME = "StartSceneSkillz";
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";
 
