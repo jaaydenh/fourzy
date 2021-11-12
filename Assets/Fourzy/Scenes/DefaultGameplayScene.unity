@@ -648,7 +648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -3617,7 +3617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -3709,7 +3709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -9600,7 +9600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -11263,7 +11263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -12249,7 +12249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -12341,7 +12341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -13367,7 +13367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -15155,7 +15155,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 44
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -15366,7 +15366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -15458,7 +15458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -16040,7 +16040,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 44
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -16260,7 +16260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -16352,7 +16352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -16968,7 +16968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -17060,7 +17060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -18345,9 +18345,9 @@ RectTransform:
   m_Father: {fileID: 1424438297}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -440}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 23, y: -440}
   m_SizeDelta: {x: 313.96997, y: 98.869995}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1028838441
@@ -21808,7 +21808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -21961,7 +21961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -22794,9 +22794,9 @@ RectTransform:
   m_Father: {fileID: 1424438297}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 346.97, y: -440}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -23, y: -440}
   m_SizeDelta: {x: 55.399994, y: 59.099976}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1397286244
@@ -24011,7 +24011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -24390,7 +24390,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 48
+          selectedMember: 53
           isDynamic: 0
         target: {fileID: 1899509752}
         memberName: ToggleHelpState
@@ -24481,7 +24481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -25697,7 +25697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
@@ -25789,7 +25789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -27205,7 +27205,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 43
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -36655,7 +36655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -36744,7 +36744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 4
   onIphone:
     inspectorListHeight: 83
