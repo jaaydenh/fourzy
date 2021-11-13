@@ -15353,7 +15353,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 44
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -16238,7 +16238,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 44
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -18543,9 +18543,9 @@ RectTransform:
   m_Father: {fileID: 1424438297}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -440}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 23, y: -440}
   m_SizeDelta: {x: 313.96997, y: 98.869995}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1028838441
@@ -22992,9 +22992,9 @@ RectTransform:
   m_Father: {fileID: 1424438297}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 346.97, y: -440}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -23, y: -440}
   m_SizeDelta: {x: 55.399994, y: 59.099976}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1397286244
@@ -24195,7 +24195,163 @@ MonoBehaviour:
   magicBadge: {fileID: 286430233}
   playerNameMaxSize: 11
   spellsHolder: {fileID: 665176971}
---- !u!1001 &1518300781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501097901}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configureAtStart: 1
+  orientation: 1
+  onIphone:
+    inspectorListHeight: 128
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 11
+          isDynamic: 0
+        target: {fileID: 1501097902}
+        memberName: localScale
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 8
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 1, y: 1, z: 1}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 0
+          isDynamic: 0
+        target: {fileID: 1501097902}
+        memberName: anchoredPosition
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 7
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: -100, y: -30}
+          vector3Argument: {x: 1, y: 1, z: 1}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  onIphoneX:
+    inspectorListHeight: 128
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 11
+          isDynamic: 0
+        target: {fileID: 1501097902}
+        memberName: localScale
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 8
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 1, y: 1, z: 1}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 0
+          isDynamic: 0
+        target: {fileID: 1501097902}
+        memberName: anchoredPosition
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 7
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: -100, y: -30}
+          vector3Argument: {x: 1, y: 1, z: 1}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  onIpad:
+    inspectorListHeight: 128
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 11
+          isDynamic: 0
+        target: {fileID: 1501097902}
+        memberName: localScale
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 8
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0.7, y: 0.7, z: 0.7}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 0
+          isDynamic: 0
+        target: {fileID: 1501097902}
+        memberName: anchoredPosition
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 7
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: -60, y: -30}
+          vector3Argument: {x: 0.7, y: 0.7, z: 0.7}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -27222,7 +27378,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 43
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack

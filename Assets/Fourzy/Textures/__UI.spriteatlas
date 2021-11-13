@@ -309,6 +309,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 8df30b2d52726d945bc5f25d9fdd9c6f, type: 3}
   - {fileID: 21300000, guid: 22c9a74d108b077489bc565c412c26fc, type: 3}
   - {fileID: 21300000, guid: 209b745da9896a3449eeff4a9a2be7f2, type: 3}
+  - {fileID: 21300000, guid: bf7ab27dafdc4a646a937c0577d865e8, type: 3}
   - {fileID: 21300000, guid: 01a2338de6d086e4ab5615e66c673c3a, type: 3}
   - {fileID: 21300000, guid: 2ac1359da1dc40948bf516bab28f647f, type: 3}
   - {fileID: 21300000, guid: 18c8859d3c433be48ac1fd84127839fc, type: 3}
@@ -623,6 +624,7 @@ SpriteAtlas:
   - GamesNumber-OFF
   - separator
   - Bots-06-Pink
+  - logo
   - Wizard-3
   - Lock-Upper
   - Icon-TurnBased
