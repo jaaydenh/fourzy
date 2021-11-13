@@ -3,6 +3,7 @@
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,10 +12,9 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class TokenWidget : WidgetBase
     {
+        public Image tokenImage;
         [HideInInspector]
         public TokensDataHolder.TokenData tokenData;
-
-        public Image tokenImage;
 
         public bool IsGrayedOut { get; private set; }
 
@@ -33,10 +33,23 @@ namespace Fourzy._Updates.UI.Widgets
         /// <summary>
         /// Invoked from button
         /// </summary>
-        public void OnTap() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(
-            tokenData,
-            PlayerPrefsWrapper.GetUnlockedTokens().Select(_data => _data.tokenType).Contains(tokenData.tokenType),
-            false);
+        public void OnTap()
+        {
+            bool filterTokens = false;
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_REGULAR:
+                    filterTokens = true;
+
+                    break;
+            }
+
+            PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(
+                tokenData,
+                filterTokens ? PlayerPrefsWrapper.GetUnlockedTokens().Select(_data => _data.tokenType).Contains(tokenData.tokenType) : true,
+                false);
+        }
 
         /// <summary>
         /// Either grayed out or normal

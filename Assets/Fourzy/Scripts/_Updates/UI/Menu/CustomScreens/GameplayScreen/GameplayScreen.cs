@@ -22,6 +22,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private PlayerUIWidget myWidget;
         [SerializeField]
         private PlayerUIWidget opponentWidget;
+        [SerializeField]
+        private TimerSliderWidget myTimer;
+        [SerializeField]
+        private TimerSliderWidget opponentTimer;
 
         public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
@@ -37,14 +41,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MenuScreen tapToStartOverlay;
 
         private IClientFourzy game;
-        private TimerSliderWidget myTimer;
-        private TimerSliderWidget opponentTimer;
         private TimerSliderWidget player1Timer;
         private TimerSliderWidget player2Timer;
         private PlayerUIWidget player1Widget;
         private PlayerUIWidget player2Widget;
         private GamePlayManager gameplayManager;
         private int gameTurnCounter;
+        private bool acrossLayout;
         private UIOutline helpButtonOutline;
         private MagicState magicState = MagicState.DISABLED;
 
@@ -99,8 +102,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
-            myTimer = myWidget.GetComponentInChildren<TimerSliderWidget>();
-            opponentTimer = opponentWidget.GetComponentInChildren<TimerSliderWidget>();
             myTimer.onValueEmpty += OnTimerEmpty;
             opponentTimer.onValueEmpty += OnTimerEmpty;
 
@@ -132,6 +133,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.gameplayManager = gameplayManager;
             game = gameplayManager.Game;
+            acrossLayout = GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
 
             player1Widget = game.me == game.player1 ? myWidget : opponentWidget;
             player2Widget = game.me == game.player2 ? myWidget : opponentWidget;
@@ -208,6 +210,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             myWidget.SetGame(game);
             opponentWidget.SetGame(game);
+            opponentWidget.transform.localEulerAngles = new Vector3(0f, 0f, acrossLayout ? 180f : 0f);
 
             myWidget.Initialize();
             opponentWidget.Initialize();

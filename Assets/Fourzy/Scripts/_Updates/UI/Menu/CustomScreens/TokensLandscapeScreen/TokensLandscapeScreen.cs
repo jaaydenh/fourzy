@@ -32,7 +32,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Vector2 spacing = tokensParent.spacing;
             List<TokensDataHolder.TokenData> allTokens = GameContentManager.Instance.tokens;
-            TokenWidget prefab = GameContentManager.GetPrefab<TokenWidget>("TOKEN_SMALL");
 
             Vector2 size = tokensParent.cellSize;
             Vector2 prefabSize = size;
@@ -56,7 +55,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //load tokens
             foreach (TokensDataHolder.TokenData data in allTokens)
             {
-                WidgetBase widget = Instantiate(prefab, gridRectTransform).SetData(data);
+                WidgetBase widget = GameContentManager.InstantiatePrefab<TokenWidget>("TOKEN_SMALL", gridRectTransform).SetData(data);
                 widget.SetActive(false);
 
                 tokenWidgets.Add(widget);

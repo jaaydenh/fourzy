@@ -35,7 +35,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
     public enum PlayerPositioning
     {
-        ACROSS,
         SIDE_BY_SIDE,
+        ACROSS,
     }
 }

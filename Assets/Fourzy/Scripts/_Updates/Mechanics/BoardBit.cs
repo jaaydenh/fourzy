@@ -104,13 +104,18 @@ namespace Fourzy._Updates.Mechanics
         {
             alphaTween.SetAlpha(value);
 
-            if (outline) outline.outlineColor = new Color(outline.outlineColor.r, outline.outlineColor.g, outline.outlineColor.b, value);
+            if (outline)
+            {
+                outline.outlineColor = new Color(outline.outlineColor.r, outline.outlineColor.g, outline.outlineColor.b, value);
+            }
         }
 
         public virtual void Hide(float time)
         {
             if (time == 0f)
+            {
                 alphaTween.SetAlpha(0f);
+            }
             else
             {
                 alphaTween.playbackTime = time;
@@ -121,7 +126,9 @@ namespace Fourzy._Updates.Mechanics
         public virtual void Show(float time)
         {
             if (time == 0f)
+            {
                 alphaTween.SetAlpha(1f);
+            }
             else
             {
                 alphaTween.playbackTime = time;
