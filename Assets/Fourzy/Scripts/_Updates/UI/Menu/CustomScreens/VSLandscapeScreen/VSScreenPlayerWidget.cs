@@ -1,6 +1,8 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using System.Collections.Generic;
 using TMPro;
@@ -11,17 +13,28 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class VSScreenPlayerWidget : WidgetBase
     {
-        public Image profileImage;
-        public TMP_Text nameLabel;
-        public Badge magic;
-        public GameObject difficultiesHolder;
-        public GameObject random;
-        public GameObject[] difficultyLevels;
-        public LocalizedText localizedText;
+        [SerializeField]
+        private Image profileImage;
+        [SerializeField]
+        private TMP_Text nameLabel;
+        [SerializeField]
+        private Badge magic;
+        [SerializeField]
+        private GameObject difficultiesHolder;
+        [SerializeField]
+        private GameObject random;
+        [SerializeField]
+        private GameObject[] difficultyLevels;
+        [SerializeField]
+        private LocalizedText localizedText;
+        [SerializeField]
+        private AlphaTween outlineTween;
 
         [Header("Spells")]
-        public TokenWidgetSmall spellPrefab;
-        public RectTransform spellsParent;
+        [SerializeField]
+        private TokenWidgetSmall spellPrefab;
+        [SerializeField]
+        private RectTransform spellsParent;
 
         private List<TokenWidgetSmall> spells = new List<TokenWidgetSmall>();
         private GamePieceData data;
@@ -93,6 +106,23 @@ namespace Fourzy._Updates.UI.Widgets
             difficultiesHolder.SetActive(level > -1);
 
             return this;
+        }
+
+        public void SetOutline(bool state)
+        {
+            if (state)
+            {
+                outlineTween.PlayForward(true);
+            }
+            else
+            {
+                outlineTween.PlayBackward(true);
+            }
+        }
+
+        public bool CheckDroppedPiece(VSScreenDragableGamepiece target)
+        {
+            return RectTransformUtility.RectangleContainsScreenPoint(rectTransform, target.transform.position);
         }
 
         private void ClearMagic()

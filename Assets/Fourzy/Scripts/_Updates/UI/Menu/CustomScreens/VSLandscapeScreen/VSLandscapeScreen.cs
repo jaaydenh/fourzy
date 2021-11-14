@@ -44,6 +44,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private Sprite randomAreaIcon;
         [SerializeField]
+        private VSScreenDragableGamepiece dragablePiecePrefab;
+        [SerializeField]
         private VSScreenPlayerWidget[] profiles;
 
         private List<GamePieceWidgetLandscape> gamePieceWidgets = new List<GamePieceWidgetLandscape>();
@@ -57,6 +59,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private AreasDataHolder.GameArea selectedArea;
         private AreasDataHolder.GameArea prevArea;
 
+        private List<VSScreenDragableGamepiece> activeDragables = new List<VSScreenDragableGamepiece>();
         private int optimalColumnCount = 1;
         private int demoCounter = 0;
         private int columns;
@@ -258,47 +261,63 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnBack();
 
-            //check backCaller id 
-            GamePieceWidgetLandscape prev;
-            bool removeById = CustomInputManager.GamepadCount > 1 && (StandaloneInputModuleExtended.BackCallerId == 0 || StandaloneInputModuleExtended.BackCallerId == 1);
-
-            if (removeById)
+            //across layout is specific only to infinity table platform, thus gamepads check won't be performed
+            if (acrossLayout)
             {
-                if (SelectedPlayers[StandaloneInputModuleExtended.BackCallerId] == null)
+                //release dragged gamepieces
+                while (activeDragables.Count > 0)
                 {
-                    BackToRoot();
-                    return;
+                    activeDragables[0].Release(false);
                 }
-                else
-                {
-                    prev = SelectedPlayers[StandaloneInputModuleExtended.BackCallerId];
-                    SelectedPlayers[StandaloneInputModuleExtended.BackCallerId] = null;
-                    prev.SelectAsPlayer(GetSameProfiles(prev, -1));
 
-                    UpdateProfiles();
-                }
+                BackToRoot();
+                return;
             }
             else
             {
-                if (SelectedPlayers[1] != null || SelectedPlayers[0] != null)
-                {
-                    for (int index = SelectedPlayers.Length - 1; index >= 0; index--)
-                    {
-                        if (SelectedPlayers[index] == null) continue;
+                //this first checks if back was pressed by a specific gamepad
+                GamePieceWidgetLandscape prev;
+                bool removeById = CustomInputManager.GamepadCount > 1 && (StandaloneInputModuleExtended.BackCallerId == 0 || StandaloneInputModuleExtended.BackCallerId == 1);
 
-                        prev = SelectedPlayers[index];
-                        SelectedPlayers[index] = null;
+                if (removeById)
+                {
+                    if (SelectedPlayers[StandaloneInputModuleExtended.BackCallerId] == null)
+                    {
+                        BackToRoot();
+                        return;
+                    }
+                    else
+                    {
+                        prev = SelectedPlayers[StandaloneInputModuleExtended.BackCallerId];
+                        SelectedPlayers[StandaloneInputModuleExtended.BackCallerId] = null;
                         prev.SelectAsPlayer(GetSameProfiles(prev, -1));
 
-                        break;
+                        UpdateProfiles();
                     }
-
-                    UpdateProfiles();
                 }
+                //otherwise remove p2 selection(if selected), than p1
                 else
                 {
-                    BackToRoot();
-                    return;
+                    if (SelectedPlayers[1] != null || SelectedPlayers[0] != null)
+                    {
+                        for (int index = SelectedPlayers.Length - 1; index >= 0; index--)
+                        {
+                            if (SelectedPlayers[index] == null) continue;
+
+                            prev = SelectedPlayers[index];
+                            SelectedPlayers[index] = null;
+                            prev.SelectAsPlayer(GetSameProfiles(prev, -1));
+
+                            break;
+                        }
+
+                        UpdateProfiles();
+                    }
+                    else
+                    {
+                        BackToRoot();
+                        return;
+                    }
                 }
             }
 
@@ -472,11 +491,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private GamePieceWidgetLandscape CreateGamepieceWidget(GamePieceData data)
         {
-            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>("GAME_PIECE_LANDSCAPE", gamePiecesRectTransform);
+            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>("GAME_PIECE_LANDSCAPE", gamePiecesRectTransform)
+                .SetData(data);
 
-            widget
-                .SetData(data)
-                .SetOnClick(OnGPSelected);
+            if (acrossLayout)
+            {
+                widget.SetOnPointerDown(StartDrag);
+            }
+            else
+            {
+                widget.SetOnClick((eventData, pieceWidget) => OnGPSelected(eventData.pointerId, pieceWidget));
+            }
 
             widgets.Add(widget);
             gamePieceWidgets.Add(widget);
@@ -492,9 +517,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void OnGPSelected(PointerEventData data, GamePieceWidgetLandscape piece)
+        private void OnGPSelected(int pointerId, GamePieceWidgetLandscape piece)
         {
-            if (CustomInputManager.GamepadCount < 2 || data.pointerId == -1)
+            if (!acrossLayout && (CustomInputManager.GamepadCount < 2 || pointerId == -1))
             {
                 for (int index = 0; index < SelectedPlayers.Length; index++)
                 {
@@ -507,13 +532,58 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else
             {
-                UpdateSelectedPlayer(data.pointerId, piece);
+                UpdateSelectedPlayer(pointerId, piece);
             }
 
             readyButton.SetState(SelectedPlayers.ToList().TrueForAll(_widget => _widget != null));
             UpdateProfiles();
 
             gamePieceWidgets.ForEach(_widget => _widget.OnPieceSelected(piece));
+        }
+
+        private void StartDrag(PointerEventData data, GamePieceWidgetLandscape piece)
+        {
+            VSScreenDragableGamepiece dragablePiece = Instantiate(dragablePiecePrefab, transform);
+
+            dragablePiece.gameObject.SetActive(true);
+            dragablePiece
+                .AttachToPointer(data)
+                .SetOnRemoved(OnDragableGamepieceRemoved)
+                .SetOnDropped((data) => OnDragableGamepieceDropped(data, piece))
+                .SetGamepiece(piece.data);
+            activeDragables.Add(dragablePiece);
+
+            //outline player profiles
+            foreach (var profile in profiles)
+            {
+                profile.SetOutline(true);
+            }
+        }
+
+        private void OnDragableGamepieceRemoved(VSScreenDragableGamepiece target)
+        {
+            activeDragables.Remove(target);
+
+            if (activeDragables.Count == 0)
+            {
+                //hide player profiles outline
+                foreach (var profile in profiles)
+                {
+                    profile.SetOutline(false);
+                }
+            }
+        }
+
+        private void OnDragableGamepieceDropped(VSScreenDragableGamepiece target, GamePieceWidgetLandscape piece)
+        {
+            for (int profileIndex = 0; profileIndex < profiles.Length; profileIndex++)
+            {
+                if (profiles[profileIndex].CheckDroppedPiece(target))
+                {
+                    OnGPSelected(profileIndex, piece);
+                    break;
+                }
+            }
         }
 
         private int[] GetSameProfiles(GamePieceWidgetLandscape piece, int indexToIgnore)

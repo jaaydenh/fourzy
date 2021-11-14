@@ -14,6 +14,7 @@ namespace Fourzy._Updates.UI.Widgets
     public class GamePieceWidgetLandscape : WidgetBase
     {
         public Action<PointerEventData, GamePieceWidgetLandscape> onClick;
+        public Action<PointerEventData, GamePieceWidgetLandscape> onPointerDown;
 
         [HideInInspector]
         public GamePieceData data;
@@ -46,7 +47,9 @@ namespace Fourzy._Updates.UI.Widgets
                     gamePiece = AddPiece(data.Id);
                 }
                 else if (!gamePiece)
+                {
                     gamePiece = AddPiece(data.Id);
+                }
 
                 random.SetActive(false);
             }
@@ -94,6 +97,13 @@ namespace Fourzy._Updates.UI.Widgets
         public GamePieceWidgetLandscape SetOnClick(Action<PointerEventData, GamePieceWidgetLandscape> action)
         {
             onClick = action;
+
+            return this;
+        }
+
+        public GamePieceWidgetLandscape SetOnPointerDown(Action<PointerEventData, GamePieceWidgetLandscape> action)
+        {
+            onPointerDown = action;
 
             return this;
         }
@@ -160,7 +170,15 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        private void OnClick(PointerEventData pointerEventData) => onClick?.Invoke(pointerEventData, this);
+        public void OnPointerDown(BaseEventData data)
+        {
+            onPointerDown?.Invoke(data as PointerEventData, this);
+        }
+
+        private void OnClick(PointerEventData pointerEventData)
+        {
+            onClick?.Invoke(pointerEventData, this);
+        }
 
         private GamePieceView AddPiece(string id)
         {

@@ -286,6 +286,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6d123bdb0434f8845afeaebf070abdcf, type: 3}
   - {fileID: 21300000, guid: 24c52ceb9c1ddff4abf3d9be00658d65, type: 3}
   - {fileID: 21300000, guid: ea0dcafb532c1684485b05bfb8f6e10b, type: 3}
+  - {fileID: 21300000, guid: dff2002c061c2d0479f75d67251b319f, type: 3}
   - {fileID: 21300000, guid: a2c5542cf118eb242ac632ed2025419d, type: 3}
   - {fileID: 21300000, guid: a1210a4c420ecdf4287b4f2fa24b28ab, type: 3}
   - {fileID: 21300000, guid: a0bec25c05c4c4c49b0325df12dde2c8, type: 3}
@@ -601,6 +602,7 @@ SpriteAtlas:
   - Logo (640x360)
   - Buttons_News
   - hintFillUp
+  - FourzyBoxBlur
   - TimerBar-Off
   - glow3
   - panel3-Sheet
