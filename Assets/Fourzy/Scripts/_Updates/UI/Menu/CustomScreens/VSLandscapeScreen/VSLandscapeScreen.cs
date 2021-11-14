@@ -227,6 +227,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             footer.anchoredPosition = new Vector3(0f, acrossLayout  ? 10f : 80f, 0f);
             profiles[1].transform.SetParent(acrossLayout ? header : footer);
             profiles[1].transform.localEulerAngles = Vector3.zero;
+            profiles[1].transform.localScale = Vector3.one;
             header.gameObject.SetActive(acrossLayout);
             title.gameObject.SetActive(!acrossLayout);
 
@@ -494,7 +495,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>("GAME_PIECE_LANDSCAPE", gamePiecesRectTransform)
                 .SetData(data);
 
-            if (acrossLayout)
+            if (GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY)
             {
                 widget.SetOnPointerDown(StartDrag);
             }
@@ -519,7 +520,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnGPSelected(int pointerId, GamePieceWidgetLandscape piece)
         {
-            if (!acrossLayout && (CustomInputManager.GamepadCount < 2 || pointerId == -1))
+            if (GameManager.Instance.buildIntent != BuildIntent.MOBILE_INFINITY && (CustomInputManager.GamepadCount < 2 || pointerId == -1))
             {
                 for (int index = 0; index < SelectedPlayers.Length; index++)
                 {
