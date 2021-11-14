@@ -96,8 +96,8 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_04"), new Vector2(.5f, .15f)),
                     new OnboardingTask_ShowMaskedArea(
-                        Constants.GAMEPLAY_MENU_CANVAS_NAME, 
-                        "Player2UIWidget", 
+                        Constants.GAMEPLAY_MENU_CANVAS_NAME,
+                        "Player2Parent", 
                         new Vector2(315f, 130f),
                         new Vector2(65f, 20f),
                         OnboardingScreenMaskObject.MaskStyle.PX_16, 

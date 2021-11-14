@@ -1,5 +1,6 @@
 //@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -16,6 +17,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void PlayLocal()
         {
             menuController.GetScreen<PlayerPositioningPromptScreen>()._Prompt(OnPositioningSelected);
+        }
+
+        public void ResetTutorial()
+        {
+            PersistantMenuController.Instance
+                .GetOrAddScreen<OnboardingScreen>()
+                .OpenTutorial(HardcodedTutorials.GetByName("Onboarding"));
         }
 
         private void OnPositioningSelected()
