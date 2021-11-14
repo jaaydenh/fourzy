@@ -318,6 +318,10 @@
       "value": "Ignorar"
     },
     {
+      "key": "igt_exit_to_dashboard",
+      "value": "Salir al tablero"
+    },
+    {
       "key": "in",
       "value": "en"
     },

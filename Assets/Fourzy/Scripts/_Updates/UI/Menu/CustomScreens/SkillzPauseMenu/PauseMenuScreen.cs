@@ -13,6 +13,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private TMP_Text scoreLabel;
         [SerializeField]
         private GameObject scorePanel;
+        [SerializeField]
+        private GameObject toDashboardButton;
 
         /// <summary>
         /// To be closed when this prompt is closed
@@ -58,6 +60,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    toDashboardButton.SetActive(true);
+
+                    break;
+
+                default:
+                    toDashboardButton.SetActive(false);
+
+                    break;
+            }
         }
 
         public void _Close(bool animate = false)
@@ -65,6 +80,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CloseSecondaryPopup(animate);
 
             CloseSelf();
+        }
+
+        public void ExitToDashboard()
+        {
+            GameManager.Instance.CloseApp();
         }
 
         public void ShowRules()

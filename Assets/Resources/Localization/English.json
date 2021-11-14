@@ -36,7 +36,6 @@
       "key": "instruction_08",
       "value": "Now let's see how much you learned, I will test your skills!"
     },
-  
     {
       "key": "abandoned_room_available",
       "value": "Abandoned Room Available"
@@ -312,6 +311,10 @@
     {
       "key": "ignore",
       "value": "Ignore"
+    },
+    {
+      "key": "igt_exit_to_dashboard",
+      "value": "Exit To Dashboard"
     },
     {
       "key": "in",
