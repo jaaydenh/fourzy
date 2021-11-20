@@ -969,11 +969,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     //create new game if random board
                     if (Game.asFourzyGame.isBoardRandom)
                     {
-                        Game = new ClientFourzyGame(
-                            Game._Area,
-                            UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
-                            UserManager.Instance.meAsPlayer.PlayerId)
-                        { _Type = GameType.PASSANDPLAY };
+                        Game = new ClientFourzyGame(Game._Area, Game.asFourzyGame.player1, Game.asFourzyGame.player2, UserManager.Instance.meAsPlayer.PlayerId) { _Type = GameType.PASSANDPLAY };
+                        Game.UpdateFirstState();
                     }
                     else
                     {

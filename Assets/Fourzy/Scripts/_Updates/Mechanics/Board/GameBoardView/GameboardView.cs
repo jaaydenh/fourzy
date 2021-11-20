@@ -2242,6 +2242,7 @@ namespace Fourzy._Updates.Mechanics.Board
             float customDelay = 0f;
             float delay = 0f;
             string lastPieceId = "";
+            bool gameOver = false;
 
             GameActionType delayedActionType = GameActionType.INVALID;
             //spawn gamepiece using first action
@@ -2518,6 +2519,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         break;
 
                     case GameActionType.GAME_END:
+                        gameOver = true;
                         SetHintAreaColliderState(false);
 
                         if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionGameEnd))
@@ -2660,15 +2662,18 @@ namespace Fourzy._Updates.Mechanics.Board
             });
 
             //flip tokens/pieces if applies
-            if (gameplayManager && acrossLayout)
+            if (!gameOver && !game.IsOver)
             {
-                bool upsideDown = game.activePlayer == game.player2;
-                foreach (BoardBit _bit in boardBits)
+                if (gameplayManager && acrossLayout)
                 {
-                    _bit.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, .3f);
-                }
+                    bool upsideDown = game.activePlayer == game.player2;
+                    foreach (BoardBit _bit in boardBits)
+                    {
+                        _bit.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, .3f);
+                    }
 
-                yield return new WaitForSeconds(.3f);
+                    yield return new WaitForSeconds(.3f);
+                }
             }
 
             onMoveEnded?.Invoke(turn, turnResults, startTurn);
