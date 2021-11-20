@@ -13403,6 +13403,7 @@ MonoBehaviour:
   pieceParent: {fileID: 641201534}
   magicBadge: {fileID: 1978830621}
   playerNameMaxSize: 11
+  updateInifinityLayout: 0
   spellsHolder: {fileID: 1581266721}
 --- !u!114 &667688348
 MonoBehaviour:
@@ -24445,6 +24446,7 @@ MonoBehaviour:
   pieceParent: {fileID: 850697869}
   magicBadge: {fileID: 286430233}
   playerNameMaxSize: 11
+  updateInifinityLayout: 1
   spellsHolder: {fileID: 665176971}
 --- !u!1 &1523515887
 GameObject:

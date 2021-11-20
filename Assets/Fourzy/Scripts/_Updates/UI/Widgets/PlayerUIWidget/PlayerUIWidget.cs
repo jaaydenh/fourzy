@@ -1,13 +1,10 @@
 ﻿//@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-using Photon.Pun;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +18,7 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform pieceParent;
         public Badge magicBadge;
         public int playerNameMaxSize = 9;
+        public bool updateInifinityLayout;
         public SpellsListUIWidget spellsHolder;
 
         private VerticalLayoutGroup verticalLayoutGroup;
@@ -132,7 +130,10 @@ namespace Fourzy._Updates.UI.Widgets
 
             game.onMagic += OnMagicUpdate;
 
-            OnPlayerPosition(PlayerPositioningPromptScreen.PlayerPositioning);
+            if (updateInifinityLayout)
+            {
+                OnPlayerPosition(PlayerPositioningPromptScreen.PlayerPositioning);
+            }
         }
 
         public void ShowPlayerTurnAnimation()

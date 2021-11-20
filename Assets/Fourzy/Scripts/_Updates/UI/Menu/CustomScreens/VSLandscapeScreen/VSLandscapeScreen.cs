@@ -67,7 +67,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private Vector2 widgetSize;
         private bool acrossLayout;
 
-        public GamePieceWidgetLandscape[] SelectedPlayers { get; private set; } = new GamePieceWidgetLandscape[2];
+        public GamePieceWidgetLandscape[] SelectedPlayers { get; } = new GamePieceWidgetLandscape[2];
         public int P1DifficultyLevel { get; private set; } = -1;
         public int P2DifficultyLevel { get; private set; } = -1;
 
@@ -226,8 +226,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             profiles[1].transform.localScale = Vector3.one;
             header.gameObject.SetActive(acrossLayout);
             title.gameObject.SetActive(!acrossLayout);
-
-            CreatePieces();
 
             areaPicker.image.sprite = selectedArea == null ? randomAreaIcon : selectedArea._4X3;
             areaPicker.SetLabel(LocalizationManager.Value(selectedArea == null ? "random" : selectedArea.name));
@@ -414,6 +412,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+
+            CreatePieces();
         }
 
         private void CreatePieces()
