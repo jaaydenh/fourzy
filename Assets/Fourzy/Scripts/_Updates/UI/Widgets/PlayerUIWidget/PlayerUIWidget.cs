@@ -4,11 +4,13 @@ using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using Photon.Pun;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -21,6 +23,7 @@ namespace Fourzy._Updates.UI.Widgets
         public int playerNameMaxSize = 9;
         public SpellsListUIWidget spellsHolder;
 
+        private VerticalLayoutGroup verticalLayoutGroup;
         private GamePieceView current;
         private int rating;
         private int totalGames;
@@ -36,6 +39,8 @@ namespace Fourzy._Updates.UI.Widgets
         protected override void Awake()
         {
             base.Awake();
+
+            verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
 
             OpponentData.onRatingUdpate += OnOpponentRatingUpdate;
             OpponentData.onTotalGamesUpdate += OnOpponentTotalGamesUpdate;
@@ -99,11 +104,35 @@ namespace Fourzy._Updates.UI.Widgets
             SetPlayerName(player.DisplayName);
         }
 
+        public void OnPlayerPosition(PlayerPositioning playerPosition)
+        {
+            switch (playerPosition)
+            {
+                case PlayerPositioning.ACROSS:
+                    pieceParent.anchorMin = new Vector2(0f, .5f);
+                    pieceParent.anchorMax = new Vector2(0f, .5f);
+                    verticalLayoutGroup.padding = new RectOffset(60, 20, 0, 0);
+
+                    break;
+
+                case PlayerPositioning.SIDE_BY_SIDE:
+                    pieceParent.anchorMin = new Vector2(1f, .5f);
+                    pieceParent.anchorMax = new Vector2(1f, .5f);
+                    verticalLayoutGroup.padding = new RectOffset(20, 60, 0, 0);
+
+                    break;
+            }
+
+            pieceParent.anchoredPosition = Vector2.zero;
+        }
+
         public void SetGame(IClientFourzy game)
         {
             this.game = game;
 
             game.onMagic += OnMagicUpdate;
+
+            OnPlayerPosition(PlayerPositioningPromptScreen.PlayerPositioning);
         }
 
         public void ShowPlayerTurnAnimation()
