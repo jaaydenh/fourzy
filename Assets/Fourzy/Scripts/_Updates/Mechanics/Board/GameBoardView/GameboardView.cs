@@ -86,6 +86,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private float swipeSpeedScale;
         private bool twoStepSwipePhaseTwo;
         private bool acrossLayout;
+        private bool upsideDown;
 
         private GamePieceView spawnedGamepiece;
         private AlphaTween alphaTween;
@@ -919,7 +920,6 @@ namespace Fourzy._Updates.Mechanics.Board
             //flip if needed
             if (gameplayManager && acrossLayout)
             {
-                bool upsideDown = game.activePlayer == game.player2;
                 gamePiece.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, 0f);
             }
 
@@ -1508,6 +1508,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             this.game = game;
             acrossLayout = GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
+            upsideDown = game.activePlayer == game.player2;
             turn = null;
             lastCol = 0;
             lastRow = 0;
@@ -2669,7 +2670,7 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 if (gameplayManager && acrossLayout)
                 {
-                    bool upsideDown = game.activePlayer == game.player2;
+                    upsideDown = game.activePlayer == game.player2;
                     foreach (BoardBit _bit in boardBits)
                     {
                         _bit.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, .3f);
