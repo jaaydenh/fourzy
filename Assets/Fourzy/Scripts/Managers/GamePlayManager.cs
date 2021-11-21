@@ -482,21 +482,27 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerDown(Vector2 position, int pointerId)
         {
-            if (GameState != GameState.GAME)
+            switch (GameState)
             {
-                return;
+                case GameState.GAME:
+                    if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && Game._State.ActivePlayerId != (pointerId + 1))
+                    {
+                        GameplayScreen.OnWrongTurn();
+
+                        return;
+                    }
+
+                    if (GameplayScreen != menuController.currentScreen) return;
+
+                    BoardView.OnPointerDown(position);
+
+                    break;
+
+                case GameState.HELP_STATE:
+                    BoardView.ShowHelpForTokenAtPosition(position);
+
+                    break;
             }
-
-            if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && Game._State.ActivePlayerId != (pointerId + 1))
-            {
-                GameplayScreen.OnWrongTurn();
-
-                return;
-            }
-
-            if (GameplayScreen != menuController.currentScreen) return;
-
-            BoardView.OnPointerDown(position);
         }
 
         public void OnPointerMove(Vector2 position)

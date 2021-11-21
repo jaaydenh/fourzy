@@ -247,10 +247,8 @@ namespace Fourzy._Updates.Mechanics.Board
             }
         }
 
-        public void OnPointerDown(Vector2 position)
+        public void ShowHelpForTokenAtPosition(Vector2 position)
         {
-            if (isAnimating || game.IsOver) return;
-
             if (gameplayManager && gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
             {
                 BoardLocation _location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
@@ -274,6 +272,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 return;
             }
+        }
+
+        public void OnPointerDown(Vector2 position)
+        {
+            if (isAnimating || game.IsOver) return;
 
             if (game._Type != GameType.PASSANDPLAY)
             {
