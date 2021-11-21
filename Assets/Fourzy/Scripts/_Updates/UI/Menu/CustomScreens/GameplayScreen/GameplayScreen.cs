@@ -31,6 +31,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameInfoWidget gameInfoWidget;
         public ButtonExtended rematchButton;
         public ButtonExtended helpButton;
+        public ButtonExtended pauseButton;
+
         [SerializeField]
         private TMP_Text matchId;
 
@@ -318,6 +320,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 opponentWidget.Hide(.1f);
             }
 
+            CheckBackButton();
+
             //initialize timer
             if (timersEnabled)
             {
@@ -600,6 +604,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     //unpause timers
                     myTimer.Unpause();
                     opponentTimer.Unpause();
+
+                    break;
+            }
+        }
+
+        private void CheckBackButton()
+        {
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                    pauseButton.SetActive(false);
+
+                    break;
+
+                default:
+                    pauseButton.SetActive(true);
 
                     break;
             }

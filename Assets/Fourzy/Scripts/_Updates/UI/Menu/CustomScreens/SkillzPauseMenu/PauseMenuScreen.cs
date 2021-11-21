@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.UI.Helpers;
 using TMPro;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private GameObject scorePanel;
         [SerializeField]
         private GameObject toDashboardButton;
+        [SerializeField]
+        private GameObject rulesButton;
+        [SerializeField]
+        private ButtonExtended exitButton;
 
         /// <summary>
         /// To be closed when this prompt is closed
@@ -35,6 +40,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 default:
                     scorePanel.SetActive(false);
+
+                    break;
+            }
+
+            //update rules button state
+            switch (GamePlayManager.Instance.Game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    rulesButton.SetActive(true);
+
+                    break;
+
+                default:
+                    rulesButton.SetActive(false);
+
+                    break;
+            }
+
+            //update exit button
+            switch (GamePlayManager.Instance.Game._Type)
+            {
+                case GameType.REALTIME:
+                    exitButton.SetLabel(LocalizationManager.Value("forfeit"));
+
+                    break;
+
+                default:
+                    exitButton.SetLabel(LocalizationManager.Value("exit"));
 
                     break;
             }

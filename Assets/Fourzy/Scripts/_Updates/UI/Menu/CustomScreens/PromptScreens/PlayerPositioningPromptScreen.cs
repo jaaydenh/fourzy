@@ -1,7 +1,6 @@
 //@vadym udod
 
 using System;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -10,6 +9,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public static PlayerPositioning PlayerPositioning;
 
         private Action postSelection;
+
+        public override void OnBack()
+        {
+            CloseSelf();
+        }
 
         public void _Prompt(Action postSelection)
         {

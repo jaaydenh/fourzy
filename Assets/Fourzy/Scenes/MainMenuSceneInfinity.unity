@@ -40773,23 +40773,12 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 28
+          selectedMember: 33
           isDynamic: 0
         target: {fileID: 5753685095688062654}
-        memberName: CloseSelf
+        memberName: OnBack
         memberType: 8
-        arguments:
-        - typeName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          supportedType: 5
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 1
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
+        arguments: []
         isDynamic: 0
         isCallEnabled: 1
   onState:
