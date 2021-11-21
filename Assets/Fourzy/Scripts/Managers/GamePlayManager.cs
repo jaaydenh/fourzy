@@ -647,7 +647,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                                 break;
 
-                                //don nothing for onboarding
+                            //don nothing for onboarding
                             case GameType.ONBOARDING:
                                 break;
 
@@ -754,10 +754,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 GameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
             }
 
+            //"token unlock ribbon" condition
+            bool showRibbon = false;
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_REGULAR:
+                    showRibbon = true;
+
+                    break;
+            }
+
             foreach (TokensDataHolder.TokenData token in tokens)
             {
                 TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
-                popupUI.Prompt(token, false, true);
+
+                popupUI.Prompt(token, false, showRibbon);
 
                 yield return new WaitWhile(() => popupUI.isOpened);
 
