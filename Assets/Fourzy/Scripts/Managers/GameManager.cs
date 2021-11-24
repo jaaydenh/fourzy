@@ -75,6 +75,9 @@ namespace Fourzy
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
         public List<TokenType> excludeInstructionsFor;
+        private PlacementStyle _placementStyle;
+        private string lastErrorMessage;
+        private InputFieldPrompt inputPromptScreen;
 
         /// <summary>
         /// Pieces placement style
@@ -123,10 +126,6 @@ namespace Fourzy
                 }
             }
         }
-
-        private PlacementStyle _placementStyle;
-        private string lastErrorMessage;
-        private InputFieldPrompt inputPromptScreen;
 
         public bool isMainMenuLoaded
         {
@@ -193,6 +192,8 @@ namespace Fourzy
                 }
             }
         }
+
+        public bool AcrossLayout => buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
 
         public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
 

@@ -306,6 +306,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (magicState == MagicState.BOTH)
                         {
                             opponentWidget.spellsHolder.SetData(game, gameplayManager.BoardView, opponent);
+                            opponentWidget.spellsHolder.UpdateWidgetsPositioning();
                             opponentWidget.SetMagicWidget(true);
                         }
                         else

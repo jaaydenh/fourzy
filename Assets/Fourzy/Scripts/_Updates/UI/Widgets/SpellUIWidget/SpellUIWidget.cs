@@ -4,6 +4,7 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -39,6 +40,12 @@ namespace Fourzy._Updates.UI.Widgets
             SetState(SpellState.UNAVAILABLE);
 
             return this;
+        }
+
+        public void UpdateAcrossLayout()
+        {
+            bool accrossLayout = GameManager.Instance.AcrossLayout;
+            transform.localEulerAngles = new Vector3(0f, 0f, accrossLayout ? 180f : 0f);
         }
 
         /// <summary>
