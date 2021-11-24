@@ -978,13 +978,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
             boardBits.Add(tokenInstance);
 
-            //flip if needed
-            if (gameplayManager && acrossLayout)
-            {
-                bool upsideDown = game.activePlayer == game.player2;
-                tokenInstance.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, 0f);
-            }
-
             if (sort)
             {
                 SortBits();
@@ -2665,18 +2658,18 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
             });
 
-            //flip tokens/pieces if applies
+            //flip pieces if applies
             if (!gameOver && !game.IsOver)
             {
                 if (gameplayManager && acrossLayout)
                 {
                     upsideDown = game.activePlayer == game.player2;
-                    foreach (BoardBit _bit in boardBits)
+                    foreach (BoardBit _bit in gamePieces)
                     {
                         _bit.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, .3f);
                     }
 
-                    yield return new WaitForSeconds(.3f);
+                    yield return new WaitForSeconds(.35f);
                 }
             }
 
