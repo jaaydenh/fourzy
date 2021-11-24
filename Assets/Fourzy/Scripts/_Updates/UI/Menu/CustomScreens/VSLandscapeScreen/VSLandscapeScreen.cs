@@ -220,7 +220,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             gamePiecesRectTransform.anchoredPosition = acrossLayout ? Vector2.zero : new Vector2(0f, 175f);
-            footer.anchoredPosition = new Vector3(0f, acrossLayout  ? 10f : 80f, 0f);
+            footer.anchoredPosition = new Vector3(0f, acrossLayout ? 10f : 80f, 0f);
             profiles[1].transform.SetParent(acrossLayout ? header : footer);
             profiles[1].transform.localEulerAngles = Vector3.zero;
             profiles[1].transform.localScale = Vector3.one;
@@ -390,9 +390,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //set default ready button state
             readyButton.SetState(false);
 
-            if (CustomInputManager.GamepadCount < 2)
+            switch (GameManager.Instance.buildIntent)
             {
-                OnP2DifficultySelected(InternalSettings.Current.DEFAULT_STANDALONE_CPU_DIFFICULTY);
+                case BuildIntent.DESKTOP_REGULAR:
+                case BuildIntent.MOBILE_REGULAR:
+                    if (CustomInputManager.GamepadCount < 2)
+                    {
+                        OnP2DifficultySelected(InternalSettings.Current.DEFAULT_STANDALONE_CPU_DIFFICULTY);
+                    }
+                    break;
+
+                case BuildIntent.MOBILE_INFINITY:
+                    //ToggleP2();
+
+                    break;
             }
 
             switch (OnRatio.GetRatio(DeviceOrientation.LandscapeLeft))
@@ -617,7 +628,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SelectedPlayers[index].SelectAsPlayer(GetSameProfiles(piece, -1));
 
             bool isP2CPU = P2DifficultyLevel > -1;
-
             SelectedPlayers[index].SetP2AsCPU(isP2CPU);
         }
 
@@ -645,17 +655,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             p2Button.SetLabel("CPU");
             P2DifficultyLevel = option;
-
             profiles[1].DisplayDifficulty(option);
 
             timerToggle.SetState(P2DifficultyLevel < 0);
-        }
-
-        public enum CURRENT_VS_STAGE
-        {
-            P1_SELECT,
-            P2_SELECT,
-            READY,
         }
     }
 }
