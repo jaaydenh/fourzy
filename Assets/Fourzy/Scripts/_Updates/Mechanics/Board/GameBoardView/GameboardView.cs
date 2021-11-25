@@ -179,6 +179,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                case GameManager.PlacementStyle.TWO_STEP_TAP:
                     if (!spawnedGamepiece && selectedBoardLocation != null && (holdTimer -= Time.deltaTime) <= 0f)
                     {
                         Direction _direction = selectedBoardLocation.Value.GetDirection(game);
@@ -298,7 +299,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     switch (GameManager.Instance.placementStyle)
                     {
                         case GameManager.PlacementStyle.TWO_STEP_SWIPE:
-
+                        case GameManager.PlacementStyle.TWO_STEP_TAP:
                             break;
 
                         default:
@@ -314,13 +315,13 @@ namespace Fourzy._Updates.Mechanics.Board
                             break;
                     }
 
-
                     switch (GameManager.Instance.placementStyle)
                     {
                         case GameManager.PlacementStyle.EDGE_TAP:
                         case GameManager.PlacementStyle.SWIPE:
                         case GameManager.PlacementStyle.TAP_AND_DRAG:
                         case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                        case GameManager.PlacementStyle.TWO_STEP_TAP:
                             touched = true;
                             tapStartTime = Time.time;
                             swipeSpeedScale = 1f;
@@ -354,6 +355,47 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             break;
 
+                        case GameManager.PlacementStyle.TWO_STEP_TAP:
+                            if (spawnedGamepiece)
+                            {
+                                if (selectedBoardLocation != null)
+                                {
+                                    Direction _direction = selectedBoardLocation.Value.GetDirection(game);
+                                    BoardLocation _outsideBoardMove = selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction));
+                                    BoardLocation mouseBoardLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+
+                                    //check location
+                                    if (mouseBoardLocation.Equals(selectedBoardLocation.Value) || mouseBoardLocation.Equals(_outsideBoardMove))
+                                    {
+                                        OnMove();
+
+                                        selectedBoardLocation = null;
+                                    }
+                                    else
+                                    {
+                                        CancelSwipe2Move();
+
+                                        if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
+                                        {
+                                            holdTimer = .05f;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    CancelSwipe2Move();
+                                }
+                            }
+                            else
+                            {
+                                if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
+                                {
+                                    holdTimer = .05f;
+                                }
+                            }
+
+                            break;
+
                         case GameManager.PlacementStyle.SWIPE:
                             if (touchOriginalLocation != Vector2.zero) return;
 
@@ -365,8 +407,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         case GameManager.PlacementStyle.TAP_AND_DRAG:
                             if (touchOriginalLocation != Vector2.zero) return;
 
-                            BoardLocation _temp = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) -
-                                transform.localPosition);
+                            BoardLocation _temp = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
                             //check if outside the board
                             if (_temp.OnBoard(game._State.Board) ||
@@ -447,8 +488,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case BoardActionState.CAST_SPELL:
-                    List<BoardLocation> locationsList =
-                        SpellEvaluator.GetValidSpellLocations(game._State.Board, activeSpell);
+                    List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, activeSpell);
 
                     //modify by current spells
                     foreach (TokenSpell _spell in createdSpellTokens)
@@ -456,8 +496,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         locationsList.RemoveAll(_location => _location.Equals(_spell.location));
                     }
 
-                    BoardLocation touchLocation =
-                        Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                    BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
                     if (!locationsList.Contains(touchLocation))
                     {

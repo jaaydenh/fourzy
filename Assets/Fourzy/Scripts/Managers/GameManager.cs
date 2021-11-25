@@ -247,8 +247,7 @@ namespace Fourzy
 
             if (SceneManager.GetActiveScene().name == MainMenuSceneName)
             {
-                StandaloneInputModuleExtended.GamepadFilter =
-                    StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+                StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
             }
 
             //StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
@@ -259,7 +258,19 @@ namespace Fourzy
             EazyNetChecker.CheckIntervalNormal = 5f;
             EazyNetChecker.Timeout = 5f;
             EazyNetChecker.StartConnectionCheck(false, true);
-            placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
+
+            switch (buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    placementStyle = PlacementStyle.TWO_STEP_TAP;
+
+                    break;
+
+                default:
+                    placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
+
+                    break;
+            }
 
 #if !UNITY_IOS && !UNITY_ANDROID
             StartRoutine("location", GetLocation());
@@ -1325,6 +1336,7 @@ namespace Fourzy
             SWIPE,
             TAP_AND_DRAG,
             TWO_STEP_SWIPE,
+            TWO_STEP_TAP,
         }
     }
 

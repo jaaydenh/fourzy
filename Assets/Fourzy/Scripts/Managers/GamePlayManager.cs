@@ -638,6 +638,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (GameManager.Instance.placementStyle)
             {
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                case GameManager.PlacementStyle.TWO_STEP_TAP:
                     if (!Game.IsOver)
                     {
                         switch (Game._Type)
