@@ -66,11 +66,11 @@
     },
     {
       "key": "area_island",
-      "value": "Sandy Island"
+      "value": "Isle of Mind"
     },
     {
       "key": "area_palace",
-      "value": "Ice Palace"
+      "value": "Glacial Palace"
     },
     {
       "key": "area_selection",
@@ -186,7 +186,7 @@
     },
     {
       "key": "exit",
-      "value": "Exit"
+      "value": "Quit"
     },
     {
       "key": "failed",
