@@ -193,7 +193,9 @@ namespace Fourzy
             }
         }
 
-        public bool AcrossLayout => buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
+        public bool AcrossLayout =>
+            buildIntent == BuildIntent.MOBILE_INFINITY &&
+            PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
 
         public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
 

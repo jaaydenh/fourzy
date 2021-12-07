@@ -135,7 +135,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.gameplayManager = gameplayManager;
             game = gameplayManager.Game;
-            acrossLayout = GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
+            acrossLayout = GameManager.Instance.AcrossLayout && game._Type != GameType.ONBOARDING;
 
             player1Widget = game.me == game.player1 ? myWidget : opponentWidget;
             player2Widget = game.me == game.player2 ? myWidget : opponentWidget;

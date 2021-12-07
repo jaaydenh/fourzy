@@ -116,6 +116,21 @@ namespace Fourzy._Updates.Mechanics.Board
         public int direction { get; private set; }
         public bool Paused { get; private set; }
 
+        public bool FlipCheck
+        {
+            get
+            {
+                switch (game._Type)
+                {
+                    case GameType.ONBOARDING:
+                        return false;
+
+                    default:
+                        return gameplayManager && acrossLayout;
+                }
+            }
+        }
+
         public List<BoardBit> tokens => boardBits.Where(bit => (bit.GetType() == typeof(TokenView) || bit.GetType().IsSubclassOf(typeof(TokenView)))).ToList();
 
         public List<BoardBit> gamePieces => boardBits.Where(bit => (bit.GetType() == typeof(GamePieceView) || bit.GetType().IsSubclassOf(typeof(GamePieceView)))).ToList();
@@ -957,7 +972,7 @@ namespace Fourzy._Updates.Mechanics.Board
             gamePiece.StartBlinking();
 
             //flip if needed
-            if (gameplayManager && acrossLayout)
+            if (FlipCheck)
             {
                 gamePiece.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, 0f);
             }
@@ -2700,7 +2715,7 @@ namespace Fourzy._Updates.Mechanics.Board
             //flip pieces if applies
             if (!gameOver && !game.IsOver)
             {
-                if (gameplayManager && acrossLayout)
+                if (FlipCheck)
                 {
                     upsideDown = game.activePlayer == game.player2;
                     foreach (BoardBit _bit in gamePieces)

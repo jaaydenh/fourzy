@@ -44,7 +44,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void UpdateAcrossLayout()
         {
-            bool accrossLayout = GameManager.Instance.AcrossLayout;
+            bool accrossLayout = GameManager.Instance.AcrossLayout && game._Type != GameType.ONBOARDING;
             transform.localEulerAngles = new Vector3(0f, 0f, accrossLayout ? 180f : 0f);
         }
 

@@ -104,6 +104,15 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OnPlayerPosition(PlayerPositioning playerPosition)
         {
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                    //reset for onboarding mode
+                    playerPosition = PlayerPositioning.SIDE_BY_SIDE;
+
+                    break;
+            }
+
             switch (playerPosition)
             {
                 case PlayerPositioning.ACROSS:
