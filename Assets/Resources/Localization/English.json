@@ -13,6 +13,10 @@
       "value": "Swipe to finish your move"
     },
     {
+      "key": "instruction_02b",
+      "value": "Tap on Fourzy to finish your move"
+    },
+    {
       "key": "instruction_03",
       "value": "Pieces enter from outside the board"
     },

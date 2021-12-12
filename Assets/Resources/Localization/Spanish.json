@@ -13,6 +13,10 @@
       "value": "Desliza para finalizar tu movimiento"
     },
     {
+      "key": "instruction_02b",
+      "value": "Toca Fourzy para finalizar tu movimiento."
+    },
+    {
       "key": "instruction_03",
       "value": "Las piezas entran desde fuera del tablero"
     },

@@ -41,6 +41,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.TAP_AND_DRAG] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
                         [PlacementStyle.SWIPE] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
+                        [PlacementStyle.TWO_STEP_TAP] = new Vector2[] { new Vector2(4f, 0f) },
                         [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(4f, 0f) },
                     }),
                     new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
@@ -48,6 +49,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.TAP_AND_DRAG] = new Rect(4f, 0f, 1f, 3f),
                         [PlacementStyle.SWIPE] = new Rect(4f, 0f, 1f, 3f),
                         [PlacementStyle.EDGE_TAP] = new Rect(4f, 0f, 1f, 1f),
+                        [PlacementStyle.TWO_STEP_TAP] = new Rect(4f, 0f, 1f, 1f),
                         [PlacementStyle.TWO_STEP_SWIPE] = new Rect(4f, 0f, 1f, 1f),
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02"), new Vector2(.5f, .15f)),
@@ -67,16 +69,37 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.SKIP_TO},
                     //---------------------------
 
+                    //two step tap tutorial part
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_TAP },
+
+                    new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},
+                    new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_02b"), new Vector2(.5f, .15f)),
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.TWO_STEP_TAP] = new Vector2[] { new Vector2(4f, -1f) },
+                    }),
+                    new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.TWO_STEP_TAP] = new Rect(4f, -1f, 1f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+
+                    new OnboardingTask() { action = OnboardingActions.SKIP_TO},
+                    //-------------------------
+
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_BUBBLE_MESSAGE },
+
+                    //wait only for input modes that onready show piece origin
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_TAP || GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_TAP},
                     new OnboardingTask_Wait (2.2f),
-                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_SWIPE },
+                    new OnboardingTask() { action = OnboardingActions.SKIP_TO},
+                    //--------------------------------------------------------
 
                     // Tutorial Step 2 part B
+                    new OnboardingTask() { action =
+                        OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_SWIPE || GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_TAP},
                     new OnboardingTask_Log("pieceOriginInstructions"),
                     new OnboardingTask() { action = OnboardingActions.PAUSE_BOARD },
-                    new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
                     new OnboardingTask_Wait (.5f),
                     new OnboardingTask_LimitInput(new Rect(0f, 0f, 1f, 1f)),
                     new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_03"), new Vector2(.5f, .15f)),
@@ -89,8 +112,8 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_GAMEPIECES },
                     new OnboardingTask_Wait (1.6f),
-
                     new OnboardingTask() { action = OnboardingActions.SKIP_TO},
+
                     // Tutorial Step 3 - Highlight Opponent Player Area
                     new OnboardingTask_Log("showOpponentInfo1"),
 
@@ -125,6 +148,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.SWIPE] = new Vector2[] { new Vector2(7f, 4f), new Vector2(5f, 4f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(7f, 4f) },
                         [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(7f, 4f) },
+                        [PlacementStyle.TWO_STEP_TAP] = new Vector2[] { new Vector2(7f, 4f) },
                     }),
                     new OnboardingTask_LimitInput(new Rect(7f, 4f, 1f, 1f)),
                     new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
@@ -132,14 +156,29 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.SWIPE] = new Rect(0f, 4f, 8f, 1f),
                         [PlacementStyle.EDGE_TAP] = new Rect(0f, 4f, 8f, 1f),
                         [PlacementStyle.TWO_STEP_SWIPE] = new Rect(0f, 4f, 8f, 1f),
+                        [PlacementStyle.TWO_STEP_TAP] = new Rect(0f, 4f, 8f, 1f),
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
 
-                    //two step swipe tutorial
+                    //two step swipe tutorial part
                     new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_SWIPE },
 
                     new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
                         [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(7f, 4f), new Vector2(6f, 4f) },
+                    }),
+
+                    new OnboardingTask() { action = OnboardingActions.SKIP_TO},
+                    //---------------------------
+
+                    //two step tap tutorial part
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_TAP },
+
+                    new OnboardingTask() { action = OnboardingActions.WAIT_FOR_GAMEPIECE_SPAWN},
+                    new OnboardingTask_ShowMaskedBoardCells(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.TWO_STEP_TAP] = new Rect(0f, 4f, 9f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(8f, 4f) },
                     }),
 
                     new OnboardingTask() { action = OnboardingActions.SKIP_TO},
