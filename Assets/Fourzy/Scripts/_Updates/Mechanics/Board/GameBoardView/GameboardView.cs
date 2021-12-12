@@ -388,7 +388,10 @@ namespace Fourzy._Updates.Mechanics.Board
                                     }
                                     else
                                     {
-                                        CancelSwipe2Move();
+                                        if (mouseBoardLocation.Row >= -1 && mouseBoardLocation.Row <= 8 && mouseBoardLocation.Column >= -1 && mouseBoardLocation.Column <= 8)
+                                        {
+                                            CancelSwipe2Move();
+                                        }
 
                                         if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
                                         {
