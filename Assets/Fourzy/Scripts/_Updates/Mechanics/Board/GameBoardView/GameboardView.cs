@@ -376,11 +376,17 @@ namespace Fourzy._Updates.Mechanics.Board
                                 if (selectedBoardLocation != null)
                                 {
                                     Direction _direction = selectedBoardLocation.Value.GetDirection(game);
-                                    BoardLocation _outsideBoardMove = selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction));
+                                    List<BoardLocation> toCheck = new List<BoardLocation>() {
+                                        selectedBoardLocation.Value,
+                                        selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction)),
+                                        selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction), 2),
+                                        selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction), 3)
+                                    };
+
                                     BoardLocation mouseBoardLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
-                                    //check location
-                                    if (mouseBoardLocation.Equals(selectedBoardLocation.Value) || mouseBoardLocation.Equals(_outsideBoardMove))
+                                    //check locations
+                                    if (toCheck.Any(_loc => mouseBoardLocation.Equals(_loc)))
                                     {
                                         OnMove();
 
