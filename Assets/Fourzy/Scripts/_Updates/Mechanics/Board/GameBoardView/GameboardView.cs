@@ -1688,7 +1688,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (game._allTurnRecord.Count == 0)
             {
-                StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(game.StartTurn(), true));
+                coroutine = StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(game.StartTurn(), true));
                 SetPausedState("boardUpdateRoutine", Paused);
             }
 
@@ -2522,7 +2522,6 @@ namespace Fourzy._Updates.Mechanics.Board
                             }
 
                             GameActionTokenMovement _tokenMovement = turnResults.Activity[actionIndex] as GameActionTokenMovement;
-
                             token = BoardTokenAt<TokenView>(_tokenMovement.Start, _tokenMovement.Token.Type).First();
 
                             switch (_tokenMovement.Reason)
@@ -2531,6 +2530,7 @@ namespace Fourzy._Updates.Mechanics.Board
                                 default:
 
                                     delay = token.StartMoveRoutine(startTurn, _tokenMovement.Start, _tokenMovement.End);
+
                                     if (delay > customDelay)
                                     {
                                         customDelay = delay;
@@ -2948,7 +2948,6 @@ namespace Fourzy._Updates.Mechanics.Board
             foreach (PlayerTurn turn in turns)
             {
                 yield return TakeTurn(new ClientPlayerTurn(turn.Moves) { PlayerId = turn.PlayerId });
-
                 yield return new WaitForSeconds(.5f);
             }
         }
