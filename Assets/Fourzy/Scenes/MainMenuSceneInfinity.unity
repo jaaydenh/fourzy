@@ -31342,7 +31342,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1971469393
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38855,7 +38855,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 56
+          selectedMember: 44
           isDynamic: 0
         target: {fileID: 5157298072942827508}
         memberName: ToggleLocalTimer

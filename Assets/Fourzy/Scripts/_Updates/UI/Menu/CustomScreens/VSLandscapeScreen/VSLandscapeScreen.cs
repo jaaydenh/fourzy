@@ -402,6 +402,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 case BuildIntent.MOBILE_INFINITY:
                     p2Button.SetPlayerState(true, false);
+                    SettingsManager.Set(SettingsManager.KEY_REALTIME_MAGIC, false);
 
                     break;
             }
