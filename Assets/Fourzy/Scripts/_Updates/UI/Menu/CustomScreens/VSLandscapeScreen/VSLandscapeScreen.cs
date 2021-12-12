@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private ButtonExtended p1Button;
         [SerializeField]
-        private ButtonExtended p2Button;
+        private VSScreenPlayerSwitchButton p2Button;
         [SerializeField]
         private RectTransform footer;
         [SerializeField]
@@ -329,7 +329,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 timerToggle.SetState(true);
 
-                p2Button.SetLabel("P2");
+                p2Button.SetPlayerState(true, true);
                 P2DifficultyLevel = -1;
                 profiles[1].DisplayDifficulty(-1);
 
@@ -401,7 +401,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 case BuildIntent.MOBILE_INFINITY:
-                    //ToggleP2();
+                    p2Button.SetPlayerState(true, false);
 
                     break;
             }
@@ -653,7 +653,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 SelectedPlayers[1].SetP2AsCPU(true);
             }
 
-            p2Button.SetLabel("CPU");
+            p2Button.SetPlayerState(false, true);
             P2DifficultyLevel = option;
             profiles[1].DisplayDifficulty(option);
 

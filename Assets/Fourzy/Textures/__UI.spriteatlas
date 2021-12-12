@@ -224,6 +224,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1a48bcd819ee97b46b6004a58a423003, type: 3}
   - {fileID: 21300000, guid: 0d3cecd8433384410a95918cb0879c61, type: 3}
   - {fileID: 21300000, guid: 050d4ce86cf29451da51a5594596189a, type: 3}
+  - {fileID: 21300000, guid: a035d2f8cbfa06b4e906806d9693bbe1, type: 3}
   - {fileID: 21300000, guid: 81948ff814a118c4b9d714ca4c0cefc7, type: 3}
   - {fileID: 21300000, guid: d939f7197123a78439a678427dfff744, type: 3}
   - {fileID: 21300000, guid: 2209cc194f01746e59ba25d22b0831ce, type: 3}
@@ -541,6 +542,7 @@ SpriteAtlas:
   - Background-Eggplant
   - SettingsButton
   - Wizard
+  - PlayerButtonHighlight
   - HorizontalBar-Lose
   - ReadyToPlay-On (noText)
   - buttonPrimary2x
