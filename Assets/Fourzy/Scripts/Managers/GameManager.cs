@@ -853,6 +853,7 @@ namespace Fourzy
                 activity.Call("finish");
             }
 #endif
+            AudioHolder.instance.StopAllBGAudio();
             Application.Quit();
         }
 
