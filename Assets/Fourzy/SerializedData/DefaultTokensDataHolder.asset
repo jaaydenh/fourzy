@@ -19,7 +19,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_blocker
-    instructionBoardName: BlockerTokenInstruction
     themesTokens:
     - theme: 2
       tokenPrefab: {fileID: 8161124261732225480, guid: 9eb9e7ed3168fcd439d9042ae6488d40,
@@ -45,7 +44,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_arrow
-    instructionBoardName: ArrowTokenInstruction
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 464145574, guid: 930375cbcd3711845a3679ba993543c6, type: 3}
@@ -55,7 +53,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_sticky
-    instructionBoardName: StickyTokenInstruction
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 2280211995192375417, guid: c42eeb486cb8dbe4aa2aff416a2e2119,
@@ -66,7 +63,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_ghost
-    instructionBoardName: GhostTokenInstruction
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 7767669712648440324, guid: 5498a25b5418c7a4b942f04bba394774,
@@ -77,7 +73,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_pit
-    instructionBoardName: PitTokenInstruction
     themesTokens:
     - theme: 4
       tokenPrefab: {fileID: 8540056239470390242, guid: bf28af94637c81343b3ec7aa7881e520,
@@ -88,7 +83,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_ice
-    instructionBoardName: IceTokenInstruction
     themesTokens:
     - theme: 16
       tokenPrefab: {fileID: 8766325973168727599, guid: f0ce173f3e315674b8cc3349c2adf111,
@@ -99,7 +93,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_sand
-    instructionBoardName: SandTokenInstruction
     themesTokens:
     - theme: 8
       tokenPrefab: {fileID: 1922302832650764088, guid: 87aeb43e86023ca4eb5daec14f9a4a34,
@@ -110,7 +103,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_fruit
-    instructionBoardName: FruitTokenInstruction
     themesTokens:
     - theme: 6
       tokenPrefab: {fileID: 6842218752336031025, guid: 53f97e1f4d129544895c6e44cb48894a,
@@ -121,7 +113,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_water
-    instructionBoardName: WaterTokenInstruction
     themesTokens:
     - theme: 4
       tokenPrefab: {fileID: 6678527419331126617, guid: 57e499ac1c032be4592d8767b4286b0b,
@@ -132,7 +123,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_circle_bomb
-    instructionBoardName: CircleBombTokenInstruction
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 2522670947061249452, guid: 236e5f00ab9a0084cb3f6deac1f6d3c8,
@@ -143,7 +133,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_fourway_arrow
-    instructionBoardName: FourWayArrowTokenInstruction
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 5820384164536987221, guid: e4616dae8ba481c47816ccbb12b5d32a,
@@ -154,7 +143,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_fruit_tree
-    instructionBoardName: FruitTreeTokenInstruction
     themesTokens:
     - theme: 4
       tokenPrefab: {fileID: 5355287401105794246, guid: 09a7348c89d97004c94d76e3ec02f228,
@@ -165,7 +153,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_ice_block
-    instructionBoardName: IceBlockTokenInstruction
     themesTokens:
     - theme: 16
       tokenPrefab: {fileID: 1799370101569748514, guid: e9f45406d89dd5a42bb3faef0ff7b144,
@@ -176,7 +163,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_snow
-    instructionBoardName: SnowTokenInstruction
     themesTokens:
     - theme: 16
       tokenPrefab: {fileID: 5537000560462396341, guid: 888dc4e93d2d5334db936a8bab6a4ec9,
@@ -187,7 +173,6 @@ MonoBehaviour:
     isSpell: 1
     spellID: 0
     description: token_desc_hex
-    instructionBoardName: HexSpellTokenInstruction
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 1133006369650618612, guid: d86264c1a8d1be543afef2f92022e503,
@@ -198,7 +183,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_moving_ghost
-    instructionBoardName: 
     themesTokens:
     - theme: 4
       tokenPrefab: {fileID: 5308922800023532423, guid: 90b5ae3199dbbe44b86a228afba8d913,
@@ -209,7 +193,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_rotating_arrow
-    instructionBoardName: 
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 3680899984073978911, guid: fbe0d6f479fc8664bb18b1f6b67662d8,
@@ -220,7 +203,6 @@ MonoBehaviour:
     isSpell: 1
     spellID: 12
     description: token_desc_lure
-    instructionBoardName: 
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 2164785177806317529, guid: e3dbb6a79e8c6f54e8795e4c05ea6457,
@@ -228,10 +210,9 @@ MonoBehaviour:
       tokenIcons:
       - {fileID: 21300000, guid: 84b86c464f0731b42a13241fe6eebcf1, type: 3}
   - tokenType: 61
-    isSpell: 0
+    isSpell: 1
     spellID: 0
     description: token_desc_move_blocker
-    instructionBoardName: 
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 1676863309525611611, guid: a3ffea0d48aaabd49b6daa2e2f47ec8d,
@@ -242,7 +223,6 @@ MonoBehaviour:
     isSpell: 0
     spellID: 0
     description: token_desc_cross_bomb
-    instructionBoardName: 
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 5202903507806380162, guid: 2c12f4e84bd8e3446a7991d7a1971736,
@@ -253,7 +233,6 @@ MonoBehaviour:
     isSpell: 1
     spellID: 3
     description: token_desc_darkness
-    instructionBoardName: 
     themesTokens:
     - theme: 127
       tokenPrefab: {fileID: 3223135564173513793, guid: 315ed889bb96a1149985c708584fb06a,

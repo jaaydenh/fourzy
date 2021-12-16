@@ -48,7 +48,7 @@ namespace FourzyGameModel.Model
         {
             get
             {
-                return TokenClassification.BLOCKER;
+                return TokenClassification.SPELL;
             }
         }
 
