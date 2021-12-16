@@ -858,7 +858,7 @@
     },
     {
       "key": "token_desc_cross_bomb",
-      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
+      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in the same row and Column as the Bomb."
     },
     {
       "key": "token_desc_darkness",
