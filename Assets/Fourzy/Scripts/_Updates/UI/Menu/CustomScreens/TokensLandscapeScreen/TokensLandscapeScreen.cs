@@ -55,10 +55,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //load tokens
             foreach (TokensDataHolder.TokenData data in allTokens)
             {
-                WidgetBase widget = GameContentManager.InstantiatePrefab<TokenWidget>("TOKEN_SMALL", gridRectTransform).SetData(data);
-                widget.SetActive(false);
+                if (!data.isSpell)
+                {
+                    WidgetBase widget = GameContentManager.InstantiatePrefab<TokenWidget>("TOKEN_SMALL", gridRectTransform).SetData(data);
+                    widget.SetActive(false);
 
-                tokenWidgets.Add(widget);
+                    tokenWidgets.Add(widget);
+                }
             }
 
             nextPageButton.SetActive(pages > 1);
