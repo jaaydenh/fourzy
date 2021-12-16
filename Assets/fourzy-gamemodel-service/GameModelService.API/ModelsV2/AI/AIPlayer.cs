@@ -192,9 +192,9 @@ namespace FourzyGameModel.Model
                     break;
 
                 case AIDifficulty.Doctor:
-                    return AIProfile.SimpleAI;
+                    return AIProfile.AggressiveAI;
             }
-            return AIProfile.PassBot;
+            return AIProfile.SimpleAI;
         }
 
 
