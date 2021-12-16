@@ -902,7 +902,7 @@
     },
     {
       "key": "token_desc_moving_ghost",
-      "value": "This Ghost moves 1 space after each turn."
+      "value": "This ghost moves 1 space after each turn. Each ghost follows a pattern.  If the next space is occupied, a ghost will skip to the next open space."
     },
     {
       "key": "token_desc_pit",
