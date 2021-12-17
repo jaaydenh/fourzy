@@ -634,7 +634,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
-
+            
+            // drop first piece for two step placement types
             switch (GameManager.Instance.placementStyle)
             {
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
@@ -648,8 +649,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                                 break;
 
-                            //don nothing for onboarding
                             case GameType.ONBOARDING:
+                                switch (Game._Mode)
+                                {
+                                    case GameMode.VERSUS:
+                                        if (Game.isMyTurn)
+                                        {
+                                            DropPiece(new BoardLocation(0, 4));
+                                        }
+
+                                        break;
+                                }
+
                                 break;
 
                             default:
