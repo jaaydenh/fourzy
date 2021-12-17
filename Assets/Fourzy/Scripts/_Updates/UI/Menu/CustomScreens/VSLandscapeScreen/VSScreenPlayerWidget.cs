@@ -29,6 +29,8 @@ namespace Fourzy._Updates.UI.Widgets
         private LocalizedText localizedText;
         [SerializeField]
         private AlphaTween outlineTween;
+        [SerializeField]
+        private GameObject extraView;
 
         [Header("Spells")]
         [SerializeField]
@@ -65,6 +67,11 @@ namespace Fourzy._Updates.UI.Widgets
 
                 random.SetActive(false);
                 localizedText.UpdateLocale();
+            }
+
+            if (extraView)
+            {
+                extraView.SetActive(!widget);
             }
 
             if (data != null)

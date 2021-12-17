@@ -173,6 +173,10 @@
       "value": "disconnected and forfeits."
     },
     {
+      "key": "drag_piece_here",
+      "value": "Drag Piece Here"
+    },
+    {
       "key": "draw",
       "value": "Draw"
     },

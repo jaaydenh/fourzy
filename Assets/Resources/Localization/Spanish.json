@@ -178,6 +178,10 @@
       "value": "desconectada y pierde."
     },
     {
+      "key": "drag_piece_here",
+      "value": "Arrastra la pieza aquí"
+    },
+    {
       "key": "draw",
       "value": "Empate"
     },
