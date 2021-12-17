@@ -397,10 +397,6 @@ namespace Fourzy._Updates.Mechanics.Board
                                         CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
                                     }
                                 }
-                                else
-                                {
-                                    CancelSwipe2Move();
-                                }
                             }
                             else
                             {
@@ -2113,7 +2109,7 @@ namespace Fourzy._Updates.Mechanics.Board
             TurnEvaluator turnEvaluator = game.turnEvaluator;
             Piece piece = game.activePlayerPiece;
 
-            InputMapValue inputMapValue = GetClosestInputMapValue(inputMapActiveOnly, position, 1);
+            InputMapValue inputMapValue = GetClosestInputMapValue(inputMapActiveOnly, position, 1.5f);
 
             if (inputMapValue == null)
             {
@@ -2131,7 +2127,6 @@ namespace Fourzy._Updates.Mechanics.Board
             else
             {
                 BoardLocation location = inputMapValue.location;
-                previousLocation = location;
 
                 if (InputMap(location) &&
                     turnEvaluator.CanIMakeMove(new SimpleMove(
@@ -2152,15 +2147,10 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
                 else
                 {
-                    if (!previousLocation.Equals(location))
-                    {
-                        negativeVfx.StartVfx(
-                            null,
-                            (Vector2)transform.position + BoardLocationToVec2(inputMapValue.location),
-                            0f);
-                    }
-
-                    selectedBoardLocation = null;
+                    negativeVfx.StartVfx(
+                        null,
+                        (Vector2)transform.position + BoardLocationToVec2(inputMapValue.location),
+                        0f);
                 }
             }
         }
