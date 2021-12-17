@@ -394,15 +394,7 @@ namespace Fourzy._Updates.Mechanics.Board
                                     }
                                     else
                                     {
-                                        if (mouseBoardLocation.Row >= -1 && mouseBoardLocation.Row <= 8 && mouseBoardLocation.Column >= -1 && mouseBoardLocation.Column <= 8)
-                                        {
-                                            CancelSwipe2Move();
-                                        }
-
-                                        if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
-                                        {
-                                            holdTimer = .05f;
-                                        }
+                                        CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
                                     }
                                 }
                                 else
@@ -412,10 +404,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             }
                             else
                             {
-                                if (CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true, false))
-                                {
-                                    holdTimer = .05f;
-                                }
+                                CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
                             }
 
                             break;
@@ -2115,6 +2104,63 @@ namespace Fourzy._Updates.Mechanics.Board
                     selectedBoardLocation = null;
 
                     return false;
+                }
+            }
+        }
+
+        private void CheckTwoStepTapMove(Vector2 position)
+        {
+            TurnEvaluator turnEvaluator = game.turnEvaluator;
+            Piece piece = game.activePlayerPiece;
+
+            InputMapValue inputMapValue = GetClosestInputMapValue(inputMapActiveOnly, position, 1);
+
+            if (inputMapValue == null)
+            {
+                if (Vec2ToBoardLocation(position).OnBoard(game._State.Board))
+                {
+                    negativeVfx.StartVfx(
+                        null,
+                        (Vector2)transform.position + BoardLocationToVec2(Vec2ToBoardLocation(position)), 0f);
+                }
+                else
+                {
+                    negativeVfx.StartVfx(null, position, 0f);
+                }
+            }
+            else
+            {
+                BoardLocation location = inputMapValue.location;
+                previousLocation = location;
+
+                if (InputMap(location) &&
+                    turnEvaluator.CanIMakeMove(new SimpleMove(
+                        piece,
+                        GetDirection(location),
+                        GetLocationFromBoardLocation(location))))
+                {
+                    if (!location.Equals(selectedBoardLocation))
+                    {
+                        if (spawnedGamepiece)
+                        {
+                            CancelSwipe2Move();
+                        }
+
+                        holdTimer = .05f;
+                        selectedBoardLocation = location;
+                    }
+                }
+                else
+                {
+                    if (!previousLocation.Equals(location))
+                    {
+                        negativeVfx.StartVfx(
+                            null,
+                            (Vector2)transform.position + BoardLocationToVec2(inputMapValue.location),
+                            0f);
+                    }
+
+                    selectedBoardLocation = null;
                 }
             }
         }
