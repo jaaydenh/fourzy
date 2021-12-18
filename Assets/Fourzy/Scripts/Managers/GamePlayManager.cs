@@ -341,6 +341,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             _Type = GameType.PASSANDPLAY
                         };
+                        game.SetRandomActivePlayer();
 
                         break;
                 }
@@ -634,7 +635,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
-            
+
             // drop first piece for two step placement types
             switch (GameManager.Instance.placementStyle)
             {
@@ -981,6 +982,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
             }
 
+            bool switchActivePlayer = false;
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    switchActivePlayer = true;
+
+                    break;
+            }
+
+            if (switchActivePlayer)
+            {
+                Game._FirstState.ActivePlayerId = Game._FirstState.ActivePlayerId == 1 ? 2 : 1;
+            }
+
             BoardView.StopAIThread();
             switch (Game._Type)
             {
@@ -998,7 +1014,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     //create new game if random board
                     if (Game.asFourzyGame.isBoardRandom)
                     {
-                        Game = new ClientFourzyGame(Game._Area, Game.asFourzyGame.player1, Game.asFourzyGame.player2, UserManager.Instance.meAsPlayer.PlayerId) { _Type = GameType.PASSANDPLAY };
+                        Game = new ClientFourzyGame(Game._Area,
+                            Game.asFourzyGame.player1,
+                            Game.asFourzyGame.player2,
+                            switchActivePlayer ? Game._FirstState.ActivePlayerId : UnityEngine.Random.value > .5f ? 1 : 2)
+                        {
+                            _Type = GameType.PASSANDPLAY
+                        };
                         Game.UpdateFirstState();
                     }
                     else

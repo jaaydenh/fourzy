@@ -167,6 +167,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (opponent.Profile == AIProfile.Player)
             {
                 game._Type = GameType.PASSANDPLAY;
+                game.SetRandomActivePlayer();
             }
             else
             {

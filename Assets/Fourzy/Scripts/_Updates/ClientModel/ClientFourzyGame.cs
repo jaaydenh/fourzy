@@ -89,16 +89,6 @@ namespace Fourzy._Updates.ClientModel
 
                         break;
                 }
-
-                //adjust active player ID
-                switch (_Type)
-                {
-                    case Fourzy.GameType.PASSANDPLAY:
-                        //random active player
-                        SetRandomActivePlayer();
-
-                        break;
-                }
             }
         }
 
@@ -503,6 +493,7 @@ namespace Fourzy._Updates.ClientModel
                         _Type = Fourzy.GameType.PASSANDPLAY
                     };
 
+                    game.SetRandomActivePlayer();
                     game.UpdateFirstState();
 
                     return game;

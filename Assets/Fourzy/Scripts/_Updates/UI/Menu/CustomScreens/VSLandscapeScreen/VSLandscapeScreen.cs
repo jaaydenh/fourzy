@@ -187,7 +187,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
             {
                 game._Type = GameType.PASSANDPLAY;
+                game.SetRandomActivePlayer();
             }
+
+            // adjust first player
+            switch (GameManager.Instance.buildIntent)
+            {
+                // for infinity table set random
+                case BuildIntent.MOBILE_INFINITY:
+                    game._State.ActivePlayerId = Random.value > .5f ? player1.PlayerId : player2.PlayerId;
+
+                    break;
+            }
+
             game.UpdateFirstState();
 
             AnalyticsManager.Instance.LogEvent(

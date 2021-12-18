@@ -88,6 +88,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             game._Type = GameType.PASSANDPLAY;
+            game.SetRandomActivePlayer();
             game.UpdateFirstState();
 
             GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
