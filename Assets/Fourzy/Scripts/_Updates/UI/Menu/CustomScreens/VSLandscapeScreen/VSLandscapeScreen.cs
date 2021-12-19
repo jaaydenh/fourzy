@@ -26,6 +26,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private ButtonExtended timerToggle;
         [SerializeField]
+        private ButtonExtended magicToggle;
+        [SerializeField]
         private ButtonExtended areaPicker;
         [SerializeField]
         private ButtonExtended p1Button;
@@ -99,13 +101,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     demoCounter = 0;
                 }
             }
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-
-            timerToggle.SetState(P2DifficultyLevel < 0);
         }
 
         /// <summary>
@@ -383,7 +378,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleLocalTimer() => SettingsManager.Toggle(SettingsManager.KEY_LOCAL_TIMER);
 
-        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_MAGIC);
+        public void ToggleMagic()
+        {
+            SettingsManager.Toggle(SettingsManager.KEY_REALTIME_MAGIC);
+
+            bool magic = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC);
+            for (int profileIndex = 0; profileIndex < profiles.Length; profileIndex++)
+            {
+                profiles[profileIndex].UpdateMagic(magic);
+            }
+        }
 
         protected override void OnInitialized()
         {
@@ -401,6 +405,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //set default ready button state
             readyButton.SetState(false);
+            timerToggle.SetState(P2DifficultyLevel < 0);
+            magicToggle.SetActive(Constants.MAGIC_TOGGLE_ACTIVE_STATE[GameManager.Instance.buildIntent]);
 
             switch (GameManager.Instance.buildIntent)
             {
@@ -532,9 +538,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void UpdateProfiles()
         {
+            bool magic = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC);
+
             for (int profileIndex = 0; profileIndex < profiles.Length; profileIndex++)
             {
                 profiles[profileIndex].SetData(SelectedPlayers[profileIndex]);
+                profiles[profileIndex].UpdateMagic(magic);
             }
         }
 

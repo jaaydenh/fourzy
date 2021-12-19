@@ -38,6 +38,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private ButtonExtended timerButton;
         [SerializeField]
+        private ButtonExtended magicButton;
+        [SerializeField]
         private ButtonExtended playButton;
 
         private Dictionary<Area, List<GameBoardDefinition>> gameboards = new Dictionary<Area, List<GameBoardDefinition>>();
@@ -76,6 +78,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AddWidget(AIProfile.EasyAI, player2select.content, 2);
             AddWidget(AIProfile.SimpleAI, player2select.content, 2);
             AddWidget(AIProfile.AggressiveAI, player2select.content, 2);
+
+            magicButton.SetActive(Constants.MAGIC_TOGGLE_ACTIVE_STATE[GameManager.Instance.buildIntent]);
 
             //load areas
             bool first = true;

@@ -40,7 +40,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         private List<TokenWidgetSmall> spells = new List<TokenWidgetSmall>();
         private GamePieceData data;
-        private GamePieceData prevData;
 
         public VSScreenPlayerWidget SetData(GamePieceWidgetLandscape widget)
         {
@@ -74,9 +73,14 @@ namespace Fourzy._Updates.UI.Widgets
                 extraView.SetActive(!widget);
             }
 
-            if (data != null)
+            return this;
+        }
+
+        public void UpdateMagic(bool displayMagic)
+        {
+            if (displayMagic)
             {
-                if (prevData != data)
+                if (data != null)
                 {
                     ClearMagic();
 
@@ -90,8 +94,11 @@ namespace Fourzy._Updates.UI.Widgets
 
                     magic.SetValue(data.Magic);
                     magic.SetState(true);
-
-                    prevData = data;
+                }
+                else
+                {
+                    ClearMagic();
+                    magic.SetState(false);
                 }
             }
             else
@@ -99,8 +106,6 @@ namespace Fourzy._Updates.UI.Widgets
                 ClearMagic();
                 magic.SetState(false);
             }
-
-            return this;
         }
 
         public VSScreenPlayerWidget DisplayDifficulty(int level)

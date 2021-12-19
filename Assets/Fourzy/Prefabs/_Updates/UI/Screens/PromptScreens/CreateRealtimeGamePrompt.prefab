@@ -1008,6 +1008,7 @@ MonoBehaviour:
   checkmarkOn: {fileID: 21300000, guid: 30aa5ee60d8dc094ba557b632196b494, type: 3}
   checkmarkOff: {fileID: 21300000, guid: d6631c2bca5f0c041a9ea87866c0f75e, type: 3}
   areasContainer: {fileID: 6667764046258842614}
+  magicButton: {fileID: 8960912256186168142}
 --- !u!225 &8960912254840272273
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1865,7 +1866,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 50
+          selectedMember: 47
           isDynamic: 0
         target: {fileID: 8960912254840272272}
         memberName: ToggleCheckmark

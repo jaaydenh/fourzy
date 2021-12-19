@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using System;
@@ -12,10 +13,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class CreateRealtimeGamePrompt : PromptScreen
     {
-        public Image checkmark;
-        public Sprite checkmarkOn;
-        public Sprite checkmarkOff;
-        public ScrollRect areasContainer;
+        [SerializeField]
+        private Image checkmark;
+        [SerializeField]
+        private Sprite checkmarkOn;
+        [SerializeField]
+        private Sprite checkmarkOff;
+        [SerializeField]
+        private ScrollRect areasContainer;
+        [SerializeField]
+        private ButtonExtended magicButton;
 
         private bool passwordEnabled = true;
         private LoadingPromptScreen _prompt;
@@ -45,6 +52,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             _prompt = PersistantMenuController.Instance
                 .GetOrAddScreen<LoadingPromptScreen>()
                 .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
+
+            magicButton.SetActive(Constants.MAGIC_TOGGLE_ACTIVE_STATE[GameManager.Instance.buildIntent]);
 
             //load areas
             bool first = true;

@@ -10262,7 +10262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -17852,7 +17852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -19978,7 +19978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -27460,6 +27460,7 @@ MonoBehaviour:
     type: 3}
   timerToggle: {fileID: 428472580}
   timerButton: {fileID: 513729951}
+  magicButton: {fileID: 1436262561}
   playButton: {fileID: 586813103}
 --- !u!1 &654004482
 GameObject:
@@ -27834,7 +27835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -29628,7 +29629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -30246,7 +30247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -31449,7 +31450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -31802,7 +31803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -33219,7 +33220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -42228,7 +42229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -43591,7 +43592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -44766,7 +44767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -47904,7 +47905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -50691,7 +50692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -50818,7 +50819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -52546,7 +52547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -58667,7 +58668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -61590,7 +61591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -64830,7 +64831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -66008,7 +66009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -68582,7 +68583,6 @@ MonoBehaviour:
   autoAdjustSize: 1
   discordButton: {fileID: 969221048}
   body: {fileID: 658507998}
-  gauntletGameUnlocked: 0
 --- !u!225 &1739894149
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -68627,7 +68627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -72796,7 +72796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -72997,7 +72997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -79880,7 +79880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -81202,7 +81202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 83
@@ -83346,7 +83346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128

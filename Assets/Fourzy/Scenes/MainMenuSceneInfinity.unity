@@ -10966,7 +10966,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -10980,7 +10980,7 @@ MonoBehaviour:
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
-  m_textAlignment: 257
+  m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -31716,7 +31716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1971469393
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36396,7 +36396,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
+      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
+        type: 2}
     - target: {fileID: 5176056263836982666, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_textInfo.lineCount
@@ -36555,13 +36556,14 @@ PrefabInstance:
     - target: {fileID: 6143930266290647100, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_text
-      value: Edge Tap
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6143930266290647100, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
+      objectReference: {fileID: 3985664887920131314, guid: 039df6059edacc74aa3426c151c05af8,
+        type: 2}
     - target: {fileID: 6143930266290647100, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_textInfo.lineCount
@@ -40197,6 +40199,7 @@ MonoBehaviour:
   gamepiecesParent: {fileID: 5157298073615348681}
   readyButton: {fileID: 5157298072034820568}
   timerToggle: {fileID: 5157298072539836334}
+  magicToggle: {fileID: 1971469395}
   areaPicker: {fileID: 5157298073194901251}
   p1Button: {fileID: 5157298072557956054}
   p2Button: {fileID: 893547968}
