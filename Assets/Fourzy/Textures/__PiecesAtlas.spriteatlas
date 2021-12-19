@@ -103,6 +103,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: f6418452ef2f81a4791bc6980492754e, type: 3}
   - {fileID: 21300000, guid: 0d735b52fb57e30429d7d5ed365e89fd, type: 3}
   - {fileID: 21300000, guid: 1e548562aeb263d419068739dbeb75c0, type: 3}
+  - {fileID: 21300000, guid: 974ea862c25564193970185a94aca80a, type: 3}
   - {fileID: 21300000, guid: 6177be62d51e59840be06b02086ca339, type: 3}
   - {fileID: 21300000, guid: c2250272f73a1134c983f37050d29b96, type: 3}
   - {fileID: 21300000, guid: ae635b7230fbb4f47b6f3cc5ba8cd857, type: 3}
@@ -461,6 +462,7 @@ SpriteAtlas:
   - RedDragon
   - Fourzy17b_Mouth-open
   - Fourzy10_Eyes-closed
+  - Furrzy
   - Fourzy07b_Mouth-open
   - Fourzy06b_Eyes-closed
   - 16-01
@@ -604,7 +606,7 @@ SpriteAtlas:
   - Fourzy36b_Mouth-closed
   - Fourzy07b_Body
   - Fourzy44b_Body
-  - Furrzy
+  - Furrzy-Blue
   - Fourzy03_Mouth-open
   - Fourzy04b_Eyes-closed
   - Fourzy07_Mouth-closed

@@ -190,7 +190,7 @@ MonoBehaviour:
       type: 3}
     Id: furrzy
     enabled: 1
-    profilePicture: {fileID: 21300000, guid: 21149a38a5e3ba148a7d134d2d0a1626, type: 3}
+    profilePicture: {fileID: 21300000, guid: 974ea862c25564193970185a94aca80a, type: 3}
     outlineColor: {r: 1, g: 1, b: 0.30588236, a: 1}
     borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
   - name: Eeek
