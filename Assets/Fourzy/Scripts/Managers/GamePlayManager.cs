@@ -544,7 +544,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (Game == null) return;
 
-            bool justStarted = false;
             if (!GameStarted)
             {
                 if (GameState != GameState.PAUSED)
@@ -556,7 +555,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     previousGameState = GameState.GAME;
                 }
                 GameStarted = true;
-                justStarted = true;
                 OnGameStarted();
             }
 

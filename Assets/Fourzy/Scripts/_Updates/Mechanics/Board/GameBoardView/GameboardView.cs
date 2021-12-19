@@ -183,6 +183,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
         protected void Update()
         {
+            if (isAnimating) return;
+
             switch (GameManager.Instance.placementStyle)
             {
                 case GameManager.PlacementStyle.EDGE_TAP:
@@ -389,8 +391,6 @@ namespace Fourzy._Updates.Mechanics.Board
                                     if (toCheck.Any(_loc => mouseBoardLocation.Equals(_loc)))
                                     {
                                         OnMove();
-
-                                        selectedBoardLocation = null;
                                     }
                                     else
                                     {
