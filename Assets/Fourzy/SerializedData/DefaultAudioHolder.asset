@@ -124,3 +124,6 @@ MonoBehaviour:
   - type: gamepiece_smash
     clips:
     - {fileID: 8300000, guid: 9b91e098ec133486f8b5ca06bc78dbb8, type: 3}
+  - type: token_snow
+    clips:
+    - {fileID: 8300000, guid: 2221e60edfdac4d7ab0e552f8246452f, type: 3}

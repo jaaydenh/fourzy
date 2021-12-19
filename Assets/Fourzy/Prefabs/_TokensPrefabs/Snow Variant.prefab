@@ -1,24 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &5537000560462396341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6867504896128275424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afa814e0febbb1940afdf481dc09fa16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _body: {fileID: 6082445141390135983}
-  onBoardScale: 1
-  _radius: 0.65
-  name: token_snow
-  volume: 1
-  onGamePieceEnter: 
-  onActivate: token_ice_block
 --- !u!1001 &4332737697150661792
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126,3 +107,22 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4332737697150661792}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5537000560462396341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867504896128275424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa814e0febbb1940afdf481dc09fa16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _body: {fileID: 6082445141390135983}
+  onBoardScale: 1
+  _radius: 0.65
+  name: token_snow
+  volume: 1
+  onGamePieceEnter: 
+  onActivate: token_snow
