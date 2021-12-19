@@ -237,12 +237,14 @@ namespace Fourzy._Updates.Audio
 
         public void StopAllBGAudio()
         {
-            foreach (BGAudio bgAudio in currentlyPlayingBG)
+            while (currentlyPlayingBG.Count > 0)
             {
-                if (bgAudio != null)
+                if (currentlyPlayingBG[0].playbackRoutine != null)
                 {
-                    StopBGAudio(bgAudio, 0.1f);
+                    StopCoroutine(currentlyPlayingBG[0].playbackRoutine);
                 }
+
+                RemoveBGAudio(currentlyPlayingBG[0]);
             }
         }
 
