@@ -397,6 +397,10 @@ namespace Fourzy._Updates.Mechanics.Board
                                         CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
                                     }
                                 }
+                                else
+                                {
+                                    CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                                }
                             }
                             else
                             {
