@@ -2751,7 +2751,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         break;
                 }
             }
-
+            isAnimating = false;
             boardBits.ForEach(bit =>
             {
                 if (bit.active)
@@ -2783,7 +2783,7 @@ namespace Fourzy._Updates.Mechanics.Board
             SetHintAreaSelectableState(true);
 
             turn = null;
-            isAnimating = false;
+            
 
             if (!game.turnEvaluator.IsAvailableSimpleMove())
             {
