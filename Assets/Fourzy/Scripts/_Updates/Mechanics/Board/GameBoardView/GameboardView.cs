@@ -1552,7 +1552,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public void Initialize(IClientFourzy game, bool hintAreas = true, bool createBits = true)
         {
             this.game = game;
-            acrossLayout = GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
+            acrossLayout = GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS && game._Type != GameType.AI;
             upsideDown = game.activePlayer == game.player2;
             turn = null;
             lastCol = 0;
