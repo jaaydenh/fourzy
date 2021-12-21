@@ -1053,6 +1053,10 @@
       "value": "Local"
     },
     {
+      "key": "vibration",
+      "value": "Vibration"
+    },
+    {
       "key": "waiting_for_game",
       "value": "Waiting for game..."
     },

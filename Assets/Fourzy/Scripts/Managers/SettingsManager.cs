@@ -16,6 +16,7 @@ namespace Fourzy._Updates.Managers
         public static Action<bool> onAnalyticsEvent;
         public static Action<bool> onLocalTimer;
         public static Action<bool> onRealtimeTimer;
+        public static Action<bool> onVibration;
 
         public const string KEY_SFX = "SETTINGS_SFX";
         public const string KEY_AUDIO = "SETTINGS_AUDIO";
@@ -23,6 +24,7 @@ namespace Fourzy._Updates.Managers
         public const string KEY_REALTIME_MAGIC = "SETTINGS_MAGIC";
         public const string KEY_REALTIME_TIMER = "SETTINGS_REALTIME_TIMER";
         public const string KEY_LOCAL_TIMER = "SETTINGS_LOCAL_TIMER";
+        public const string KEY_VIBRATION = "SETTINGS_VIBRATION";
 
         public const bool DEFAULT_SFX = true;
         public const bool DEFAULT_AUDIO = true;
@@ -30,6 +32,7 @@ namespace Fourzy._Updates.Managers
         public const bool DEFAULT_MAGIC = false;
         public const bool DEFAULT_LOCAL_TIMER = true;
         public const bool DEFAULT_REALTIME_TIMER = true;
+        public const bool DEFAULT_VIBRATION = true;
 
         private static bool initialized = false;
 
@@ -52,6 +55,7 @@ namespace Fourzy._Updates.Managers
             [KEY_REALTIME_MAGIC] = DEFAULT_MAGIC,
             [KEY_LOCAL_TIMER] = DEFAULT_LOCAL_TIMER,
             [KEY_REALTIME_TIMER] = DEFAULT_REALTIME_TIMER,
+            [KEY_VIBRATION] = DEFAULT_VIBRATION,
         };
 
         public static void Set(string key, bool value)
@@ -87,6 +91,11 @@ namespace Fourzy._Updates.Managers
 
                 case KEY_LOCAL_TIMER:
                     onLocalTimer?.Invoke(value);
+
+                    break;
+
+                case KEY_VIBRATION:
+                    onVibration?.Invoke(value);
 
                     break;
             }

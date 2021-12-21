@@ -165,6 +165,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SettingsManager.Toggle(SettingsManager.KEY_SFX);
         }
 
+        public void ToggleVibration()
+        {
+            SettingsManager.Toggle(SettingsManager.KEY_VIBRATION);
+        }
+
         /// <summary>
         /// Invoked by contunie button
         /// </summary>

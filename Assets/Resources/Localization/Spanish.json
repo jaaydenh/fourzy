@@ -1062,6 +1062,10 @@
       "value": "Versus"
     },
     {
+      "key": "vibration",
+      "value": "Vibración"
+    },
+    {
       "key": "invite_code",
       "value": "Codigo de invitacion"
     },
