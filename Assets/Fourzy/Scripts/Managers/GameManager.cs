@@ -971,8 +971,6 @@ namespace Fourzy
         {
             if (!SettingsManager.Get(SettingsManager.KEY_VIBRATION)) return;
 
-            Debug.Log("vibrate");
-
             switch (Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_INFINITY:
