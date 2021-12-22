@@ -287,6 +287,7 @@ public class MenuItems : MonoBehaviour
                 plugin.ClearSettings();
                 plugin.SetCompatibleWithPlatform(BuildTarget.Android, true);
 
+
                 break;
 
             case BuildIntent.MOBILE_REGULAR:
@@ -375,7 +376,10 @@ public class MenuItems : MonoBehaviour
         switch (intent)
         {
             case BuildIntent.MOBILE_INFINITY:
-                PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
+                PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
+                PlayerSettings.allowedAutorotateToLandscapeLeft = true;
+                PlayerSettings.allowedAutorotateToLandscapeRight = true;
+
                 PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel28;
                 PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
 
