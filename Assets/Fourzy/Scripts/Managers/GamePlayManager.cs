@@ -999,41 +999,35 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (Game._Type)
             {
                 case GameType.AI:
+                    switch (GameManager.Instance.buildIntent)
+                    {
+                        case BuildIntent.MOBILE_INFINITY:
+                            NewBoard(GameType.AI);
+
+                            break;
+
+                        default:
+                            ResetBoard();
+
+                            break;
+                    }
+
+                    break;
+
                 case GameType.PUZZLE:
                 case GameType.ONBOARDING:
                 case GameType.TRY_TOKEN:
-                    Game._Reset();
-
-                    LoadGame(Game);
+                    ResetBoard();
 
                     break;
 
                 case GameType.PASSANDPLAY:
-                    //create new game if random board
-                    if (Game.asFourzyGame.isBoardRandom)
-                    {
-                        Game = new ClientFourzyGame(Game._Area,
-                            Game.asFourzyGame.player1,
-                            Game.asFourzyGame.player2,
-                            switchActivePlayer ? Game._FirstState.ActivePlayerId : UnityEngine.Random.value > .5f ? 1 : 2)
-                        {
-                            _Type = GameType.PASSANDPLAY
-                        };
-                        Game.UpdateFirstState();
-                    }
-                    else
-                    {
-                        Game._Reset();
-                    }
-
-                    LoadGame(Game);
+                    NewBoard(GameType.PASSANDPLAY);
 
                     break;
 
                 case GameType.REALTIME:
-                    Game._Reset();
-
-                    LoadGame(Game);
+                    ResetBoard();
 
                     break;
 
@@ -1049,6 +1043,35 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     break;
+            }
+
+            void NewBoard(GameType type)
+            {
+                //create new game if random board
+                if (Game.asFourzyGame.isBoardRandom)
+                {
+                    Game = new ClientFourzyGame(Game._Area,
+                        Game.asFourzyGame.player1,
+                        Game.asFourzyGame.player2,
+                        switchActivePlayer ? Game._FirstState.ActivePlayerId : UnityEngine.Random.value > .5f ? 1 : 2)
+                    {
+                        _Type = type
+                    };
+                    Game.UpdateFirstState();
+                }
+                else
+                {
+                    Game._Reset();
+                }
+
+                LoadGame(Game);
+            }
+
+            void ResetBoard()
+            {
+                Game._Reset();
+
+                LoadGame(Game);
             }
         }
 
