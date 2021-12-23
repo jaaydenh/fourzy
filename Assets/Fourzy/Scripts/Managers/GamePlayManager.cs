@@ -370,6 +370,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CancelRoutine("takeTurn");
             CancelRoutine("realtimeCountdownRoutine");
             CancelRoutine("postGameRoutine");
+            CancelRoutine("tokensInstruction");
 
             if (GameState != GameState.PAUSED)
             {
@@ -720,6 +721,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 new KeyValuePair<string, object>("isPrivate", false));
         }
 
+        public void ShowTokensInstructions(IEnumerable<TokensDataHolder.TokenData> tokens, bool ribbon)
+        {
+            StartRoutine("tokensInstruction", ShowTokensInstructionsRoutine(tokens, ribbon));
+        }
+
         /// <summary>
         /// Triggered after board/tokens fade id + optional delays
         /// </summary>
@@ -739,6 +745,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.ResetRematchState();
 
                     break;
+            }
+        }
+
+        private IEnumerator ShowTokensInstructionsRoutine(IEnumerable<TokensDataHolder.TokenData> tokens, bool ribbon)
+        {
+            foreach (TokensDataHolder.TokenData token in tokens)
+            {
+                TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
+
+                popupUI.Prompt(token, false, ribbon);
+
+                yield return new WaitWhile(() => popupUI.isOpened);
+
+                PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, true);
             }
         }
 
@@ -775,16 +795,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            foreach (TokensDataHolder.TokenData token in tokens)
-            {
-                TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
-
-                popupUI.Prompt(token, false, showRibbon);
-
-                yield return new WaitWhile(() => popupUI.isOpened);
-
-                PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, true);
-            }
+            yield return ShowTokensInstructionsRoutine(tokens, showRibbon);
         }
 
         private IEnumerator FadeGameScreen(float alpha, float fadeTime)

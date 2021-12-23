@@ -282,7 +282,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     return;
                 }
 
-                PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(_tokens.First());
+                gameplayManager.ShowTokensInstructions(_tokens.Select(entry => GameContentManager.Instance.GetTokenData(entry.Token.Type)), false);
 
                 if (gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
                 {
