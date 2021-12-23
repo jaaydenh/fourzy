@@ -75,12 +75,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void Update()
         {
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q))
-            {
-                //toggle demo mode
-                SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
-            }
-
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 viewportPoint = Camera.main.ScreenToViewportPoint(Input.mousePosition);
@@ -158,7 +152,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             ClientFourzyGame game;
-            Area _area = selectedArea == null ?
+            bool randomArea = selectedArea == null;
+
+            Area _area = randomArea ?
                     GameContentManager.Instance.areasDataHolder.areas.Random().areaID :
                     selectedArea.areaID;
 
@@ -170,6 +166,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 game = new ClientFourzyGame(gameBoardDefinition, player1, player2);
             }
+            game.isAreaRandom = randomArea;
 
             if (P1DifficultyLevel > -1 && P2DifficultyLevel > -1)
             {

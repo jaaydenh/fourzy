@@ -29,6 +29,8 @@ namespace Fourzy._Updates.ClientModel
 
         public bool isBoardRandom { get; private set; } = false;
 
+        public bool isAreaRandom { get; set; } = false;
+
         private int _originalHerdCount;
         private GameMode _mode = GameMode.VERSUS;
 
