@@ -75,12 +75,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void Update()
         {
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q))
-            {
-                //toggle demo mode
-                SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
-            }
-
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 viewportPoint = Camera.main.ScreenToViewportPoint(Input.mousePosition);
