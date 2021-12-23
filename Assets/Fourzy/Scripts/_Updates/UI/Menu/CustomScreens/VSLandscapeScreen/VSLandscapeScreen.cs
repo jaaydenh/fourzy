@@ -158,7 +158,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             ClientFourzyGame game;
-            Area _area = selectedArea == null ?
+            bool randomArea = selectedArea == null;
+
+            Area _area = randomArea ?
                     GameContentManager.Instance.areasDataHolder.areas.Random().areaID :
                     selectedArea.areaID;
 
@@ -170,6 +172,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 game = new ClientFourzyGame(gameBoardDefinition, player1, player2);
             }
+            game.isAreaRandom = randomArea;
 
             if (P1DifficultyLevel > -1 && P2DifficultyLevel > -1)
             {

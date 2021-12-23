@@ -1050,7 +1050,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 //create new game if random board
                 if (Game.asFourzyGame.isBoardRandom)
                 {
-                    Game = new ClientFourzyGame(Game._Area,
+                    bool isAreaRandom = Game.asFourzyGame.isAreaRandom;
+
+                    Area area = isAreaRandom ? GameContentManager.Instance.areasDataHolder.areas.Random().areaID : Game._Area;
+                    Game = new ClientFourzyGame(area,
                         Game.asFourzyGame.player1,
                         Game.asFourzyGame.player2,
                         switchActivePlayer ? Game._FirstState.ActivePlayerId : UnityEngine.Random.value > .5f ? 1 : 2)
@@ -1058,6 +1061,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         _Type = type
                     };
                     Game.UpdateFirstState();
+                    Game.asFourzyGame.isAreaRandom = isAreaRandom;
                 }
                 else
                 {
