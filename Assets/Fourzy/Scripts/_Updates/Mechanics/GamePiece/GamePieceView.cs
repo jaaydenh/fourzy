@@ -19,6 +19,8 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public Animator pieceAnimator;
         public AnimationCurve movementCurve;
+        [SerializeField]
+        private float outlineSize = .0015f;
 
         public string moveSfx = "gamepiece_move";
 
@@ -232,7 +234,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void PlayWinAnimation(float delay)
         {
-            AnimateOutline(0f, 1f, 1f, .0015f);
+            AnimateOutline(0f, 1f, 1f, outlineSize);
 
             StartRoutine("winAnimation", delay, () =>
             {
@@ -256,12 +258,12 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             CancelRoutine("jumping");
             StartRoutine("jumping", JumpRoutine(3), () => pieceAnimator.Play(h_Idle, indexBaseLayer), () => pieceAnimator.Play(h_Idle, indexBaseLayer));
 
-            AnimateOutline(0f, 1f, 1f, .0015f, repeat: true);
+            AnimateOutline(0f, 1f, 1f, outlineSize, repeat: true);
         }
 
         public void StopTurnAnimation()
         {
-            AnimateOutlineFrom(0f, 1f, .0015f, 1.15f);
+            AnimateOutlineFrom(0f, 1f, outlineSize, 1.15f);
 
             Sleep();
             pieceAnimator.CrossFade(h_Idle, 0.35f, indexBaseLayer);
