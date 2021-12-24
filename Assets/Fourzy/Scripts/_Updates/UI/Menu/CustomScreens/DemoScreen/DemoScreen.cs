@@ -124,7 +124,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnDemo(bool state)
         {
-            if (Debug.isDebugBuild)
+            if (Debug.isDebugBuild && !Application.isEditor)
             {
                 Debug.Log("Demo screen blocked");
                 return;

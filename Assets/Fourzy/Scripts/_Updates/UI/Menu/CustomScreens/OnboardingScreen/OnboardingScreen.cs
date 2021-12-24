@@ -226,7 +226,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             for (int taskIndex = 0; taskIndex < tutorial.tasks.Length; taskIndex++)
             {
                 currentTask = tutorial.tasks[taskIndex];
-
+                
                 switch (currentTask.action)
                 {
                     case OnboardingActions.SHOW_MINIBOARD:
@@ -463,6 +463,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (waitTask.WaitTime > 0f)
                         {
+
                             yield return new WaitForSeconds(waitTask.WaitTime);
                         }
                         else

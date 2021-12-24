@@ -89,15 +89,20 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
                     new OnboardingTask() { action = OnboardingActions.HIDE_BUBBLE_MESSAGE },
 
-                    //wait only for input modes that onready show piece origin
-                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_TAP || GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_TAP},
+                    //extra wait for certain input styles
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue = 
+                        GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_SWIPE && 
+                        GameManager.Instance.placementStyle != PlacementStyle.TWO_STEP_TAP },
+
                     new OnboardingTask_Wait (2.2f),
                     new OnboardingTask() { action = OnboardingActions.SKIP_TO},
                     //--------------------------------------------------------
 
                     // Tutorial Step 2 part B
-                    new OnboardingTask() { action =
-                        OnboardingActions.SKIP_FROM, boolValue = GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_SWIPE || GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_TAP},
+                    new OnboardingTask() { action = OnboardingActions.SKIP_FROM, boolValue =
+                        GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_SWIPE || 
+                        GameManager.Instance.placementStyle == PlacementStyle.TWO_STEP_TAP},
+
                     new OnboardingTask_Log("pieceOriginInstructions"),
                     new OnboardingTask() { action = OnboardingActions.PAUSE_BOARD },
                     new OnboardingTask_Wait (.5f),
