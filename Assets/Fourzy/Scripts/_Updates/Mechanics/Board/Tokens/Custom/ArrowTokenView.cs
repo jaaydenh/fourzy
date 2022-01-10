@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Mechanics._GamePiece;
+using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
 using System.Linq;
 using UnityEngine;
@@ -56,6 +57,11 @@ namespace Fourzy._Updates.Mechanics.Board
                 AnimateOutline(mltp, 1.2f, .2f, .0011f, 1.2f);
                 AnimateColor(originalColor, Color.white, 0f);
             }
+        }
+
+        public override void RotateTo(float value, RepeatType repeatType, float time, bool startTurn = false)
+        {
+            //blank
         }
 
         public override void OnBitExit(BoardBit other)

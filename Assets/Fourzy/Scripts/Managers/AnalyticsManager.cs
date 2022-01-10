@@ -125,6 +125,7 @@ namespace Fourzy
             switch (GameManager.Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_REGULAR:
+                case BuildIntent.MOBILE_INFINITY:
                     Amplitude.Instance.setUserProperty("lastSeenDate", DateTime.Now.ToString());
 
                     break;

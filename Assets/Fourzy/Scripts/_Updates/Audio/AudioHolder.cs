@@ -235,6 +235,19 @@ namespace Fourzy._Updates.Audio
             }
         }
 
+        public void StopAllBGAudio()
+        {
+            while (currentlyPlayingBG.Count > 0)
+            {
+                if (currentlyPlayingBG[0].playbackRoutine != null)
+                {
+                    StopCoroutine(currentlyPlayingBG[0].playbackRoutine);
+                }
+
+                RemoveBGAudio(currentlyPlayingBG[0]);
+            }
+        }
+
         private IEnumerator BGAudioRoutine(BGAudio bgAudio)
         {
             if (bgAudio.volumeTween)

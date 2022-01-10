@@ -1,14 +1,13 @@
 ﻿//@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-using Photon.Pun;
-using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -19,8 +18,10 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform pieceParent;
         public Badge magicBadge;
         public int playerNameMaxSize = 9;
+        public bool updateInifinityLayout;
         public SpellsListUIWidget spellsHolder;
 
+        private VerticalLayoutGroup verticalLayoutGroup;
         private GamePieceView current;
         private int rating;
         private int totalGames;
@@ -36,6 +37,8 @@ namespace Fourzy._Updates.UI.Widgets
         protected override void Awake()
         {
             base.Awake();
+
+            verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
 
             OpponentData.onRatingUdpate += OnOpponentRatingUpdate;
             OpponentData.onTotalGamesUpdate += OnOpponentTotalGamesUpdate;
@@ -88,9 +91,7 @@ namespace Fourzy._Updates.UI.Widgets
                 Destroy(current.gameObject);
             }
 
-            current = Instantiate(player.PlayerId == 1 ?
-                game.playerOneGamepiece :
-                game.playerTwoGamepiece, pieceParent);
+            current = Instantiate(player.PlayerId == 1 ? game.playerOneGamepiece : game.playerTwoGamepiece, pieceParent);
             current.transform.localPosition = Vector3.zero;
             current.transform.localScale = Vector3.one * 94f;
 
@@ -101,11 +102,47 @@ namespace Fourzy._Updates.UI.Widgets
             SetPlayerName(player.DisplayName);
         }
 
+        public void OnPlayerPosition(PlayerPositioning playerPosition)
+        {
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                    //reset for onboarding mode
+                    playerPosition = PlayerPositioning.SIDE_BY_SIDE;
+
+                    break;
+            }
+
+            switch (playerPosition)
+            {
+                case PlayerPositioning.ACROSS:
+                    pieceParent.anchorMin = new Vector2(0f, .5f);
+                    pieceParent.anchorMax = new Vector2(0f, .5f);
+                    verticalLayoutGroup.padding = new RectOffset(60, 20, 0, 0);
+
+                    break;
+
+                case PlayerPositioning.SIDE_BY_SIDE:
+                    pieceParent.anchorMin = new Vector2(1f, .5f);
+                    pieceParent.anchorMax = new Vector2(1f, .5f);
+                    verticalLayoutGroup.padding = new RectOffset(20, 60, 0, 0);
+
+                    break;
+            }
+
+            pieceParent.anchoredPosition = Vector2.zero;
+        }
+
         public void SetGame(IClientFourzy game)
         {
             this.game = game;
 
             game.onMagic += OnMagicUpdate;
+
+            if (updateInifinityLayout)
+            {
+                OnPlayerPosition(PlayerPositioningPromptScreen.PlayerPositioning);
+            }
         }
 
         public void ShowPlayerTurnAnimation()

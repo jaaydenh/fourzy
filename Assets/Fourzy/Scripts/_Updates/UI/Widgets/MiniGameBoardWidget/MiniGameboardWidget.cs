@@ -89,6 +89,7 @@ namespace Fourzy._Updates.UI.Widgets
                 {
                     _Type = GameType.PASSANDPLAY
                 };
+                game.SetRandomActivePlayer();
                 game.UpdateFirstState();
 
                 if (updateArea)

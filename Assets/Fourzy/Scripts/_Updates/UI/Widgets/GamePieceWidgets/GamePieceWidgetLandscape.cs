@@ -14,6 +14,7 @@ namespace Fourzy._Updates.UI.Widgets
     public class GamePieceWidgetLandscape : WidgetBase
     {
         public Action<PointerEventData, GamePieceWidgetLandscape> onClick;
+        public Action<PointerEventData, GamePieceWidgetLandscape> onPointerDown;
 
         [HideInInspector]
         public GamePieceData data;
@@ -46,7 +47,9 @@ namespace Fourzy._Updates.UI.Widgets
                     gamePiece = AddPiece(data.Id);
                 }
                 else if (!gamePiece)
+                {
                     gamePiece = AddPiece(data.Id);
+                }
 
                 random.SetActive(false);
             }
@@ -62,12 +65,10 @@ namespace Fourzy._Updates.UI.Widgets
 
         public GamePieceWidgetLandscape SelectAsPlayer(params int[] players)
         {
-            bool p1 = Array.IndexOf(players, 0) != -1;// .Contains(0);
+            bool p1 = Array.IndexOf(players, 0) != -1;
             bool p2 = Array.IndexOf(players, 1) != -1;
-            // bool p2 = players.Contains(1);
 
             this.players = Array.IndexOf(players, -1) != -1 ? null : players;
-            // this.players = players.Contains(-1) ? null : players;
 
             player1Marker.SetActive(p1);
             player2Marker.gameObject.SetActive(p2);
@@ -98,6 +99,13 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
+        public GamePieceWidgetLandscape SetOnPointerDown(Action<PointerEventData, GamePieceWidgetLandscape> action)
+        {
+            onPointerDown = action;
+
+            return this;
+        }
+
         public void OnPieceSelected(GamePieceWidgetLandscape piece)
         {
 
@@ -105,7 +113,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnPointerEnter(PointerEventData data)
         {
-            if (players != null || (_menuScreen.selectedPlayers[0] && _menuScreen.selectedPlayers[1])) return;
+            if (players != null || (_menuScreen.SelectedPlayers[0] && _menuScreen.SelectedPlayers[1])) return;
 
             if (CustomInputManager.GamepadCount > 1 && data.pointerId > -1)
             {
@@ -114,7 +122,7 @@ namespace Fourzy._Updates.UI.Widgets
                     case 1:
                         currentHighlight = p2Selection;
 
-                        p2Selection.sprite = _menuScreen.p2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
+                        p2Selection.sprite = _menuScreen.P2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
                         p2Selection.gameObject.SetActive(true);
                         p2Selection.fillAmount = 1f;
 
@@ -131,11 +139,11 @@ namespace Fourzy._Updates.UI.Widgets
             }
             else
             {
-                if (_menuScreen.selectedPlayers[0])
+                if (_menuScreen.SelectedPlayers[0])
                 {
                     currentHighlight = p2Selection;
 
-                    p2Selection.sprite = _menuScreen.p2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
+                    p2Selection.sprite = _menuScreen.P2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
                     p2Selection.gameObject.SetActive(true);
                     p2Selection.fillAmount = 1f;
                 }
@@ -160,7 +168,15 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        private void OnClick(PointerEventData pointerEventData) => onClick?.Invoke(pointerEventData, this);
+        public void OnPointerDown(BaseEventData data)
+        {
+            onPointerDown?.Invoke(data as PointerEventData, this);
+        }
+
+        private void OnClick(PointerEventData pointerEventData)
+        {
+            onClick?.Invoke(pointerEventData, this);
+        }
 
         private GamePieceView AddPiece(string id)
         {

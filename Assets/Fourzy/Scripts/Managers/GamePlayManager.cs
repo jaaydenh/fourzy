@@ -341,6 +341,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             _Type = GameType.PASSANDPLAY
                         };
+                        game.SetRandomActivePlayer();
 
                         break;
                 }
@@ -369,6 +370,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CancelRoutine("takeTurn");
             CancelRoutine("realtimeCountdownRoutine");
             CancelRoutine("postGameRoutine");
+            CancelRoutine("tokensInstruction");
 
             if (GameState != GameState.PAUSED)
             {
@@ -482,21 +484,27 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerDown(Vector2 position, int pointerId)
         {
-            if (GameState != GameState.GAME)
+            switch (GameState)
             {
-                return;
+                case GameState.GAME:
+                    if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && Game._State.ActivePlayerId != (pointerId + 1))
+                    {
+                        GameplayScreen.OnWrongTurn();
+
+                        return;
+                    }
+
+                    if (GameplayScreen != menuController.currentScreen) return;
+
+                    BoardView.OnPointerDown(position);
+
+                    break;
+
+                case GameState.HELP_STATE:
+                    BoardView.ShowHelpForTokenAtPosition(position);
+
+                    break;
             }
-
-            if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && Game._State.ActivePlayerId != (pointerId + 1))
-            {
-                GameplayScreen.OnWrongTurn();
-
-                return;
-            }
-
-            if (GameplayScreen != menuController.currentScreen) return;
-
-            BoardView.OnPointerDown(position);
         }
 
         public void OnPointerMove(Vector2 position)
@@ -537,7 +545,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (Game == null) return;
 
-            bool justStarted = false;
             if (!GameStarted)
             {
                 if (GameState != GameState.PAUSED)
@@ -549,7 +556,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     previousGameState = GameState.GAME;
                 }
                 GameStarted = true;
-                justStarted = true;
                 OnGameStarted();
             }
 
@@ -629,9 +635,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
+            // drop first piece for two step placement types
             switch (GameManager.Instance.placementStyle)
             {
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                case GameManager.PlacementStyle.TWO_STEP_TAP:
                     if (!Game.IsOver)
                     {
                         switch (Game._Type)
@@ -641,8 +649,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                                 break;
 
-                                //don nothing for onboarding
                             case GameType.ONBOARDING:
+                                switch (Game._Mode)
+                                {
+                                    case GameMode.VERSUS:
+                                        if (Game.isMyTurn)
+                                        {
+                                            DropPiece(new BoardLocation(0, 4));
+                                        }
+
+                                        break;
+                                }
+
                                 break;
 
                             default:
@@ -703,6 +721,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 new KeyValuePair<string, object>("isPrivate", false));
         }
 
+        public void ShowTokensInstructions(IEnumerable<TokensDataHolder.TokenData> tokens, bool ribbon)
+        {
+            StartRoutine("tokensInstruction", ShowTokensInstructionsRoutine(tokens, ribbon));
+        }
+
         /// <summary>
         /// Triggered after board/tokens fade id + optional delays
         /// </summary>
@@ -722,6 +745,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.ResetRematchState();
 
                     break;
+            }
+        }
+
+        private IEnumerator ShowTokensInstructionsRoutine(IEnumerable<TokensDataHolder.TokenData> tokens, bool ribbon)
+        {
+            foreach (TokensDataHolder.TokenData token in tokens)
+            {
+                TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
+
+                popupUI.Prompt(token, false, ribbon);
+
+                yield return new WaitWhile(() => popupUI.isOpened);
+
+                PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, true);
             }
         }
 
@@ -748,15 +785,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 GameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
             }
 
-            foreach (TokensDataHolder.TokenData token in tokens)
+            //"token unlock ribbon" condition
+            bool showRibbon = false;
+            switch (GameManager.Instance.buildIntent)
             {
-                TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
-                popupUI.Prompt(token, false, true);
+                case BuildIntent.MOBILE_REGULAR:
+                    showRibbon = true;
 
-                yield return new WaitWhile(() => popupUI.isOpened);
-
-                PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, true);
+                    break;
             }
+
+            yield return ShowTokensInstructionsRoutine(tokens, showRibbon);
         }
 
         private IEnumerator FadeGameScreen(float alpha, float fadeTime)
@@ -952,42 +991,54 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
             }
 
+            bool switchActivePlayer = false;
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    switchActivePlayer = true;
+
+                    break;
+            }
+
+            if (switchActivePlayer)
+            {
+                Game._FirstState.ActivePlayerId = Game._FirstState.ActivePlayerId == 1 ? 2 : 1;
+            }
+
             BoardView.StopAIThread();
             switch (Game._Type)
             {
                 case GameType.AI:
+                    switch (GameManager.Instance.buildIntent)
+                    {
+                        case BuildIntent.MOBILE_INFINITY:
+                            NewBoard(GameType.AI);
+
+                            break;
+
+                        default:
+                            ResetBoard();
+
+                            break;
+                    }
+
+                    break;
+
                 case GameType.PUZZLE:
                 case GameType.ONBOARDING:
                 case GameType.TRY_TOKEN:
-                    Game._Reset();
-
-                    LoadGame(Game);
+                    ResetBoard();
 
                     break;
 
                 case GameType.PASSANDPLAY:
-                    //create new game if random board
-                    if (Game.asFourzyGame.isBoardRandom)
-                    {
-                        Game = new ClientFourzyGame(
-                            Game._Area,
-                            UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
-                            UserManager.Instance.meAsPlayer.PlayerId)
-                        { _Type = GameType.PASSANDPLAY };
-                    }
-                    else
-                    {
-                        Game._Reset();
-                    }
-
-                    LoadGame(Game);
+                    NewBoard(GameType.PASSANDPLAY);
 
                     break;
 
                 case GameType.REALTIME:
-                    Game._Reset();
-
-                    LoadGame(Game);
+                    ResetBoard();
 
                     break;
 
@@ -1003,6 +1054,39 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     break;
+            }
+
+            void NewBoard(GameType type)
+            {
+                //create new game if random board
+                if (Game.asFourzyGame.isBoardRandom)
+                {
+                    bool isAreaRandom = Game.asFourzyGame.isAreaRandom;
+
+                    Area area = isAreaRandom ? GameContentManager.Instance.areasDataHolder.areas.Random().areaID : Game._Area;
+                    Game = new ClientFourzyGame(area,
+                        Game.asFourzyGame.player1,
+                        Game.asFourzyGame.player2,
+                        switchActivePlayer ? Game._FirstState.ActivePlayerId : UnityEngine.Random.value > .5f ? 1 : 2)
+                    {
+                        _Type = type
+                    };
+                    Game.UpdateFirstState();
+                    Game.asFourzyGame.isAreaRandom = isAreaRandom;
+                }
+                else
+                {
+                    Game._Reset();
+                }
+
+                LoadGame(Game);
+            }
+
+            void ResetBoard()
+            {
+                Game._Reset();
+
+                LoadGame(Game);
             }
         }
 

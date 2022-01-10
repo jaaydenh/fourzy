@@ -263,6 +263,7 @@ GameObject:
   - component: {fileID: 1495684253271428971}
   - component: {fileID: 5509466861795699686}
   - component: {fileID: 5468425439645941584}
+  - component: {fileID: 645219448737952239}
   m_Layer: 5
   m_Name: GamePieceLandscapeViewPrefab
   m_TagString: Untagged
@@ -309,11 +310,7 @@ MonoBehaviour:
     player2Prefab: {fileID: 0}
     Id: 
     enabled: 0
-    startingMagic: 100
-    piecesToUnlock: 40
-    pieces: 0
     profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
     outlineColor: {r: 0, g: 0, b: 1, a: 1}
     borderColor: {r: 0, g: 1, b: 0, a: 1}
   gamePieceParent: {fileID: 277804850831549247}
@@ -439,6 +436,36 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
+--- !u!114 &645219448737952239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2811702351793752031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4693621611874812664}
+          m_TargetAssemblyTypeName: Fourzy._Updates.UI.Widgets.GamePieceWidgetLandscape,
+            Assembly-CSharp
+          m_MethodName: OnPointerDown
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4466608339721169986
 GameObject:
   m_ObjectHideFlags: 0

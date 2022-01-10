@@ -13,6 +13,10 @@
       "value": "Desliza para finalizar tu movimiento"
     },
     {
+      "key": "instruction_02b",
+      "value": "Toca Fourzy para finalizar tu movimiento."
+    },
+    {
       "key": "instruction_03",
       "value": "Las piezas entran desde fuera del tablero"
     },
@@ -67,7 +71,7 @@
     },
     {
       "key": "area_island",
-      "value": "Isla arenosa"
+      "value": "Isla de Mind"
     },
     {
       "key": "area_palace",
@@ -172,6 +176,10 @@
     {
       "key": "disconnected_and_forfeits",
       "value": "desconectada y pierde."
+    },
+    {
+      "key": "drag_piece_here",
+      "value": "Arrastra la pieza aquí"
     },
     {
       "key": "draw",
@@ -316,6 +324,10 @@
     {
       "key": "ignore",
       "value": "Ignorar"
+    },
+    {
+      "key": "igt_exit_to_dashboard",
+      "value": "Tablero"
     },
     {
       "key": "in",
@@ -538,6 +550,14 @@
       "value": "Jugador 2"
     },
     {
+      "key": "player_positioning_across",
+      "value": "A través de"
+    },
+    {
+      "key": "player_positioning_side_by_side",
+      "value": "Lado a lado"
+    },
+    {
       "key": "portalpoints",
       "value": "Puntos de portal"
     },
@@ -696,6 +716,10 @@
     {
       "key": "select_board",
       "value": "Selección de juego"
+    },
+    {
+      "key": "select_player_positioning",
+      "value": "Seleccionar posicionamiento de jugadoras"
     },
     {
       "key": "settings",
@@ -1036,6 +1060,10 @@
     {
       "key": "versus",
       "value": "Versus"
+    },
+    {
+      "key": "vibration",
+      "value": "Vibración"
     },
     {
       "key": "invite_code",

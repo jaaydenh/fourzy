@@ -3,6 +3,7 @@
 using Fourzy._Updates.UI.Helpers;
 using System;
 using TMPro;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -72,34 +73,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (inputBlocked && !force) return;
 
-            onAccept?.Invoke();
-
             if (closeOnAccept)
             {
                 CloseSelf();
             }
+
+            onAccept?.Invoke();
         }
 
         public virtual void Decline(bool force = false)
         {
             if (inputBlocked && !force) return;
 
-            bool closeCalled = false;
-
-            if (onDecline != null)
-            {
-                onDecline.Invoke();
-            }
-            else
-            {
-                closeCalled = true;
-                CloseSelf();
-            }
-
-            if (!closeCalled && closeOnDecline)
+            if (onDecline == null || closeOnDecline)
             {
                 CloseSelf();
             }
+
+            onDecline?.Invoke();
         }
 
         public void UpdateAcceptButton(string yes)

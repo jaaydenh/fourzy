@@ -29,6 +29,8 @@ namespace Fourzy._Updates.ClientModel
 
         public bool isBoardRandom { get; private set; } = false;
 
+        public bool isAreaRandom { get; set; } = false;
+
         private int _originalHerdCount;
         private GameMode _mode = GameMode.VERSUS;
 
@@ -86,16 +88,6 @@ namespace Fourzy._Updates.ClientModel
 
                                 break;
                         }
-
-                        break;
-                }
-
-                //adjust active player ID
-                switch (_Type)
-                {
-                    case Fourzy.GameType.PASSANDPLAY:
-                        //random active player
-                        SetRandomActivePlayer();
 
                         break;
                 }
@@ -212,9 +204,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientFourzyHelper.AssignPrefabs(this);
 
-                return playerOnePrefabData.Id == playerTwoPrefabData.Id ?
-                    playerTwoPrefabData.player2Prefab :
-                    playerTwoPrefabData.player1Prefab;
+                return playerOnePrefabData.Id == playerTwoPrefabData.Id ? playerTwoPrefabData.player2Prefab : playerTwoPrefabData.player1Prefab;
             }
         }
 
@@ -505,6 +495,7 @@ namespace Fourzy._Updates.ClientModel
                         _Type = Fourzy.GameType.PASSANDPLAY
                     };
 
+                    game.SetRandomActivePlayer();
                     game.UpdateFirstState();
 
                     return game;

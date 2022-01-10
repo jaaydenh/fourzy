@@ -220,9 +220,11 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 584350a818123d745a89acfff8ed01a0, type: 3}
   - {fileID: 21300000, guid: 50e066a8f1275e04e8e7ec62f05a0d5c, type: 3}
   - {fileID: 21300000, guid: bd251aa8f29c14bddbcde82e38845b6e, type: 3}
+  - {fileID: 21300000, guid: 66c76cd8b329f0945a3aec096fef060e, type: 3}
   - {fileID: 21300000, guid: 1a48bcd819ee97b46b6004a58a423003, type: 3}
   - {fileID: 21300000, guid: 0d3cecd8433384410a95918cb0879c61, type: 3}
   - {fileID: 21300000, guid: 050d4ce86cf29451da51a5594596189a, type: 3}
+  - {fileID: 21300000, guid: a035d2f8cbfa06b4e906806d9693bbe1, type: 3}
   - {fileID: 21300000, guid: 81948ff814a118c4b9d714ca4c0cefc7, type: 3}
   - {fileID: 21300000, guid: d939f7197123a78439a678427dfff744, type: 3}
   - {fileID: 21300000, guid: 2209cc194f01746e59ba25d22b0831ce, type: 3}
@@ -286,6 +288,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6d123bdb0434f8845afeaebf070abdcf, type: 3}
   - {fileID: 21300000, guid: 24c52ceb9c1ddff4abf3d9be00658d65, type: 3}
   - {fileID: 21300000, guid: ea0dcafb532c1684485b05bfb8f6e10b, type: 3}
+  - {fileID: 21300000, guid: dff2002c061c2d0479f75d67251b319f, type: 3}
   - {fileID: 21300000, guid: a2c5542cf118eb242ac632ed2025419d, type: 3}
   - {fileID: 21300000, guid: a1210a4c420ecdf4287b4f2fa24b28ab, type: 3}
   - {fileID: 21300000, guid: a0bec25c05c4c4c49b0325df12dde2c8, type: 3}
@@ -535,9 +538,11 @@ SpriteAtlas:
   - blue 160
   - buttonLeaderboard selected
   - buttonChat
+  - igt_logo
   - Background-Eggplant
   - SettingsButton
   - Wizard
+  - PlayerButtonHighlight
   - HorizontalBar-Lose
   - ReadyToPlay-On (noText)
   - buttonPrimary2x
@@ -601,6 +606,7 @@ SpriteAtlas:
   - Logo (640x360)
   - Buttons_News
   - hintFillUp
+  - FourzyBoxBlur
   - TimerBar-Off
   - glow3
   - panel3-Sheet

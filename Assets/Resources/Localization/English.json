@@ -13,6 +13,10 @@
       "value": "Swipe to finish your move"
     },
     {
+      "key": "instruction_02b",
+      "value": "Tap on Fourzy to finish your move"
+    },
+    {
       "key": "instruction_03",
       "value": "Pieces enter from outside the board"
     },
@@ -36,7 +40,6 @@
       "key": "instruction_08",
       "value": "Now let's see how much you learned, I will test your skills!"
     },
-  
     {
       "key": "abandoned_room_available",
       "value": "Abandoned Room Available"
@@ -67,11 +70,11 @@
     },
     {
       "key": "area_island",
-      "value": "Sandy Island"
+      "value": "Isle of Mind"
     },
     {
       "key": "area_palace",
-      "value": "Ice Palace"
+      "value": "Glacial Palace"
     },
     {
       "key": "area_selection",
@@ -135,7 +138,7 @@
     },
     {
       "key": "continue",
-      "value": "Continue"
+      "value": "Return"
     },
     {
       "key": "continue_question",
@@ -170,6 +173,10 @@
       "value": "disconnected and forfeits."
     },
     {
+      "key": "drag_piece_here",
+      "value": "Drag Piece Here"
+    },
+    {
       "key": "draw",
       "value": "Draw"
     },
@@ -187,7 +194,7 @@
     },
     {
       "key": "exit",
-      "value": "Exit"
+      "value": "Menu"
     },
     {
       "key": "failed",
@@ -312,6 +319,10 @@
     {
       "key": "ignore",
       "value": "Ignore"
+    },
+    {
+      "key": "igt_exit_to_dashboard",
+      "value": "Dashboard"
     },
     {
       "key": "in",
@@ -538,6 +549,14 @@
       "value": "Player 2"
     },
     {
+      "key": "player_positioning_across",
+      "value": "Across"
+    },
+    {
+      "key": "player_positioning_side_by_side",
+      "value": "Side By Side"
+    },
+    {
       "key": "portalpoints",
       "value": "Portal Points"
     },
@@ -698,6 +717,10 @@
       "value": "Board Selection"
     },
     {
+      "key": "select_player_positioning",
+      "value": "Select Players Positioning"
+    },
+    {
       "key": "settings",
       "value": "Settings"
     },
@@ -839,7 +862,7 @@
     },
     {
       "key": "token_desc_cross_bomb",
-      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
+      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in the same row and Column as the Bomb."
     },
     {
       "key": "token_desc_darkness",
@@ -883,7 +906,7 @@
     },
     {
       "key": "token_desc_moving_ghost",
-      "value": "This Ghost moves 1 space after each turn."
+      "value": "This ghost moves 1 space after each turn. Each ghost follows a pattern.  If the next space is occupied, a ghost will skip to the next open space."
     },
     {
       "key": "token_desc_pit",
@@ -1028,6 +1051,10 @@
     {
       "key": "versus",
       "value": "Local"
+    },
+    {
+      "key": "vibration",
+      "value": "Vibration"
     },
     {
       "key": "waiting_for_game",

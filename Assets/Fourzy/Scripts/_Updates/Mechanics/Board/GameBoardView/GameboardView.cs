@@ -83,9 +83,10 @@ namespace Fourzy._Updates.Mechanics.Board
         private bool touched = false;
         private float holdTimer;
         private float tapStartTime;
-        private float distanceToFinishSwipeAnimation;
         private float swipeSpeedScale;
         private bool twoStepSwipePhaseTwo;
+        private bool acrossLayout;
+        private bool upsideDown;
 
         private GamePieceView spawnedGamepiece;
         private AlphaTween alphaTween;
@@ -114,6 +115,21 @@ namespace Fourzy._Updates.Mechanics.Board
         public BoardLocation previousLocation { get; private set; }
         public int direction { get; private set; }
         public bool Paused { get; private set; }
+
+        public bool FlipCheck
+        {
+            get
+            {
+                switch (game._Type)
+                {
+                    case GameType.ONBOARDING:
+                        return false;
+
+                    default:
+                        return gameplayManager && acrossLayout;
+                }
+            }
+        }
 
         public List<BoardBit> tokens => boardBits.Where(bit => (bit.GetType() == typeof(TokenView) || bit.GetType().IsSubclassOf(typeof(TokenView)))).ToList();
 
@@ -167,6 +183,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
         protected void Update()
         {
+            if (isAnimating) return;
+
             switch (GameManager.Instance.placementStyle)
             {
                 case GameManager.PlacementStyle.EDGE_TAP:
@@ -178,12 +196,13 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                case GameManager.PlacementStyle.TWO_STEP_TAP:
                     if (!spawnedGamepiece && selectedBoardLocation != null && (holdTimer -= Time.deltaTime) <= 0f)
                     {
                         Direction _direction = selectedBoardLocation.Value.GetDirection(game);
                         BoardLocation _outsideBoardMove = selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction));
 
-                        spawnedGamepiece = SpawnPiece(_outsideBoardMove.Row, _outsideBoardMove.Column, (PlayerEnum)game._State.ActivePlayerId);
+                        spawnedGamepiece = SpawnPiece(_outsideBoardMove.Row, _outsideBoardMove.Column, (PlayerEnum)game._State.ActivePlayerId, true, false);
                         spawnedGamepiece.Show(.25f);
                         spawnedGamepiece.ScaleToCurrent(Vector3.zero, .25f);
 
@@ -247,10 +266,8 @@ namespace Fourzy._Updates.Mechanics.Board
             }
         }
 
-        public void OnPointerDown(Vector2 position)
+        public void ShowHelpForTokenAtPosition(Vector2 position)
         {
-            if (isAnimating || game.IsOver) return;
-
             if (gameplayManager && gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
             {
                 BoardLocation _location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
@@ -265,7 +282,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     return;
                 }
 
-                PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(_tokens.First());
+                gameplayManager.ShowTokensInstructions(_tokens.Select(entry => GameContentManager.Instance.GetTokenData(entry.Token.Type)), false);
 
                 if (gameplayManager.GameState == GameplayScene.GameState.HELP_STATE)
                 {
@@ -274,6 +291,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 return;
             }
+        }
+
+        public void OnPointerDown(Vector2 position)
+        {
+            if (isAnimating || game.IsOver) return;
 
             if (game._Type != GameType.PASSANDPLAY)
             {
@@ -294,7 +316,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     switch (GameManager.Instance.placementStyle)
                     {
                         case GameManager.PlacementStyle.TWO_STEP_SWIPE:
-
+                        case GameManager.PlacementStyle.TWO_STEP_TAP:
                             break;
 
                         default:
@@ -310,13 +332,13 @@ namespace Fourzy._Updates.Mechanics.Board
                             break;
                     }
 
-
                     switch (GameManager.Instance.placementStyle)
                     {
                         case GameManager.PlacementStyle.EDGE_TAP:
                         case GameManager.PlacementStyle.SWIPE:
                         case GameManager.PlacementStyle.TAP_AND_DRAG:
                         case GameManager.PlacementStyle.TWO_STEP_SWIPE:
+                        case GameManager.PlacementStyle.TWO_STEP_TAP:
                             touched = true;
                             tapStartTime = Time.time;
                             swipeSpeedScale = 1f;
@@ -350,6 +372,43 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             break;
 
+                        case GameManager.PlacementStyle.TWO_STEP_TAP:
+                            if (spawnedGamepiece)
+                            {
+                                if (selectedBoardLocation != null)
+                                {
+                                    Direction _direction = selectedBoardLocation.Value.GetDirection(game);
+                                    List<BoardLocation> toCheck = new List<BoardLocation>() {
+                                        selectedBoardLocation.Value,
+                                        selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction)),
+                                        selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction), 2),
+                                        selectedBoardLocation.Value.Neighbor(BoardLocation.Reverse(_direction), 3)
+                                    };
+
+                                    BoardLocation mouseBoardLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+
+                                    //check locations
+                                    if (toCheck.Any(_loc => mouseBoardLocation.Equals(_loc)))
+                                    {
+                                        OnMove();
+                                    }
+                                    else
+                                    {
+                                        CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                                    }
+                                }
+                                else
+                                {
+                                    CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                                }
+                            }
+                            else
+                            {
+                                CheckTwoStepTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                            }
+
+                            break;
+
                         case GameManager.PlacementStyle.SWIPE:
                             if (touchOriginalLocation != Vector2.zero) return;
 
@@ -361,8 +420,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         case GameManager.PlacementStyle.TAP_AND_DRAG:
                             if (touchOriginalLocation != Vector2.zero) return;
 
-                            BoardLocation _temp = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) -
-                                transform.localPosition);
+                            BoardLocation _temp = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
                             //check if outside the board
                             if (_temp.OnBoard(game._State.Board) ||
@@ -443,8 +501,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case BoardActionState.CAST_SPELL:
-                    List<BoardLocation> locationsList =
-                        SpellEvaluator.GetValidSpellLocations(game._State.Board, activeSpell);
+                    List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, activeSpell);
 
                     //modify by current spells
                     foreach (TokenSpell _spell in createdSpellTokens)
@@ -452,8 +509,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         locationsList.RemoveAll(_location => _location.Equals(_spell.location));
                     }
 
-                    BoardLocation touchLocation =
-                        Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                    BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
                     if (!locationsList.Contains(touchLocation))
                     {
@@ -885,11 +941,9 @@ namespace Fourzy._Updates.Mechanics.Board
         public T BoardSpellAt<T>(BoardLocation at, SpellId spellId) where T : TokenSpell =>
             boardBits.Find(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenSpell).spellId == spellId) as T;
 
-        public GamePieceView SpawnPiece(float row, float col, PlayerEnum player, bool sort = true)
+        public GamePieceView SpawnPiece(float row, float col, PlayerEnum player, bool addToBits = true, bool sort = true)
         {
-            GamePieceView gamePiece = Instantiate(
-                player == PlayerEnum.ONE ? game.playerOneGamepiece : game.playerTwoGamepiece,
-                bitsParent);
+            GamePieceView gamePiece = Instantiate(player == PlayerEnum.ONE ? game.playerOneGamepiece : game.playerTwoGamepiece, bitsParent);
 
             if (gameplayManager)
             {
@@ -915,11 +969,20 @@ namespace Fourzy._Updates.Mechanics.Board
             gamePiece.transform.localPosition = pieceLocalPosition;
             gamePiece.StartBlinking();
 
-            boardBits.Add(gamePiece);
-
-            if (sort)
+            //flip if needed
+            if (FlipCheck)
             {
-                SortBits();
+                gamePiece.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, 0f);
+            }
+
+            if (addToBits)
+            {
+                boardBits.Add(gamePiece);
+
+                if (sort)
+                {
+                    SortBits();
+                }
             }
 
             onPieceSpawned?.Invoke(gamePiece);
@@ -935,10 +998,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     return null;
 
                 default:
-                    return SpawnToken<TokenView>(
-                            token.Space.Location.Row,
-                            token.Space.Location.Column,
-                            token.Type, sort)
+                    return SpawnToken<TokenView>(token.Space.Location.Row, token.Space.Location.Column, token.Type, sort)
                         .SetData(token);
             }
         }
@@ -1492,6 +1552,8 @@ namespace Fourzy._Updates.Mechanics.Board
         public void Initialize(IClientFourzy game, bool hintAreas = true, bool createBits = true)
         {
             this.game = game;
+            acrossLayout = GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS && game._Type != GameType.AI;
+            upsideDown = game.activePlayer == game.player2;
             turn = null;
             lastCol = 0;
             lastRow = 0;
@@ -1624,7 +1686,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (game._allTurnRecord.Count == 0)
             {
-                StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(game.StartTurn(), true));
+                coroutine = StartRoutine("boardUpdateRoutine", BoardUpdateRoutine(game.StartTurn(), true));
                 SetPausedState("boardUpdateRoutine", Paused);
             }
 
@@ -1826,6 +1888,8 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (spawnedGamepiece != null)
             {
+                boardBits.Remove(spawnedGamepiece);
+
                 spawnedGamepiece._Destroy(.2f);
                 spawnedGamepiece.Hide(.2f);
 
@@ -2044,6 +2108,57 @@ namespace Fourzy._Updates.Mechanics.Board
             }
         }
 
+        private void CheckTwoStepTapMove(Vector2 position)
+        {
+            TurnEvaluator turnEvaluator = game.turnEvaluator;
+            Piece piece = game.activePlayerPiece;
+
+            InputMapValue inputMapValue = GetClosestInputMapValue(inputMapActiveOnly, position, 1.5f);
+
+            if (inputMapValue == null)
+            {
+                if (Vec2ToBoardLocation(position).OnBoard(game._State.Board))
+                {
+                    negativeVfx.StartVfx(
+                        null,
+                        (Vector2)transform.position + BoardLocationToVec2(Vec2ToBoardLocation(position)), 0f);
+                }
+                else
+                {
+                    negativeVfx.StartVfx(null, position, 0f);
+                }
+            }
+            else
+            {
+                BoardLocation location = inputMapValue.location;
+
+                if (InputMap(location) &&
+                    turnEvaluator.CanIMakeMove(new SimpleMove(
+                        piece,
+                        GetDirection(location),
+                        GetLocationFromBoardLocation(location))))
+                {
+                    if (!location.Equals(selectedBoardLocation))
+                    {
+                        if (spawnedGamepiece)
+                        {
+                            CancelSwipe2Move();
+                        }
+
+                        holdTimer = .05f;
+                        selectedBoardLocation = location;
+                    }
+                }
+                else
+                {
+                    negativeVfx.StartVfx(
+                        null,
+                        (Vector2)transform.position + BoardLocationToVec2(inputMapValue.location),
+                        0f);
+                }
+            }
+        }
+
         private InputMapValue GetClosestInputMapValue(List<InputMapValue> _inputMap, Vector3 position, float maxDistance = 1.5f)
         {
             float _maxDistance = maxDistance * step.x;
@@ -2227,6 +2342,7 @@ namespace Fourzy._Updates.Mechanics.Board
             float customDelay = 0f;
             float delay = 0f;
             string lastPieceId = "";
+            bool gameOver = false;
 
             GameActionType delayedActionType = GameActionType.INVALID;
             //spawn gamepiece using first action
@@ -2243,16 +2359,12 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         if (!firstGameActionMoveFound)
                         {
-                            moveAction = moveAction.InDirection(
-                                BoardLocation.Reverse(moveAction.Piece.Direction), 1);
+                            moveAction = moveAction.InDirection(BoardLocation.Reverse(moveAction.Piece.Direction), 1);
 
                             if (!spawnedGamepiece)
                             {
                                 //spawn gamepiece using first action
-                                spawnedGamepiece = SpawnPiece(
-                                    moveAction.Start.Row,
-                                    moveAction.Start.Column,
-                                    (PlayerEnum)moveAction.Piece.PlayerId);
+                                spawnedGamepiece = SpawnPiece(moveAction.Start.Row, moveAction.Start.Column, (PlayerEnum)moveAction.Piece.PlayerId);
 
                                 spawnedGamepiece.Show(.25f);
                                 spawnedGamepiece.ScaleToCurrent(Vector3.zero, .25f);
@@ -2459,7 +2571,6 @@ namespace Fourzy._Updates.Mechanics.Board
                             }
 
                             GameActionTokenMovement _tokenMovement = turnResults.Activity[actionIndex] as GameActionTokenMovement;
-
                             token = BoardTokenAt<TokenView>(_tokenMovement.Start, _tokenMovement.Token.Type).First();
 
                             switch (_tokenMovement.Reason)
@@ -2468,6 +2579,7 @@ namespace Fourzy._Updates.Mechanics.Board
                                 default:
 
                                     delay = token.StartMoveRoutine(startTurn, _tokenMovement.Start, _tokenMovement.End);
+
                                     if (delay > customDelay)
                                     {
                                         customDelay = delay;
@@ -2485,24 +2597,13 @@ namespace Fourzy._Updates.Mechanics.Board
                                 delay = 0f;
                             }
 
-                            GameActionTokenRotation _tokenRotation =
-                                turnResults.Activity[actionIndex] as GameActionTokenRotation;
-
-                            token = BoardTokenAt<TokenView>(
-                                _tokenRotation.Token.Space.Location,
-                                _tokenRotation.Token.Type)
-                                .First();
+                            GameActionTokenRotation _tokenRotation = turnResults.Activity[actionIndex] as GameActionTokenRotation;
+                            token = BoardTokenAt<TokenView>(_tokenRotation.Token.Space.Location, _tokenRotation.Token.Type).First();
 
                             switch (_tokenRotation.Reason)
                             {
                                 default:
-                                    delay = token.RotateTo(
-                                        _tokenRotation.StartOrientation,
-                                        _tokenRotation.EndOrientation,
-                                        _tokenRotation.RotationDirection,
-                                        0f,
-                                        startTurn);
-
+                                    delay = token.RotateTo(_tokenRotation.StartOrientation, _tokenRotation.EndOrientation, _tokenRotation.RotationDirection, 0f, startTurn);
                                     if (delay > customDelay)
                                     {
                                         customDelay = delay;
@@ -2518,6 +2619,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         break;
 
                     case GameActionType.GAME_END:
+                        gameOver = true;
                         SetHintAreaColliderState(false);
 
                         if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionGameEnd))
@@ -2649,7 +2751,6 @@ namespace Fourzy._Updates.Mechanics.Board
                         break;
                 }
             }
-
             isAnimating = false;
             boardBits.ForEach(bit =>
             {
@@ -2659,6 +2760,21 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
             });
 
+            //flip pieces if applies
+            if (!gameOver && !game.IsOver)
+            {
+                if (FlipCheck)
+                {
+                    upsideDown = game.activePlayer == game.player2;
+                    foreach (BoardBit _bit in gamePieces)
+                    {
+                        _bit.RotateTo(upsideDown ? 180f : 0f, RepeatType.NONE, .3f);
+                    }
+
+                    yield return new WaitForSeconds(.35f);
+                }
+            }
+
             onMoveEnded?.Invoke(turn, turnResults, startTurn);
 
             //update hint blocks
@@ -2667,6 +2783,7 @@ namespace Fourzy._Updates.Mechanics.Board
             SetHintAreaSelectableState(true);
 
             turn = null;
+            
 
             if (!game.turnEvaluator.IsAvailableSimpleMove())
             {
@@ -2880,7 +2997,6 @@ namespace Fourzy._Updates.Mechanics.Board
             foreach (PlayerTurn turn in turns)
             {
                 yield return TakeTurn(new ClientPlayerTurn(turn.Moves) { PlayerId = turn.PlayerId });
-
                 yield return new WaitForSeconds(.5f);
             }
         }

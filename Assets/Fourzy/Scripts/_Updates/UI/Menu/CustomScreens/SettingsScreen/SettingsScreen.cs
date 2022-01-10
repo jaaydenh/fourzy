@@ -69,6 +69,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleRealtimeTimer() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_TIMER);
 
+        public void ToggleVibration() => SettingsManager.Toggle(SettingsManager.KEY_VIBRATION);
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

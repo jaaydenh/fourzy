@@ -6,6 +6,7 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using Hellmade.Net;
 using System;
 using System.Collections;
 using System.Linq;
@@ -17,19 +18,19 @@ namespace Fourzy
 {
     public class LoadingScreenControl : MonoBehaviour
     {
-        public Slider slider;
-        public GameplayBG bg;
-        public OnRatio landscape;
-        public OnRatio portrait;
+        [SerializeField]
+        private Slider slider;
+        [SerializeField]
+        private GameplayBG bg;
+        [SerializeField]
+        private OnRatio landscape;
+        [SerializeField]
+        private OnRatio portrait;
 
         private PlayfabValuesLoaded[] valuesToWaitFor;
 
         protected void Start()
         {
-            valuesToWaitFor = ((PlayfabValuesLoaded[])Enum.GetValues(typeof(PlayfabValuesLoaded))).Where(_value => _value != PlayfabValuesLoaded.NONE).ToArray();
-
-            UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
-
             if (GameManager.Instance.Landscape)
             {
                 landscape.CheckOrientation();
@@ -41,7 +42,24 @@ namespace Fourzy
 
             bg.Configure();
 
-            StartCoroutine(LoadingRoutine());
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_REGULAR:
+                case BuildIntent.DESKTOP_REGULAR:
+                    StartCoroutine(MobileRegularLoadRoutine());
+
+                    break;
+
+                case BuildIntent.MOBILE_SKILLZ:
+                    StartCoroutine(SkillzLoadRoutine());
+
+                    break;
+
+                case BuildIntent.MOBILE_INFINITY:
+                    StartCoroutine(InfinityLoadRoutine());
+
+                    break;
+            }
         }
 
         protected void OnDestroy()
@@ -52,7 +70,7 @@ namespace Fourzy
         private void OnPlayfabValueLoaded(PlayfabValuesLoaded value)
         {
             int values = 0;
-
+            
             foreach (PlayfabValuesLoaded _value in valuesToWaitFor)
             {
                 if (UserManager.Instance.IsPlayfabValueLoaded(_value))
@@ -64,8 +82,11 @@ namespace Fourzy
             slider.value = (float)values / valuesToWaitFor.Length;
         }
 
-        private IEnumerator LoadingRoutine()
+        private IEnumerator MobileRegularLoadRoutine()
         {
+            valuesToWaitFor = ((PlayfabValuesLoaded[])Enum.GetValues(typeof(PlayfabValuesLoaded))).Where(_value => _value != PlayfabValuesLoaded.NONE).ToArray();
+            UserManager.onPlayfabValuesLoaded += OnPlayfabValueLoaded;
+
             AudioHolder.instance.PlaySelfSfxOneShotTracked("game_greeting", 1f);
 
             OnboardingScreen onboardingScreen = PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>();
@@ -97,8 +118,44 @@ namespace Fourzy
 
             if (displayTutorial)
             {
-                onboardingScreen.OpenTutorial(
-                    HardcodedTutorials.GetByName(GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding"));
+                onboardingScreen.OpenTutorial(HardcodedTutorials.GetByName("Onboarding"));
+            }
+        }
+
+        private IEnumerator SkillzLoadRoutine()
+        {
+            while (EazyNetChecker.Status != NetStatus.Connected)
+            {
+                yield return null;
+            }
+
+            AsyncOperation async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
+
+            if (async != null)
+            {
+                async.allowSceneActivation = true;
+
+                while (!async.isDone)
+                {
+                    slider.value = async.progress;
+                    yield return null;
+                }
+            }
+        }
+
+        private IEnumerator InfinityLoadRoutine()
+        {
+            AsyncOperation async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
+
+            if (async != null)
+            {
+                async.allowSceneActivation = true;
+
+                while (!async.isDone)
+                {
+                    slider.value = async.progress;
+                    yield return null;
+                }
             }
         }
     }

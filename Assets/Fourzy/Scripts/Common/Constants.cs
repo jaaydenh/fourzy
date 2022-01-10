@@ -2,6 +2,7 @@
 
 using Fourzy._Updates;
 using FourzyGameModel.Model;
+using System.Collections.Generic;
 
 namespace Fourzy
 {
@@ -61,6 +62,15 @@ namespace Fourzy
         public const int CIRCULAR_TIMER_SECONDS = 8;
         public const int RESET_TIMER_SECTIONS = 2;
 
+        //magic toggle state
+        public static Dictionary<BuildIntent, bool> MAGIC_TOGGLE_ACTIVE_STATE = new Dictionary<BuildIntent, bool>()
+        {
+            [BuildIntent.MOBILE_INFINITY] = false,
+            [BuildIntent.DESKTOP_REGULAR] = true,
+            [BuildIntent.MOBILE_REGULAR] = true,
+            [BuildIntent.MOBILE_SKILLZ] = false,
+        };
+
         //Skillz params
         public const string SKILLZ_GAMES_COUNT_KEY = "Games";
         public const string SKILLZ_GAME_TIMER_KEY = "Timer";
@@ -104,9 +114,9 @@ namespace Fourzy
         public const string GAMEPLAY_SCENE_NAME = "DefaultGameplayScene";
         public const string MAIN_MENU_P_SCENE_NAME = "MainMenuScenePortrait";
         public const string MAIN_MENU_L_SCENE_NAME = "MainMenuSceneLandscape";
+        public const string MAIN_MENU_INFINITY_SCENE_NAME = "MainMenuSceneInfinity";
         public const string MAIN_MENU_SKILLZ_SCENE_NAME = "MainMenuSkillz";
         public const string LOGO_SCENE_NAME = "StartSceneDefault";
-        public const string LOGO_SKILLZ_SCENE_NAME = "StartSceneSkillz";
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";
 

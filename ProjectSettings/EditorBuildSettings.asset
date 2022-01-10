@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Fourzy/Scenes/StartSceneSkillz.unity
-    guid: 6c88b0a6b59ded94592e8c46342b7dda
+    path: Assets/Fourzy/Scenes/StartSceneDefault.unity
+    guid: 3d7de46172b55e6428ad01b7276860e0
   - enabled: 1
-    path: Assets/Fourzy/Scenes/MainMenuSkillz.unity
-    guid: d1dae10112c57a54fa89c4c96f0d24fd
+    path: Assets/Fourzy/Scenes/MainMenuSceneInfinity.unity
+    guid: 1bf6a248f26cb954296d48d4301611ab
   - enabled: 1
     path: Assets/Fourzy/Scenes/DefaultGameplayScene.unity
     guid: 5ac49ce917313314ca626e8b6c3217fe

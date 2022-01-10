@@ -57,9 +57,9 @@ namespace Fourzy
             {
                 return new List<SpellId>()
                 {
-                    SpellId.HEX,
-                    SpellId.PLACE_LURE,
-                    SpellId.DARKNESS
+                    // SpellId.HEX,
+                    // SpellId.PLACE_LURE,
+                    // SpellId.DARKNESS
                 };
             }
         }

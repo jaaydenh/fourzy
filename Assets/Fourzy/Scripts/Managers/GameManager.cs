@@ -33,6 +33,8 @@ namespace Fourzy
 {
     public class GameManager : RoutinesBase
     {
+        public static BuildIntent BuildIntent;
+
         public static Action<Product> onPurchaseComplete;
         public static Action<Product> onPurchaseFailed;
 
@@ -73,6 +75,9 @@ namespace Fourzy
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
         public List<TokenType> excludeInstructionsFor;
+        private PlacementStyle _placementStyle;
+        private string lastErrorMessage;
+        private InputFieldPrompt inputPromptScreen;
 
         /// <summary>
         /// Pieces placement style
@@ -113,15 +118,14 @@ namespace Fourzy
                     case BuildIntent.DESKTOP_REGULAR:
                         return Constants.MAIN_MENU_L_SCENE_NAME;
 
+                    case BuildIntent.MOBILE_INFINITY:
+                        return Constants.MAIN_MENU_INFINITY_SCENE_NAME;
+
                     default:
                         return Constants.MAIN_MENU_P_SCENE_NAME;
                 }
             }
         }
-
-        private PlacementStyle _placementStyle;
-        private string lastErrorMessage;
-        private InputFieldPrompt inputPromptScreen;
 
         public bool isMainMenuLoaded
         {
@@ -189,6 +193,10 @@ namespace Fourzy
             }
         }
 
+        public bool AcrossLayout =>
+            buildIntent == BuildIntent.MOBILE_INFINITY &&
+            PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
+
         public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
 
         protected override void Awake()
@@ -241,8 +249,7 @@ namespace Fourzy
 
             if (SceneManager.GetActiveScene().name == MainMenuSceneName)
             {
-                StandaloneInputModuleExtended.GamepadFilter =
-                    StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+                StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
             }
 
             //StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
@@ -253,7 +260,19 @@ namespace Fourzy
             EazyNetChecker.CheckIntervalNormal = 5f;
             EazyNetChecker.Timeout = 5f;
             EazyNetChecker.StartConnectionCheck(false, true);
-            placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
+
+            switch (buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    placementStyle = PlacementStyle.TWO_STEP_TAP;
+
+                    break;
+
+                default:
+                    placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
+
+                    break;
+            }
 
 #if !UNITY_IOS && !UNITY_ANDROID
             StartRoutine("location", GetLocation());
@@ -823,6 +842,21 @@ namespace Fourzy
             }
         }
 
+        public void CloseApp()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_ANDROID
+            using (var activityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                var activity = activityClass.GetStatic<AndroidJavaObject>("currentActivity");
+                activity.Call("finish");
+            }
+#endif
+            AudioHolder.instance.StopAllBGAudio();
+            Application.Quit();
+        }
+
         public void OpenLobbyGame()
         {
             //private const string kLobbyScreenOpened = "lobbyScreenOpened";
@@ -933,7 +967,32 @@ namespace Fourzy
             FourzyPhotonManager.onJoinRoomFailed -= OnRejoinRoomFailed;
         }
 
-        public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
+        public static void Vibrate(HapticTypes type)
+        {
+            if (!SettingsManager.Get(SettingsManager.KEY_VIBRATION)) return;
+
+            switch (Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    int durationInMs = 100;
+#if UNITY_EDITOR
+                    Debug.Log($"Infinity Game Table: Rumble ({durationInMs}ms)");
+#elif UNITY_ANDROID
+                    using (var igtMotor = new AndroidJavaClass("com.arcade1up.igtsdk.IGTMotor"))
+                    {
+                        igtMotor.CallStatic("rumble", durationInMs);
+                    }
+#endif
+
+                    break;
+
+                case BuildIntent.DESKTOP_REGULAR:
+                case BuildIntent.MOBILE_SKILLZ:
+                    MMVibrationManager.Haptic(type);
+
+                    break;
+            }
+        }
 
         public static void Vibrate() => Vibrate(HapticTypes.Success);
 
@@ -1282,6 +1341,7 @@ namespace Fourzy
             SWIPE,
             TAP_AND_DRAG,
             TWO_STEP_SWIPE,
+            TWO_STEP_TAP,
         }
     }
 
@@ -1302,5 +1362,6 @@ namespace Fourzy
         MOBILE_REGULAR,
         DESKTOP_REGULAR,
         MOBILE_SKILLZ,
+        MOBILE_INFINITY,
     }
 }

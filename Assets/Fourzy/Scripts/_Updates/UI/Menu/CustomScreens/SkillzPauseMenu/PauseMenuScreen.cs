@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.UI.Helpers;
 using TMPro;
 using UnityEngine;
 
@@ -13,6 +14,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private TMP_Text scoreLabel;
         [SerializeField]
         private GameObject scorePanel;
+        [SerializeField]
+        private GameObject toDashboardButton;
+        [SerializeField]
+        private GameObject rulesButton;
+        [SerializeField]
+        private ButtonExtended exitButton;
 
         /// <summary>
         /// To be closed when this prompt is closed
@@ -33,6 +40,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 default:
                     scorePanel.SetActive(false);
+
+                    break;
+            }
+
+            //update rules button state
+            switch (GamePlayManager.Instance.Game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    rulesButton.SetActive(true);
+
+                    break;
+
+                default:
+                    rulesButton.SetActive(false);
+
+                    break;
+            }
+
+            //update exit button
+            switch (GamePlayManager.Instance.Game._Type)
+            {
+                case GameType.REALTIME:
+                    exitButton.SetLabel(LocalizationManager.Value("forfeit"));
+
+                    break;
+
+                default:
+                    exitButton.SetLabel(LocalizationManager.Value("exit"));
 
                     break;
             }
@@ -58,6 +93,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    toDashboardButton.SetActive(true);
+
+                    break;
+
+                default:
+                    toDashboardButton.SetActive(false);
+
+                    break;
+            }
         }
 
         public void _Close(bool animate = false)
@@ -65,6 +113,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CloseSecondaryPopup(animate);
 
             CloseSelf();
+        }
+
+        public void ExitToDashboard()
+        {
+            GameManager.Instance.CloseApp();
         }
 
         public void ShowRules()
@@ -110,6 +163,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void ToggleSfx()
         {
             SettingsManager.Toggle(SettingsManager.KEY_SFX);
+        }
+
+        public void ToggleVibration()
+        {
+            SettingsManager.Toggle(SettingsManager.KEY_VIBRATION);
         }
 
         /// <summary>

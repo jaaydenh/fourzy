@@ -168,8 +168,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //load tokens
             foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.tokens)
             {
-                TokenWidget _tokenWidget = GameContentManager
-                    .InstantiatePrefab<TokenWidget>("TOKEN_SMALL", tokensParent);
+                TokenWidget _tokenWidget = GameContentManager.InstantiatePrefab<TokenWidget>("TOKEN_SMALL", tokensParent);
                 _tokenWidget.SetData(data);
 
                 tokens.Add(_tokenWidget);

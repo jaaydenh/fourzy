@@ -20,6 +20,7 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToNetworkState = false;
         private bool listensToSfxState = false;
         private bool listensToAudioState = false;
+        private bool listensToVibrationState = false;
         private bool listensToDemoModeState = false;
         private bool listensToAnalyticsState = false;
         private bool listensToMagicState = false;
@@ -66,6 +67,15 @@ namespace Fourzy._Updates.UI.Helpers
                         {
                             listensToAudioState = true;
                             SettingsManager.onAudio += OnAudio;
+                        }
+                        break;
+
+                    case ListenValues.SETTINGS_VIBRATION_OFF:
+                    case ListenValues.SETTINGS_VIBRATION_ON:
+                        if (!listensToVibrationState)
+                        {
+                            listensToVibrationState = true;
+                            SettingsManager.onVibration += OnVibration;
                         }
                         break;
 
@@ -183,6 +193,15 @@ namespace Fourzy._Updates.UI.Helpers
 
                         break;
 
+                    case ListenValues.SETTINGS_VIBRATION_OFF:
+                    case ListenValues.SETTINGS_VIBRATION_ON:
+                        if (listensToVibrationState)
+                        {
+                            listensToVibrationState = false;
+                            SettingsManager.onVibration -= OnVibration;
+                        }
+                        break;
+
                     case ListenValues.SETTINGS_ANALYTICS_ON:
                     case ListenValues.SETTINGS_ANALYTICS_OFF:
                         if (listensToAnalyticsState)
@@ -252,7 +271,9 @@ namespace Fourzy._Updates.UI.Helpers
         public void InvokeTargets(bool force)
         {
             foreach (ListenTarget target in targets.list)
+            {
                 if (force || target.updateOnStart)
+                {
                     switch (target.type)
                     {
                         case ListenValues.NO_INTERNET_ACCESS:
@@ -264,19 +285,17 @@ namespace Fourzy._Updates.UI.Helpers
                         case ListenValues.SETTINGS_SFX_ON:
                             OnSfx(SettingsManager.Get(SettingsManager.KEY_SFX));
 
+                            break;
 
-
-
-
-
+                        case ListenValues.SETTINGS_VIBRATION_OFF:
+                        case ListenValues.SETTINGS_VIBRATION_ON:
+                            OnVibration(SettingsManager.Get(SettingsManager.KEY_VIBRATION));
 
                             break;
 
                         case ListenValues.SETTINGS_AUDIO_OFF:
                         case ListenValues.SETTINGS_AUDIO_ON:
                             OnAudio(SettingsManager.Get(SettingsManager.KEY_AUDIO));
-
-
 
                             break;
 
@@ -327,6 +346,8 @@ namespace Fourzy._Updates.UI.Helpers
 
                             break;
                     }
+                }
+            }
         }
 
         public void UpdateNoInternet(bool state)
@@ -344,6 +365,12 @@ namespace Fourzy._Updates.UI.Helpers
         public void OnAudio(bool state)
         {
             foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_AUDIO_ON : ListenValues.SETTINGS_AUDIO_OFF])
+                target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        private void OnVibration(bool state)
+        {
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_VIBRATION_ON : ListenValues.SETTINGS_VIBRATION_OFF])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
@@ -445,5 +472,7 @@ namespace Fourzy._Updates.UI.Helpers
         PHOTON_CONNECTED_DEFAULT_LOBBY,
         PHOTON_DISCONNECTED,
         PHOTON_CONNECTED_QUICKMATCH_LOBBY,
+        SETTINGS_VIBRATION_ON,
+        SETTINGS_VIBRATION_OFF,
     }
 }

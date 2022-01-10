@@ -11,7 +11,9 @@ using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEditor;
+using UnityEditor.U2D;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class MenuItems : MonoBehaviour
 {
@@ -43,9 +45,15 @@ public class MenuItems : MonoBehaviour
     }
 
     [MenuItem("Fourzy/Set For Desktop")]
-    public static void SetMobileDesktop()
+    public static void SetDesktop()
     {
         SetBuildIntent(BuildIntent.DESKTOP_REGULAR);
+    }
+
+    [MenuItem("Fourzy/Set For Mobile Infinity")]
+    public static void SetMobileInfinity()
+    {
+        SetBuildIntent(BuildIntent.MOBILE_INFINITY);
     }
 
     private static void SetBuildIntent(BuildIntent intent)
@@ -62,7 +70,8 @@ public class MenuItems : MonoBehaviour
                 so.FindProperty("buildIntent").enumValueIndex = (int)intent;
                 so.ApplyModifiedProperties();
 
-                SetScenesFromIntent(intent);
+                UpdateIntentRelatedValues(intent);
+
                 AssetDatabase.SaveAssets();
             }
         }
@@ -261,6 +270,67 @@ public class MenuItems : MonoBehaviour
         return true;
     }
 
+    public static void UpdateIntentRelatedValues(BuildIntent intent)
+    {
+        UpdateMiscAssets(intent);
+        UpdateAtlasses(intent);
+        SetScenesFromIntent(intent);
+        SetBuildSettingsFromIntent(intent);
+    }
+
+    public static void UpdateMiscAssets(BuildIntent intent)
+    {
+        PluginImporter plugin = AssetImporter.GetAtPath("Assets/Plugins/Android/igtsdk.aar") as PluginImporter;
+        switch (intent)
+        {
+            case BuildIntent.MOBILE_INFINITY:
+                plugin.ClearSettings();
+                plugin.SetCompatibleWithPlatform(BuildTarget.Android, true);
+
+
+                break;
+
+            case BuildIntent.MOBILE_REGULAR:
+            case BuildIntent.MOBILE_SKILLZ:
+                plugin.SetCompatibleWithPlatform(BuildTarget.Android, false);
+
+                break;
+        }
+
+        EditorUtility.SetDirty(plugin);
+        plugin.SaveAndReimport();
+    }
+
+    public static void UpdateAtlasses(BuildIntent intent)
+    {
+        switch (intent)
+        {
+            case BuildIntent.MOBILE_INFINITY:
+                SetAtlasState("__AdventureMaps", false);
+                SetAtlasState("__LandscapeBuildOnly", true);
+
+                break;
+
+            case BuildIntent.DESKTOP_REGULAR:
+                SetAtlasState("__AdventureMaps", false);
+                SetAtlasState("__LandscapeBuildOnly", true);
+
+                break;
+
+            case BuildIntent.MOBILE_SKILLZ:
+                SetAtlasState("__AdventureMaps", false);
+                SetAtlasState("__LandscapeBuildOnly", false);
+
+                break;
+
+            case BuildIntent.MOBILE_REGULAR:
+                SetAtlasState("__AdventureMaps", true);
+                SetAtlasState("__LandscapeBuildOnly", false);
+
+                break;
+        }
+    }
+
     public static void SetScenesFromIntent(BuildIntent intent)
     {
         List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene>();
@@ -283,14 +353,80 @@ public class MenuItems : MonoBehaviour
                 break;
 
             case BuildIntent.MOBILE_SKILLZ:
-                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SKILLZ_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SCENE_NAME)[0]), true));
                 scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.MAIN_MENU_SKILLZ_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.GAMEPLAY_SCENE_NAME)[0]), true));
+
+                break;
+
+            case BuildIntent.MOBILE_INFINITY:
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SCENE_NAME)[0]), true));
+                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.MAIN_MENU_INFINITY_SCENE_NAME)[0]), true));
                 scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.GAMEPLAY_SCENE_NAME)[0]), true));
 
                 break;
         }
 
         EditorBuildSettings.scenes = scenes.ToArray();
+    }
+
+    public static void SetBuildSettingsFromIntent(BuildIntent intent)
+    {
+        //set orientation
+        switch (intent)
+        {
+            case BuildIntent.MOBILE_INFINITY:
+                PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
+                PlayerSettings.allowedAutorotateToLandscapeLeft = true;
+                PlayerSettings.allowedAutorotateToLandscapeRight = true;
+
+                PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel28;
+                PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
+
+                break;
+
+            case BuildIntent.DESKTOP_REGULAR:
+                PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
+                PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
+                PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
+
+                break;
+
+            case BuildIntent.MOBILE_REGULAR:
+            case BuildIntent.MOBILE_SKILLZ:
+                PlayerSettings.defaultInterfaceOrientation = UIOrientation.Portrait;
+                PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
+                PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
+
+                break;
+        }
+
+        ////set build target
+        //switch (intent)
+        //{
+        //    case BuildIntent.DESKTOP_REGULAR:
+        //        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64);
+
+        //        break;
+
+        //    case BuildIntent.MOBILE_INFINITY:
+        //        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+
+        //        break;
+        //}
+    }
+
+    private static void SetAtlasState(string name, bool state)
+    {
+        SpriteAtlas target = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(name)[0]));
+
+        if (target == null)
+        {
+            Debug.LogError($"Failed to locate {name}");
+            return;
+        }
+
+        SpriteAtlasExtensions.SetIncludeInBuild(target, state);
     }
 }
 

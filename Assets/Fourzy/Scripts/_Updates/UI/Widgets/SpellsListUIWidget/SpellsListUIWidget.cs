@@ -3,10 +3,10 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,63 +16,15 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public SpellUIWidget spellWidgetPrefab;
         public RectTransform spellsContainer;
+        [NonSerialized]
+        public Player owner;
 
         public IClientFourzy game { get; private set; }
         public GameboardView board { get; private set; }
         public List<SpellUIWidget> spellWidgets { get; private set; }
         public ToggleGroup toggleGroup { get; private set; }
 
-        [NonSerialized]
-        public Player owner;
-
-        public SpellUIWidget activeSpell =>
-            spellWidgets.Find(spell => spell.state == SpellState.ACTIVE);
-
-        //protected void Update()
-        //{
-        //    if (game == null) return;
-
-        //    switch (game._Type)
-        //    {
-        //        case GameType.PASSANDPLAY:
-        //            switch (StandaloneInputModuleExtended.GamepadFilter)
-        //            {
-        //                case StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD:
-
-        //                    if (Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 0)) || Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 1)))
-        //                    {
-        //                        spellWidgets[0].OnTap();
-        //                    }
-
-        //                    break;
-
-        //                case StandaloneInputModuleExtended.GamepadControlFilter.SPECIFIC_GAMEPAD:
-        //                    switch (StandaloneInputModuleExtended.GamepadID)
-        //                    {
-        //                        case 0:
-        //                            if (Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 0)))
-        //                            {
-        //                                spellWidgets[0].OnTap();
-        //                            }
-
-        //                            break;
-
-        //                        case 1:
-        //                            if (Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 1)))
-        //                            {
-        //                                spellWidgets[0].OnTap();
-        //                            }
-
-        //                            break;
-        //                    }
-
-        //                    break;
-        //            }
-
-        //            break;
-        //    }
-        //}
-
+        public SpellUIWidget activeSpell => spellWidgets.Find(spell => spell.state == SpellState.ACTIVE);
 
         public void SetData(IClientFourzy game, GameboardView board, Player owner)
         {
@@ -123,6 +75,14 @@ namespace Fourzy._Updates.UI.Widgets
             board.onGameFinished += OnGameFinished;
         }
 
+        public void UpdateWidgetsPositioning()
+        {
+            foreach (SpellUIWidget widget in spellWidgets)
+            {
+                widget.UpdateAcrossLayout();
+            }
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -140,9 +100,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void AddSpell(SpellId spellId)
         {
-            spellWidgets.Add(
-                Instantiate(spellWidgetPrefab, spellsContainer)
-                .SetData(spellId, this, owner));
+            spellWidgets.Add(Instantiate(spellWidgetPrefab, spellsContainer).SetData(spellId, this, owner));
         }
 
         private void ClearSpells()

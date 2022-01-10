@@ -202,6 +202,7 @@ namespace Fourzy._Updates.ClientModel
             if (Player1.Profile == AIProfile.Player && Player2.Profile == AIProfile.Player)
             {
                 game._Type = GameType.PASSANDPLAY;
+                game.SetRandomActivePlayer();
             }
             else
             {
@@ -235,6 +236,7 @@ namespace Fourzy._Updates.ClientModel
             if (Human.Profile == AIProfile.Player && AI != null && AI.Profile == AIProfile.Player)
             {
                 game._Type = GameType.PASSANDPLAY;
+                game.SetRandomActivePlayer();
             }
             else
             {
@@ -260,6 +262,7 @@ namespace Fourzy._Updates.ClientModel
             if (Human.Profile == AIProfile.Player && AI != null && AI.Profile == AIProfile.Player)
             {
                 game._Type = GameType.PASSANDPLAY;
+                game.SetRandomActivePlayer();
             }
             else
             {

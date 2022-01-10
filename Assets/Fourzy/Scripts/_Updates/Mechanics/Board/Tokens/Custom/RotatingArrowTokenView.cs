@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
 
 namespace Fourzy._Updates.Mechanics.Board
@@ -38,6 +39,11 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             SetValue(currentCountdownValue);
+        }
+
+        public override void RotateTo(float value, RepeatType repeatType, float time, bool startTurn = false)
+        {
+            //blank
         }
 
         private void SetValue(int value)

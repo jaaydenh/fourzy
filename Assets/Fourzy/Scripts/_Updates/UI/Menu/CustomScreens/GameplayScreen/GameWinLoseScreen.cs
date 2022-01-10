@@ -252,10 +252,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //gamepieces highlight
             switch (game._Type)
             {
-                //case GameType.SKILLZ_ASYNC:
-
-                //    break;
-
                 default:
                     //remove prev gamepieces
                     foreach (GamePieceView gamepiece in gamePieces)
@@ -445,6 +441,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnBGTap()
         {
+            switch (GameManager.Instance.buildIntent)
+            {
+                //skip bg taps for infinity table build
+                case BuildIntent.MOBILE_INFINITY:
+                    return;
+            }
+
             switch (game._Mode)
             {
                 case GameMode.GAUNTLET:
@@ -682,31 +685,49 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     default:
-                        switch (GameManager.Instance.ExpectedGameType)
+                        bool resolved = false;
+                        switch (GameManager.Instance.buildIntent)
                         {
-                            case GameTypeLocal.REALTIME_BOT_GAME:
-                                switch (GameManager.Instance.botGameType)
+                            case BuildIntent.MOBILE_INFINITY:
+                                rematchButton.SetActive(true);
+                                exitButton.SetActive(true);
+                                resolved = true;
+
+                                break;
+
+                            default:
+                                switch (GameManager.Instance.ExpectedGameType)
                                 {
-                                    case GameManager.BotGameType.REGULAR:
-                                        rematchButton.SetActive(true);
+                                    case GameTypeLocal.REALTIME_BOT_GAME:
+                                        switch (GameManager.Instance.botGameType)
+                                        {
+                                            case GameManager.BotGameType.REGULAR:
+                                                rematchButton.SetActive(true);
+                                                resolved = true;
 
-                                        break;
+                                                break;
 
-                                    default:
-                                        rematchButton.SetActive(false);
+                                            default:
+                                                rematchButton.SetActive(false);
+                                                resolved = true;
+
+                                                break;
+                                        }
 
                                         break;
                                 }
 
                                 break;
-
-                            default:
-                                nextGameButton.SetActive(false);
-                                exitButton.SetActive(false);
-                                rematchButton.SetActive(false);
-
-                                break;
                         }
+                       
+
+                        if (!resolved)
+                        {
+                            nextGameButton.SetActive(false);
+                            exitButton.SetActive(false);
+                            rematchButton.SetActive(false);
+                        }
+
                         break;
                 }
             }

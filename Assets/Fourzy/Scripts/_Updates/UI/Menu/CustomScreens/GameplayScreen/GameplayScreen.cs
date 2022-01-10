@@ -22,11 +22,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private PlayerUIWidget myWidget;
         [SerializeField]
         private PlayerUIWidget opponentWidget;
+        [SerializeField]
+        private TimerSliderWidget myTimer;
+        [SerializeField]
+        private TimerSliderWidget opponentTimer;
 
         public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
         public ButtonExtended rematchButton;
         public ButtonExtended helpButton;
+        public ButtonExtended pauseButton;
+
         [SerializeField]
         private TMP_Text matchId;
 
@@ -37,14 +43,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MenuScreen tapToStartOverlay;
 
         private IClientFourzy game;
-        private TimerSliderWidget myTimer;
-        private TimerSliderWidget opponentTimer;
         private TimerSliderWidget player1Timer;
         private TimerSliderWidget player2Timer;
         private PlayerUIWidget player1Widget;
         private PlayerUIWidget player2Widget;
         private GamePlayManager gameplayManager;
         private int gameTurnCounter;
+        private bool acrossLayout;
         private UIOutline helpButtonOutline;
         private MagicState magicState = MagicState.DISABLED;
 
@@ -99,8 +104,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
-            myTimer = myWidget.GetComponentInChildren<TimerSliderWidget>();
-            opponentTimer = opponentWidget.GetComponentInChildren<TimerSliderWidget>();
             myTimer.onValueEmpty += OnTimerEmpty;
             opponentTimer.onValueEmpty += OnTimerEmpty;
 
@@ -132,7 +135,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.gameplayManager = gameplayManager;
             game = gameplayManager.Game;
-
+            acrossLayout = GameManager.Instance.AcrossLayout && game._Type != GameType.ONBOARDING && game._Type != GameType.AI;
             player1Widget = game.me == game.player1 ? myWidget : opponentWidget;
             player2Widget = game.me == game.player2 ? myWidget : opponentWidget;
 
@@ -208,6 +211,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             myWidget.SetGame(game);
             opponentWidget.SetGame(game);
+            opponentWidget.transform.localEulerAngles = new Vector3(0f, 0f, acrossLayout ? 180f : 0f);
 
             myWidget.Initialize();
             opponentWidget.Initialize();
@@ -301,6 +305,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (magicState == MagicState.BOTH)
                         {
                             opponentWidget.spellsHolder.SetData(game, gameplayManager.BoardView, opponent);
+                            opponentWidget.spellsHolder.UpdateWidgetsPositioning();
                             opponentWidget.SetMagicWidget(true);
                         }
                         else
@@ -314,6 +319,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 opponentWidget.Hide(.1f);
             }
+
+            CheckBackButton();
 
             //initialize timer
             if (timersEnabled)
@@ -597,6 +604,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     //unpause timers
                     myTimer.Unpause();
                     opponentTimer.Unpause();
+
+                    break;
+            }
+        }
+
+        private void CheckBackButton()
+        {
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                    pauseButton.SetActive(false);
+
+                    break;
+
+                default:
+                    pauseButton.SetActive(true);
 
                     break;
             }

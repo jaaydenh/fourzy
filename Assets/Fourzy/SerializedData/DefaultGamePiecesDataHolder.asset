@@ -133,7 +133,7 @@ MonoBehaviour:
     profilePicture: {fileID: 0}
     outlineColor: {r: 1, g: 1, b: 0.29411766, a: 1}
     borderColor: {r: 1, g: 1, b: 1, a: 1}
-  - name: Sentinal
+  - name: Sentinel
     player1Prefab: {fileID: 3008632754777774422, guid: 541328802fe2ad54b8cfb885bbc2b643,
       type: 3}
     player2Prefab: {fileID: 441494821392692054, guid: 2e37407a01421e745b25a9b8bd0abcc2,
@@ -190,7 +190,7 @@ MonoBehaviour:
       type: 3}
     Id: furrzy
     enabled: 1
-    profilePicture: {fileID: 21300000, guid: 21149a38a5e3ba148a7d134d2d0a1626, type: 3}
+    profilePicture: {fileID: 21300000, guid: 974ea862c25564193970185a94aca80a, type: 3}
     outlineColor: {r: 1, g: 1, b: 0.30588236, a: 1}
     borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
   - name: Eeek
