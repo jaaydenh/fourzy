@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Fourzy;
 using Fourzy._Updates;
 using FourzyGameModel.Model;
@@ -62,6 +63,19 @@ public class MenuItems : MonoBehaviour
 
         if (managers)
         {
+            //update define symbols
+            foreach (BuildTargetGroup target in new BuildTargetGroup[] { BuildTargetGroup.Android, BuildTargetGroup.Standalone, BuildTargetGroup.iOS })
+            {
+                PlayerSettings.GetScriptingDefineSymbolsForGroup(target, out string[] defines);
+
+                //remove build intent value from defines
+                List<string> newDefines = defines.Except(Enum.GetNames(typeof(BuildIntent))).ToList();
+                newDefines.Add(intent.ToString());
+
+                //add selected intent
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(target, newDefines.ToArray());
+            }
+
             GameManager gameManager = managers.GetComponentInChildren<GameManager>();
 
             if (gameManager)

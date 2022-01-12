@@ -79,7 +79,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AddWidget(AIProfile.SimpleAI, player2select.content, 2);
             AddWidget(AIProfile.AggressiveAI, player2select.content, 2);
 
-            magicButton.SetActive(Constants.MAGIC_TOGGLE_ACTIVE_STATE[GameManager.Instance.buildIntent]);
+            magicButton.SetActive(Constants.MAGIC_TOGGLE_ACTIVE_STATE);
 
             //load areas
             bool first = true;

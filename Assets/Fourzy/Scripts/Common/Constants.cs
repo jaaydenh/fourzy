@@ -63,13 +63,18 @@ namespace Fourzy
         public const int RESET_TIMER_SECTIONS = 2;
 
         //magic toggle state
-        public static Dictionary<BuildIntent, bool> MAGIC_TOGGLE_ACTIVE_STATE = new Dictionary<BuildIntent, bool>()
-        {
-            [BuildIntent.MOBILE_INFINITY] = false,
-            [BuildIntent.DESKTOP_REGULAR] = true,
-            [BuildIntent.MOBILE_REGULAR] = true,
-            [BuildIntent.MOBILE_SKILLZ] = false,
-        };
+        public static bool MAGIC_TOGGLE_ACTIVE_STATE =
+#if MOBILE_INFINITY
+            false;
+#elif DESKTOP_REGULAR
+            true;
+#elif MOBILE_REGULAR
+            true;
+#elif MOBILE_SKILLZ
+            false;
+#else
+            false;
+#endif
 
         //Skillz params
         public const string SKILLZ_GAMES_COUNT_KEY = "Games";
@@ -146,7 +151,7 @@ namespace Fourzy
 
         public const string LOCALIZATION_FOLDER = "Localization";
 
-        #region Remote Settings
+#region Remote Settings
 
         public const string KEY_APP_VERSION = "app_version";
         public const string KEY_DAILY_PUZZLE = "daily_puzzle";
@@ -159,7 +164,7 @@ namespace Fourzy
         public const string KEY_REWARDS_PUZZLEPLAY = "rewards_screen_puzzleplay";
         public const string KEY_REWARDS_REALTIME = "rewards_screen_realtime";
 
-        #endregion
+#endregion
 
         //photon
         public static readonly float REALTIME_GAME_VALID_AFTER_X_SECONDS = 10f;

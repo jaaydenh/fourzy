@@ -403,7 +403,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //set default ready button state
             readyButton.SetState(false);
             timerToggle.SetState(P2DifficultyLevel < 0);
-            magicToggle.SetActive(Constants.MAGIC_TOGGLE_ACTIVE_STATE[GameManager.Instance.buildIntent]);
+            magicToggle.SetActive(Constants.MAGIC_TOGGLE_ACTIVE_STATE);
 
             switch (GameManager.Instance.buildIntent)
             {
