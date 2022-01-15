@@ -4,7 +4,6 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
-using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
@@ -106,6 +105,8 @@ namespace Fourzy
         {
             base.Awake();
 
+#if !MOBILE_SKILLZ
+            // amplitude setup
             string apiKey = AMP_PROD_KEY;
 
             if (Debug.isDebugBuild || Application.isEditor)
@@ -118,6 +119,7 @@ namespace Fourzy
             amplitude.trackSessionEvents(true);
             amplitude.useAdvertisingIdForDeviceId();
             amplitude.init(apiKey);
+#endif
         }
 
         protected void OnApplicationQuit()
@@ -126,7 +128,7 @@ namespace Fourzy
             {
                 case BuildIntent.MOBILE_REGULAR:
                 case BuildIntent.MOBILE_INFINITY:
-                    Amplitude.Instance.setUserProperty("lastSeenDate", DateTime.Now.ToString());
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("lastSeenDate", DateTime.Now.ToString());
 
                     break;
             }
@@ -146,7 +148,9 @@ namespace Fourzy
         public static void SetUsetID(string userId)
         {
             Analytics.SetUserId(userId);
+#if !MOBILE_SKILLZ
             Amplitude.Instance.setUserId(userId);
+#endif
         }
 
         public void LogOtherJoinedLobby(
@@ -508,6 +512,41 @@ namespace Fourzy
             }
         }
 
+        public void AmplitudeSetUserProperty(string property, bool value)
+        {
+#if !MOBILE_SKILLZ
+            Amplitude.Instance.setUserProperty(property, value);
+#endif
+        }
+
+        public void AmplitudeSetUserProperty(string property, int value)
+        {
+#if !MOBILE_SKILLZ
+            Amplitude.Instance.setUserProperty(property, value);
+#endif
+        }
+
+        public void AmplitudeSetUserProperty(string property, string value)
+        {
+#if !MOBILE_SKILLZ
+            Amplitude.Instance.setUserProperty(property, value);
+#endif
+        }
+
+        public void AmplitudeSetUserProperty(string property, float value)
+        {
+#if !MOBILE_SKILLZ
+            Amplitude.Instance.setUserProperty(property, value);
+#endif
+        }
+
+        public void LogAmplitudeEvent(string @event, IDictionary<string, object> values)
+        {
+#if !MOBILE_SKILLZ
+            Amplitude.Instance.logEvent(@event, values);
+#endif
+        }
+
         public void LogEvent(
            string @event,
            Dictionary<string, object> values,
@@ -520,7 +559,7 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.AMPLITUDE:
-                            Amplitude.Instance.logEvent(@event, values);
+                            LogAmplitudeEvent(@event, values);
 
                             break;
 

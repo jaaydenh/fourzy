@@ -14,7 +14,9 @@ using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
+#if !MOBILE_SKILLZ
 using Hellmade.Net;
+#endif
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
 using Photon.Pun;
@@ -220,8 +222,10 @@ namespace Fourzy
             FourzyPhotonManager.onEvent += OnEventCall;
             Application.logMessageReceived += HandleException;
 
+#if !MOBILE_SKILLZ
             EazyNetChecker.OnConnectionStatusChanged += OnNetStatusChanged;
             EazyNetChecker.OnCheckTimeout += OnNetStatusChanged;
+#endif
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEntered;
             FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
 
@@ -257,9 +261,11 @@ namespace Fourzy
 
             //PointerInputModuleExtended.noInput += OnNoInput;
 
+#if !MOBILE_SKILLZ
             EazyNetChecker.CheckIntervalNormal = 5f;
             EazyNetChecker.Timeout = 5f;
             EazyNetChecker.StartConnectionCheck(false, true);
+#endif
 
             switch (buildIntent)
             {
@@ -404,9 +410,7 @@ namespace Fourzy
             AnalyticsManager.Instance.LogEvent("progressReset");
 
             PlayerPrefsWrapper.AddAdventurePuzzlesResets();
-            Amplitude.Instance.setUserProperty(
-                "totalAdventurePuzzlesReset",
-                PlayerPrefsWrapper.GetAdventurePuzzleResets());
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdventurePuzzlesReset", PlayerPrefsWrapper.GetAdventurePuzzleResets());
         }
 
         public void ReportRealtimeGameFinished(IClientFourzy game, string winnerID, string opponentID, bool abandoned)
@@ -996,7 +1000,17 @@ namespace Fourzy
 
         public static void Vibrate() => Vibrate(HapticTypes.Success);
 
-        public static bool NetworkAccess => EazyNetChecker.Status == NetStatus.Connected;
+        public static bool NetworkAccess
+        {
+            get
+            {
+#if !MOBILE_SKILLZ
+                return EazyNetChecker.Status == NetStatus.Connected;
+#else
+                return true;
+#endif
+            }
+        }
 
         public static void UpdateFastPuzzlesStat(int _value)
         {
@@ -1223,7 +1237,9 @@ namespace Fourzy
 
         private void OnNetStatusChanged()
         {
+#if !MOBILE_SKILLZ
             onNetworkAccess?.Invoke(EazyNetChecker.Status == NetStatus.Connected);
+#endif
         }
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)

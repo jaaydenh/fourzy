@@ -77,7 +77,7 @@ namespace Fourzy
                 FourzyPhotonManager.SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, value);
 
                 PlayFabClientAPI.UpdateAvatarUrl(new UpdateAvatarUrlRequest() { ImageUrl = value, }, OnAvatarUrlUpdate, OnChangeNamePlayfabError);
-                Amplitude.Instance.setUserProperty("gamePieceId", value);
+                AnalyticsManager.Instance.AmplitudeSetUserProperty("gamePieceId", value);
             }
         }
 
@@ -169,7 +169,7 @@ namespace Fourzy
                 onRatingUpdate?.Invoke(value);
 
                 FourzyPhotonManager.SetMyProperty(Constants.REALTIME_RATING_KEY, value);
-                Amplitude.Instance.setUserProperty("realtimeRating", value);
+                AnalyticsManager.Instance.AmplitudeSetUserProperty("realtimeRating", value);
             }
         }
 
@@ -243,7 +243,7 @@ namespace Fourzy
 
             set
             {
-                Amplitude.Instance.setUserProperty("totalRealtimeGamesCompleted", value);
+                AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesCompleted", value);
                 _lastCachedRealtimeGamesComplete = value;
 
                 onRealtimeGamesCompleteUdpate?.Invoke(_lastCachedRealtimeGamesComplete);
@@ -662,7 +662,7 @@ namespace Fourzy
 
         private void ChangeDisplayNameResult(UpdateUserTitleDisplayNameResult result)
         {
-            Amplitude.Instance.setUserProperty("playerName", result.DisplayName);
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("playerName", result.DisplayName);
             settingRandomName = false;
 
             onDisplayNameChanged?.Invoke();

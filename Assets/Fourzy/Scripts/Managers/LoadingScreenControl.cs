@@ -6,7 +6,6 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
-using Hellmade.Net;
 using System;
 using System.Collections;
 using System.Linq;
@@ -124,11 +123,6 @@ namespace Fourzy
 
         private IEnumerator SkillzLoadRoutine()
         {
-            while (EazyNetChecker.Status != NetStatus.Connected)
-            {
-                yield return null;
-            }
-
             AsyncOperation async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
 
             if (async != null)

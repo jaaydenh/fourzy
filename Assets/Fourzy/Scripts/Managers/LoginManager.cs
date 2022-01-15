@@ -401,6 +401,7 @@ namespace Fourzy
                 UserManager.Instance.SetDisplayName(CharacterNameFactory.GeneratePlayerName());
                 UserManager.Instance.UpdateSelectedGamePiece(InternalSettings.Current.DEFAULT_GAME_PIECE);
 
+#if !MOBILE_SKILLZ
                 Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
                 {
                     ["hasMonetized"] = false,
@@ -417,25 +418,26 @@ namespace Fourzy
                     ["totalSpent"] = 0,
                     ["totalAdsWatched"] = 0,
                 });
+#endif
             }
 
             int timesOpened = PlayerPrefsWrapper.GetAppOpened();
             if (timesOpened == 1)
             {
-                Amplitude.Instance.setUserProperty("firstEntry", false);
+                AnalyticsManager.Instance.AmplitudeSetUserProperty("firstEntry", false);
             }
             else if (timesOpened == 2)
             {
-                Amplitude.Instance.setUserProperty("firstEntry", false);
+                AnalyticsManager.Instance.AmplitudeSetUserProperty("firstEntry", false);
             }
 
             //get seconds since last opened
             long lastOpened = PlayerPrefsWrapper.GetSecondsSinceLastOpen();
             PlayerPrefsWrapper.AddDaysPlayed(lastOpened / 60f / 24f);
-            Amplitude.Instance.setUserProperty("totalDaysPlayed", PlayerPrefsWrapper.GetDaysPlayed());
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalDaysPlayed", PlayerPrefsWrapper.GetDaysPlayed());
             PlayerPrefsWrapper.SetAppOpenedTime();
 
-            Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSessions", timesOpened);
 
             UserManager.Instance.AddPlayfabValueLoaded(PlayfabValuesLoaded.LOGGED_IN);
 

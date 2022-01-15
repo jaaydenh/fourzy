@@ -95,8 +95,8 @@ namespace Fourzy._Updates.UI.Widgets
 
             PlayerPrefsWrapper.AddAdsWatched();
 
-            Amplitude.Instance.setUserProperty("hasWatchedAd", true);
-            Amplitude.Instance.setUserProperty("totalAdsWatched", PlayerPrefsWrapper.GetAdsWatched());
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("hasWatchedAd", true);
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdsWatched", PlayerPrefsWrapper.GetAdsWatched());
         }
     }
 }

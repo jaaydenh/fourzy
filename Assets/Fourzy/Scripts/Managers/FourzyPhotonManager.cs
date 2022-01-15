@@ -3,7 +3,9 @@
 using ExitGames.Client.Photon;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
+#if !MOBILE_SKILLZ
 using Hellmade.Net;
+#endif
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -73,7 +75,7 @@ namespace Fourzy
             DontDestroyOnLoad(go);
         }
 
-        #region Callbacks
+#region Callbacks
 
         public override void OnEnable()
         {
@@ -391,7 +393,9 @@ namespace Fourzy
             if (DEBUG)
             {
                 Debug.Log($"Disconnected from server.");
+#if !MOBILE_SKILLZ
                 EazyNetChecker.StartConnectionCheck(false, true);
+#endif
             }
 
             onDisconnectedFromServer?.Invoke();
@@ -417,7 +421,7 @@ namespace Fourzy
             onPlayerPpopertiesUpdate?.Invoke(targetPlayer, changedProps);
         }
 
-        #endregion
+#endregion
 
         public static void SetClientReadyState(bool state)
         {

@@ -265,7 +265,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                     PlayerPrefsWrapper.AddRealtimGamesAbandoned();
-                    Amplitude.Instance.setUserProperty("totalRealtimeGamesAbandoned", PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesAbandoned", PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
 
                     break;
             }
@@ -1737,9 +1737,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     {
                         PlayerPrefsWrapper.AddRealtimeGamesDraw();
 
-                        Amplitude.Instance.setUserProperty(
-                            "totalRealtimeGamesDraw",
-                            PlayerPrefsWrapper.GetRealtimeGamesDraw());
+                        AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesDraw", PlayerPrefsWrapper.GetRealtimeGamesDraw());
                     }
                     else
                     {
@@ -1747,17 +1745,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             PlayerPrefsWrapper.AddRealtimeGamesWon();
 
-                            Amplitude.Instance.setUserProperty(
-                                "totalRealtimeGamesWon",
-                                PlayerPrefsWrapper.GetRealtimeGamesWon());
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesWon", PlayerPrefsWrapper.GetRealtimeGamesWon());
                         }
                         else
                         {
                             PlayerPrefsWrapper.AddRealtimeGamesLost();
 
-                            Amplitude.Instance.setUserProperty(
-                                "totalRealtimeGamesLost",
-                                PlayerPrefsWrapper.GetRealtimeGamesLost());
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesLost", PlayerPrefsWrapper.GetRealtimeGamesLost());
                         }
                     }
 
@@ -1769,9 +1763,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     {
                         PlayerPrefsWrapper.AddPrivateGamesDraw();
 
-                        Amplitude.Instance.setUserProperty(
-                            "totalPrivateGamesDraw",
-                            PlayerPrefsWrapper.GetPrivateGamesDraw());
+                        AnalyticsManager.Instance.AmplitudeSetUserProperty("totalPrivateGamesDraw", PlayerPrefsWrapper.GetPrivateGamesDraw());
                     }
                     else
                     {
@@ -1779,17 +1771,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             PlayerPrefsWrapper.AddPrivateGamesWon();
 
-                            Amplitude.Instance.setUserProperty(
-                                "totalPrivateGamesWon",
-                                PlayerPrefsWrapper.GetPrivateGamesWon());
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalPrivateGamesWon", PlayerPrefsWrapper.GetPrivateGamesWon());
                         }
                         else
                         {
                             PlayerPrefsWrapper.AddPrivateGamesLost();
 
-                            Amplitude.Instance.setUserProperty(
-                                "totalPrivateGamesLost",
-                                PlayerPrefsWrapper.GetPrivateGamesLost());
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalPrivateGamesLost", PlayerPrefsWrapper.GetPrivateGamesLost());
                         }
                     }
                     break;
@@ -1818,17 +1806,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     case GameMode.BOSS_AI_PACK:
                         if (winner)
                         {
-                            Amplitude.Instance.setUserProperty(
-                                "totalAdventurePuzzlesCompleted",
-                                GameManager.Instance.currentMap.totalGamesComplete);
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdventurePuzzlesCompleted", GameManager.Instance.currentMap.totalGamesComplete);
                         }
                         else
                         {
                             PlayerPrefsWrapper.AddAdventurePuzzlesFailedTimes();
 
-                            Amplitude.Instance.setUserProperty(
-                                "totalAdventurePuzzleFailures",
-                                PlayerPrefsWrapper.GetAdventurePuzzleFailedTimes());
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdventurePuzzleFailures", PlayerPrefsWrapper.GetAdventurePuzzleFailedTimes());
                         }
 
                         break;
@@ -2266,7 +2250,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
-            Amplitude.Instance.setUserProperty("totalRealtimeGamesOpponentAbandoned", PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesOpponentAbandoned", PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
         }
 
         private IEnumerator GameInitRoutine()
