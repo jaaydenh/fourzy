@@ -2,9 +2,13 @@
 
 using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
+
+#if !MOBILE_SKILLZ
 using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
+#endif
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +21,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public FriendWidget widgetPrefab;
         public RectTransform widgetsParent;
 
-        private List<FriendWidget> friends = new List<FriendWidget>();
-        private List<FriendInfo> friendsData = new List<FriendInfo>();
-
         private string lastAddFriendName;
         private int listUpdates;
         private bool keepUpdating;
         private bool isUpdating;
+
+#if !MOBILE_SKILLZ
+        private List<FriendWidget> friends = new List<FriendWidget>();
+        private List<FriendInfo> friendsData = new List<FriendInfo>();
 
         public string[] friendsIDs => friendsData.Select(_friend => _friend.FriendPlayFabId).ToArray();
 
@@ -100,10 +105,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Debug.Log($"Playfab friends {obj.Friends.Count}");
 
             if (obj.Friends.Count > 0)
+            {
                 //get photon friends list
                 PhotonNetwork.FindFriends(friendsIDs);
+            }
             else
+            {
                 isUpdating = false;
+            }
         }
 
         private void OnPhotonFriendsUpdated(List<Photon.Realtime.FriendInfo> _friends)
@@ -182,5 +191,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 UpdateFriendsList();
             }
         }
+#endif
     }
 }

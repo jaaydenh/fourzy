@@ -744,6 +744,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
+#if !MOBILE_SKILLZ
                 case GameType.REALTIME:
                     if (InternalSettings.Current.LOSE_ON_EMPTY_TIMER)
                     {
@@ -799,6 +800,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
 
                     break;
+#endif
             }
         }
 

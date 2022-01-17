@@ -40,6 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             matchMakingStrings = JsonUtility.FromJson<GameStrings>(strings.text).values;
 
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onJoinRandomFailed += OnJoinRandomFailed;
             FourzyPhotonManager.onCreateRoom += OnRoomCreated;
             FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
@@ -47,10 +48,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinedRoom += OnRoomJoined;
             FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimeOut;
             FourzyPhotonManager.onRoomLeft += OnRoomLeft;
+#endif
         }
 
         protected void OnDestroy()
         {
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onJoinRandomFailed -= OnJoinRandomFailed;
             FourzyPhotonManager.onCreateRoom -= OnRoomCreated;
             FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
@@ -58,6 +61,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinedRoom -= OnRoomJoined;
             FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimeOut;
             FourzyPhotonManager.onRoomLeft -= OnRoomLeft;
+#endif
         }
 
         public void BackButtonPressed()
@@ -236,8 +240,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             });
         }
 
-        #region Photon callbacks
-
+#if !MOBILE_SKILLZ
         private void OnJoinRandomFailed()
         {
             if (!IsOpened) return;
@@ -309,8 +312,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             OpenRealtime();
         }
-
-        #endregion
+#endif
 
         private void ReadyToClose()
         {

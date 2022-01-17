@@ -25,7 +25,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Awake();
 
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomsListUpdated += OnRoomsUpdated;
+#endif
             FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
             FourzyPhotonManager.onJoinedLobby += OnJoinedLobby;
 
@@ -40,7 +42,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void OnDestroy()
         {
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomsListUpdated -= OnRoomsUpdated;
+#endif
             FourzyPhotonManager.onJoinedRoom -= OnJoinedRoom;
             FourzyPhotonManager.onJoinedLobby -= OnJoinedLobby;
 
@@ -67,7 +71,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
+#if !MOBILE_SKILLZ
             OnRoomsUpdated(FourzyPhotonManager.Instance.cachedRooms);
+#endif
 
             if (HeaderScreen.Instance)
             {
@@ -77,6 +83,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public bool CheckLobby()
         {
+#if !MOBILE_SKILLZ
             if (PhotonNetwork.CurrentRoom != null)
             {
                 menuController
@@ -130,6 +137,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 return false;
             }
+#else
+            return false;
+#endif
         }
 
         /// <summary>
@@ -163,6 +173,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             });
         }
 
+#if !MOBILE_SKILLZ
         private void OnRoomsUpdated(List<RoomInfo> _rooms)
         {
             foreach (RoomInfo roomData in _rooms)
@@ -188,6 +199,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
             }
         }
+#endif
 
         private void OnJoinedRoom(string roomName)
         {

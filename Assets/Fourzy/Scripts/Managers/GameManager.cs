@@ -219,15 +219,16 @@ namespace Fourzy
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
-            FourzyPhotonManager.onEvent += OnEventCall;
             Application.logMessageReceived += HandleException;
 
 #if !MOBILE_SKILLZ
             EazyNetChecker.OnConnectionStatusChanged += OnNetStatusChanged;
             EazyNetChecker.OnCheckTimeout += OnNetStatusChanged;
-#endif
+
+            FourzyPhotonManager.onEvent += OnEventCall;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEntered;
             FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
+#endif
 
             //to modify manifest file
             bool value = false;
@@ -289,11 +290,13 @@ namespace Fourzy
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
-            FourzyPhotonManager.onEvent -= OnEventCall;
             Application.logMessageReceived -= HandleException;
 
+#if !MOBILE_SKILLZ
+            FourzyPhotonManager.onEvent -= OnEventCall;
             FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEntered;
+#endif
 
             //NetworkAccess.onNetworkAccess -= OnNetworkAccess;
 
@@ -415,6 +418,7 @@ namespace Fourzy
 
         public void ReportRealtimeGameFinished(IClientFourzy game, string winnerID, string opponentID, bool abandoned)
         {
+#if !MOBILE_SKILLZ
             if (activeGame == null) return;
             if (string.IsNullOrEmpty(opponentID)) return;
 
@@ -458,6 +462,7 @@ namespace Fourzy
 
                 ReportPlayFabError(error.ErrorMessage);
             });
+#endif
         }
 
         public void ReportPlayFabError(string errorMessage)
@@ -944,6 +949,7 @@ namespace Fourzy
 
         private void OnRoomJoinedRematch(string roomName)
         {
+#if !MOBILE_SKILLZ
             RoomType roomType = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE);
             switch (roomType)
             {
@@ -963,12 +969,15 @@ namespace Fourzy
 
             FourzyPhotonManager.onJoinedRoom -= OnRoomJoinedRematch;
             StartGame(ExpectedGameType);
+#endif
         }
 
         private void OnRejoinRoomFailed(string roomName)
         {
+#if !MOBILE_SKILLZ
             RejoinAbandonedGame = false;
             FourzyPhotonManager.onJoinRoomFailed -= OnRejoinRoomFailed;
+#endif
         }
 
         public static void Vibrate(HapticTypes type)
@@ -1206,15 +1215,14 @@ namespace Fourzy
             onSceneChanged?.Invoke(SceneManager.GetActiveScene().name);
         }
 
+#if !MOBILE_SKILLZ
         private void OnPlayerEntered(Photon.Realtime.Player obj)
         {
             //lock room 
             //PhotonNetwork.CurrentRoom.IsVisible = false;
         }
 
-        private void OnPlayerPropertiesUpdate(
-            Photon.Realtime.Player player,
-            ExitGames.Client.Photon.Hashtable data)
+        private void OnPlayerPropertiesUpdate(Photon.Realtime.Player player, ExitGames.Client.Photon.Hashtable data)
         {
             if (PhotonNetwork.PlayerListOthers.Length == 0 || PhotonNetwork.PlayerListOthers[0] != player) return;
 
@@ -1234,6 +1242,7 @@ namespace Fourzy
                 }
             }
         }
+#endif
 
         private void OnNetStatusChanged()
         {
@@ -1264,6 +1273,7 @@ namespace Fourzy
             }
         }
 
+#if !MOBILE_SKILLZ
         private void OnEventCall(EventData data)
         {
             switch (data.Code)
@@ -1275,6 +1285,7 @@ namespace Fourzy
                     break;
             }
         }
+#endif
 
         private IEnumerator StartingGameRoutine()
         {

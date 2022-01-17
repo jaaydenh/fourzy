@@ -56,7 +56,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Awake();
 
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
+#endif
             loaderBar.gameObject.SetActive(false);
         }
 
@@ -69,7 +71,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void OnDestroy()
         {
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
+#endif
         }
 
         public override void Close(bool animate = true)
@@ -329,6 +333,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             switch (game._Type)
             {
+#if !MOBILE_SKILLZ
                 case GameType.REALTIME:
                     if (!waitingScreen)
                     {
@@ -400,6 +405,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
 
                     break;
+#endif
 
                 default:
                     if (isCurrent)
@@ -739,6 +745,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+#if !MOBILE_SKILLZ
         private void OnRoomPropertiesUpdate(Hashtable values)
         {
             if (FourzyPhotonManager.CheckPlayersRematchReady() &&
@@ -750,6 +757,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             waitingScreen = null;
         }
+#endif
 
         protected override void OnInitialized()
         {

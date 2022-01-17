@@ -42,6 +42,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Instance = this;
 
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onCreateRoom += OnRoomCreated;
             FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
@@ -49,10 +50,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinedLobby += OnJoinedLobby;
             FourzyPhotonManager.onRoomLeft += OnRoomLeft;
             FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimedOut;
+#endif
         }
 
         protected void OnDestroy()
         {
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onCreateRoom -= OnRoomCreated;
             FourzyPhotonManager.onJoinedRoom -= OnJoinedRoom;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
@@ -60,6 +63,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinedLobby -= OnJoinedLobby;
             FourzyPhotonManager.onRoomLeft -= OnRoomLeft;
             FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimedOut;
+#endif
         }
 
         protected override void OnInitialized()
@@ -135,6 +139,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             overlay.SetActive(isTwo);
         }
 
+#if !MOBILE_SKILLZ
         private void OnJoinedRoom(string roomName)
         {
             if (GameManager.Instance.RejoinAbandonedGame) return;
@@ -159,6 +164,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             string password = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_PASSWORD, "");
             lobbyButton.GetBadge("code").badge.SetValue(password);
         }
+#endif
 
         private void OnPlayerEnteredRoom(Photon.Realtime.Player other)
         {

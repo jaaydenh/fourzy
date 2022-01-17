@@ -83,7 +83,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             get
             {
+#if !MOBILE_SKILLZ
                 return Mathf.Min(PhotonNetwork.GetPing() * .002f, .5f);
+#else
+                return 0f;
+#endif
             }
         }
         public bool IsBoardReady { get; private set; }
@@ -112,10 +116,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             UserManager.onHintsUpdate += OnHintUpdate;
 
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent += OnEventCall;
+#endif
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
             {
@@ -145,10 +151,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             UserManager.onHintsUpdate -= OnHintUpdate;
 
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent -= OnEventCall;
+#endif
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
             {
@@ -201,6 +209,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
+#if !MOBILE_SKILLZ
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
@@ -212,6 +221,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+#endif
         }
 
         protected void OnApplicationQuit()
@@ -247,6 +257,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
+#if !MOBILE_SKILLZ
                 //for editor/pc
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
@@ -256,8 +267,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     break;
+#endif
             }
 
+#if !MOBILE_SKILLZ
             //for editor/pc
             switch (GameManager.Instance.ExpectedGameType)
             {
@@ -269,6 +282,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+#endif
         }
 
         public void BackButtonOnClick()
@@ -280,6 +294,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
+#if !MOBILE_SKILLZ
                 case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
@@ -295,6 +310,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     break;
+#endif
             }
 
             GameManager.Instance.OpenMainMenu();
@@ -412,6 +428,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void CreateRealtimeGame()
         {
+#if !MOBILE_SKILLZ
             //only continue if master
             if (PhotonNetwork.IsMasterClient)
             {
@@ -480,6 +497,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 LoadGame(_game);
             }
+#endif
         }
 
         public void OnPointerDown(Vector2 position, int pointerId)
@@ -1399,7 +1417,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        #region Turn Base Calls
+#region Turn Base Calls
 
         // private void OnChallengeUpdate(ChallengeData gameData)
         // {
@@ -1438,10 +1456,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         //     }
         // }
 
-        #endregion
+#endregion
 
-        #region Photon Callbacks
-
+#if !MOBILE_SKILLZ
         private void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable values)
         {
             if (PhotonNetwork.IsMasterClient)
@@ -1645,15 +1662,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
         }
+#endif
 
-        #endregion
 
         internal void OnGameFinished(IClientFourzy game)
         {
             onGameFinished?.Invoke(game);
             bool winner = game.IsWinner();
 
-            #region Skillz Game Check
+#region Skillz Game Check
 
             if (game._Type == GameType.SKILLZ_ASYNC)
             {
@@ -1723,11 +1740,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
             }
 
-            #endregion
+#endregion
 
             GameplayScreen.OnGameFinished();
 
-            #region Amplitude user properties update
+#if !MOBILE_SKILLZ
+
+#region Amplitude user properties update
 
             switch (GameManager.Instance.ExpectedGameType)
             {
@@ -1819,9 +1838,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
             }
 
-            #endregion
+#endregion
 
-            #region Realtime game complete (both vs and bot)
+#region Realtime game complete (both vs and bot)
 
             if (game._Type == GameType.REALTIME)
             {
@@ -1883,9 +1902,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 ratingUpdated = true;
             }
 
-            #endregion
+#endregion
 
-            #region Rewards
+#endif
+
+#region Rewards
 
             switch (game._Type)
             {
@@ -1897,7 +1918,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            #endregion
+#endregion
 
             //reset controller filter
             switch (game._Type)
@@ -2233,6 +2254,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             gameCameraManager.Wiggle();
         }
 
+#if !MOBILE_SKILLZ
         private void OnRealtimeOpponentAbandoned()
         {
             //reset game ttl
@@ -2252,6 +2274,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
             AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesOpponentAbandoned", PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
         }
+#endif
 
         private IEnumerator GameInitRoutine()
         {
@@ -2517,6 +2540,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
+#if !MOBILE_SKILLZ
         private IEnumerator PlayerLeftRealtimeRoutine(Photon.Realtime.Player otherPlayer)
         {
             int waitTime = Constants.REALTIME_TTL_SECONDS;
@@ -2546,6 +2570,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //and close gameplay scene
             BackButtonOnClick();
         }
+#endif
     }
 
     public enum GameState

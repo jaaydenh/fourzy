@@ -1631,6 +1631,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             switch (game._Type)
             {
+#if !MOBILE_SKILLZ
                 case GameType.REALTIME:
                     switch (GameManager.Instance.ExpectedGameType)
                     {
@@ -1668,6 +1669,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     }
 
                     break;
+#endif
             }
 
             TakeTurn(_move);

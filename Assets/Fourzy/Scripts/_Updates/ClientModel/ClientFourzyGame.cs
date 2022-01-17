@@ -402,6 +402,7 @@ namespace Fourzy._Updates.ClientModel
 
             switch (_Type)
             {
+#if !MOBILE_SKILLZ
                 case Fourzy.GameType.REALTIME:
                     switch (GameManager.Instance.ExpectedGameType)
                     {
@@ -421,6 +422,7 @@ namespace Fourzy._Updates.ClientModel
                     }
 
                     break;
+#endif
             }
 
             return result;

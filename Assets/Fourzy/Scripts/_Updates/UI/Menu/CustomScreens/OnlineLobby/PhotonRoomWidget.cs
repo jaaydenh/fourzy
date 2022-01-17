@@ -27,6 +27,7 @@ namespace Fourzy._Updates.UI.Widgets
         private string password = null;
         private Image _image;
 
+#if !MOBILE_SKILLZ
         public PhotonRoomWidget SetData(RoomInfo data)
         {
             this.data = data;
@@ -154,5 +155,6 @@ namespace Fourzy._Updates.UI.Widgets
                     .SetTextColor(Color.red, 1f);
             }
         }
+#endif
     }
 }

@@ -481,6 +481,7 @@ namespace Fourzy
 
         public void SetDisplayName(string value, bool updatePlayFabDisplayName = true)
         {
+#if !MOBILE_SKILLZ
             if (PhotonNetwork.IsConnected)
             {
                 PhotonNetwork.NickName = value;
@@ -506,6 +507,7 @@ namespace Fourzy
             {
                 settingRandomName = false;
             }
+#endif
 
             PlayerPrefsWrapper.SetUserName(value);
         }

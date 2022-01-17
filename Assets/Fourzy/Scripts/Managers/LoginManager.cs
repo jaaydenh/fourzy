@@ -30,6 +30,8 @@ namespace Fourzy
         public static string playerTitleId;
         public static string masterAccountId;
 
+#if !MOBILE_SKILLZ
+
         private bool isConnecting;
 
         private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
@@ -81,6 +83,18 @@ namespace Fourzy
 
             //Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
             //Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
+        }
+
+        public void LogMessage(string message)
+        {
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.Log("Login Manager: " + message);
+            }
+            else
+            {
+                Debug.Log("Photon token aquired");
+            }
         }
 
         // public void GetCoinsEarnedLeaderboard(Action<List<RankingScreen.LeaderboardEntry>, string> callback)
@@ -401,7 +415,6 @@ namespace Fourzy
                 UserManager.Instance.SetDisplayName(CharacterNameFactory.GeneratePlayerName());
                 UserManager.Instance.UpdateSelectedGamePiece(InternalSettings.Current.DEFAULT_GAME_PIECE);
 
-#if !MOBILE_SKILLZ
                 Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
                 {
                     ["hasMonetized"] = false,
@@ -418,7 +431,6 @@ namespace Fourzy
                     ["totalSpent"] = 0,
                     ["totalAdsWatched"] = 0,
                 });
-#endif
             }
 
             int timesOpened = PlayerPrefsWrapper.GetAppOpened();
@@ -487,18 +499,6 @@ namespace Fourzy
             PhotonNetwork.AuthValues = customAuth;
 
             FourzyPhotonManager.Instance.JoinLobby();
-        }
-
-        public void LogMessage(string message)
-        {
-            if (Application.isEditor || Debug.isDebugBuild)
-            {
-                Debug.Log("Login Manager: " + message);
-            }
-            else
-            {
-                Debug.Log("Photon token aquired");
-            }
         }
 
         private void OnProfileOK(GetEntityProfileResponse profile)
@@ -700,5 +700,6 @@ namespace Fourzy
         {
             Debug.Log("Language set error " + error.ErrorMessage);
         }
+#endif
     }
 }

@@ -1,13 +1,17 @@
 //@vadym udod
 
-using Fourzy._Updates.UI.Helpers;
+#if !MOBILE_SKILLZ
 using Photon.Pun;
+#endif
+
+using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI
 {
     public class PrivateMatchButtonController : MonoBehaviour
     {
+#if !MOBILE_SKILLZ
         private ButtonExtended button;
 
         private void Awake()
@@ -38,5 +42,6 @@ namespace Fourzy._Updates.UI
         {
             button.SetState(false);
         }
+#endif
     }
 }

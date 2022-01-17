@@ -3,10 +3,13 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Widgets;
-using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -53,7 +56,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SetMessage(string text)
         {
+#if !MOBILE_SKILLZ
             if (PhotonNetwork.CurrentRoom == null) return;
+#endif
 
             if (!FourzyPhotonManager.CheckPlayersReady())
             {

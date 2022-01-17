@@ -335,6 +335,7 @@ namespace Fourzy._Updates.UI.Helpers
 
                             break;
 
+#if !MOBILE_SKILLZ
                         case ListenValues.PHOTON_CONNECTED_DEFAULT_LOBBY:
                         case ListenValues.PHOTON_CONNECTED_QUICKMATCH_LOBBY:
                             if (PhotonNetwork.CurrentLobby != null) OnPhotonConnected(PhotonNetwork.CurrentLobby != null ? PhotonNetwork.CurrentLobby.Name : "");
@@ -345,6 +346,7 @@ namespace Fourzy._Updates.UI.Helpers
                             if (PhotonNetwork.CurrentLobby == null) OnPhotonDisconnected();
 
                             break;
+#endif
                     }
                 }
             }
