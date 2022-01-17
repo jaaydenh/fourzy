@@ -4,9 +4,12 @@ using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
-using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -94,6 +97,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 .CloseOnAccept();
         }
 
+#if !MOBILE_SKILLZ
         private void SetData(GamePieceView one, GamePieceView two = null)
         {
             if (!isOpened)
@@ -139,7 +143,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             overlay.SetActive(isTwo);
         }
 
-#if !MOBILE_SKILLZ
         private void OnJoinedRoom(string roomName)
         {
             if (GameManager.Instance.RejoinAbandonedGame) return;
@@ -164,7 +167,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             string password = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_PASSWORD, "");
             lobbyButton.GetBadge("code").badge.SetValue(password);
         }
-#endif
 
         private void OnPlayerEnteredRoom(Photon.Realtime.Player other)
         {
@@ -308,6 +310,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             state = LobbyOverlayState.NONE;
         }
+#endif
 
         private enum LobbyOverlayState
         {

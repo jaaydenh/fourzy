@@ -3,10 +3,13 @@
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if !MOBILE_SKILLZ
+using Photon.Realtime;
+#endif
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -20,14 +23,13 @@ namespace Fourzy._Updates.UI.Widgets
         public GameObject lockImage;
         public GameObject timerImage;
 
+#if !MOBILE_SKILLZ
         protected RoomInfo data;
-
         private LobbyScreen _menuScreen;
         private InputFieldPrompt passwordScreen;
         private string password = null;
         private Image _image;
 
-#if !MOBILE_SKILLZ
         public PhotonRoomWidget SetData(RoomInfo data)
         {
             this.data = data;

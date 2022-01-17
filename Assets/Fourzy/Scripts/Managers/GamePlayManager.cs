@@ -1,6 +1,10 @@
 ﻿//modded @vadym udod
 
+#if !MOBILE_SKILLZ
 using ExitGames.Client.Photon;
+using Photon.Pun;
+#endif
+
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
@@ -13,7 +17,6 @@ using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;

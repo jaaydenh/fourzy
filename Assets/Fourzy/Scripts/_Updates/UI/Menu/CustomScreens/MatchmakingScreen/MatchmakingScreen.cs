@@ -6,13 +6,16 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {

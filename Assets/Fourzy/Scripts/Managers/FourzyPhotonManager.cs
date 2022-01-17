@@ -1,16 +1,17 @@
 ﻿//@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
-#if !MOBILE_SKILLZ
-using Hellmade.Net;
-#endif
-using Photon.Pun;
-using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using ExitGames.Client.Photon;
+using Hellmade.Net;
+using Photon.Pun;
+using Photon.Realtime;
+#endif
 
 namespace Fourzy
 {
@@ -47,6 +48,7 @@ namespace Fourzy
         public static Action<List<FriendInfo>> onFriendsUpdated;
         public static Action<List<RoomInfo>> onRoomsListUpdated;
         public static Action<Player, Hashtable> onPlayerPpopertiesUpdate;
+        public List<RoomInfo> cachedRooms = new List<RoomInfo>();
 #endif
         public static Action onRoomLeft;
         public static Action onConnectionTimeOut;
@@ -57,7 +59,6 @@ namespace Fourzy
         private static FourzyPhotonManager instance;
         private static StackModified<KeyValuePair<string, Action>> tasks = new StackModified<KeyValuePair<string, Action>>();
 
-        public List<RoomInfo> cachedRooms = new List<RoomInfo>();
 
         private Coroutine connectionTimedOutRoutine;
 
@@ -709,31 +710,31 @@ namespace Fourzy
 #endif
         }
 
+#if !MOBILE_SKILLZ
         public static T GetPlayerProperty<T>(Player player, string key, T defaultValue)
         {
-#if !MOBILE_SKILLZ
             if (player == null) return defaultValue;
             if (!player.CustomProperties.ContainsKey(key)) return defaultValue;
 
             return (T)player.CustomProperties[key];
-#else
-            return default;
-#endif
         }
+#endif
 
+#if !MOBILE_SKILLZ
         public static int GetPlayerTotalGamesCount(Player player)
         {
             return GetPlayerProperty(player, Constants.REALTIME_WINS_KEY, 0) +
                 GetPlayerProperty(player, Constants.REALTIME_LOSES_KEY, 0) +
                 GetPlayerProperty(player, Constants.REALTIME_DRAWS_KEY, 0);
         }
+#endif
 
+#if !MOBILE_SKILLZ
         public void OnEvent(EventData photonEvent)
         {
-#if !MOBILE_SKILLZ
             onEvent?.Invoke(photonEvent);
-#endif
         }
+#endif
 
         public void ConnectUsingSettings(bool runTimeOutRoutine = true)
         {

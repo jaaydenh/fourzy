@@ -1,6 +1,9 @@
 ﻿//@vadym udod
 
+#if !MOBILE_SKILLZ
 using Photon.Realtime;
+#endif
+
 using System;
 
 namespace Fourzy._Updates
@@ -13,7 +16,9 @@ namespace Fourzy._Updates
         public bool useExternalRatingValue = false;
         public bool useExternalTotalGamesValue = false;
 
+#if !MOBILE_SKILLZ
         private Player _player;
+#endif
 
         private int rating;
         private int totalGames;
@@ -23,19 +28,25 @@ namespace Fourzy._Updates
         {
             get
             {
+#if !MOBILE_SKILLZ
                 if (_player == null || useExternalRatingValue)
                 {
                     return rating;
                 }
 
                 return FourzyPhotonManager.GetPlayerProperty(_player, Constants.REALTIME_RATING_KEY, -1);
+#else
+                return 0;
+#endif
             }
             set
             {
+#if !MOBILE_SKILLZ
                 if (_player == null)
                 {
                     rating = value;
                 }
+#endif
 
                 onRatingUdpate?.Invoke(value);
             }
@@ -44,19 +55,25 @@ namespace Fourzy._Updates
         {
             get
             {
+#if !MOBILE_SKILLZ
                 if (_player == null || useExternalTotalGamesValue)
                 {
                     return totalGames;
                 }
 
                 return FourzyPhotonManager.GetPlayerTotalGamesCount(_player);
+#else
+                return 0;
+#endif
             }
             set
             {
+#if !MOBILE_SKILLZ
                 if (_player == null)
                 {
                     totalGames = value;
                 }
+#endif
 
                 onTotalGamesUpdate?.Invoke(value);
             }
@@ -64,13 +81,12 @@ namespace Fourzy._Updates
 
         public OpponentData() { }
 
-        public OpponentData(Player player) :
-            this(player.UserId,
-                FourzyPhotonManager.GetPlayerProperty(player, Constants.REALTIME_RATING_KEY, -1),
-                FourzyPhotonManager.GetPlayerTotalGamesCount(player))
+#if !MOBILE_SKILLZ
+        public OpponentData(Player player) : this(player.UserId, FourzyPhotonManager.GetPlayerProperty(player, Constants.REALTIME_RATING_KEY, -1), FourzyPhotonManager.GetPlayerTotalGamesCount(player))
         {
             _player = player;
         }
+#endif
 
         public OpponentData(string id, int rating, int totalGames) : this()
         {

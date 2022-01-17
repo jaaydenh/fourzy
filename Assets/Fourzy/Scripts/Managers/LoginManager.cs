@@ -2,21 +2,19 @@
 
 using Fourzy._Updates;
 using Fourzy._Updates.UI.Toasts;
-//#if UNITY_IOS
-//using UnityEngine.SocialPlatforms.GameCenter;
-//#endif
-//using SA.iOS.GameKit;
-//using SA.Foundation.Templates;
 using FourzyGameModel.Model;
-using Photon.Pun;
-using PlayFab;
-using PlayFab.ClientModels;
-using PlayFab.ProfilesModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+using PlayFab.ProfilesModels;
+using Photon.Pun;
+#endif
 
 namespace Fourzy
 {

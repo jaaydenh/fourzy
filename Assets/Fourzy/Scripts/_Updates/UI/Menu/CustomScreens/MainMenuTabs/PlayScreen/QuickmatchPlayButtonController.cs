@@ -1,8 +1,11 @@
 //@vadym udod
 
 using Fourzy._Updates.UI.Helpers;
-using Photon.Pun;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.UI
 {

@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
@@ -8,11 +7,15 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
-using Photon.Pun;
 using StackableDecorator;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using ExitGames.Client.Photon;
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -139,15 +142,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget = game.me == game.player1 ? myWidget : opponentWidget;
             player2Widget = game.me == game.player2 ? myWidget : opponentWidget;
 
-            #region Timer usage
+#region Timer usage
 
             timersEnabled = Tools.Utils.GetTimerState(game);
             player1Timer = game.me == game.player1 ? myTimer : opponentTimer;
             player2Timer = game.me == game.player2 ? myTimer : opponentTimer;
 
-            #endregion
+#endregion
 
-            #region Magic usage
+#region Magic usage
 
             magicState = MagicState.DISABLED;
             switch (game._Type)
@@ -195,7 +198,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
             }
 
-            #endregion
+#endregion
 
             Player me = game.me;
 
@@ -219,7 +222,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             myWidget.SetPlayer(me);
             myWidget.StopPlayerTurnAnimation();
 
-            #region Set P1 Rating
+#region Set P1 Rating
 
             switch (game._Type)
             {
@@ -234,7 +237,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
             }
 
-            #endregion
+#endregion
 
             Player opponent = game.opponent;
             if (opponent != null)
@@ -242,7 +245,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 opponentWidget.SetPlayer(opponent);
                 opponentWidget.StopPlayerTurnAnimation();
 
-                #region Set P2 Rating
+#region Set P2 Rating
 
                 switch (game._Type)
                 {
@@ -274,7 +277,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
                 }
 
-                #endregion
+#endregion
 
                 if (game.hideOpponent)
                 {
@@ -637,7 +640,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             HideGameInfoWidget();
 
-            #region Timers
+#region Timers
 
             if (timersEnabled)
             {
@@ -650,7 +653,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 AdjustTimer(opponentTimer);
             }
 
-            #endregion
+#endregion
 
             SetResetButtonState(true);
 
@@ -703,7 +706,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
             }
 
-            #region Timers
+#region Timers
 
             if (timersEnabled)
             {
@@ -722,7 +725,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     widget.AddTimerValue(InternalSettings.Current.RESET_TIMER_SECTIONS, true, true);
                 }
             }
-            #endregion
+#endregion
         }
 
         private void OnTimerEmpty(Player player)

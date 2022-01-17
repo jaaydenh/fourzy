@@ -5,12 +5,15 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using Photon.Pun;
-using PlayFab;
-using PlayFab.ClientModels;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayFab;
+using PlayFab.ClientModels;
+
+#if !MOBILE_SKILLZ
+using Photon.Pun;
+#endif
 
 namespace Fourzy
 {

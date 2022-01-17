@@ -1,6 +1,5 @@
 //@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
@@ -14,7 +13,6 @@ using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +20,11 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+#if !MOBILE_SKILLZ
+using ExitGames.Client.Photon;
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.Mechanics.Board
 {

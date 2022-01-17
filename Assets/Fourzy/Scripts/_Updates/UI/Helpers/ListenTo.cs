@@ -2,11 +2,14 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Managers;
-using Photon.Pun;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.UI.Helpers
 {

@@ -3,10 +3,13 @@
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
-using Photon.Pun;
-using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using Photon.Realtime;
+using Photon.Pun;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {

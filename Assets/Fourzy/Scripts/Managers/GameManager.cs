@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
@@ -14,12 +13,8 @@ using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
-#if !MOBILE_SKILLZ
-using Hellmade.Net;
-#endif
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
-using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
@@ -30,6 +25,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Purchasing;
 using UnityEngine.SceneManagement;
+
+#if !MOBILE_SKILLZ
+using ExitGames.Client.Photon;
+using Hellmade.Net;
+using Photon.Pun;
+#endif
 
 namespace Fourzy
 {
@@ -824,6 +825,7 @@ namespace Fourzy
 
         public void StartRealtimeQuickGame()
         {
+#if !MOBILE_SKILLZ
             //check if there is abandoned realtime game
             string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
             if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
@@ -849,6 +851,7 @@ namespace Fourzy
             {
                 MenuController.activeMenu.GetScreen<MatchmakingScreen>().OpenRealtime();
             }
+#endif
         }
 
         public void CloseApp()
@@ -868,18 +871,7 @@ namespace Fourzy
 
         public void OpenLobbyGame()
         {
-            //private const string kLobbyScreenOpened = "lobbyScreenOpened";
-            //if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
-            //{
-            //    menuController.GetOrAddScreen<LobbyScreen>().CheckLobby();
-            //}
-            //else
-            //{
-            //    menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
-
-            //    PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
-            //}
-
+#if !MOBILE_SKILLZ
             //check if there is abandoned realtime game
             string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
             if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
@@ -935,6 +927,7 @@ namespace Fourzy
                     })
                     .CloseOnAccept();
             }
+#endif
         }
 
         private void OnRoomJoined(string roomName)
