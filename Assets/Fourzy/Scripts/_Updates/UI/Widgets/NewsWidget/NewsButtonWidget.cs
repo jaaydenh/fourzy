@@ -6,6 +6,7 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class NewsButtonWidget : WidgetBase
     {
+#if !MOBILE_SKILLZ
         protected override void Awake()
         {
             base.Awake();
@@ -33,5 +34,6 @@ namespace Fourzy._Updates.UI.Widgets
             button.GetBadge().badge.SetValue(unreadNews);
             button.SetState(allNewsCount > 0);
         }
+#endif
     }
 }

@@ -8,8 +8,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
 using PlayFab;
 using PlayFab.ClientModels;
+#endif
 
 #if !MOBILE_SKILLZ
 using Photon.Pun;
@@ -79,7 +82,9 @@ namespace Fourzy
                 PlayerPrefsWrapper.SetSelectedGamePiece(value);
                 FourzyPhotonManager.SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, value);
 
+#if !MOBILE_SKILLZ
                 PlayFabClientAPI.UpdateAvatarUrl(new UpdateAvatarUrlRequest() { ImageUrl = value, }, OnAvatarUrlUpdate, OnChangeNamePlayfabError);
+#endif
                 AnalyticsManager.Instance.AmplitudeSetUserProperty("gamePieceId", value);
             }
         }
@@ -451,6 +456,7 @@ namespace Fourzy
 
         public static void AddHints(int number, string ticket = "")
         {
+#if !MOBILE_SKILLZ
             if (number > 0)
             {
                 PlayFabClientAPI.AddUserVirtualCurrency(
@@ -474,6 +480,7 @@ namespace Fourzy
                 ModifyCurrencyError,
                 ticket);
             }
+#endif
         }
 
         public static void OnHintsValueUpdated(int value, string token = "")
@@ -541,6 +548,7 @@ namespace Fourzy
                 return;
             }
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "checkPlayerRating",
@@ -560,6 +568,7 @@ namespace Fourzy
 
                 onFailed?.Invoke();
             });
+#endif
         }
 
         /// <summary>
@@ -600,6 +609,7 @@ namespace Fourzy
             Action<CheckPlayerStatsResult> onSuccess,
             Action onFailed)
         {
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "userStats",
@@ -618,6 +628,7 @@ namespace Fourzy
                 Debug.Log(error.ErrorMessage);
                 onFailed?.Invoke();
             });
+#endif
         }
 
         private void OnNetworkAccess(bool networkAccess)
@@ -629,6 +640,7 @@ namespace Fourzy
             }
         }
 
+#if !MOBILE_SKILLZ
         private void OnAvatarUrlUpdate(EmptyResponse response)
         {
         }
@@ -672,6 +684,7 @@ namespace Fourzy
 
             onDisplayNameChanged?.Invoke();
         }
+#endif
 
         [System.Serializable]
         public struct CheckRatingResult

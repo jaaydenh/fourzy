@@ -6,12 +6,15 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using PlayFab;
-using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 #if !MOBILE_SKILLZ
 using Photon.Pun;
@@ -205,6 +208,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         internal void StartBotMatch()
         {
+#if !MOBILE_SKILLZ
             //get bot profile from players' rating
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
@@ -241,6 +245,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 Debug.LogError(error.ErrorMessage);
             });
+#endif
         }
 
 #if !MOBILE_SKILLZ

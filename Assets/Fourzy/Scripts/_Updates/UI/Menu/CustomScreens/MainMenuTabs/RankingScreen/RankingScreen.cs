@@ -2,13 +2,16 @@
 
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
-using PlayFab;
-using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -26,12 +29,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public FastPuzzlesLeaderboardPlayerWidget leaderboardWidgetPrefab;
         public RectTransform widgetsParent;
 
+#if !MOBILE_SKILLZ
         private bool loadingLeaderboard = false;
         private bool checkScrolling = false;
         private bool firstLoad = true;
         private float prevScrollValue = 0f;
-        private List<FastPuzzlesLeaderboardPlayerWidget> loadedWidgets =
-            new List<FastPuzzlesLeaderboardPlayerWidget>();
+        private List<FastPuzzlesLeaderboardPlayerWidget> loadedWidgets = new List<FastPuzzlesLeaderboardPlayerWidget>();
         private List<PlayerLeaderboardEntry> playersData = new List<PlayerLeaderboardEntry>();
 
         protected override void Awake()
@@ -275,5 +278,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 OnError);
             }
         }
+#endif
     }
 }

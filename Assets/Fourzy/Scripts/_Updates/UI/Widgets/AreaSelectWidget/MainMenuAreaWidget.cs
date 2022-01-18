@@ -6,12 +6,15 @@ using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -42,7 +45,9 @@ namespace Fourzy._Updates.UI.Widgets
         private AreaProgression progressionData = null;
         private AreaProgressionEntry previousReward;
         private AreaProgressionEntry nextReward;
+#if !MOBILE_SKILLZ
         private CatalogItem rewardItem;
+#endif
         private int gamesPlayed = 0;
         private Area currentArea;
 
@@ -125,6 +130,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OnRewardTap()
         {
+#if !MOBILE_SKILLZ
             if (rewardItem == null) return;
 
             switch (rewardItem.ItemClass)
@@ -152,6 +158,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
+#endif
         }
 
         public void OpenAreaProgressionScreen()
@@ -274,6 +281,7 @@ namespace Fourzy._Updates.UI.Widgets
                 return;
             }
 
+#if !MOBILE_SKILLZ
             CatalogItem _current = GameContentManager.Instance.GetFirstInBundle(nextReward.id);
             if (rewardItem != _current)
             {
@@ -284,6 +292,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 rewardAnimation.AnimateProgress();
             }
+#endif
         }
 
         private AreaProgression ProgressionFromArea(Area area)
@@ -320,7 +329,9 @@ namespace Fourzy._Updates.UI.Widgets
             AreaProgressionRewardScreen _rewardScreen = menuScreen.menuController.GetOrAddScreen<AreaProgressionRewardScreen>();
             //this screen is transparent at first
             //and will also block inputs
+#if !MOBILE_SKILLZ
             _rewardScreen.ShowReward(rewardItem);
+#endif
 
             progressionValue.text = "";
 

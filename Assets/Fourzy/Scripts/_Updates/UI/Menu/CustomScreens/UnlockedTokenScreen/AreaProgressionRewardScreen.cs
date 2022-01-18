@@ -5,11 +5,14 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
-using PlayFab.ClientModels;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -26,7 +29,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         [SerializeField]
         private ParticleSystem fgStarsParticles;
 
+#if !MOBILE_SKILLZ
         private CatalogItem reward;
+#endif
         private GameObject spawn;
 
         public override void Open()
@@ -44,6 +49,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnBack();
 
+#if !MOBILE_SKILLZ
             switch (reward.ItemClass)
             {
                 case Constants.PLAYFAB_TOKEN_CLASS:
@@ -66,10 +72,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+#endif
 
             CloseSelf();
         }
 
+#if !MOBILE_SKILLZ
         internal void ShowReward(CatalogItem item)
         {
             reward = item;
@@ -132,11 +140,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             menuController.OpenScreen(this);
         }
+#endif
 
         public void TryButtonPress()
         {
             CloseSelf();
 
+#if !MOBILE_SKILLZ
             switch (reward.ItemClass)
             {
                 case Constants.PLAYFAB_TOKEN_CLASS:
@@ -168,6 +178,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+#endif
         }
 
         public void ActualOpen()
@@ -176,6 +187,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             HeaderScreen.Instance.Close();
 
+#if !MOBILE_SKILLZ
             switch (reward.ItemClass)
             {
                 case Constants.PLAYFAB_TOKEN_CLASS:
@@ -201,6 +213,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+#endif
         }
     }
 }

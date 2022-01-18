@@ -15,8 +15,6 @@ using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
-using PlayFab;
-using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,6 +23,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Purchasing;
 using UnityEngine.SceneManagement;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 #if !MOBILE_SKILLZ
 using ExitGames.Client.Photon;
@@ -103,7 +106,9 @@ namespace Fourzy
         public IClientFourzy activeGame { get; set; }
         public BasicPuzzlePack currentPuzzlePack { get; set; }
         public Camera3dItemProgressionMap currentMap { get; set; }
+#if !MOBILE_SKILLZ
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
+#endif
         public OpponentData RealtimeOpponent { get; set; }
         public bool RejoinAbandonedGame { get; set; }
         public Player Bot { get; set; }
@@ -200,7 +205,9 @@ namespace Fourzy
             buildIntent == BuildIntent.MOBILE_INFINITY &&
             PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
 
+#if !MOBILE_SKILLZ
         public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
+#endif
 
         protected override void Awake()
         {
@@ -523,6 +530,7 @@ namespace Fourzy
 
             float winner = game.draw ? .5f : (game.IsWinner() ? 1f : 0f);
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "reportBotGameComplete",
@@ -566,10 +574,12 @@ namespace Fourzy
 
                 ReportPlayFabError(error.ErrorMessage);
             });
+#endif
         }
 
         public void ReportAreaProgression(Area _area)
         {
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "reportAreaProgression",
@@ -659,6 +669,7 @@ namespace Fourzy
 
                 ReportPlayFabError(error.ErrorMessage);
             });
+#endif
         }
 
         public void LogGameComplete(IClientFourzy game)
@@ -806,6 +817,7 @@ namespace Fourzy
             if (!NetworkAccess) return;
             Debug.Log("Fetching news..");
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(),
             result =>
             {
@@ -821,6 +833,7 @@ namespace Fourzy
                 Debug.LogError(error.GenerateErrorReport());
                 ReportPlayFabError(error.ErrorMessage);
             });
+#endif
         }
 
         public void StartRealtimeQuickGame()
@@ -1016,6 +1029,7 @@ namespace Fourzy
 
         public static void UpdateFastPuzzlesStat(int _value)
         {
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "reportFastPuzzlesCount",
@@ -1029,10 +1043,12 @@ namespace Fourzy
 
                 Instance.ReportPlayFabError(error.ErrorMessage);
             });
+#endif
         }
 
         public static void GetTitleData(Action<object> onDataLoaded, Action onFailed)
         {
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(),
                 result =>
                 {
@@ -1043,6 +1059,7 @@ namespace Fourzy
                     Debug.Log(error.ErrorMessage);
                     onFailed?.Invoke();
                 });
+#endif
         }
 
         public static int ValueFromCurrencyType(CurrencyType type)
@@ -1115,6 +1132,7 @@ namespace Fourzy
             if (activeGame == null) return;
             if (string.IsNullOrEmpty(RealtimeOpponent.Id)) return;
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "reportRatingGameComplete",
@@ -1147,6 +1165,7 @@ namespace Fourzy
 
                 Instance.ReportPlayFabError(error.ErrorMessage);
             });
+#endif
         }
 
         private void HandleException(string condition, string stackTrace, LogType type)

@@ -4,11 +4,14 @@ using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using Newtonsoft.Json;
-using PlayFab;
-using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -44,6 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             HeaderScreen.Instance.Close();
         }
 
+#if !MOBILE_SKILLZ
         private void OnError(PlayFabError error)
         {
             loadingPrompt.CloseSelf();
@@ -83,6 +87,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 foreach (PlayerLeaderboardEntry entry in leaderboard.s2)
                     widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
         }
+#endif
 
         private void NetworkAccess(bool state)
         {
@@ -118,18 +123,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 menuController.CloseCurrentScreen();
             });
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "getLeaderboard",
                 FunctionParameter = new { maxCount = 6, tableName = "PuzzlesLB" }
             }, OnLeaderboardLoaded, OnError);
+#endif
         }
 
+#if !MOBILE_SKILLZ
         public class LeaderboardRequestResult
         {
             public List<PlayerLeaderboardEntry> s1;
             public List<PlayerLeaderboardEntry> s2;
             public int version;
         }
+#endif
     }
 }

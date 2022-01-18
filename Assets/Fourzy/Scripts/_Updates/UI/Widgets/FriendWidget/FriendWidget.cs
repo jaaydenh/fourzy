@@ -4,11 +4,14 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
-using PlayFab;
-using PlayFab.ClientModels;
 using System;
 using TMPro;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -22,9 +25,12 @@ namespace Fourzy._Updates.UI.Widgets
         public ButtonExtended playButton;
 
         private GamePieceView gamepiece;
+#if !MOBILE_SKILLZ
         private FriendInfo friendInfo;
+#endif
         private bool removing;
 
+#if !MOBILE_SKILLZ
         public string friendID => friendInfo.FriendPlayFabId;
 
         public FriendWidget SetData(FriendInfo friendInfo)
@@ -35,6 +41,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             return this;
         }
+#endif
 
         public FriendWidget SetPlayerIcon(string gamepieceID)
         {
@@ -64,6 +71,7 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
+#if !MOBILE_SKILLZ
         public void Challenge()
         {
             menuScreen.menuController
@@ -84,22 +92,26 @@ namespace Fourzy._Updates.UI.Widgets
                 .Prompt($"Unfollow {friendInfo.TitleDisplayName}", "", () => Unfollow(), null)
                 .CloseOnAccept();
         }
+#endif
 
         public FriendWidget Unfollow()
         {
             if (removing) return this;
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.RemoveFriend(new RemoveFriendRequest()
             {
                 FriendPlayFabId = friendInfo.FriendPlayFabId
             }, 
             OnRemoveFriend, 
             OnRemoveFriendError);
+#endif
             removing = true;
 
             return this;
         }
 
+#if !MOBILE_SKILLZ
         private void OnRemoveFriendError(PlayFabError error)
         {
             removing = false;
@@ -116,5 +128,6 @@ namespace Fourzy._Updates.UI.Widgets
 
             GamesToastsController.ShowTopToast($"Unfollowed: {friendInfo.TitleDisplayName}");
         }
+#endif
     }
 }

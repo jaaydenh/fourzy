@@ -2,10 +2,13 @@
 
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
-using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -28,11 +31,13 @@ namespace Fourzy._Updates.UI.Widgets
             StartRoutine("animation", duration, OnComplete);
         }
 
+#if !MOBILE_SKILLZ
         public void SetReward(CatalogItem item)
         {
             CancelRoutine("set_item");
             StartRoutine("set_item", UpdateRewardRoutine(item));
         }
+#endif
 
         public void RemoveCurrentReward()
         {
@@ -53,6 +58,7 @@ namespace Fourzy._Updates.UI.Widgets
             rewardParticles.Stop();
         }
 
+#if !MOBILE_SKILLZ
         private IEnumerator UpdateRewardRoutine(CatalogItem item)
         {
             CancelRoutine("remove_current");
@@ -80,6 +86,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             _currentReward.PlayForward();
         }
+#endif
 
         private IEnumerator RemoveCurrentRewardRoutine()
         {

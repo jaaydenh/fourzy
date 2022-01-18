@@ -11,13 +11,16 @@ using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PlayFab;
-using PlayFab.ClientModels;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy
 {
@@ -53,7 +56,9 @@ namespace Fourzy
 
         internal List<string> bundlesInPlayerInventory { get; set; } = new List<string>();
 
+#if !MOBILE_SKILLZ
         internal Dictionary<string, CatalogItem> allItemsInfo;
+#endif
 
         internal IEnumerable<TokensDataHolder.TokenData> unlockedTokensData
         {
@@ -106,6 +111,7 @@ namespace Fourzy
 
         public void GetItemsCataloge()
         {
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.GetCatalogItems(
                 new GetCatalogItemsRequest(),
                 result =>
@@ -145,8 +151,10 @@ namespace Fourzy
                 {
                     GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
                 });
+#endif
         }
 
+#if !MOBILE_SKILLZ
         public CatalogItem GetCatalogItem(string itemId)
         {
             if (allItemsInfo.ContainsKey(itemId))
@@ -173,6 +181,7 @@ namespace Fourzy
                 return null;
             }
         }
+#endif
 
         public GameBoardDefinition GetInstructionBoard(string boardFileName)
         {

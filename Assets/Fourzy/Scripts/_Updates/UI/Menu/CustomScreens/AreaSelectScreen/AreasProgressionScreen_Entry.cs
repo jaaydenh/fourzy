@@ -3,12 +3,15 @@
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
-using PlayFab.ClientModels;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Fourzy._Updates.Serialized;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -37,6 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             rectTransform = gameObject.GetComponent<RectTransform>();
         }
 
+#if !MOBILE_SKILLZ
         public void Initialize(int targetValue, float fillAmount, CatalogItem item)
         {
             FillAmount = fillAmount;
@@ -92,5 +96,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
             }
         }
+#endif
     }
 }

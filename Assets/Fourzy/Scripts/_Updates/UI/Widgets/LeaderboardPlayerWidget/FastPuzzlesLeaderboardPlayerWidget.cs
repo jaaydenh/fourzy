@@ -1,9 +1,12 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics._GamePiece;
-using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -15,8 +18,11 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform iconParent;
 
         private GamePieceView currentGamepiece;
+#if !MOBILE_SKILLZ
         private PlayerLeaderboardEntry data;
+#endif
 
+#if !MOBILE_SKILLZ
         public FastPuzzlesLeaderboardPlayerWidget SetData(PlayerLeaderboardEntry entry)
         {
             data = entry;
@@ -38,6 +44,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             return this;
         }
+#endif
 
         public float GetHeight() => rectTransform ? rectTransform.rect.height : 0f;
 

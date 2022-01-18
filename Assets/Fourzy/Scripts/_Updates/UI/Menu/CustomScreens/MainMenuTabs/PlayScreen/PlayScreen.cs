@@ -71,7 +71,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             tabsParent.menuController.OpenScreen<FastPuzzlesScreen>();
         }
 
-        public void OpenNews() => menuController.GetOrAddScreen<NewsPromptScreen>()._Prompt();
+        public void OpenNews()
+        {
+#if !MOBILE_SKILLZ
+            menuController.GetOrAddScreen<NewsPromptScreen>()._Prompt();
+#endif
+        }
 
         public void OpenDiscord()
         {

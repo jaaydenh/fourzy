@@ -1,9 +1,12 @@
 ﻿//@vadym udod
 
-using PlayFab.ClientModels;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -11,6 +14,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public TMP_Text date;
 
+#if !MOBILE_SKILLZ
         private int currentNewsIndex = -1;
         private List<TitleNewsItem> news = new List<TitleNewsItem>();
 
@@ -54,5 +58,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //set news as opened
             PlayerPrefsWrapper.SetNewsOpened(news[page].NewsId, true);
         }
+#endif
     }
 }

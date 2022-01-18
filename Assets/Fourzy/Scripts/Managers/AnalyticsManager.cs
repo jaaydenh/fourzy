@@ -4,13 +4,16 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
-using PlayFab;
-using PlayFab.ClientModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Analytics;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+using PlayFab;
+#endif
 
 namespace Fourzy
 {
@@ -564,6 +567,7 @@ namespace Fourzy
                             break;
 
                         case AnalyticsProvider.PLAYFAB:
+#if !MOBILE_SKILLZ
                             if (PlayFabClientAPI.IsClientLoggedIn())
                             {
                                 PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
@@ -580,6 +584,7 @@ namespace Fourzy
                             {
                                 playFabCachedEvents += () => LogEvent(@event, values, AnalyticsProvider.PLAYFAB);
                             }
+#endif
 
                             break;
 

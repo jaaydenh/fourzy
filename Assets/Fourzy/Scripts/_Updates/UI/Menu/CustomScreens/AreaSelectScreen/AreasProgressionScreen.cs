@@ -6,12 +6,15 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
-using PlayFab.ClientModels;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if !MOBILE_SKILLZ
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -41,7 +44,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private List<PracticeScreenAreaSelectWidget> areasWidgets = new List<PracticeScreenAreaSelectWidget>();
         private List<AreasProgressionScreen_Entry> entriesList = new List<AreasProgressionScreen_Entry>();
+#if !MOBILE_SKILLZ
         private Dictionary<Area, List<(int number, CatalogItem item)>> progression;
+#endif
         private PracticeScreenAreaSelectWidget currentAreaWidget;
 
         protected override void Awake()
@@ -165,6 +170,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             int gamesNumber = UserManager.Instance.GetAreaProgression(currentAreaWidget.Area);
             bool useFillValue = true;
             int prevItemNumber = 0;
+#if !MOBILE_SKILLZ
             foreach (var entry in progression[currentAreaWidget.Area])
             {
                 AreasProgressionScreen_Entry newEntry = Instantiate(rewardPrefab, rewardsHolder);
@@ -179,6 +185,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 entriesList.Add(newEntry);
             }
+#endif
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(rewardsHolder);
 
@@ -209,6 +216,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnPlayfabValueLoaded(PlayfabValuesLoaded value)
         {
+#if !MOBILE_SKILLZ
             //init slider
             if (!isPlayFabInitialized && UserManager.Instance.IsPlayfabValueLoaded(PlayfabValuesLoaded.TITLE_DATA_RECEIVED, PlayfabValuesLoaded.PLAYER_STATS_RECEIVED, PlayfabValuesLoaded.CATALOG_INFO_RECEIVED))
             {
@@ -228,6 +236,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 return areaProgression.progression.Select(item => (item.gamesNumber, GameContentManager.Instance.GetFirstInBundle(item.id))).ToList();
             }
+#endif
         }
 
         private void OnAreaProgression(Area area, int gamesNumber)
@@ -245,6 +254,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private (Area area, AreaProgressionEntry entry) GetAreaUnlockItem(Area area)
         {
+#if !MOBILE_SKILLZ
             if (GameContentManager.Instance.allItemsInfo.ContainsKey(area.ToString()))
             {
                 foreach (CatalogItem item in GameContentManager.Instance.allItemsInfo.Values)
@@ -284,6 +294,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                 }
             }
+#endif
 
             return (Area.NONE, null);
         }

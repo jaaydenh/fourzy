@@ -81,11 +81,13 @@ namespace Fourzy._Updates.UI.Menu
             //check for news
             if (PlayerPrefsWrapper.GetTutorialFinished("Onboarding"))
             {
+#if !MOBILE_SKILLZ
                 //only force news if onboarding was finished
                 if (GameManager.Instance.unreadNews.Count > 0)
                 {
                     GetOrAddScreen<NewsPromptScreen>()._Prompt();
                 }
+#endif
             }
         }
     }

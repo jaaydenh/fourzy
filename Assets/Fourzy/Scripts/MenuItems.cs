@@ -9,12 +9,15 @@ using Fourzy;
 using Fourzy._Updates;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using PlayFab;
-using PlayFab.ClientModels;
 using UnityEditor;
 using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.U2D;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 public class MenuItems : MonoBehaviour
 {
@@ -102,6 +105,7 @@ public class MenuItems : MonoBehaviour
     {
         if (!IsRuntime()) return;
 
+#if !MOBILE_SKILLZ
         PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
             FunctionName = "resetPlayerInventory",
@@ -117,6 +121,7 @@ public class MenuItems : MonoBehaviour
             Debug.Log("Inventory cleared");
         },
         null);
+#endif
     }
 
     [MenuItem("Fourzy/Clear Area Progress")]
@@ -126,6 +131,7 @@ public class MenuItems : MonoBehaviour
 
         Debug.Log($"Reset games counter on all areas for player.");
 
+#if !MOBILE_SKILLZ
         PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
             FunctionName = "resetAreaProgression",
@@ -146,6 +152,7 @@ public class MenuItems : MonoBehaviour
 
             GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
         });
+#endif
     }
 
     [MenuItem("Fourzy/Reset Player Stats")]
@@ -153,6 +160,7 @@ public class MenuItems : MonoBehaviour
     {
         if (!IsRuntime()) return;
 
+#if !MOBILE_SKILLZ
         PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
             FunctionName = "resetPlayerStats",
@@ -170,6 +178,7 @@ public class MenuItems : MonoBehaviour
 
            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
        });
+#endif
     }
 
     [MenuItem("Fourzy/Start Bot Match(from MainMenu)")]
@@ -177,6 +186,7 @@ public class MenuItems : MonoBehaviour
     {
         if (!IsRuntime()) return;
 
+#if !MOBILE_SKILLZ
         PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
             FunctionName = "botDataFromRating",
@@ -211,6 +221,7 @@ public class MenuItems : MonoBehaviour
 
             Debug.LogError(error.ErrorMessage);
         });
+#endif
     }
 
     [MenuItem("Fourzy/Add Realtime Game Complete")]
@@ -218,6 +229,7 @@ public class MenuItems : MonoBehaviour
     {
         if (!IsRuntime()) return;
 
+#if !MOBILE_SKILLZ
         PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
             FunctionName = "addRealtimeGameComplete",
@@ -227,6 +239,7 @@ public class MenuItems : MonoBehaviour
             UserManager.Instance.realtimeGamesComplete += 1;
         },
         null);
+#endif
     }
 
     [MenuItem("Fourzy/Add Progress Training Garden")]

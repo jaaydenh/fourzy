@@ -4,11 +4,14 @@ using Fourzy._Updates;
 using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using PlayFab;
-using PlayFab.ClientModels;
 using Sirenix.OdinInspector;
 using System.Linq;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy
 {
@@ -35,6 +38,7 @@ namespace Fourzy
         {
             if (!IsRuntime()) return;
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "botDataFromRating",
@@ -69,6 +73,7 @@ namespace Fourzy
 
                 Debug.LogError(error.ErrorMessage);
             });
+#endif
         }
 
         [Button]
@@ -76,6 +81,7 @@ namespace Fourzy
         {
             if (!IsRuntime()) return;
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "addRealtimeGameComplete",
@@ -85,6 +91,7 @@ namespace Fourzy
                 UserManager.Instance.realtimeGamesComplete += 1;
             },
             null);
+#endif
         }
 
         [Button]
@@ -136,6 +143,7 @@ namespace Fourzy
 
             Debug.Log($"Reset games counter on all areas for player.");
 
+#if !MOBILE_SKILLZ
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "resetAreaProgression",
@@ -154,6 +162,7 @@ namespace Fourzy
 
                 GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
             });
+#endif
         }
 
         [Button]
@@ -175,5 +184,5 @@ namespace Fourzy
             return true;
         }
 #endif
+        }
     }
-}

@@ -4,10 +4,13 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
-using PlayFab;
 using System.Collections;
 using UnityEngine;
+
+#if !MOBILE_SKILLZ
+using PlayFab;
 using PlayFab.ClientModels;
+#endif
 
 namespace Fourzy.Testing
 {
@@ -46,6 +49,7 @@ namespace Fourzy.Testing
             //}
         }
 
+#if !MOBILE_SKILLZ
         private void OnResult(ExecuteCloudScriptResult result)
         {
             print("good: " + result.ToJson());
@@ -55,6 +59,7 @@ namespace Fourzy.Testing
         {
             print("bad: " + error.ToString());
         }
+#endif
 
         protected void Start()
         {
