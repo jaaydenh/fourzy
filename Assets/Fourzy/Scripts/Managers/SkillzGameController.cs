@@ -1,13 +1,11 @@
 //@vadym udod
 
 using Fourzy._Updates.Mechanics.GameplayScene;
-using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using SkillzSDK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Fourzy._Updates.Managers
 {
@@ -55,8 +53,12 @@ namespace Fourzy._Updates.Managers
         internal List<SkillzGameResult> GamesPlayed { get; } = new List<SkillzGameResult>();
         internal int Points => GamesPlayed.Sum(game => game.Points);
         internal bool HaveNextGame => CurrentLevelIndex < GamesToPlay;
+        /// <summary>
+        /// If game is opened when we return from skillz to fourzy, exit to main menu
+        /// </summary>
         internal bool CloseGameOnBack { get; set; }
         internal List<SkillzLevelParams> LevelsInfo => levelsInfo;
+        internal int SubmitRetries { get; set; }
 
         public void InitializeMatchData()
         {
@@ -99,6 +101,7 @@ namespace Fourzy._Updates.Managers
         {
             CurrentMatch = matchInfo;
             OngoingMatch = true;
+            SubmitRetries = 3;
             InitializeMatchData();
 
             GameManager.Instance.StartGame(GameTypeLocal.ASYNC_SKILLZ_GAME);

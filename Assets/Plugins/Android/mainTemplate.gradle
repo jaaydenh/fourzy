@@ -14,13 +14,7 @@
             url "https://maven.google.com"
         }
         maven {
-            url "https://repo.maven.apache.org/maven2" // Assets/Editor/AmplitudeDependencies.xml:5
-        }
-        maven {
             url "http://nexus.skillz.com/content/groups/public/" // Assets/Skillz/Editor/SkillzDependencies.xml:5
-        }
-        maven {
-            url "https://maven.google.com" // Assets/Editor/AmplitudeDependencies.xml:11, Assets/Editor/AmplitudeDependencies.xml:17
         }
         maven {
             url "https://s3.amazonaws.com/moat-sdk-builds" // Assets/Skillz/Editor/SkillzDependencies.xml:122
@@ -57,7 +51,6 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.14.0' // Assets/Skillz/Editor/SkillzDependencies.xml:85
     implementation 'com.amazonaws:aws-android-sdk-pinpoint:2.14.0' // Assets/Skillz/Editor/SkillzDependencies.xml:83
     implementation 'com.amazonaws:aws-android-sdk-s3:2.14.0' // Assets/Skillz/Editor/SkillzDependencies.xml:89
-    implementation 'com.amplitude:android-sdk:2.28.2' // Assets/Editor/AmplitudeDependencies.xml:11
     implementation 'com.anjlab.android.iab.v3:library:1.0.36' // Assets/Skillz/Editor/SkillzDependencies.xml:23
     implementation 'com.braintreepayments.api:braintree:3.9.0' // Assets/Skillz/Editor/SkillzDependencies.xml:35
     implementation 'com.braintreepayments.api:data-collector:3.9.0' // Assets/Skillz/Editor/SkillzDependencies.xml:37
@@ -88,7 +81,6 @@ dependencies {
     implementation 'com.skillz-mopub:mopub-sdk-base:5.12.1-skillz' // Assets/Skillz/Editor/SkillzDependencies.xml:122
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1' // Assets/Skillz/Editor/SkillzDependencies.xml:79
     implementation 'com.squareup.okhttp3:okhttp:3.14.1' // Assets/Skillz/Editor/SkillzDependencies.xml:51
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2' // Assets/Editor/AmplitudeDependencies.xml:17
     implementation 'com.squareup.picasso:picasso:2.71828' // Assets/Skillz/Editor/SkillzDependencies.xml:73
     implementation 'com.squareup.retrofit:retrofit:1.9.0' // Assets/Skillz/Editor/SkillzDependencies.xml:71
     implementation 'com.yqritc:android-scalablevideoview:1.0.4' // Assets/Skillz/Editor/SkillzDependencies.xml:128

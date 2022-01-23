@@ -1739,7 +1739,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 if (!SkillzGameController.Instance.HaveNextGame)
                 {
                     SkillzGameController.Instance.OnMatchFinished();
-                    SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
+                    TrySubmitScore();
                 }
             }
 
@@ -1938,17 +1938,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             StartRoutine("postGameRoutine", PostGameFinished());
         }
 
+        private void TrySubmitScore()
+        {
+            SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
+        }
+
         private void OnSkillzScoreReported()
         {
-            CancelRoutine("skillzScorehelper");
+            Debug.Log("Score submited.");
         }
 
         private void OnSkillzScoreReportedError(string error)
         {
             Debug.Log($"Failed to report Skillz score: {error}");
-            Debug.Log($"Starting up skillz score helper");
 
-            StartRoutine("skillzScorehelper", SkillzScoreReportHelper());
+            StartCoroutine(SkillzScoreReportHelper());
         }
 
         /// <summary>
@@ -1957,16 +1961,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         /// <returns></returns>
         private IEnumerator SkillzScoreReportHelper()
         {
-            int tries = 3;
-
-            for (int _try = 0; _try < tries; _try++)
+            if (SkillzGameController.Instance.SubmitRetries > 0)
             {
-                SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, null);
+                //wait for 3 seconds for the next try
+                yield return new WaitForSeconds(3f);
 
-                yield return new WaitForSeconds(2f);
+                SkillzGameController.Instance.SubmitRetries--;
+                TrySubmitScore();
             }
-
-            if (!SkillzGameController.Instance.HaveNextGame)
+            else
             {
                 Debug.Log("Failed to report score");
                 Debug.Log("Last effort, using DisplayTournamentResultsWithScore");
