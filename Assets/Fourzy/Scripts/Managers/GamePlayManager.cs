@@ -196,6 +196,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
                     else
                     {
+                        if (SkillzGameController.Instance.CurrentMatch == null) return;
+
                         //deduct wait time
                         if (SkillzGameController.Instance.MatchPausesLeft == 0)
                         {
