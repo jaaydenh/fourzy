@@ -91,7 +91,7 @@ namespace Fourzy
             OnboardingScreen onboardingScreen = PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>();
 
             AsyncOperation async = null;
-            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.GetByName("Onboarding"))/* && GameManager.Instance.Landscape*/;
+            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.GetByName("Onboarding"));
 
             if (!displayTutorial)
             {
@@ -123,7 +123,19 @@ namespace Fourzy
 
         private IEnumerator SkillzLoadRoutine()
         {
-            AsyncOperation async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked("game_greeting", 1f);
+
+            OnboardingScreen onboardingScreen = PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>();
+
+            AsyncOperation async = null;
+
+            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.GetByName("Onboarding"));
+
+            if (!displayTutorial)
+            {
+                async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
+                async.allowSceneActivation = false;
+            }
 
             if (async != null)
             {
@@ -134,6 +146,11 @@ namespace Fourzy
                     slider.value = async.progress;
                     yield return null;
                 }
+            }
+
+            if (displayTutorial)
+            {
+                onboardingScreen.OpenTutorial(HardcodedTutorials.GetByName("Onboarding"));
             }
         }
 
