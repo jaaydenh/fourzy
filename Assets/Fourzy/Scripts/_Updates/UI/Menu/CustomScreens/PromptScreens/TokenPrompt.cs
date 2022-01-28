@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
@@ -19,6 +20,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private GameObject newTokenRibbon;
         [SerializeField]
         private ButtonExtended tryItButton;
+        [SerializeField]
+        private ButtonExtended showTokenInstructions;
 
         [SerializeField]
         private TMP_Text locationLabel;
@@ -36,12 +39,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gameboard = GetComponentInChildren<GameboardView>();
         }
 
-        public virtual void Prompt(TokensDataHolder.TokenData data, bool canTryIt, bool ribbon)
+        public virtual void Prompt(TokensDataHolder.TokenData data, bool canTryIt, bool ribbon, bool showCheckbox)
         {
             this.data = data;
 
             newTokenRibbon.gameObject.SetActive(ribbon);
             tryItButton.SetActive(canTryIt);
+            showTokenInstructions.SetActive(showCheckbox);
 
             InitPrompt(GameContentManager.Instance.GetTokenThemes(data.tokenType));
         }
@@ -71,6 +75,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CloseSelf();
 
             GameContentManager.Instance.StartTryItBoard(data.tokenType);
+        }
+
+        public void ToggleInstructionCheckbox()
+        {
+            SettingsManager.Toggle(SettingsManager.KEY_TOKEN_INSTRUCTION);
         }
 
         private void InitPrompt(List<AreasDataHolder.GameArea> themes)

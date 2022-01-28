@@ -25,6 +25,7 @@ namespace Fourzy._Updates.UI.Widgets
         public void OnClick() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(
             data, 
             PlayerPrefsWrapper.GetUnlockedTokens().Select(_data => _data.tokenType).Contains(data.tokenType), 
+            false,
             false);
     }
 }

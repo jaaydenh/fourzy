@@ -71,6 +71,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleVibration() => SettingsManager.Toggle(SettingsManager.KEY_VIBRATION);
 
+        public void ToggleTokenInstructions() => SettingsManager.Toggle(SettingsManager.KEY_TOKEN_INSTRUCTION);
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

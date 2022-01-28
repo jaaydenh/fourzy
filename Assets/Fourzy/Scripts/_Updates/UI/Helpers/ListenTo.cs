@@ -24,6 +24,7 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToSfxState = false;
         private bool listensToAudioState = false;
         private bool listensToVibrationState = false;
+        private bool listensToTokenInstructions = false;
         private bool listensToDemoModeState = false;
         private bool listensToAnalyticsState = false;
         private bool listensToMagicState = false;
@@ -80,6 +81,16 @@ namespace Fourzy._Updates.UI.Helpers
                             listensToVibrationState = true;
                             SettingsManager.onVibration += OnVibration;
                         }
+                        break;
+
+                    case ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_OFF:
+                    case ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_ON:
+                        if (!listensToTokenInstructions)
+                        {
+                            listensToTokenInstructions = true;
+                            SettingsManager.onTokenInstructionsOption += OnTokenInstructions;
+                        }
+
                         break;
 
                     case ListenValues.SETTINGS_DEMO_MODE_OFF:
@@ -205,6 +216,15 @@ namespace Fourzy._Updates.UI.Helpers
                         }
                         break;
 
+                    case ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_OFF:
+                    case ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_ON:
+                        if (listensToTokenInstructions)
+                        {
+                            listensToTokenInstructions = false;
+                            SettingsManager.onTokenInstructionsOption -= OnTokenInstructions;
+                        }
+                        break;
+
                     case ListenValues.SETTINGS_ANALYTICS_ON:
                     case ListenValues.SETTINGS_ANALYTICS_OFF:
                         if (listensToAnalyticsState)
@@ -296,6 +316,12 @@ namespace Fourzy._Updates.UI.Helpers
 
                             break;
 
+                        case ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_OFF:
+                        case ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_ON:
+                            OnTokenInstructions(SettingsManager.Get(SettingsManager.KEY_TOKEN_INSTRUCTION));
+
+                            break;
+
                         case ListenValues.SETTINGS_AUDIO_OFF:
                         case ListenValues.SETTINGS_AUDIO_ON:
                             OnAudio(SettingsManager.Get(SettingsManager.KEY_AUDIO));
@@ -376,6 +402,12 @@ namespace Fourzy._Updates.UI.Helpers
         private void OnVibration(bool state)
         {
             foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_VIBRATION_ON : ListenValues.SETTINGS_VIBRATION_OFF])
+                target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        private void OnTokenInstructions(bool state)
+        {
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_ON : ListenValues.SETTINGS_TOKEN_INSTRUCTIONS_OFF])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
@@ -479,5 +511,7 @@ namespace Fourzy._Updates.UI.Helpers
         PHOTON_CONNECTED_QUICKMATCH_LOBBY,
         SETTINGS_VIBRATION_ON,
         SETTINGS_VIBRATION_OFF,
+        SETTINGS_TOKEN_INSTRUCTIONS_ON,
+        SETTINGS_TOKEN_INSTRUCTIONS_OFF,
     }
 }

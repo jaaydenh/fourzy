@@ -358,7 +358,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         break;
 
                     case GameTypeLocal.LOCAL_GAME:
-                        game = new ClientFourzyGame(GameContentManager.Instance.GetInstructionBoard("BLOCKER"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"))
+                        game = new ClientFourzyGame(GameContentManager.Instance.GetInstructionBoard("ARROW"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"))
                         {
                             _Type = GameType.PASSANDPLAY
                         };
@@ -777,11 +777,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
 
-                popupUI.Prompt(token, false, ribbon);
+                popupUI.Prompt(token, false, ribbon, true);
 
                 yield return new WaitWhile(() => popupUI.isOpened);
 
                 PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, true);
+
+                if (!SettingsManager.Get(SettingsManager.KEY_TOKEN_INSTRUCTION))
+                {
+                    break;
+                }
             }
         }
 
@@ -2308,11 +2313,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
                 case GameType.PRESENTATION:
-                case GameType.SKILLZ_ASYNC:
                     break;
 
                 default:
-                    yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
+                    if (SettingsManager.Get(SettingsManager.KEY_TOKEN_INSTRUCTION))
+                    {
+                        yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
+                    }
 
                     break;
             }

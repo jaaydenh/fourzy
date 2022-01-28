@@ -706,6 +706,10 @@
       "value": "Skillz game rules here"
     },
     {
+      "key": "score",
+      "value": "Puntaje"
+    },
+    {
       "key": "second",
       "value": "segunda"
     },
@@ -726,8 +730,8 @@
       "value": "Configuraciones"
     },
     {
-      "key": "score",
-      "value": "Puntaje"
+      "key": "show_token_instructions",
+      "value": "Mostrar instrucciones de token"
     },
     {
       "key": "skillz_big_win_key",
