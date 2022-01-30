@@ -362,7 +362,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 189976684}
-  - component: {fileID: 189976685}
   m_Layer: 5
   m_Name: Body
   m_TagString: Untagged
@@ -390,71 +389,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &189976685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 189976683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceIPhoneX: 0
-  onIPhoneX:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 13
-          isDynamic: 0
-        target: {fileID: 189976684}
-        memberName: offsetMax
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -20}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-  other:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 13
-          isDynamic: 0
-        target: {fileID: 189976684}
-        memberName: offsetMax
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
 --- !u!1 &274238692
 GameObject:
   m_ObjectHideFlags: 0
@@ -3153,7 +3087,6 @@ GameObject:
   - component: {fileID: 673389458}
   - component: {fileID: 673389462}
   - component: {fileID: 673389461}
-  - component: {fileID: 673389460}
   - component: {fileID: 673389459}
   m_Layer: 5
   m_Name: Panel
@@ -3186,7 +3119,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 650.5071, y: 800}
+  m_SizeDelta: {x: 600, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &673389459
 MonoBehaviour:
@@ -3214,26 +3147,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &673389460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 673389457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: 700
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &673389461
 MonoBehaviour:
   m_ObjectHideFlags: 0
