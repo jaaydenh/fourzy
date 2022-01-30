@@ -237,9 +237,8 @@ namespace SkillzSDK.Internal.API.iOS
 		{
 			string keysJSON = MiniJSON.Json.Serialize(userDataKeys);
 			// set success/failure Actions that will be called in the progression proxy
-			SkillzProgressionProxy.progGetSuccessCallback = successCallback;
-			SkillzProgressionProxy.progGetFailureCallback = failureCallback;
-			InteropMethods._getProgressionUserData(progressionNamespace, keysJSON);
+			int requestId = SkillzProgressionProxy.RegisterGetCallbacks(successCallback, failureCallback);
+			InteropMethods._getProgressionUserData(requestId, progressionNamespace, keysJSON);
 		}
 
 		public void UpdateProgressionUserData(string progressionNamespace, Dictionary<string, object> userDataUpdates,
@@ -248,9 +247,8 @@ namespace SkillzSDK.Internal.API.iOS
 			string updatesJSON = MiniJSON.Json.Serialize(userDataUpdates);
 
 			// set success/failure Actions that will be called in the progression proxy
-			SkillzProgressionProxy.progUpdateSuccessCallback = successCallback;
-			SkillzProgressionProxy.progUpdateFailureCallback = failureCallback;
-			InteropMethods._updateProgressionUserData(progressionNamespace, updatesJSON);
+			int requestId = SkillzProgressionProxy.RegisterUpdateCallbacks(successCallback, failureCallback);
+			InteropMethods._updateProgressionUserData(requestId, progressionNamespace, updatesJSON);
 		}
 
 		int ISyncAPI.GetConnectedPlayerCount()
@@ -354,61 +352,120 @@ namespace SkillzSDK.Internal.API.iOS
 		/// </summary>
 		private static class SkillzProgressionProxy
 		{
-			public static Action<Dictionary<string, ProgressionValue>> progGetSuccessCallback;
-			public static Action<string> progGetFailureCallback;
-			public static Action progUpdateSuccessCallback;
-			public static Action<string> progUpdateFailureCallback;
+			private static int nextRequestId = 0;
+			public static Dictionary<int, Action<Dictionary<string, ProgressionValue>>> getSuccessCallbackDict;
+			public static Dictionary<int, Action<string>> getFailureCallbackDict;
+			public static Dictionary<int, Action> updateSuccessCallbackDict;
+			public static Dictionary<int, Action<string>> updateFailureCallbackDict;
 
-			private delegate void ProgressionGetSuccess(string dataJSON);
-			private delegate void ProgressionGetFailure(string errorString);
-			private delegate void ProgressionUpdateSuccess();
-			private delegate void ProgressionUpdateFailure(string errorString);
+			private delegate void ProgressionGetSuccess(int requestId, string dataJSON);
+			private delegate void ProgressionGetFailure(int requestId, string errorString);
+			private delegate void ProgressionUpdateSuccess(int requestId);
+			private delegate void ProgressionUpdateFailure(int requestId, string errorString);
+
+			private static int GetNextRequestID()
+			{
+				int requestId = SkillzProgressionProxy.nextRequestId += 1;
+				return requestId;
+			}
+
+
+			public static int RegisterGetCallbacks(Action<Dictionary<string, ProgressionValue>> successCallback, 
+				Action<string> failureCallback)
+			{
+				int requestId = GetNextRequestID();
+				if (getSuccessCallbackDict != null && getFailureCallbackDict != null) 
+				{
+					getSuccessCallbackDict.Add(requestId, successCallback);
+					getFailureCallbackDict.Add(requestId, failureCallback);
+				}
+				return requestId;
+			}
+
+			public static void ClearGetCallbacks(int requestId)
+			{
+				if (getSuccessCallbackDict != null && getFailureCallbackDict != null) 
+				{
+					getSuccessCallbackDict.Remove(requestId);
+					getFailureCallbackDict.Remove(requestId);
+				}
+			}
+
+			public static int RegisterUpdateCallbacks(Action successCallback, 
+				Action<string> failureCallback)
+			{
+				int requestId = GetNextRequestID();
+				if (updateSuccessCallbackDict != null && updateFailureCallbackDict != null) 
+				{
+					updateSuccessCallbackDict.Add(requestId, successCallback);
+					updateFailureCallbackDict.Add(requestId, failureCallback);
+				}
+				return requestId;
+			}
+
+			public static void ClearUpdateCallbacks(int requestId)
+			{
+				if (updateSuccessCallbackDict != null && updateFailureCallbackDict != null) 
+				{
+					updateSuccessCallbackDict.Remove(requestId);
+					updateFailureCallbackDict.Remove(requestId);
+				}
+			}
 
 			[MonoPInvokeCallback(typeof(ProgressionGetSuccess))]
-			public static void progressionGetSuccessCallback(string dataJSON)
+			public static void progressionGetSuccessCallback(int requestId, string dataJSON)
 			{
-				if (progGetSuccessCallback != null) {
+				if (getSuccessCallbackDict != null && getSuccessCallbackDict[requestId] != null)
+				{
 					Dictionary<string, object> jsonDict  = DeserializeJSONToDictionary(dataJSON);
 					Dictionary<string, ProgressionValue> formattedData = ProgressionValue.GetProgressionValuesFromJSON(jsonDict);
 
-					Action<Dictionary<string, ProgressionValue>> callback = progGetSuccessCallback;
-					progGetSuccessCallback = null;
+					Action<Dictionary<string, ProgressionValue>> callback = getSuccessCallbackDict[requestId];
+					ClearGetCallbacks(requestId);					
 					callback(formattedData);
 				}
 			}
 
 			[MonoPInvokeCallback(typeof(ProgressionGetFailure))]
-			public static void progressionGetFailureCallback(string errorString)
+			public static void progressionGetFailureCallback(int requestId, string errorString)
 			{
-				if (progGetFailureCallback != null) {
-					Action<string> callback = progGetFailureCallback;
-					progGetFailureCallback = null;
+				if (getFailureCallbackDict != null && getFailureCallbackDict[requestId] != null)
+				{
+					Action<string> callback = getFailureCallbackDict[requestId];
+					ClearGetCallbacks(requestId);
 					callback(errorString);
 				}
 			}
 
 			[MonoPInvokeCallback(typeof(ProgressionUpdateSuccess))]
-			public static void progressionUpdateSuccessCallback()
+			public static void progressionUpdateSuccessCallback(int requestId)
 			{
-				if (progUpdateSuccessCallback != null) {
-					Action callback = progUpdateSuccessCallback;
-					progUpdateSuccessCallback = null;
+				if (updateSuccessCallbackDict != null && updateSuccessCallbackDict[requestId] != null)
+				{
+					Action callback = updateSuccessCallbackDict[requestId];
+					ClearUpdateCallbacks(requestId);
 					callback();
 				}
 			}
 
 			[MonoPInvokeCallback(typeof(ProgressionUpdateFailure))]
-			public static void progressionUpdateFailureCallback(string errorString)
+			public static void progressionUpdateFailureCallback(int requestId, string errorString)
 			{
-				if (progUpdateFailureCallback != null) {
-					Action<string> callback = progUpdateFailureCallback;
-					progUpdateFailureCallback = null;
+				if (updateFailureCallbackDict != null && updateFailureCallbackDict[requestId] != null) 
+				{
+					Action<string> callback = updateFailureCallbackDict[requestId];
+					ClearUpdateCallbacks(requestId);
 					callback(errorString);
 				}
 			}
 
 			public static void Initialize()
 			{
+				getSuccessCallbackDict = new Dictionary<int, Action<Dictionary<string, ProgressionValue>>>();
+				getFailureCallbackDict = new Dictionary<int, Action<string>>();
+				updateSuccessCallbackDict = new Dictionary<int, Action>();
+				updateFailureCallbackDict = new Dictionary<int, Action<string>>();
+
 				var onProgressionGetSuccessFP = new ProgressionGetSuccess(progressionGetSuccessCallback);
 				IntPtr onProgressionGetSuccessIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetSuccessFP);
 				InteropMethods._assignOnProgressionGetSuccess(onProgressionGetSuccessIP);

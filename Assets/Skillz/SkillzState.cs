@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Fourzy;
 using SkillzSDK.Internal.API;
 using SkillzSDK.Settings;
 using UnityEngine;
@@ -43,14 +42,8 @@ namespace SkillzSDK
 			// This method will be invoked only once, which is after
 			// the initial scene of the game has been loaded.
 
-			switch (GameManager.Instance.buildIntent)
-            {
-				case BuildIntent.MOBILE_SKILLZ:
-					InitializeSkillz();
-					InitializeSkillzDelegate();
-
-					break;
-            }
+			InitializeSkillz();
+			InitializeSkillzDelegate();
 		}
 
 		public static void SetAsyncDelegate(SkillzMatchDelegate skillzDelegate)

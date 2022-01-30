@@ -123,10 +123,10 @@ namespace SkillzSDK.Internal.API.iOS
 		public static extern float _getSkillzMusicVolume();
 
 		[DllImport("__Internal")]
-		public static extern void _getProgressionUserData(string progressionNamespace, string keysJSON);
+		public static extern void _getProgressionUserData(int requestId, string progressionNamespace, string keysJSON);
 
 		[DllImport("__Internal")]
-		public static extern void _updateProgressionUserData(string progressionNamespace, string updatesJSON);
+		public static extern void _updateProgressionUserData(int requestId, string progressionNamespace, string updatesJSON);
 
 		[DllImport("__Internal")]
 		public static extern void _assignOnProgressionGetSuccess(IntPtr funcPtr);

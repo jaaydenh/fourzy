@@ -85,10 +85,10 @@ namespace SkillzSDK.Internal.API.UnityEditor
 
         public BridgedAPI()
         {
-            //if (!Application.isEditor)
-            //{
-            //    throw new InvalidOperationException("This can only be instantiated while the Unity editor is playing");
-            //}
+            if (!Application.isEditor)
+            {
+                throw new InvalidOperationException("This can only be instantiated while the Unity editor is playing");
+            }
 
             soundEffectsVolume = DefaultVolume;
             backgroundMusicVolume = DefaultVolume;

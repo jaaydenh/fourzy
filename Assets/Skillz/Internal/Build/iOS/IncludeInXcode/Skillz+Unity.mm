@@ -37,10 +37,10 @@ extern "C" int UnitySelectedRenderingAPI();
 /*
  The following are stored C# function pointers for Skillz Progression callback methods
  */
-@property (nonatomic) void (* onProgressionGetSuccessFunc)(const char*);
-@property (nonatomic) void (* onProgressionGetFailureFunc)(const char*);
-@property (nonatomic) void (* onProgressionUpdateSuccessFunc)();
-@property (nonatomic) void (* onProgressionUpdateFailureFunc)(const char*);
+@property (nonatomic) void (* onProgressionGetSuccessFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionGetFailureFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionUpdateSuccessFunc)(int);
+@property (nonatomic) void (* onProgressionUpdateFailureFunc)(int, const char*);
 
 /*
  The following are stored C# function pointers for SkillzSyncPlayDelegate methods
@@ -958,7 +958,7 @@ extern "C" float _getSkillzMusicVolume()
 #pragma mark
 
 
-extern "C" void _getProgressionUserData(const char* progressionNamespace, const char* keysJSON)
+extern "C" void _getProgressionUserData(int requestID, const char* progressionNamespace, const char* keysJSON)
 {
     NSString *jsonString = [[NSString alloc] initWithUTF8String:keysJSON];
     NSString *namespaceString= [[NSString alloc] initWithUTF8String:progressionNamespace];
@@ -999,19 +999,19 @@ extern "C" void _getProgressionUserData(const char* progressionNamespace, const 
         NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetSuccessFunc) {
-                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetSuccessFunc([dataString cStringUsingEncoding:NSUTF8StringEncoding]);
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetSuccessFunc(requestID, [dataString cStringUsingEncoding:NSUTF8StringEncoding]);
             }
         });
     } withFailure:^(NSString * errorString){
         dispatch_async(dispatch_get_main_queue(), ^{
             if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetFailureFunc) {
-                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetFailureFunc([errorString cStringUsingEncoding:NSUTF8StringEncoding]);
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetFailureFunc(requestID, [errorString cStringUsingEncoding:NSUTF8StringEncoding]);
             }
         });
     }];
 }
 
-extern "C" void _updateProgressionUserData(const char* progressionNamespace, const char* updatesJSON)
+extern "C" void _updateProgressionUserData(int requestID, const char* progressionNamespace, const char* updatesJSON)
 {
     NSString *jsonString = [[NSString alloc] initWithUTF8String:updatesJSON ];
     NSString *namespaceString = [[NSString alloc] initWithUTF8String:progressionNamespace];
@@ -1028,13 +1028,13 @@ extern "C" void _updateProgressionUserData(const char* progressionNamespace, con
                                             withSuccess:^(NSDictionary * userData){
         dispatch_async(dispatch_get_main_queue(), ^{
             if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateSuccessFunc) {
-                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateSuccessFunc();
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateSuccessFunc(requestID);
             }
         });
     } withFailure:^(NSString * errorString){
         dispatch_async(dispatch_get_main_queue(), ^{
             if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateFailureFunc) {
-                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateFailureFunc([errorString cStringUsingEncoding:NSUTF8StringEncoding]);
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateFailureFunc(requestID, [errorString cStringUsingEncoding:NSUTF8StringEncoding]);
             }
         });
     }];
@@ -1044,22 +1044,22 @@ extern "C" void _updateProgressionUserData(const char* progressionNamespace, con
 
 extern "C" void _assignOnProgressionGetSuccess(void *funcPtr)
 {
-    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetSuccessFunc = reinterpret_cast<void(*)(const char*)>(funcPtr);
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetSuccessFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
 }
 
 extern "C" void _assignOnProgressionGetFailure(void *funcPtr)
 {
-    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetFailureFunc = reinterpret_cast<void(*)(const char*)>(funcPtr);
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetFailureFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
 }
         
 extern "C" void _assignOnProgressionUpdateSuccess(void *funcPtr)
 {
-    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateSuccessFunc = reinterpret_cast<void(*)()>(funcPtr);
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateSuccessFunc = reinterpret_cast<void(*)(int)>(funcPtr);
 }
 
 extern "C" void _assignOnProgressionUpdateFailure(void *funcPtr)
 {
-    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateFailureFunc = reinterpret_cast<void(*)(const char*)>(funcPtr);
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateFailureFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
 }
 
 #pragma mark

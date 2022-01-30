@@ -1,10 +1,12 @@
-using SkillzSDK.Extensions;
-using SkillzSDK.Settings;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Collections;
+using SkillzSDK.Settings;
+using SkillzSDK.Extensions;
+
 using JSONDict = System.Collections.Generic.Dictionary<string, object>;
+using System.Linq;
 
 namespace SkillzSDK
 {
@@ -51,14 +53,14 @@ namespace SkillzSDK
             DisplayName = playerJSON.SafeGetStringValue("displayName");
             AvatarURL = playerJSON.SafeGetStringValue("avatarURL");
             FlagURL = playerJSON.SafeGetStringValue("flagURL");
-            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer").GetValueOrDefault();
+            IsCurrentPlayer = (bool)playerJSON.SafeGetBoolValue("isCurrentPlayer");
             TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
 #elif UNITY_ANDROID
             ID = playerJSON.SafeGetUintValue("userId");
             DisplayName = playerJSON.SafeGetStringValue("userName");
             AvatarURL = playerJSON.SafeGetStringValue("avatarUrl");
             FlagURL = playerJSON.SafeGetStringValue("flagUrl");
-            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer").GetValueOrDefault();
+            IsCurrentPlayer = (bool)playerJSON.SafeGetBoolValue("isCurrentPlayer");
             TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
 #endif
         }
@@ -161,6 +163,27 @@ namespace SkillzSDK
         /// </summary>
         public readonly Dictionary<string, string> GameParams;
 
+        /// <summary>
+        /// Defines the <see cref="T:SkillzSDK.Match"/>  as a tie-breaker.
+        /// <summary>
+        public readonly bool IsTieBreaker;
+
+        /// <summary>
+        /// Defines the <see cref="T:SkillzSDK.Match"/> as a bracket event match.
+        /// <summary>
+        public readonly bool IsBracket;
+
+        /// <summary>
+        /// The bracket round when the <see cref="T:SkillzSDK.Match"/> is a bracket <see cref="IsBracket"/>..
+        /// <summary>
+        public readonly int? BracketRound;
+
+        /// <summary>
+        /// Defines the <see cref="T:SkillzSDK.Match"/> as a video add entry event match.
+        /// Entry fees should be ignore.
+        /// <summary>
+        public readonly bool? IsVideoAdEntry;
+
         public Match(JSONDict jsonData)
         {
             Description = jsonData.SafeGetStringValue("matchDescription");
@@ -171,6 +194,10 @@ namespace SkillzSDK
             Name = jsonData.SafeGetStringValue("name");
             IsCash = jsonData.SafeGetBoolValue("isCash");
             IsSynchronous = (bool)jsonData.SafeGetBoolValue("isSynchronous");
+            IsTieBreaker = (bool)jsonData.SafeGetBoolValue("isTieBreaker");
+            IsBracket = (bool)jsonData.SafeGetBoolValue("isBracket");
+            BracketRound = jsonData.SafeGetIntValue("bracketRound");
+            IsVideoAdEntry = jsonData.SafeGetBoolValue("isVideoAdEntry");
 
             object players = jsonData.SafeGetValue("players");
             Players = new List<Player>();
@@ -186,10 +213,12 @@ namespace SkillzSDK
                 ? new CustomServerConnectionInfo(connectionInfoJson)
                 : null;
 
-#if UNITY_EDITOR
-            GameParams = LoadSimulatedMatchParameters();
+            if (Application.isEditor)
+            {
+                GameParams = LoadSimulatedMatchParameters();
+            }
 
-#elif UNITY_IOS
+#if UNITY_IOS
             GameParams = new Dictionary<string, string>();
             object parameters = jsonData.SafeGetValue("gameParameters");
             if (parameters != null && parameters.GetType() == typeof(JSONDict)) {
@@ -229,6 +258,10 @@ namespace SkillzSDK
             " SkillzDifficulty: [" + SkillzDifficulty + "]" +
             " IsCash: [" + IsCash + "]" +
             " IsSynchronous: [" + IsSynchronous + "]" +
+            " IsTieBreaker: [" + IsTieBreaker + "]" +
+            " IsBracket: [" + IsBracket + "]" +
+            " BracketRound: [" + BracketRound + "]" +
+            " IsVideoAdEntry: [" + IsVideoAdEntry + "]" +
             " IsCustomSynchronousMatch: [" + IsCustomSynchronousMatch + "]" +
             " EntryPoints: [" + EntryPoints + "]" +
             " EntryCash: [" + EntryCash + "]" +
