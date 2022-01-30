@@ -125,7 +125,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else
             {
-                GamePlayManager.Instance.Rematch();
+                GamePlayManager.Instance.StartNextGame();
             }
         }
 

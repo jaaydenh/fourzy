@@ -185,7 +185,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             if (SkillzGameController.Instance.HaveNextGame)
                             {
-                                Rematch();
+                                StartNextGame();
                             }
                         }
 
@@ -1002,7 +1002,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             GameplayScreen.SetMatchID(matchId);
         }
 
-        public void Rematch(bool sendResetEvent = false)
+        public void StartNextGame(bool sendResetEvent = false)
         {
             if (Game == null) return;
 
