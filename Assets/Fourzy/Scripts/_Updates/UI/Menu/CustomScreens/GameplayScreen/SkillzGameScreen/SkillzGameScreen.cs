@@ -2,10 +2,11 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
-using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Sirenix.Utilities;
 using System;
 using System.Collections;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -19,11 +20,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private TMP_Text scoreLabel;
         [SerializeField]
         private TMP_Text movesLeftLabel;
-        [SerializeField]
-        private RectTransform gamepieceParent;
 
         private float gameTimer;
-        private GamePieceView currentGamepiece;
 
         public IClientFourzy game { get; private set; }
         public float Timer
@@ -67,13 +65,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetMovesLeft(game.myMembers.Count);
             SetPoints(SkillzGameController.Instance.Points);
 
-            if (currentGamepiece)
-            {
-                Destroy(currentGamepiece.gameboard);
-            }
-            currentGamepiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(game.me.HerdId).player1Prefab, gamepieceParent);
-            currentGamepiece.StartBlinking();
-
             CancelRoutine("timer");
             StartRoutine("timer", GameTimerRoutine());
         }
@@ -112,7 +103,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SetMovesLeft(int movesLeft)
         {
-            movesLeftLabel.text = movesLeft + "";
+            movesLeftLabel.text = $"{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(LocalizationManager.Value("moves"))}: {movesLeft}";
         }
 
         public void Pause()
