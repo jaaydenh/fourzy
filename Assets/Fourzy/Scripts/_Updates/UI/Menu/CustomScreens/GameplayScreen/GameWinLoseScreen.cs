@@ -416,7 +416,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         menuController.CloseCurrentScreen(true);
                     }
 
-                    GamePlayManager.Instance.Rematch(true);
+                    GamePlayManager.Instance.StartNextGame(true);
 
                     break;
             }
