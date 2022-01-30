@@ -3533,23 +3533,12 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 41
+          selectedMember: 51
           isDynamic: 0
-        target: {fileID: 1899509752}
-        memberName: Rematch
+        target: {fileID: 159788920}
+        memberName: ResetButtonOnClick
         memberType: 8
-        arguments:
-        - typeName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-          supportedType: 5
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 1
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
+        arguments: []
         isDynamic: 0
         isCallEnabled: 1
   onState:
@@ -18880,7 +18869,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -79.3, y: -374.3}
+  m_AnchoredPosition: {x: -79.29999, y: -374.3}
   m_SizeDelta: {x: 120, y: 53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1019088135
@@ -36530,7 +36519,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 48
+          selectedMember: 50
           isDynamic: 0
         target: {fileID: 873791303}
         memberName: TryUseHint

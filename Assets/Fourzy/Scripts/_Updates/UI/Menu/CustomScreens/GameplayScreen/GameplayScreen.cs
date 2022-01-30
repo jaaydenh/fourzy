@@ -612,6 +612,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        /// <summary>
+        /// Invoked from ResetButton
+        /// </summary>
+        public void ResetButtonOnClick()
+        {
+            gameplayManager.StartNextGame();
+        }
+
         private void CheckBackButton()
         {
             switch (game._Type)
