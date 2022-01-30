@@ -961,9 +961,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
                     string recipe = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzCrossPlatform.Random.Value();
                     matchId = recipe;
-                    
-                    //string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
-                    string myName = "MsEmploymentRunning785";
+
+                    string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
                     string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
 
                     preferences.RequestedRecipe = recipe;
