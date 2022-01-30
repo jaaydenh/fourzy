@@ -97,18 +97,23 @@ namespace Fourzy._Updates.UI.Helpers
             {
                 case DeviceOrientation.LandscapeLeft:
                 case DeviceOrientation.LandscapeRight:
-                    if (aspect > 1.78f)
+                    if (aspect >= 1f)
                     {
-                        return DisplayRatioOption.IPHONEX;
+                        if (aspect > 1.78f)
+                        {
+                            return DisplayRatioOption.IPHONEX;
+                        }
+                        else if (aspect >= 1.34f)
+                        {
+                            return DisplayRatioOption.IPHONE;
+                        }
+                        else
+                        {
+                            return DisplayRatioOption.IPAD;
+                        }
                     }
-                    else if (aspect >= 1.34f)
-                    {
-                        return DisplayRatioOption.IPHONE;
-                    }
-                    else
-                    {
-                        return DisplayRatioOption.IPAD;
-                    }
+
+                    break;
 
                 case DeviceOrientation.Portrait:
                 case DeviceOrientation.PortraitUpsideDown:
