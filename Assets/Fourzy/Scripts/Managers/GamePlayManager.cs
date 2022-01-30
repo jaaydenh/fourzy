@@ -795,12 +795,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (Game == null || Game._Type == GameType.ONBOARDING) yield break;
 
             HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
+            bool includePreviouslyDisplayed = false;
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_SKILLZ:
+                    includePreviouslyDisplayed = true;
+
+                    break;
+            }
 
             foreach (BoardSpace boardSpace in Game.boardContent)
             {
                 foreach (IToken token in boardSpace.Tokens.Values)
                 {
-                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) &&
+                    if ((!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) || includePreviouslyDisplayed) &&
                         !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
                     {
                         tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
