@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿le. using System.Collections;
 using System.Collections.Generic;
 
 namespace FourzyGameModel.Model
@@ -8,8 +8,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
 {
         public override string Name { get { return "Beginner Garden"; } }
         public override Area Area { get { return Area.TRAINING_GARDEN; } }
-        public override int MinComplexity { get { return 1300; } }
-        public override int MaxComplexity { get { return 7000; } }
+        public override int MinComplexity { get { return 250; } }
+        public override int MaxComplexity { get { return 800; } }
 
         public BeginnerGardenRandomGenerator(GameOptions Options = null, BoardGenerationPreferences Preferences = null)
     {
