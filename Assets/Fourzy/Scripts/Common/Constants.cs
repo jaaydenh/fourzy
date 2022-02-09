@@ -2,7 +2,6 @@
 
 using Fourzy._Updates;
 using FourzyGameModel.Model;
-using System.Collections.Generic;
 
 namespace Fourzy
 {
