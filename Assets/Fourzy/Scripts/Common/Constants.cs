@@ -88,12 +88,12 @@ namespace Fourzy
         public const string SKILLZ_MATCH_PAUSES_KEY = "Pauses";
         public const int SKILLZ_DEFAULT_GAMES_COUNT = 3;
         public const int SKILLZ_DEFAULT_GAME_TIMER = 180;
-        public const int SKILLZ_MOVES_PER_MATCH = 30;
+        public const int SKILLZ_MOVES_PER_MATCH = 28;
         public const int SKILLZ_WIN_POINTS = 2000;
-        public const int SKILLZ_POINTS_PER_SECOND_REMAINING = 10;
-        public const int SKILLZ_POINTS_PER_MOVE_LEFT_WIN = 50;
-        public const int SKILLZ_POINTS_PER_MOVE_LEFT_LOSE = 25;
-        public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 40;
+        public const int SKILLZ_POINTS_PER_SECOND_REMAINING = 1;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_WIN = 10;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_LOSE = 10;
+        public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 10;
         public const int SKILLZ_GAME_COMPLEXITY = 10;
         public const int SKILLZ_PAUSES_COUNT_PER_MATCH = 3;
         public const int SKILLZ_DEFAULT_AIPROFILE = (int)AIProfile.SimpleAI;
