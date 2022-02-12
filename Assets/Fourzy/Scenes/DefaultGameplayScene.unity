@@ -15097,7 +15097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -66.99997, y: -29.999695}
+  m_AnchoredPosition: {x: -66.99994, y: -29.999695}
   m_SizeDelta: {x: 268.41, y: 90}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &773452095
@@ -15527,7 +15527,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 43
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -16412,7 +16412,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 43
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -16520,7 +16520,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -247}
+  m_AnchoredPosition: {x: 0, y: -300}
   m_SizeDelta: {x: 700, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &855172655
@@ -16570,8 +16570,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 102
-  m_fontSizeBase: 102
+  m_fontSize: 85
+  m_fontSizeBase: 85
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -16582,7 +16582,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 2
   m_wordSpacing: 0
-  m_lineSpacing: -44
+  m_lineSpacing: -10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -16747,7 +16747,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -247}
+          vector2Argument: {x: 0, y: -280}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -16773,7 +16773,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -247}
+          vector2Argument: {x: 0, y: -280}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -16799,7 +16799,7 @@ MonoBehaviour:
           floatArgument: 0
           boolArgument: 0
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: -247}
+          vector2Argument: {x: 0, y: -280}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
@@ -18122,7 +18122,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 45
           isDynamic: 0
         target: {fileID: 577774582}
         memberName: ToggleMusic
@@ -27538,7 +27538,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 43
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -28560,7 +28560,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 43
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -37473,7 +37473,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 24
+          selectedMember: 26
           isDynamic: 0
         target: {fileID: 577774582}
         memberName: Continue
