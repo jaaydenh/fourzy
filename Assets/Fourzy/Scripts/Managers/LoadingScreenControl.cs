@@ -137,6 +137,9 @@ namespace Fourzy
                 async.allowSceneActivation = false;
             }
 
+            // wait for 1.5 seconds anyway
+            yield return new WaitForSeconds(1.5f);
+
             if (async != null)
             {
                 async.allowSceneActivation = true;
