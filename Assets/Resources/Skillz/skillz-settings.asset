@@ -17,7 +17,7 @@ MonoBehaviour:
   Orientation: 1
   MatchParameters:
   - Key: Games
-    Value: 3
+    Value: 2
   - Key: Timer
     Value: 20
   - Key: Moves
