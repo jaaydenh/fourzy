@@ -170,6 +170,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SettingsManager.Toggle(SettingsManager.KEY_VIBRATION);
         }
 
+        public void ToggleTokenInstructions()
+        {
+            SettingsManager.Toggle(SettingsManager.KEY_TOKEN_INSTRUCTION);
+        }
+
         /// <summary>
         /// Invoked by contunie button
         /// </summary>
