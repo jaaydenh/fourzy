@@ -183,7 +183,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.TWO_STEP_TAP] = new Rect(0f, 4f, 9f, 1f),
                     }, OnboardingScreenMaskObject.MaskStyle.PX_0),
                     new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
-                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(8f, 4f) },
+                        [PlacementStyle.TWO_STEP_SWIPE] = new Vector2[] { new Vector2(7.5f, 4f) },
                     }),
 
                     new OnboardingTask() { action = OnboardingActions.SKIP_TO},
