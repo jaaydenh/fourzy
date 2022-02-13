@@ -12,11 +12,10 @@ namespace Fourzy._Updates.UI.Helpers
     public class OnIPhoneX : MonoBehaviour
     {
         public static string[] NOTCH_MODELS = new string[] {
-            "iPhone12,1",
-            "iPhone11,8",
-            "iPhone11,6",
-            "iPhone11,2",
-            "iPhone10,6",
+            "iPhone13",
+            "iPhone12",
+            "iPhone11",
+            "iPhone10",
             "Xiaomi Redmi 6 Pro",
             "Xiaomi Redmi Note 7",
         };
@@ -40,23 +39,20 @@ namespace Fourzy._Updates.UI.Helpers
 
         protected void Update()
         {
-            if (!Application.isPlaying)
-            {
-                CheckPlatform(true);
-            }
+            CheckPlatform();
         }
 
-        public void CheckPlatform(bool editor = false)
+        public void CheckPlatform()
         {
-            if (editor)
+            if (Application.isEditor)
             {
                 //for editor use
-                if (forceIPhoneX && model == "0")
+                if (forceIPhoneX && model != "1")
                 {
                     onIPhoneX?.Invoke();
                     model = "1";
                 }
-                else if (!forceIPhoneX && model == "1")
+                else if (!forceIPhoneX && model != "0")
                 {
                     other?.Invoke();
                     model = "0";
@@ -67,7 +63,7 @@ namespace Fourzy._Updates.UI.Helpers
                 //designed to run only once
                 if (model != SystemInfo.deviceModel)
                 {
-                    if (NOTCH_MODELS.Contains(SystemInfo.deviceModel))
+                    if (NOTCH_MODELS.Any(model => SystemInfo.deviceModel.Contains(model)))
                     {
                         onIPhoneX?.Invoke();
                     }
