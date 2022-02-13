@@ -35,7 +35,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private Sprite single;
 
         private List<SkillzProgressionScreenPointsEntry> pointsEntries = new List<SkillzProgressionScreenPointsEntry>();
-        private bool openNextOnClose = false;
+        private bool openFinalScreen = false;
 
         public override void Close(bool animate = true)
         {
@@ -54,72 +54,85 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 widgets.Remove(widget);
             }
 
-            for (int gameIndex = 0; gameIndex < SkillzGameController.Instance.GamesToPlay; gameIndex++)
-            {
-                Sprite sprite;
+            int gamesToPlay = SkillzGameController.Instance.GamesToPlay;
+            string titleText = LocalizationManager.Value("game_complete");
+            string buttonText = LocalizationManager.Value("next");
 
-                //pick sprite
-                if (SkillzGameController.Instance.GamesToPlay == 1)
+            if (gamesToPlay > 1)
+            {
+                progressContainer.gameObject.SetActive(true);
+
+                // final screen option
+                if (!SkillzGameController.Instance.HaveNextGame)
                 {
-                    sprite = single;
+                    openFinalScreen = true;
                 }
-                else
+
+                // init games progress widget
+                for (int gameIndex = 0; gameIndex < SkillzGameController.Instance.GamesToPlay; gameIndex++)
                 {
-                    if (gameIndex == 0)
+                    Sprite sprite;
+
+                    //pick sprite
+                    if (SkillzGameController.Instance.GamesToPlay == 1)
                     {
-                        sprite = left;
-                    }
-                    else if (gameIndex == SkillzGameController.Instance.GamesToPlay - 1)
-                    {
-                        sprite = right;
+                        sprite = single;
                     }
                     else
                     {
-                        sprite = middle;
+                        if (gameIndex == 0)
+                        {
+                            sprite = left;
+                        }
+                        else if (gameIndex == SkillzGameController.Instance.GamesToPlay - 1)
+                        {
+                            sprite = right;
+                        }
+                        else
+                        {
+                            sprite = middle;
+                        }
                     }
-                }
 
-                AddProgressionWidget().SetSprite(sprite).SetChecked(gameIndex < SkillzGameController.Instance.GamesPlayed.Count ?
-                    (SkillzGameController.Instance.GamesPlayed[gameIndex].state ? gameWonSprite : gameLostSprite) :
-                    null);
+                    AddProgressionWidget()
+                        .SetSprite(sprite)
+                        .SetChecked(gameIndex < SkillzGameController.Instance.GamesPlayed.Count ?
+                        (SkillzGameController.Instance.GamesPlayed[gameIndex].state ? gameWonSprite : gameLostSprite) :
+                        null);
+                }
+            }
+            else
+            {
+                progressContainer.gameObject.SetActive(false);
+
+                titleText = LocalizationManager.Value("final_score");
+                buttonText = LocalizationManager.Value("submit_score");
             }
 
             ClearPointsEntries();
 
             SkillzGameResult lastGameResult = SkillzGameController.Instance.GamesPlayed.FindLast(entries => entries.Points > 0);
             //display points
-            if (lastGameResult != null)
+            foreach (PointsEntry pointsEntry in lastGameResult.pointsEntries)
             {
-                foreach (PointsEntry pointsEntry in lastGameResult.pointsEntries)
-                {
-                    AddPointsWidget(pointsEntry.name, pointsEntry.amount);
-                }
-                AddPointsWidget("" , lastGameResult.Points)
-                    .SetSize(48)
-                    .SetColor(Color.green);
-
-                if (!SkillzGameController.Instance.HaveNextGame)
-                {
-                    openNextOnClose = true;
-                }
+                AddPointsWidget(pointsEntry.name, pointsEntry.amount);
             }
-            else
-            {
-                AddTotalToPrompt();
-            }
+            AddPointsWidget("", lastGameResult.Points)
+                .SetSize(48)
+                .SetColor(Color.green);
 
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
 
             //start timer routine
-            StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME), () => Decline());
+            StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME), () => Decline(), null);
 
             //open screen
-            Prompt(LocalizationManager.Value("game_complete"), null, null, LocalizationManager.Value("next"));
+            Prompt(titleText, null, null, buttonText);
         }
 
         public override void Decline(bool force = false)
         {
-            if (openNextOnClose)
+            if (openFinalScreen)
             {
                 StartCoroutine(CloseAndOpenTotal());
             }
@@ -198,7 +211,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //start timer routine
             StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME), () => Decline());
 
-            openNextOnClose = false;
+            openFinalScreen = false;
         }
     }
 }

@@ -1703,7 +1703,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (myMovesLeft > 0)
                     {
                         points.Add(new PointsEntry(
-                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftWin}/{LocalizationManager.Value("move")})",
+                            $"{LocalizationManager.Value("skillz_moves_left_points_key")}", 
                             myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftWin));
                     }
                 }
@@ -1712,14 +1712,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (myMovesLeft > 0)
                     {
                         points.Add(new PointsEntry(
-                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftDraw}/{LocalizationManager.Value("move")})",
+                            $"{LocalizationManager.Value("skillz_moves_left_points_key")}",
                             myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftDraw));
                     }
                 }
                 else
                 {
                     points.Add(new PointsEntry(
-                        $"{LocalizationManager.Value("skillz_survival_moves_left_key")} ({SkillzGameController.Instance.PointsPerMoveLeftLose}/{LocalizationManager.Value("move")})",
+                        $"{LocalizationManager.Value("skillz_survival_moves_left_key")}",
                         myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
                 }
 
@@ -1729,14 +1729,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (timerLeft > 0)
                     {
                         points.Add(new PointsEntry(
-                            $"{LocalizationManager.Value("skillz_time_left_points_key")} ({SkillzGameController.Instance.PointsPerSecond}/{LocalizationManager.Value("second")})",
+                            $"{LocalizationManager.Value("skillz_time_left_points_key")}",
                             timerLeft * SkillzGameController.Instance.PointsPerSecond));
                     }
 
-                    //big win bonus
-                    if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state) && winner)
+                    // only if this match is more than 1 games
+                    if (SkillzGameController.Instance.GamesToPlay > 1)
                     {
-                        points.Add(new PointsEntry(LocalizationManager.Value("skillz_big_win_key"), 2000));
+                        //big win bonus
+                        if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state) && winner)
+                        {
+                            points.Add(new PointsEntry(LocalizationManager.Value("skillz_big_win_key"), 2000));
+                        }
                     }
                 }
 
