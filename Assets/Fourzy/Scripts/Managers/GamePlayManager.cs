@@ -358,7 +358,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         break;
 
                     case GameTypeLocal.LOCAL_GAME:
-                        game = new ClientFourzyGame(GameContentManager.Instance.GetInstructionBoard("ARROW"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"))
+                        game = new ClientFourzyGame(GameContentManager.Instance.GetInstructionBoard("ARROW"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two Player Two Player Two Player Two"))
                         {
                             _Type = GameType.PASSANDPLAY
                         };

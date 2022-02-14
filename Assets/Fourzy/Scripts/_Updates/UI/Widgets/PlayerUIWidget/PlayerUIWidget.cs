@@ -13,12 +13,21 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class PlayerUIWidget : WidgetBase
     {
-        public TextMeshProUGUI playerName;
-        public TextMeshProUGUI extraLabel;
-        public RectTransform pieceParent;
-        public Badge magicBadge;
-        public int playerNameMaxSize = 9;
-        public bool updateInifinityLayout;
+        [SerializeField]
+        private TextMeshProUGUI playerName;
+        [SerializeField]
+        private TextMeshProUGUI extraLabel;
+        [SerializeField]
+        private RectTransform pieceParent;
+        [SerializeField]
+        private Badge magicBadge;
+        [SerializeField]
+        private int playerNameMaxSize = 9;
+        [SerializeField]
+        private int noMagicMaxPlayerName = 20;
+        [SerializeField]
+        private bool updateInifinityLayout;
+
         public SpellsListUIWidget spellsHolder;
 
         private VerticalLayoutGroup verticalLayoutGroup;
@@ -27,12 +36,12 @@ namespace Fourzy._Updates.UI.Widgets
         private int totalGames;
         private bool magicWidget = true;
 
-        public Player assignedPlayer { get; private set; }
-        public IClientFourzy game { get; private set; }
-
-        public bool shown { get; private set; }
-        public bool isMe { get; private set; }
-        public int magic { get; private set; } = 1;
+        public Player AssignedPlayer { get; private set; }
+        public IClientFourzy Game { get; private set; }
+        public bool Shown { get; private set; }
+        public bool IsMe { get; private set; }
+        public int Magic { get; private set; } = 1;
+        public string PlayerName { get; private set; }
 
         protected override void Awake()
         {
@@ -48,9 +57,9 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected void OnDestroy()
         {
-            if (game != null)
+            if (Game != null)
             {
-                game.onMagic -= OnMagicUpdate;
+                Game.onMagic -= OnMagicUpdate;
             }
 
             OpponentData.onRatingUdpate -= OnOpponentRatingUpdate;
@@ -61,15 +70,19 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void SetPlayerName(string name)
         {
+            int maxPName = magicWidget ? playerNameMaxSize : noMagicMaxPlayerName;
+
             if (string.IsNullOrEmpty(name))
             {
+                PlayerName = "";
                 playerName.text = "Empty Name";
             }
             else
             {
-                if (name.Length > playerNameMaxSize)
+                PlayerName = name;
+                if (name.Length > maxPName)
                 {
-                    playerName.text = name.Substring(0, playerNameMaxSize - 1) + "...";
+                    playerName.text = name.Substring(0, maxPName - 1) + "...";
                 }
                 else
                 {
@@ -80,10 +93,10 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void SetPlayer(Player player)
         {
-            assignedPlayer = player;
-            if (game != null)
+            AssignedPlayer = player;
+            if (Game != null)
             {
-                isMe = assignedPlayer == game.me;
+                IsMe = AssignedPlayer == Game.me;
             }
 
             if (current)
@@ -91,20 +104,19 @@ namespace Fourzy._Updates.UI.Widgets
                 Destroy(current.gameObject);
             }
 
-            current = Instantiate(player.PlayerId == 1 ? game.playerOneGamepiece : game.playerTwoGamepiece, pieceParent);
+            current = Instantiate(player.PlayerId == 1 ? Game.playerOneGamepiece : Game.playerTwoGamepiece, pieceParent);
             current.transform.localPosition = Vector3.zero;
             current.transform.localScale = Vector3.one * 94f;
 
             current.gameObject.SetActive(true);
 
             SetMagic(player.Magic);
-
             SetPlayerName(player.DisplayName);
         }
 
         public void OnPlayerPosition(PlayerPositioning playerPosition)
         {
-            switch (game._Type)
+            switch (Game._Type)
             {
                 case GameType.ONBOARDING:
                     //reset for onboarding mode
@@ -135,7 +147,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void SetGame(IClientFourzy game)
         {
-            this.game = game;
+            this.Game = game;
 
             game.onMagic += OnMagicUpdate;
 
@@ -175,6 +187,9 @@ namespace Fourzy._Updates.UI.Widgets
         {
             magicWidget = value;
             magicBadge.SetState(value);
+
+            // update player name (label size)
+            SetPlayerName(PlayerName);
         }
 
         public void SetRating(int value, int totalGames)
@@ -198,7 +213,7 @@ namespace Fourzy._Updates.UI.Widgets
                 base.Show(time);
             }
 
-            shown = true;
+            Shown = true;
         }
 
         public override void Hide(float time)
@@ -208,7 +223,7 @@ namespace Fourzy._Updates.UI.Widgets
                 base.Hide(time);
             }
 
-            shown = false;
+            Shown = false;
         }
 
         internal void SetMagic(int value)
@@ -216,12 +231,12 @@ namespace Fourzy._Updates.UI.Widgets
             if (!magicWidget) return;
 
             magicBadge.SetValue(value);
-            magic = value;
+            Magic = value;
         }
 
         private void OnMagicUpdate(int playerId, int value)
         {
-            if (assignedPlayer.PlayerId == playerId)
+            if (AssignedPlayer.PlayerId == playerId)
             {
                 SetMagic(value);
             }
@@ -229,7 +244,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnOpponentRatingUpdate(int rating)
         {
-            if (isMe)
+            if (IsMe)
             {
                 return;
             }
@@ -239,7 +254,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnOpponentTotalGamesUpdate(int totalGames)
         {
-            if (isMe)
+            if (IsMe)
             {
                 return;
             }
@@ -252,7 +267,7 @@ namespace Fourzy._Updates.UI.Widgets
         private void OnRatingUpdate(int rating)
         {
             //only me
-            if (!isMe)
+            if (!IsMe)
             {
                 return;
             }
@@ -265,7 +280,7 @@ namespace Fourzy._Updates.UI.Widgets
         private void OnTotalGamesUpdate(int totalGames)
         {
             //only me
-            if (!isMe)
+            if (!IsMe)
             {
                 return;
             }

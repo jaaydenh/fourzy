@@ -69,7 +69,7 @@ namespace Fourzy
             {
                 string playerPrefsValue = PlayerPrefsWrapper.GetUserName();
 
-                return string.IsNullOrEmpty(playerPrefsValue) ? "Player" : playerPrefsValue;
+                return string.IsNullOrEmpty(playerPrefsValue) ? "Player One Player One Player One" : playerPrefsValue;
             }
         }
 

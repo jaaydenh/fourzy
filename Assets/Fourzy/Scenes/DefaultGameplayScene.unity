@@ -13672,7 +13672,6 @@ GameObject:
   m_Component:
   - component: {fileID: 667688337}
   - component: {fileID: 667688347}
-  - component: {fileID: 667688348}
   - component: {fileID: 667688341}
   - component: {fileID: 667688340}
   - component: {fileID: 667688339}
@@ -13987,166 +13986,9 @@ MonoBehaviour:
   pieceParent: {fileID: 641201534}
   magicBadge: {fileID: 1978830621}
   playerNameMaxSize: 11
+  noMagicMaxPlayerName: 20
   updateInifinityLayout: 0
   spellsHolder: {fileID: 1581266721}
---- !u!114 &667688348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667688336}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configureAtStart: 1
-  orientation: 1
-  onIphone:
-    inspectorListHeight: 128
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 11
-          isDynamic: 0
-        target: {fileID: 667688337}
-        memberName: localScale
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 8
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 667688337}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 100, y: 30}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-  onIphoneX:
-    inspectorListHeight: 128
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 11
-          isDynamic: 0
-        target: {fileID: 667688337}
-        memberName: localScale
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 8
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 667688337}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 100, y: 30}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-  onIpad:
-    inspectorListHeight: 128
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 11
-          isDynamic: 0
-        target: {fileID: 667688337}
-        memberName: localScale
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 8
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0.7, y: 0.7, z: 0.7}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 667688337}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 60, y: 30}
-          vector3Argument: {x: 0.7, y: 0.7, z: 0.7}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
 --- !u!1 &700708469
 GameObject:
   m_ObjectHideFlags: 0
@@ -15529,7 +15371,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 773452094}
-  - component: {fileID: 773452095}
   m_Layer: 5
   m_Name: Player2Parent
   m_TagString: Untagged
@@ -15559,164 +15400,6 @@ RectTransform:
   m_AnchoredPosition: {x: -66.99994, y: -29.999695}
   m_SizeDelta: {x: 268.41, y: 90}
   m_Pivot: {x: 1, y: 1}
---- !u!114 &773452095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 773452093}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configureAtStart: 1
-  orientation: 1
-  onIphone:
-    inspectorListHeight: 128
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 11
-          isDynamic: 0
-        target: {fileID: 1501097902}
-        memberName: localScale
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 8
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 1501097902}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: -100, y: -30}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-  onIphoneX:
-    inspectorListHeight: 128
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 11
-          isDynamic: 0
-        target: {fileID: 1501097902}
-        memberName: localScale
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 8
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 1501097902}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: -100, y: -30}
-          vector3Argument: {x: 1, y: 1, z: 1}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-  onIpad:
-    inspectorListHeight: 128
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 11
-          isDynamic: 0
-        target: {fileID: 1501097902}
-        memberName: localScale
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 8
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0.7, y: 0.7, z: 0.7}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 1501097902}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: -60, y: -30}
-          vector3Argument: {x: 0.7, y: 0.7, z: 0.7}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
 --- !u!1 &780493825
 GameObject:
   m_ObjectHideFlags: 0
@@ -25794,9 +25477,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -134.20502, y: -44.999985}
+  m_AnchoredPosition: {x: -0.00012207031, y: -45.00006}
   m_SizeDelta: {x: 0, y: 90}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1501097903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26070,6 +25753,7 @@ MonoBehaviour:
   pieceParent: {fileID: 850697869}
   magicBadge: {fileID: 286430233}
   playerNameMaxSize: 11
+  noMagicMaxPlayerName: 30
   updateInifinityLayout: 1
   spellsHolder: {fileID: 665176971}
 --- !u!1 &1523515887

@@ -87,9 +87,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
         public float OpponentTimerLeft => timersEnabled ? opponentTimer.TotalTimeLeft : -1f;
-        public int MyMagicLeft => magicEnabled ? myWidget.magic : -1;
-        public int Player1MagicLeft => myWidget.magic;
-        public int Player2MagicLeft => opponentWidget.magic;
+        public int MyMagicLeft => magicEnabled ? myWidget.Magic : -1;
+        public int Player1MagicLeft => myWidget.Magic;
+        public int Player2MagicLeft => opponentWidget.Magic;
         public float Player1TimeLeft => player1Timer.TotalTimeLeft;
         public float Player2TimeLeft => player2Timer.TotalTimeLeft;
 
@@ -420,7 +420,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void UpdatePlayerTurnGraphics()
         {
-            if (game.activePlayer.PlayerId == myWidget.assignedPlayer.PlayerId)
+            if (game.activePlayer.PlayerId == myWidget.AssignedPlayer.PlayerId)
             {
                 myWidget.ShowPlayerTurnAnimation();
 
@@ -492,7 +492,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (!game.draw)
             {
-                if (game.IsWinner(myWidget.assignedPlayer))
+                if (game.IsWinner(myWidget.AssignedPlayer))
                 {
                     myWidget.StartWinJumps();
                 }
