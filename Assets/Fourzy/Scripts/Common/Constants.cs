@@ -100,7 +100,7 @@ namespace Fourzy
         public const int SKILLZ_DEFAULT_AREA = (int)Area.TRAINING_GARDEN;
         public const string SKILLZ_DEFAULT_OPP_HERD_ID = "red_dragon";
 
-        public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 5;
+        public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 10;
         public const int SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME = 10;
         //
 
