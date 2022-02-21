@@ -37,24 +37,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: Groupbox1Background_Hellmade
-    ext: psd
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: eazyNetchecker-Header_Hellmade
-    ext: png
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Header1NetCheckerBackground_Hellmade
-    ext: psd
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: AchievementDisplay
     ext: prefab
     path: 
@@ -73,18 +55,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: MoreMountains.NiceVibrations.MMNVPath, MoreMountains.NiceVibrations,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - name: PhotonServerSettings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: Photon.Pun.ServerSettings, PhotonUnityNetworking, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PlayFabSharedSettings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: PlayFabSharedSettings, PlayFab, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
   - name: Sirenix
     ext: 
     path: 
@@ -1198,6 +1168,24 @@ MonoBehaviour:
     path: GameBoards
     type: 1
     objectTypeName: 
+  - name: DrawExample1
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: DrawExample2
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: MovesCountdownExmaple
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: OnboardingBoard0
     ext: json
     path: GameBoards/MiscBoards
@@ -1217,6 +1205,30 @@ MonoBehaviour:
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: OnboardingLevelSampleBoard
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: PieceMovement
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: ReferenceBoard
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: SkillzBlockedExplained
+    ext: json
+    path: GameBoards/MiscBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TokensShowdown
     ext: json
     path: GameBoards/MiscBoards
     type: 2
@@ -3193,6 +3205,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 485
+  m_FileCount: 487
   m_FolderCount: 54
   UpdateAutomatically: 0

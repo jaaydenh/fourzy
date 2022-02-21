@@ -653,6 +653,81 @@
       "key": "room_code",
       "value": "Código de juego"
     },
+      "key": "rule_skillz_1_title",
+      "value": "EL OBJETIVO"
+    },
+    {
+      "key": "rule_skillz_2_title",
+      "value": "HOW TO MOVE"
+    },
+    {
+      "key": "rule_skillz_3_title",
+      "value": "CÓMO MOVER"
+    },
+    {
+      "key": "rule_skillz_4_title",
+      "value": "FICHAS"
+    },
+    {
+      "key": "rule_skillz_5_title",
+      "value": "PIEZAS LIMITADAS"
+    },
+    {
+      "key": "rule_skillz_6_title",
+      "value": "PUNTUACIÓN"
+    },
+    {
+      "key": "rule_skillz_7_title",
+      "value": "SORTEOS"
+    },
+    {
+      "key": "rule_skillz_8_title",
+      "value": "REFERENCIA"
+    },
+    {
+      "key": "rule_skillz_1",
+      "value": "Fourzy es un juego de estrategia para 2 jugadores. Los jugadores se turnan.\nEl objetivo es conseguir <color=yellow>cuatro seguidos.</color>Esto puede ser horizontal, vertical o diagonal."
+    },
+    {
+      "key": "rule_skillz_2",
+      "value": "Las piezas comienzan en el exterior del tablero y pueden entrar en cualquier borde <color=yellow>no bloqueado</color>.\nUna pieza entrará en el tablero y continuará en línea recta."
+    },
+    {
+      "key": "rule_skillz_3",
+      "value": "Una pieza continuará hasta que alcance el <color=yellow>borde</color> del tablero o interactúe con una <color=yellow>pieza o ficha</color>."
+    },
+    {
+      "key": "rule_skillz_4",
+      "value": "Las fichas tienen muchos efectos y pueden alterar el movimiento o la dirección de una pieza."
+    },
+    {
+      "key": "rule_skillz_5",
+      "value": "Tienes un número limitado de piezas. Después de cada movimiento, el número restante de piezas disminuye. Si es tu turno y no tienes piezas, <color=yellow>pierdes el juego</color>."
+    },
+    {
+      "key": "rule_skillz_6",
+      "value": "Gana puntos ganando juegos, y la cantidad de tiempo y piezas restantes."
+    },
+    {
+      "key": "rule_skillz_6_1",
+      "value": "puntos por ganar un juego."
+    },
+    {
+      "key": "rule_skillz_6_2",
+      "value": "puntos por cada pieza que queda al final del juego."
+    },
+    {
+      "key": "rule_skillz_6_3",
+      "value": "puntos por cada segundo restante al final del juego."
+    },
+    {
+      "key": "rule_skillz_7",
+      "value": "Si <color=yellow>ambos</color> jugadores tienen cuatro seguidos, el juego es un <color=yellow>empate</color>. Si un jugador tiene más piezas seguidas, ese jugador gana."
+    },
+    {
+      "key": "rule_skillz_8",
+      "value": "Cada tablero tendrá una nueva combinación de fichas para aprender y dominar. Use la referencia del token o el signo de interrogación para buscar más información."
+    },
     {
       "key": "rule_swipe_down",
       "value": "Desliza hacia abajo para moverte"

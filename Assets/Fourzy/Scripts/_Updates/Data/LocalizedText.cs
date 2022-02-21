@@ -12,14 +12,17 @@ namespace Fourzy
         public bool updateOnStart = true;
 
         private Text text;
-        private TextMeshProUGUI tmPro;
+        private TMP_Text tmPro;
 
-        void Start()
+        void Awake()
         {
             text = GetComponent<Text>();
-            tmPro = GetComponent<TextMeshProUGUI>();
+            tmPro = GetComponent<TMP_Text>();
 
-            if (updateOnStart) UpdateLocale();
+            if (updateOnStart)
+            {
+                UpdateLocale();
+            }
         }
 
         public void UpdateLocale()
@@ -29,18 +32,33 @@ namespace Fourzy
             int _keyEnd = key.IndexOf("}");
 
             if (_keyIndex > -1 && _keyEnd > -1)
+            {
                 newString = key.Replace(key.Substring(_keyIndex, _keyEnd - _keyIndex + 1), LocalizationManager.Value(key.Substring(_keyIndex + 1, _keyEnd - _keyIndex - 1)));
+            }
             else
+            {
                 newString = LocalizationManager.Value(key);
+            }
 
-            if (tmPro) tmPro.text = newString;
-            else if (text) text.text = newString;
+            SetText(newString);
         }
 
         public void UpdateLocale(string _key)
         {
             key = _key;
             UpdateLocale();
+        }
+
+        public void SetText(string newString)
+        {
+            if (tmPro)
+            {
+                tmPro.text = newString;
+            }
+            else if (text)
+            {
+                text.text = newString;
+            }
         }
     }
 }

@@ -33,8 +33,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (GamePlayManager.Instance.Game._Type)
             {
                 case GameType.SKILLZ_ASYNC:
-                    scorePanel.SetActive(true);
-                    scoreLabel.text = SkillzGameController.Instance.Points + "";
+                    if (SkillzGameController.Instance.GamesToPlay > 1)
+                    {
+                        scorePanel.SetActive(true);
+                        scoreLabel.text = SkillzGameController.Instance.Points + "";
+                    }
+                    else
+                    {
+                        scorePanel.SetActive(false);
+                    }
 
                     break;
 
@@ -122,37 +129,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ShowRules()
         {
-            switch (GamePlayManager.Instance.Game._Type)
-            {
-                case GameType.SKILLZ_ASYNC:
-                    secondaryPopup = menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("rules"), LocalizationManager.Value("rules_skillz_game"), "", LocalizationManager.Value("close"));
-
-                    break;
-
-                case GameType.REALTIME:
-                    secondaryPopup = menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("rules"), LocalizationManager.Value("rules_realtime_game"), "", LocalizationManager.Value("close"));
-
-                    break;
-
-                case GameType.PASSANDPLAY:
-                    secondaryPopup = menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("rules"), LocalizationManager.Value("rules_passandplay_game"), "", LocalizationManager.Value("close"));
-
-                    break;
-            }
-
-            switch (GamePlayManager.Instance.Game._Mode)
-            {
-                case GameMode.GAUNTLET:
-                    secondaryPopup = menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("rules"), LocalizationManager.Value("rules_gauntlet_game"), "", LocalizationManager.Value("close"));
-
-                    break;
-
-                case GameMode.PUZZLE_PACK:
-                case GameMode.PUZZLE_FAST:
-                    secondaryPopup = menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("rules"), LocalizationManager.Value("rules_puzzlepack_game"), "", LocalizationManager.Value("close"));
-
-                    break;
-            }
+            secondaryPopup = menuController.GetOrAddScreen<SkillzRulesScreen>()._OpenScreen();
         }
 
         public void ToggleMusic()

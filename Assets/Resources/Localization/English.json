@@ -653,6 +653,82 @@
       "value": "Room Code"
     },
     {
+      "key": "rule_skillz_1_title",
+      "value": "GOAL"
+    },
+    {
+      "key": "rule_skillz_2_title",
+      "value": "HOW TO MOVE"
+    },
+    {
+      "key": "rule_skillz_3_title",
+      "value": "PIECE MOVEMENT"
+    },
+    {
+      "key": "rule_skillz_4_title",
+      "value": "TOKENS"
+    },
+    {
+      "key": "rule_skillz_5_title",
+      "value": "LIMITED PIECES"
+    },
+    {
+      "key": "rule_skillz_6_title",
+      "value": "SCORING"
+    },
+    {
+      "key": "rule_skillz_7_title",
+      "value": "DRAWS"
+    },
+    {
+      "key": "rule_skillz_8_title",
+      "value": "REFERENCE"
+    },
+    {
+      "key": "rule_skillz_1",
+      "value": "Fourzy is a 2 player strategy game. Players take turns.\nThe goal is to get <color=yellow>four in a row.</color> This can be horizontally, vertically, or diagonally."
+    },
+    {
+      "key": "rule_skillz_2",
+      "value": "Pieces start on the outside of the board and can enter on any <color=yellow>unblocked</color> edge.\nA piece will enter the board and continue in a straight line."
+    },
+    {
+      "key": "rule_skillz_3",
+      "value": "A piece will continue until it reaches the <color=yellow>edge</color> of the board or interacts with a <color=yellow>piece or token</color>."
+    },
+    {
+      "key": "rule_skillz_4",
+      "value": "Tokens have many effects and may alter the movement or direction of a piece."
+    },
+    {
+      "key": "rule_skillz_5",
+      "value": "You have a limited number of pieces. After each move, the remaining number of pieces decreases. If it is your turn and you have no pieces, you <color=yellow>lose the game</color>."
+    },
+    {
+      "key": "rule_skillz_6",
+      "value": "Score points by winning games, and the amount of time and pieces left."
+    },
+    {
+      "key": "rule_skillz_6_1",
+      "value": "points for winning a game."
+    },
+    {
+      "key": "rule_skillz_6_2",
+      "value": "points for each piece left at the end of the game."
+    },
+    {
+      "key": "rule_skillz_6_3",
+      "value": "points for each second left at the end of the game."
+    },
+    {
+      "key": "rule_skillz_7",
+      "value": "If <color=yellow>both</color> players have four in a row, the game is a <color=yellow>draw</color>.\n\nIf one player has more pieces in a row, that player wins."
+    },
+    {
+      "key": "rule_skillz_8",
+      "value": "Each board will have a new combination of tokens to learn and master. Use the token reference or question mark to look up more information."
+    },
+    {
       "key": "rule_swipe_down",
       "value": "Swipe down to move"
     },
@@ -683,26 +759,6 @@
     {
       "key": "rules",
       "value": "Rules"
-    },
-    {
-      "key": "rules_gauntlet_game",
-      "value": "Gauntlet game rules here"
-    },
-    {
-      "key": "rules_passandplay_game",
-      "value": "Passandplay game rules here"
-    },
-    {
-      "key": "rules_puzzlepack_game",
-      "value": "Puzzlepack game rules here"
-    },
-    {
-      "key": "rules_realtime_game",
-      "value": "Realtime game rules here"
-    },
-    {
-      "key": "rules_skillz_game",
-      "value": "Skillz game rules here"
     },
     {
       "key": "score",
