@@ -968,14 +968,25 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     SkillzLevelParams levelParams = SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.CurrentLevelIndex];
                     Area area = (Area)levelParams.areaId;
                     BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
-                    string randomseed = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzGameController.Instance.CurrentLevelIndex;
-                    matchId = randomseed;
+                    int explicitSeed = SkillzGameController.Instance.ExplicitSeed;
+
+                    string randomSeed;
+                    if (explicitSeed > -1)
+                    {
+                        randomSeed = explicitSeed + "";
+                    }
+                    else
+                    {
+                        randomSeed = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzGameController.Instance.CurrentLevelIndex;
+                    }
+
+                    matchId = randomSeed;
 
                     string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
                     string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
 
                     preferences.RequestedRecipe = "";
-                    preferences.RecipeSeed = randomseed;
+                    preferences.RecipeSeed = randomSeed;
                     preferences.TargetComplexityLow = levelParams.complexityLow;
                     preferences.TargetComplexityHigh = levelParams.complexityHigh;
 

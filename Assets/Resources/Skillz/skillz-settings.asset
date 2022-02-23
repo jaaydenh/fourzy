@@ -31,8 +31,8 @@ MonoBehaviour:
   - Key: Level2
     Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 8, "oppHerdId":
       "red_dragon", "aiProfile": 2 }'
-  - Key: 
-    Value: 
+  - Key: RandomSeed
+    Value: 1
   - Key: 
     Value: 
   - Key: 

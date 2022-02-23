@@ -36,7 +36,6 @@ namespace Fourzy._Updates.Managers
         private int pointsPerMoveLeftLose;
         private int pointsPerMoveLeftDraw;
         private int matchPausesLeft;
-        private List<SkillzLevelParams> levelsInfo;
 
         internal Match CurrentMatch { get; set; }
         internal bool OngoingMatch { get; set; }
@@ -58,8 +57,9 @@ namespace Fourzy._Updates.Managers
         /// </summary>
         internal bool CloseGameOnBack { get; set; }
         internal bool ReturnToSkillzCalled { get; set; }
-        internal List<SkillzLevelParams> LevelsInfo => levelsInfo;
+        internal List<SkillzLevelParams> LevelsInfo { get; private set; }
         internal int SubmitRetries { get; set; }
+        internal int ExplicitSeed => random - GetMatchParamInt("RandomSeed", -1);
 
         public void InitializeMatchData()
         {
@@ -86,16 +86,16 @@ namespace Fourzy._Updates.Managers
             //match pauses left
             matchPausesLeft = GetMatchParamInt(Constants.SKILLZ_MATCH_PAUSES_KEY, Constants.SKILLZ_PAUSES_COUNT_PER_MATCH);
 
-            levelsInfo = new List<SkillzLevelParams>();
+            LevelsInfo = new List<SkillzLevelParams>();
             //levels info
             for (int levelIndex = 0; levelIndex < gamesToPlay; levelIndex++)
             {
                 SkillzLevelParams info = 
                     GetLevelInfo(levelIndex) ?? 
-                    levelsInfo.Last() ?? 
+                    LevelsInfo.Last() ?? 
                     new SkillzLevelParams() { areaId = Constants.SKILLZ_DEFAULT_AREA, complexityLow = Constants.SKILLZ_GAME_COMPLEXITY, complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY, oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID };
 
-                levelsInfo.Add(info);
+                LevelsInfo.Add(info);
             }
         }
 
