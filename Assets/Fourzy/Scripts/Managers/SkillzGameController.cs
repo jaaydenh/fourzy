@@ -57,6 +57,7 @@ namespace Fourzy._Updates.Managers
         /// If game is opened when we return from skillz to fourzy, exit to main menu
         /// </summary>
         internal bool CloseGameOnBack { get; set; }
+        internal bool ReturnToSkillzCalled { get; set; }
         internal List<SkillzLevelParams> LevelsInfo => levelsInfo;
         internal int SubmitRetries { get; set; }
 
@@ -64,6 +65,7 @@ namespace Fourzy._Updates.Managers
         {
             random = UnityEngine.Random.Range(10000, 99999);
             GamesPlayed.Clear();
+            ReturnToSkillzCalled = false;
 
             //assign timer value
             timer = GetMatchParamInt(Constants.SKILLZ_GAME_TIMER_KEY, Constants.SKILLZ_DEFAULT_GAME_TIMER);

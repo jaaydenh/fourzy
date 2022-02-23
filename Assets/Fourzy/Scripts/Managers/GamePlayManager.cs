@@ -1087,7 +1087,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     else
                     {
                         SkillzGameController.Instance.CloseGameOnBack = true;
-                        SkillzCrossPlatform.ReturnToSkillz();
+
+                        if (!SkillzGameController.Instance.ReturnToSkillzCalled)
+                        {
+                            if (SkillzCrossPlatform.ReturnToSkillz())
+                            {
+                                SkillzGameController.Instance.ReturnToSkillzCalled = true;
+                            }
+                        }
                     }
 
                     break;
@@ -1965,7 +1972,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnSkillzScoreReported()
         {
-            Debug.Log("Score submited.");
+            Debug.Log("Skillz Score submited. All good.");
         }
 
         private void OnSkillzScoreReportedError(string error)
@@ -1994,7 +2001,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 Debug.Log("Failed to report score");
                 Debug.Log("Last effort, using DisplayTournamentResultsWithScore");
 
-                SkillzCrossPlatform.DisplayTournamentResultsWithScore(SkillzGameController.Instance.Points);
+                if (!SkillzGameController.Instance.ReturnToSkillzCalled)
+                {
+                    SkillzGameController.Instance.ReturnToSkillzCalled = true;
+                    SkillzCrossPlatform.DisplayTournamentResultsWithScore(SkillzGameController.Instance.Points);
+                }
             }
         }
 
