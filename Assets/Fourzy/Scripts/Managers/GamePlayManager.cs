@@ -967,6 +967,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.ASYNC_SKILLZ_GAME:
                     SkillzLevelParams levelParams = SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.CurrentLevelIndex];
                     Area area = (Area)levelParams.areaId;
+                    AIProfile aiProfile = (AIProfile)levelParams.aiProfile;
                     BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
                     int explicitSeed = SkillzGameController.Instance.ExplicitSeed;
 
@@ -983,7 +984,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     matchId = randomSeed;
 
                     string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
-                    string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
+                    //string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
+                    string opponentName = AIPlayerFactory.GetAIPlayerNameForSkillz(aiProfile);
 
                     preferences.RequestedRecipe = "";
                     preferences.RecipeSeed = randomSeed;
@@ -991,7 +993,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     preferences.TargetComplexityHigh = levelParams.complexityHigh;
 
                     Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
-                    Player opponent = new Player(2, opponentName, (AIProfile)levelParams.aiProfile) { HerdId = levelParams.oppHerdId };
+                    Player opponent = new Player(2, opponentName, aiProfile) { HerdId = levelParams.oppHerdId };
 
                     GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
                     ClientFourzyGame game = new ClientFourzyGame(area, player, opponent, 1, options, preferences);

@@ -271,6 +271,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
+                    case GameType.SKILLZ_ASYNC:
+                        opponentWidget.SetExtraData("Bot");
+
+                        break;
+
                     default:
                         opponentWidget.SetExtraData("Wizard");
 
