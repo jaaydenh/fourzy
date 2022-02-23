@@ -73,6 +73,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleTokenInstructions() => SettingsManager.Toggle(SettingsManager.KEY_TOKEN_INSTRUCTION);
 
+        public void OpenSkillzRules()
+        {
+            menuController.GetOrAddScreen<SkillzRulesScreen>()._OpenScreen();
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
