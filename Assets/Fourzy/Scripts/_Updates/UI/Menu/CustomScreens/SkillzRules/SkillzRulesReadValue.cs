@@ -32,13 +32,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (value)
             {
                 case SkillzValues.WINNER_POINTS:
-                    return SkillzGameController.Instance.WinPoints;
+                    //return SkillzGameController.Instance.WinPoints;
+                    return Constants.SKILLZ_WIN_POINTS;
 
                 case SkillzValues.POINTS_PER_MOVES_LEFT:
-                    return SkillzGameController.Instance.PointsPerMoveLeftWin;
+                    //return SkillzGameController.Instance.PointsPerMoveLeftWin;
+                    return Constants.SKILLZ_POINTS_PER_MOVE_LEFT_WIN;
 
                 case SkillzValues.POINTS_PER_SECOND_LEFT:
-                    return SkillzGameController.Instance.PointsPerSecond;
+                    //return SkillzGameController.Instance.PointsPerSecond;
+                    return Constants.SKILLZ_POINTS_PER_SECOND_REMAINING;
             }
 
             return 0;

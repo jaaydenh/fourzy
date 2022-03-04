@@ -1,18 +1,25 @@
 //@vadym udod
 
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Helpers;
+using System;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class SkillzRulesScreen : PromptScreen
     {
+        [SerializeField]
+        private SwipeHandler swipeHandler;
+        [SerializeField]
+        private ButtonExtended nextButton;
+
         private SkillzRulesPage[] pages;
         private SkillzRulesDotButton[] dotButtons;
         private PositionTween positionTween;
 
         private float pageWidth;
-        private int previousPage = -1;
+        private int currentPage = -1;
 
         protected override void Awake()
         {
@@ -21,6 +28,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             pages = GetComponentsInChildren<SkillzRulesPage>();
             dotButtons = GetComponentsInChildren<SkillzRulesDotButton>();
             positionTween = GetComponentInChildren<PositionTween>();
+            swipeHandler.onSwipe += OnSwipe;
 
             pageWidth = pages[0].GetComponent<RectTransform>().rect.width;
         }
@@ -33,16 +41,33 @@ namespace Fourzy._Updates.UI.Menu.Screens
             return this;
         }
 
+        public void OpenNextViaButton()
+        {
+            if (currentPage == pages.Length - 1)
+            {
+                CloseSelf();
+            }
+            else
+            {
+                OpenNextPage();
+            }
+        }
+
         public void OpenNextPage()
         {
-            SetPage((previousPage + 1) % pages.Length, true);
+            SetPage((currentPage + 1) % pages.Length, true);
+        }
+
+        public void OpenPreviousPage()
+        {
+            SetPage(currentPage == 0 ? pages.Length - 1 : currentPage - 1, true);
         }
 
         public void SetPage(int page, bool animated)
         {
             if (animated)
             {
-                positionTween.from = positionTween._value;
+                positionTween.from = currentPage > -1 ? (Vector2.left * pageWidth * currentPage) : Vector2.zero;
                 positionTween.to = Vector2.left * pageWidth * page;
 
                 positionTween.PlayForward(true);
@@ -52,16 +77,35 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 positionTween.SetPosition(Vector2.left * pageWidth * page);
             }
 
-            if (previousPage > -1)
+            if (currentPage > -1)
             {
-                dotButtons[previousPage].SetSelected(false);
-                pages[previousPage].OnPageClosed();
+                dotButtons[currentPage].SetSelected(false);
+                pages[currentPage].OnPageClosed();
             }
 
             pages[page].OnPageOpened();
 
             dotButtons[page].SetSelected(true);
-            previousPage = page;
+            currentPage = page;
+
+            //update button
+            nextButton.GetLabel().label.text = LocalizationManager.Value(currentPage == pages.Length - 1 ? "done" : "next");
+        }
+
+        private void OnSwipe(SwipeDirection direction)
+        {
+            switch (direction)
+            {
+                case SwipeDirection.LEFT:
+                    OpenNextPage();
+
+                    break;
+
+                case SwipeDirection.RIGHT:
+                    OpenPreviousPage();
+
+                    break;
+            }
         }
     }
 }

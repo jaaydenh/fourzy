@@ -34,7 +34,7 @@ public class TouchZone : EventTrigger
         else
             originPosition = new Vector2(eventData.position.x, eventData.position.y);
 
-        onPointerDown.Invoke(originPosition);
+        onPointerDown?.Invoke(originPosition);
         onPointerDownData?.Invoke(originPosition, eventData.pointerId);
     }
 
@@ -45,16 +45,16 @@ public class TouchZone : EventTrigger
         if (dragPositionRelative)
         {
             if (scalePosition)
-                onPointerMove.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y) - originPosition);
+                onPointerMove?.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y) - originPosition);
             else
-                onPointerMove.Invoke(new Vector2(eventData.position.x, eventData.position.y) - originPosition);
+                onPointerMove?.Invoke(new Vector2(eventData.position.x, eventData.position.y) - originPosition);
         }
         else
         {
             if (scalePosition)
-                onPointerMove.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y));
+                onPointerMove?.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y));
             else
-                onPointerMove.Invoke(new Vector2(eventData.position.x, eventData.position.y));
+                onPointerMove?.Invoke(new Vector2(eventData.position.x, eventData.position.y));
         }
     }
 
@@ -66,8 +66,8 @@ public class TouchZone : EventTrigger
         if (scalePosition) _result = new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y);
         else _result = new Vector2(eventData.position.x, eventData.position.y);
 
-        onPointerUp.Invoke(_result);
-        onPointerUpData.Invoke(_result, eventData.pointerId);
+        onPointerUp?.Invoke(_result);
+        onPointerUpData?.Invoke(_result, eventData.pointerId);
     }
 
     private Canvas CheckObj(Transform @object)

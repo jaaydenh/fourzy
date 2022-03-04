@@ -181,6 +181,10 @@
       "value": "Draw"
     },
     {
+      "key": "done",
+      "value": "Done"
+    },
+    {
       "key": "enter_room_code",
       "value": "Enter Room Code"
     },

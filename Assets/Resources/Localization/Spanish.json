@@ -186,6 +186,10 @@
       "value": "Empate"
     },
     {
+      "key": "done",
+      "value": "Hecho"
+    },
+    {
       "key": "enter_room_code",
       "value": "Ingrese código de lugar "
     },
