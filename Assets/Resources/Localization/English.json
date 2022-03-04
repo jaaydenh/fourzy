@@ -725,6 +725,14 @@
       "value": "points for each second left at the end of the game."
     },
     {
+      "key": "rule_skillz_6_4",
+      "value": "points for draw."
+    },
+    {
+      "key": "rule_skillz_6_5",
+      "value": "points for winning all games."
+    },
+    {
       "key": "rule_skillz_7",
       "value": "If <color=yellow>both</color> players have four in a row, the game is a <color=yellow>draw</color>.\n\nIf one player has more pieces in a row, that player wins."
     },

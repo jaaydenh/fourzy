@@ -25,6 +25,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void Start()
         {
             localizedText.UpdateLocale($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{GetValue()}</color>" + " {" + originalKey + "}");
+
+            //check if this rule needs to be disabled
+            if (Constants.SKILLZ_DEFAULT_GAMES_COUNT == 1 && value == SkillzValues.BIG_WIN_POINTS)
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                gameObject.SetActive(true);
+            }
         }
 
         public int GetValue()
@@ -42,6 +52,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case SkillzValues.POINTS_PER_SECOND_LEFT:
                     //return SkillzGameController.Instance.PointsPerSecond;
                     return Constants.SKILLZ_POINTS_PER_SECOND_REMAINING;
+
+                case SkillzValues.DRAW_POINTS:
+                    return Constants.SKILLZ_DRAW_POINTS;
+
+                case SkillzValues.BIG_WIN_POINTS:
+                    return Constants.SKILLZ_WIN_ALL_GAMES_BONUS;
             }
 
             return 0;
@@ -53,5 +69,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         WINNER_POINTS,
         POINTS_PER_MOVES_LEFT,
         POINTS_PER_SECOND_LEFT,
+        DRAW_POINTS,
+        BIG_WIN_POINTS,
     }
 }

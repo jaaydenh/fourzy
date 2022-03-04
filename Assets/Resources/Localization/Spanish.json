@@ -725,6 +725,14 @@
       "value": "puntos por cada segundo restante al final del juego."
     },
     {
+      "key": "rule_skillz_6_4",
+      "value": "puntos por empate."
+    },
+    {
+      "key": "rule_skillz_6_5",
+      "value": "puntos por ganar todos los juegos."
+    },
+    {
       "key": "rule_skillz_7",
       "value": "Si <color=yellow>ambos</color> jugadores tienen cuatro seguidos, el juego es un <color=yellow>empate</color>. Si un jugador tiene más piezas seguidas, ese jugador gana."
     },
