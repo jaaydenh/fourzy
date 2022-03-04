@@ -31,6 +31,8 @@ namespace Fourzy._Updates.Managers
         private int movesPerMatch;
         private float timer;
         private int winPoints;
+        private int drawPoints;
+        private int winAllGamesBonus;
         private int pointsPerSecond;
         private int pointsPerMoveLeftWin;
         private int pointsPerMoveLeftLose;
@@ -42,6 +44,8 @@ namespace Fourzy._Updates.Managers
         internal float GameInitialTimerValue => random - timer;
         internal int CurrentLevelIndex => GamesPlayed.Count;
         internal int WinPoints => random - winPoints;
+        internal int DrawPoints => random - drawPoints;
+        internal int WinAllGamesBonus => random - winAllGamesBonus;
         internal int PointsPerSecond => random - pointsPerSecond;
         internal int PointsPerMoveLeftWin => random - pointsPerMoveLeftWin;
         internal int PointsPerMoveLeftLose => random - pointsPerMoveLeftLose;
@@ -75,6 +79,10 @@ namespace Fourzy._Updates.Managers
             movesPerMatch = GetMatchParamInt(Constants.SKILLZ_MOVES_PER_MATCH_KEY, Constants.SKILLZ_MOVES_PER_MATCH);
             //win points
             winPoints = GetMatchParamInt(Constants.SKILLZ_WIN_POINTS_KEY, Constants.SKILLZ_WIN_POINTS);
+            //draw points
+            drawPoints = GetMatchParamInt(Constants.SKILLZ_DRAW_POINTS_KEY, Constants.SKILLZ_DRAW_POINTS);
+            //win all games bonus points
+            winAllGamesBonus = GetMatchParamInt(Constants.SKILLZ_WIN_ALL_GAMES_BONUS_KEY, Constants.SKILLZ_WIN_ALL_GAMES_BONUS);
             //points per second left
             pointsPerSecond = GetMatchParamInt(Constants.SKILLZ_POINTS_PER_SECOND_KEY, Constants.SKILLZ_POINTS_PER_SECOND_REMAINING);
             //points per move left win

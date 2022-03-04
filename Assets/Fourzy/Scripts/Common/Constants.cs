@@ -79,17 +79,21 @@ namespace Fourzy
         //Skillz params
         public const string SKILLZ_GAMES_COUNT_KEY = "Games";
         public const string SKILLZ_GAME_TIMER_KEY = "Timer";
-        public const string SKILLZ_MOVES_PER_MATCH_KEY = "Moves";
+        public const string SKILLZ_MOVES_PER_MATCH_KEY = "MovesPerGame";
         public const string SKILLZ_WIN_POINTS_KEY = "WinPoints";
+        public const string SKILLZ_DRAW_POINTS_KEY = "DrawPoints";
+        public const string SKILLZ_WIN_ALL_GAMES_BONUS_KEY = "WinAllGamesBonus";
         public const string SKILLZ_POINTS_PER_SECOND_KEY = "PointsPerSecond";
         public const string SKILLZ_POINTS_PER_MOVE_WIN_KEY = "PointsPerMoveWin";
         public const string SKILLZ_POINTS_PER_MOVE_LOSE_KEY = "PointsPerMoveLose";
         public const string SKILLZ_POINTS_PER_MOVE_DRAW_KEY = "PointsPerMoveDraw";
-        public const string SKILLZ_MATCH_PAUSES_KEY = "Pauses";
+        public const string SKILLZ_MATCH_PAUSES_KEY = "PauseLimit";
         public const int SKILLZ_DEFAULT_GAMES_COUNT = 3;
         public const int SKILLZ_DEFAULT_GAME_TIMER = 180;
         public const int SKILLZ_MOVES_PER_MATCH = 28;
         public const int SKILLZ_WIN_POINTS = 2000;
+        public const int SKILLZ_DRAW_POINTS = 1000;
+        public const int SKILLZ_WIN_ALL_GAMES_BONUS = 1000;
         public const int SKILLZ_POINTS_PER_SECOND_REMAINING = 1;
         public const int SKILLZ_POINTS_PER_MOVE_LEFT_WIN = 10;
         public const int SKILLZ_POINTS_PER_MOVE_LEFT_LOSE = 10;

@@ -829,6 +829,10 @@
       "value": "Victoria"
     },
     {
+      "key": "skillz_draw_points_key",
+      "value": "Draw"
+    },
+    {
       "key": "sound_effects",
       "value": "Efectos de sonido"
     },

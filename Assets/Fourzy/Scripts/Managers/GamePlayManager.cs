@@ -1729,6 +1729,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
                 else if (game.draw)
                 {
+                    points.Add(new PointsEntry(LocalizationManager.Value("skillz_draw_points_key"), SkillzGameController.Instance.DrawPoints));
+                    
                     if (myMovesLeft > 0)
                     {
                         points.Add(new PointsEntry(
@@ -1759,7 +1761,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         //big win bonus
                         if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state) && winner)
                         {
-                            points.Add(new PointsEntry(LocalizationManager.Value("skillz_big_win_key"), 2000));
+                            points.Add(new PointsEntry(LocalizationManager.Value("skillz_big_win_key"), SkillzGameController.Instance.WinAllGamesBonus));
                         }
                     }
                 }

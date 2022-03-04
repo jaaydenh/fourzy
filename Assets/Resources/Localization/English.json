@@ -809,6 +809,10 @@
       "value": "Victory"
     },
     {
+      "key": "skillz_draw_points_key",
+      "value": "Draw"
+    },
+    {
       "key": "sound_effects",
       "value": "Sound Effects"
     },
