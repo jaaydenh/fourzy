@@ -40,7 +40,10 @@
       "key": "instruction_08",
       "value": "Ahora veamos cuánto has aprendido, ¡pondré a prueba tus habilidades!"
     },
-	
+    {
+      "key": "instruction_help",
+      "value": "Toca un cuadrado resaltado para obtener ayuda."
+    },
     {
       "key": "abandoned_room_available",
       "value": "Lugar abandonado disponible"

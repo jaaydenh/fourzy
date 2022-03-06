@@ -392,7 +392,7 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   onBackSfx: menu_back
-  closePreviousWhenOpened: 1
+  closePreviousWhenOpened: 0
   default: 0
   isOpened: 0
   defaultCalls: 1

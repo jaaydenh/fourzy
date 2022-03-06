@@ -237,6 +237,17 @@ namespace Fourzy._Updates._Tutorial
                         new MessageData(LocalizationManager.Value("suggest_hint_use"), Vector2.zero, Vector2.up * 120f),
                         true),
                 }
+            },
+
+            new Tutorial()
+            {
+                name = "HelpInstruction",
+                onBack = TutorialOnBack.LEGACY,
+                tasks = new OnboardingTask[]
+                {
+                    new OnboardingTask_ShowBubbleMessage(LocalizationManager.Value("instruction_help"), new Vector2(.5f, .15f)),
+                    new OnboardingTask_Wait (-1f),
+                }
             }
         };
 
@@ -333,6 +344,7 @@ namespace Fourzy._Updates._Tutorial
     {
         SHOW_LEAVE_PROMPT,
         IGNORE,
+        LEGACY,
     }
 
     public class OnboardingTask

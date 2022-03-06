@@ -14,7 +14,11 @@ namespace Fourzy._Updates.Mechanics.Board
     {
         public AdvancedEvent onShow;
         public AdvancedEvent onHide;
-        public ScaleTween scaleTween;
+
+        [SerializeField]
+        private ScaleTween scaleTween;
+        [SerializeField]
+        private GameObject helpView;
 
         private AlphaTween alphaTween;
         private SpriteRenderer spriteRenderer;
@@ -90,6 +94,22 @@ namespace Fourzy._Updates.Mechanics.Board
             Hide(time);
         }
 
+        public void SetMode(HintBlockMode mode)
+        {
+            switch (mode)
+            {
+                case HintBlockMode.DEFAULT:
+                    helpView.SetActive(false);
+
+                    break;
+
+                case HintBlockMode.HELP:
+                    helpView.SetActive(true);
+
+                    break;
+            }
+        }
+
         public void Animate(float duration = .7f, bool loop = false)
         {
             CancelRoutine("animation");
@@ -129,7 +149,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public enum HintBlockMode
         {
             DEFAULT,
-            SPELL,
+            HELP,
         }
     }
 }

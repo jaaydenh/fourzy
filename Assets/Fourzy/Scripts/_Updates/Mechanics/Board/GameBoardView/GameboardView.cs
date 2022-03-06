@@ -1,5 +1,6 @@
 //@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
@@ -20,6 +21,7 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Fourzy._Updates.Mechanics.Board.HintBlock;
 
 #if !MOBILE_SKILLZ
 using ExitGames.Client.Photon;
@@ -1745,6 +1747,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 case BoardActionState.MOVE:
                     switch (GameManager.Instance.placementStyle)
                     {
+                        case GameManager.PlacementStyle.TWO_STEP_TAP:
                         case GameManager.PlacementStyle.EDGE_TAP:
                             //only active inputMap values
                             foreach (InputMapValue inputMapValue in inputMapActiveOnly)
@@ -1758,6 +1761,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             break;
 
                         case GameManager.PlacementStyle.SWIPE:
+                        case GameManager.PlacementStyle.TWO_STEP_SWIPE:
                             if (selectedBoardLocation == null) return;
                             Direction targetDir = selectedBoardLocation.Value.GetDirection(game);
 
@@ -1866,6 +1870,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 lastHighlighted = tokensToHighlight;
 
+                MenuController controller = MenuController.GetMenu(Constants.GAMEPLAY_MENU_CANVAS_NAME);
+                if (controller)
+                {
+                    controller
+                        .GetOrAddScreen<OnboardingScreen>()
+                        .OpenTutorial(HardcodedTutorials.GetByName("HelpInstruction"));
+                }
+
+                SetHintBlocksState(affected, HintBlockMode.HELP);
                 StartRoutine(
                     "showHintBlocks",
                     AnimateHintBlocks(affected, HintAreaStyle.NONE, HintAreaAnimationPattern.CIRCLE));
@@ -1878,6 +1891,15 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
                 lastHighlighted = new List<TokenView>();
 
+                MenuController controller = MenuController.GetMenu(Constants.GAMEPLAY_MENU_CANVAS_NAME);
+                if (controller)
+                {
+                    controller
+                        .GetOrAddScreen<OnboardingScreen>()
+                        .CloseSelf();
+                }
+
+                SetHintBlocksState(null, HintBlockMode.DEFAULT);
                 HideHintArea(HintAreaAnimationPattern.NONE);
             }
         }
@@ -2029,7 +2051,6 @@ namespace Fourzy._Updates.Mechanics.Board
             Piece piece = game.activePlayerPiece;
 
             InputMapValue inputMapValue = GetClosestInputMapValue(inputMapActiveOnly, position);
-
             if (inputMapValue == null)
             {
                 if (tap)
@@ -2119,7 +2140,6 @@ namespace Fourzy._Updates.Mechanics.Board
             Piece piece = game.activePlayerPiece;
 
             InputMapValue inputMapValue = GetClosestInputMapValue(inputMapActiveOnly, position, 1.5f);
-
             if (inputMapValue == null)
             {
                 if (Vec2ToBoardLocation(position).OnBoard(game._State.Board))
@@ -2132,6 +2152,8 @@ namespace Fourzy._Updates.Mechanics.Board
                 {
                     negativeVfx.StartVfx(null, position, 0f);
                 }
+
+                //ShowHints();
             }
             else
             {
@@ -2160,6 +2182,22 @@ namespace Fourzy._Updates.Mechanics.Board
                         null,
                         (Vector2)transform.position + BoardLocationToVec2(inputMapValue.location),
                         0f);
+
+                    //ShowHints();
+                }
+            }
+
+            void ShowHints()
+            {
+                //dont show hint area on onboarding game mode
+                if (game._Type != GameType.ONBOARDING)
+                {
+                    SetHintAreaColliderState(false);
+                    CancelRoutine("wrongMove");
+                    //start wrong move routine
+                    StartRoutine("wrongMove", 1.3f, () => UpdateHintArea(), null);
+                    //light up hint area
+                    ShowHintArea(HintAreaStyle.ANIMATION, HintAreaAnimationPattern.NONE);
                 }
             }
         }
@@ -2315,6 +2353,29 @@ namespace Fourzy._Updates.Mechanics.Board
             } while (index < actions.Count);
 
             return false;
+        }
+
+        /// <summary>
+        /// Change hint blocks mode.
+        /// </summary>
+        /// <param name="affected">Pass null to affect all</param>
+        /// <param name="mode"></param>
+        private void SetHintBlocksState(Dictionary<BoardLocation, HintBlock> affected, HintBlockMode mode)
+        {
+            if (affected == null)
+            {
+                foreach (KeyValuePair<BoardLocation, HintBlock> pair in hintBlocks)
+                {
+                    pair.Value.SetMode(mode);
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<BoardLocation, HintBlock> pair in affected)
+                {
+                    pair.Value.SetMode(mode);
+                }
+            }
         }
 
         private IEnumerator BoardUpdateRoutine(PlayerTurnResult turnResults, bool startTurn)

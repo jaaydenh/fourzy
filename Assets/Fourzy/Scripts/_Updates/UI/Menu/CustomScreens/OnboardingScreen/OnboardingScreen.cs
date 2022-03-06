@@ -85,6 +85,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
+                case TutorialOnBack.LEGACY:
+                    MenuController.menus.Values.Where(pair => pair != PersistantMenuController.Instance).First()?.currentScreen.OnBack();
+
+                    break;
+
                 case TutorialOnBack.SHOW_LEAVE_PROMPT:
                     base.OnBack();
 
@@ -114,9 +119,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
             isTutorialRunning = true;
             this.tutorial = tutorial;
 
-            if (menuController.currentScreen != this)
+            switch (tutorial.onBack)
             {
-                menuController.OpenScreen(this);
+                case TutorialOnBack.LEGACY:
+                    Open();
+
+                    break;
+
+                default:
+                    if (menuController.currentScreen != this)
+                    {
+                        menuController.OpenScreen(this);
+                    }
+
+                    break;
             }
 
             masks.Hide(0f);

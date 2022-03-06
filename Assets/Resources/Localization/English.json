@@ -41,6 +41,10 @@
       "value": "Now let's see how much you learned, I will test your skills!"
     },
     {
+      "key": "instruction_help",
+      "value": "Tap a highlighted square for help."
+    },
+    {
       "key": "abandoned_room_available",
       "value": "Abandoned Room Available"
     },

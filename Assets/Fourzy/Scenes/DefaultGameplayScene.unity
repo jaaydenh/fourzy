@@ -12006,7 +12006,7 @@ RectTransform:
   - {fileID: 716993479}
   - {fileID: 1197571244}
   m_Father: {fileID: 711810975}
-  m_RootOrder: 5
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -14245,10 +14245,11 @@ RectTransform:
   - {fileID: 849088959}
   - {fileID: 1690463454}
   - {fileID: 783680538}
-  - {fileID: 577774579}
   - {fileID: 1633794825}
+  - {fileID: 1179715429}
   - {fileID: 278685327}
   - {fileID: 6392147300521717329}
+  - {fileID: 577774579}
   m_Father: {fileID: 2049771977}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21119,6 +21120,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1177048217}
   m_CullTransparentMesh: 0
+--- !u!1 &1179715428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1179715429}
+  m_Layer: 5
+  m_Name: NewScreens
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1179715429
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179715428}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 711810975}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1186938972
 GameObject:
   m_ObjectHideFlags: 0
@@ -28255,7 +28291,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 711810975}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -38773,7 +38809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 1722187672}
-  newScreensParent: {fileID: 711810975}
+  newScreensParent: {fileID: 1179715429}
   canvasRoot: {fileID: 711810975}
   extraScreens: []
 --- !u!114 &2049771982
@@ -39617,7 +39653,7 @@ PrefabInstance:
     - target: {fileID: 6392147300521717329, guid: 4afd7bba92165a24ca1a6746afd983c0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6392147300521717329, guid: 4afd7bba92165a24ca1a6746afd983c0,
         type: 3}

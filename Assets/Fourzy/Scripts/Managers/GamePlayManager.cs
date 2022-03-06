@@ -1218,7 +1218,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void PauseGame()
         {
-            if (GameState == GameState.PAUSED) return;
+            switch (GameState)
+            {
+                case GameState.PAUSED:
+                    return;
+
+                case GameState.HELP_STATE:
+                    ToggleHelpState();
+
+                    break;
+            }
 
             previousGameState = GameState;
             GameState = GameState.PAUSED;
