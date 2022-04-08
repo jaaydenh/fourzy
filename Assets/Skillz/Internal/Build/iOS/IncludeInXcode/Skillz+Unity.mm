@@ -18,6 +18,9 @@
 #import "DisplayManager.h"
 #import "CoreImage/CoreImage.h"
 
+enum EColorSpace { kLinearCplorSpace = 1, kGammaColorSpace = 0};
+extern EColorSpace GetActiveColorSpace();
+
 @class SkillzSDKDelegate;
 
 extern "C" int UnitySelectedRenderingAPI();
@@ -27,7 +30,6 @@ extern "C" int UnitySelectedRenderingAPI();
 @property SkillzOrientation orientation;
 @property (nonatomic) NSString *matchRules;
 @property (nonatomic) NSString *matchInfo;
-
 /*
  The following are stored C# function pointers for Skillz submit score callback methods
  */
@@ -41,6 +43,12 @@ extern "C" int UnitySelectedRenderingAPI();
 @property (nonatomic) void (* onProgressionGetFailureFunc)(int, const char*);
 @property (nonatomic) void (* onProgressionUpdateSuccessFunc)(int);
 @property (nonatomic) void (* onProgressionUpdateFailureFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionGetCurrentSeasonSuccessFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionGetCurrentSeasonFailureFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionGetPreviousSeasonsSuccessFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionGetPreviousSeasonsFailureFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionGetNextSeasonsSuccessFunc)(int, const char*);
+@property (nonatomic) void (* onProgressionGetNextSeasonsFailureFunc)(int, const char*);
 
 /*
  The following are stored C# function pointers for SkillzSyncPlayDelegate methods
@@ -58,6 +66,8 @@ extern "C" int UnitySelectedRenderingAPI();
 @property (nonatomic) void (* onMatchCompletedFunc)();
 
 @end
+
+static SkillzEnvironment sSkillzEnvironment;
 
 static void PauseApp()
 {
@@ -83,6 +93,7 @@ static void ResumeApp()
     [GetAppController() applicationDidBecomeActive:[UIApplication sharedApplication]];
 }
 
+
 @interface Skillz (Unity)
 
 + (void)sendMessageToUnityObject:(NSString *)objName
@@ -99,8 +110,16 @@ static void ResumeApp()
 -(void)startLaunching:(NSNotification*)notification;
 
 @property (nonatomic) BOOL hasMetalRendering;
-@property (atomic) CIImage* frameImage;
-@property (atomic) BOOL needsFrameImage;
+
+@property (atomic) BOOL needsFrameTexture;
+@property (atomic) NSInteger droppedFrames;
+@property (atomic) CIContext* ciContext;
+@property (nonatomic) NSMutableArray<MTLTextureRef> *frameTextures;
+@property (nonatomic) NSMutableArray<MTLTextureRef> *renderedFrameTextures;
+@property (atomic) MTLTextureRef busyFrameTexture;
+
+@property (nonatomic) CGColorSpaceRef colorSpace;
+@property (nonatomic) MTLPixelFormat pixelFormat;
 
 @end
 
@@ -109,23 +128,52 @@ static void ResumeApp()
 - (id)init
 {
     id result = [super init];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLaunching:)
                                                  name:UIApplicationDidFinishLaunchingNotification
                                                object:nil];
+
     return result;
+}
+
+- (void)dealloc
+{
+    CGColorSpaceRelease(_colorSpace);
+}
+
+- (void)reset
+{
+    self.needsFrameTexture = NO;
 }
 
 - (CIImage*)createImage
 {
-    CIImage* image = nil;
-    CIImage* frameImage = self.frameImage;
-    if (frameImage) {
-        image = [[frameImage imageBySettingAlphaOneInExtent:self.frameImage.extent]
-                 imageByApplyingOrientation:kCGImagePropertyOrientationDownMirrored];
-        self.frameImage = nil;
+    MTLTextureRef metalTexture = nil;
+    @synchronized(self.renderedFrameTextures) {
+        metalTexture = [self.renderedFrameTextures firstObject];
+        if (metalTexture) {
+            [self.renderedFrameTextures removeObjectAtIndex:0];
+        }
     }
-    self.needsFrameImage = YES;
+    
+    if (self.busyFrameTexture) {
+        @synchronized(self.frameTextures) {
+            [self.frameTextures addObject:self.busyFrameTexture];
+        }
+    }
+    self.busyFrameTexture = metalTexture;
+    CIImage* image = nil;
+
+    if (metalTexture) {
+        static NSDictionary* options = @{kCIContextCacheIntermediates:@NO};
+        
+        CIImage* frameImage = [CIImage imageWithMTLTexture:metalTexture options:options];
+        
+        image = [[frameImage imageBySettingAlphaOneInExtent:frameImage.extent]
+                 imageByApplyingOrientation:kCGImagePropertyOrientationDownMirrored];
+        self.droppedFrames = 0;
+    }
+    self.needsFrameTexture = YES;
     return image;
 }
 
@@ -143,38 +191,107 @@ static void ResumeApp()
     }
 }
 
-- (void)onBeforeMainDisplaySurfaceRecreate:(struct RenderingSurfaceParams*)params
+-(void)onAfterMainDisplaySurfaceRecreate
 {
-    [super onBeforeMainDisplaySurfaceRecreate:params];
-    if (self.hasMetalRendering) {
-        if (params->renderH > 0 && params->renderW > 0) {
-            params->useCVTextureCache = YES;
+    UnityDisplaySurfaceMTL* surface = (UnityDisplaySurfaceMTL*) GetMainDisplaySurface();
+    
+    if (self.frameTextures == nil) {
+        self.frameTextures = [@[] mutableCopy];
+        self.renderedFrameTextures = [@[] mutableCopy];
+
+        NSInteger width = surface->targetW;
+        NSInteger height = surface->targetH;
+
+        EColorSpace activeColorSpace = GetActiveColorSpace();
+      
+        if (activeColorSpace == kGammaColorSpace || surface->wideColor) {
+            self.colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceLinearSRGB);
+            self.pixelFormat = MTLPixelFormatBGRA8Unorm;
+        } else {
+            self.colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+            self.pixelFormat = MTLPixelFormatBGRA8Unorm_sRGB;
+        }
+        MTLTextureDescriptor *descriptor =
+            [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:self.pixelFormat
+                                                               width:width
+                                                              height:height
+                                                           mipmapped:NO];
+    
+        descriptor.usage = MTLTextureUsageShaderWrite|MTLTextureUsageShaderRead;
+
+        MTLDeviceRef device = UnityGetMetalDevice();
+
+        @synchronized (self.frameTextures) {
+            for (int i = 0; i < 3; ++i) {
+                MTLTextureRef frameTexture = [device newTextureWithDescriptor:descriptor];
+                [self.frameTextures addObject:frameTexture];
+            }
+        }
+        NSDictionary* options = @{kCIContextCacheIntermediates:@NO, kCIContextUseSoftwareRenderer:@NO};
+        if (@available(iOS 13.0, *)) {
+            self.ciContext = [CIContext contextWithMTLCommandQueue:UnityGetMetalCommandQueue() options:options];
+        } else {
+            self.ciContext = [CIContext contextWithMTLDevice:device options:options];
         }
     }
-    self.frameImage = nil;
-    self.needsFrameImage = false;
 }
-
+    
 -(void)onFrameResolved
 {
-    if (self.needsFrameImage) {
-        self.needsFrameImage = NO;
-        if (self.frameImage == nil) {
-            [UnityCurrentMTLCommandBuffer() addCompletedHandler:^(MTLCommandBufferRef buffer){
-                UnityDisplaySurfaceMTL* surface = (UnityDisplaySurfaceMTL*) GetMainDisplaySurface();
-                
-                if (surface) {
-                    id<MTLTexture> metalTexture = GetMetalTextureFromCVTextureCache(surface->cvTextureCacheTexture);
-             
-                    self.frameImage = [CIImage imageWithMTLTexture:metalTexture options:nil];
+    if (self.needsFrameTexture) {
+        if (self.droppedFrames > 10) {
+            NSArray *copiedFrames;
+            @synchronized(self.renderedFrameTextures) {
+                copiedFrames = [NSArray arrayWithArray:self.renderedFrameTextures ];
+                [self.renderedFrameTextures removeAllObjects];
+            }
+            @synchronized(self.frameTextures) {
+                [self.frameTextures addObjectsFromArray:copiedFrames];
+                if (self.busyFrameTexture) {
+                    [self.frameTextures addObject:self.busyFrameTexture];
+                    self.busyFrameTexture = nil;
                 }
-            }];
+            }
+            self.needsFrameTexture = NO;
+            self.droppedFrames = 0;
+            return;
+        }
+
+        MTLTextureRef frameTexture = nil;
+
+        @synchronized (self.frameTextures) {
+            frameTexture = [self.frameTextures firstObject];
+            if (frameTexture) {
+                [self.frameTextures removeObjectAtIndex:0];
+            }
+        }
+        
+        if (frameTexture) {
+            UnityDisplaySurfaceMTL* surface = (UnityDisplaySurfaceMTL*) GetMainDisplaySurface();
+
+            MTLTextureRef metalTexture = surface->targetColorRT ? surface->targetColorRT :
+                        surface->systemColorRB;
+            static NSDictionary* options = @{kCIContextCacheIntermediates:@NO};
+
+            CIImage *image = [CIImage imageWithMTLTexture:metalTexture options:options];
+            MTLCommandBufferRef bufferRef = UnityCurrentMTLCommandBuffer();
+            
+            [self.ciContext render:image
+                      toMTLTexture:frameTexture
+                     commandBuffer:bufferRef
+                            bounds:CGRectMake(0, 0, surface->targetW, surface->targetH)
+                        colorSpace:self.colorSpace];
+            @synchronized(self.renderedFrameTextures) {
+                [self.renderedFrameTextures addObject: frameTexture];
+            }
+        } else {
+            self.droppedFrames++;
         }
     }
 }
 @end
 
-static SKZRenderDelegate *sRenderDelgate = [[SKZRenderDelegate alloc] init];
+static SKZRenderDelegate *sRenderDelegate = [[SKZRenderDelegate alloc] init];
 
 @interface SKZAppDelegate : NSProxy  <UIApplicationDelegate>
 
@@ -251,6 +368,15 @@ BOOL isReportingScore = false;
 - (void)tournamentWillBegin:(NSDictionary *)gameParameters
               withMatchInfo:(SKZMatchInfo *)matchInfo
 {
+    if (![gameParameters count] && sSkillzEnvironment != SkillzProduction) {
+        // if server has no game parameters, then check info.plist for a "gameParameters" dictionary
+        NSDictionary *infoGameParameters = [[[NSBundle mainBundle] infoDictionary]
+                          objectForKey:@"gameParameters"];
+        if (infoGameParameters) {
+            gameParameters = infoGameParameters;
+        }
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         ResumeApp();
         isReportingScore = false;
@@ -429,11 +555,13 @@ void UnitySendMessage(const char *obj, const char *method, const char *msg);
 
 + (CIImage*)getFrame
 {
-    return [sRenderDelgate createImage];
+    return [sRenderDelegate createImage];
 }
 
 + (BOOL)supportsUnityRecording
 {
+    [sRenderDelegate reset];
+   
     return UnitySelectedRenderingAPI() == apiMetal;
 }
 
@@ -544,6 +672,7 @@ extern "C" void _skillzInitForGameIdAndEnvironment(const char *gameId, const cha
                                                                      userInfo:nil];
         [badEnvironmentException raise];
     }
+    sSkillzEnvironment = skillzEnvironment;
     
     [[Skillz skillzInstance] setGameHasSyncBot:NO];
     [[Skillz skillzInstance] initWithGameId:gameIdString
@@ -1040,6 +1169,82 @@ extern "C" void _updateProgressionUserData(int requestID, const char* progressio
     }];
 }
 
+extern "C" void _getProgessionCurrentSeason(int requestID)
+{
+    [[Skillz skillzInstance] getCurrentSeason:^(SKZSeason *season){
+        
+        NSString *seasonString = season.seasonJson;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetCurrentSeasonSuccessFunc) {
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetCurrentSeasonSuccessFunc(requestID, [seasonString cStringUsingEncoding:NSUTF8StringEncoding]);
+            }
+        });
+    } withFailure:^(NSString * errorString){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetCurrentSeasonFailureFunc) {
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetCurrentSeasonFailureFunc(requestID, [errorString cStringUsingEncoding:NSUTF8StringEncoding]);
+            }
+        });
+        
+    }];
+}
+
+static NSString *parseSeasonsArray(NSArray *seasons) {
+    NSMutableArray *seasonArray = [[NSMutableArray alloc] init];
+    for (SKZSeason *season in seasons) {
+        NSData *data = [season.seasonJson dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        [seasonArray addObject:jsonDict];
+    }
+    NSMutableDictionary *jsonDictionary = [[NSMutableDictionary alloc] init];
+    jsonDictionary[@"seasons"] = seasonArray;
+    
+    // Convert data into a JSON
+    NSError *toJSONError;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:jsonDictionary
+                                                   options:0
+                                                     error:&toJSONError];
+    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return dataString;
+}
+
+extern "C" void _getProgessionPreviousSeasons(int requestID, int count)
+{
+    
+    [[Skillz skillzInstance] getPreviousSeasons:count withSuccess:^(NSArray *seasons) {
+        NSString * dataString = parseSeasonsArray(seasons);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetPreviousSeasonsSuccessFunc) {
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetPreviousSeasonsSuccessFunc(requestID, [dataString cStringUsingEncoding:NSUTF8StringEncoding]);
+            }
+        });
+    } withFailure:^(NSString *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetPreviousSeasonsFailureFunc) {
+                ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetPreviousSeasonsFailureFunc(requestID, [error cStringUsingEncoding:NSUTF8StringEncoding]);
+            }
+        });
+    }];
+}
+
+ extern "C" void _getProgessionNextSeasons(int requestID, int count)
+ {
+     [[Skillz skillzInstance] getNextSeasons:count withSuccess:^(NSArray *seasons) {
+         NSString * dataString = parseSeasonsArray(seasons);
+         dispatch_async(dispatch_get_main_queue(), ^{
+             if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetNextSeasonsSuccessFunc) {
+                 ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetNextSeasonsSuccessFunc(requestID, [dataString cStringUsingEncoding:NSUTF8StringEncoding]);
+             }
+         });
+     } withFailure:^(NSString *error) {
+         dispatch_async(dispatch_get_main_queue(), ^{
+             if (((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetNextSeasonsFailureFunc) {
+                 ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetNextSeasonsFailureFunc(requestID, [error cStringUsingEncoding:NSUTF8StringEncoding]);
+             }
+         });
+     }];
+ }
+
 #pragma mark Progression Callback Setup
 
 extern "C" void _assignOnProgressionGetSuccess(void *funcPtr)
@@ -1061,6 +1266,37 @@ extern "C" void _assignOnProgressionUpdateFailure(void *funcPtr)
 {
     ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionUpdateFailureFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
 }
+
+extern "C" void _assignOnProgressionGetCurrentSeasonSuccess(void *funcPtr)
+{
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetCurrentSeasonSuccessFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
+}
+
+extern "C" void _assignOnProgressionGetCurrentSeasonFailure(void *funcPtr)
+{
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetCurrentSeasonFailureFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
+}
+
+extern "C" void _assignOnProgressionGetPreviousSeasonsSuccess(void *funcPtr)
+{
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetPreviousSeasonsSuccessFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
+}
+
+extern "C" void _assignOnProgressionGetPreviousSeasonsFailure(void *funcPtr)
+{
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetPreviousSeasonsFailureFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
+}
+
+extern "C" void _assignOnProgressionGetNextSeasonsSuccess(void *funcPtr)
+{
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetNextSeasonsSuccessFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
+}
+
+extern "C" void _assignOnProgressionGetNextSeasonsFailure(void *funcPtr)
+{
+    ((UnitySkillzSDKDelegate*)[Skillz skillzInstance].skillzDelegate).onProgressionGetNextSeasonsFailureFunc = reinterpret_cast<void(*)(int, const char*)>(funcPtr);
+}
+
 
 #pragma mark
 #pragma mark Sync API

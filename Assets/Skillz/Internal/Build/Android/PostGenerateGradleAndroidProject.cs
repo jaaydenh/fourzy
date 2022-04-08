@@ -40,6 +40,7 @@ namespace SkillzSDK.Internal.Build.Android
 			AppendLocallySetSdkVersionToGradleProperties(GetProjectGradlePropertiesPath(basePath));
 			EnableAndroidxInGradleProperties(GetProjectGradlePropertiesPath(basePath));
 			EnableR8InGradleProperties(GetProjectGradlePropertiesPath(basePath));
+			AddUnityStreamingAssets(GetProjectGradlePropertiesPath(basePath));
 			AddExportedProjectInGradleProperties(GetProjectGradlePropertiesPath(basePath));
 			ModifyAndroidManifests(basePath);
 			ModifyGradleFile(GetGradlePath(basePath));
@@ -99,6 +100,23 @@ namespace SkillzSDK.Internal.Build.Android
 				}
 			}
 		}
+
+		private void AddUnityStreamingAssets(string projectGradlePropertiesPath)
+		{
+			Debug.Log($"Adding property to '{projectGradlePropertiesPath}' to add Unity Streaming Assests ");
+			
+			const string unityStreamingAssests = "unityStreamingAssets=.unity3d, google-services-desktop.json, google-services.json, GoogleService-Info.plist";
+
+			using (var projectGradleProperties = new GradleProperties(projectGradlePropertiesPath))
+			{
+				if (!projectGradleProperties.FileContents.Contains(unityStreamingAssests))
+				{
+					projectGradleProperties.Append(unityStreamingAssests);
+				}
+				
+			}
+		}
+
 
 		private void EnableR8InGradleProperties(string projectGradlePropertiesPath)
 		{
@@ -165,7 +183,6 @@ namespace SkillzSDK.Internal.Build.Android
 				ExcludeMobileAppKitFromMopub(buildDotGradle);
 				ExcludeMobileAppKitAAR(buildDotGradle);
 
-				ExcludeReactFromImagePicker(buildDotGradle);
 				ExcludeReactFromScrollView(buildDotGradle);
 				ExcludeReactAAR(buildDotGradle);
 
@@ -203,13 +220,6 @@ namespace SkillzSDK.Internal.Build.Android
 			const string mobileAppKitPackage = "com.moat.analytics.mobile.mpub.moat-mobile-app-kit-2.4.5";
 
 			buildDotGradle.ExcludeAARDependency(mobileAppKitPackage);
-		}
-
-		private void ExcludeReactFromImagePicker(BuildDotGradle buildDotGradle)
-		{
-			const string imagePickerPackage = "com.react-native-image-picker:rn-image-picker-android";
-
-			ExcludeReactFromPackage(buildDotGradle, imagePickerPackage);
 		}
 
 		private void ExcludeReactFromScrollView(BuildDotGradle buildDotGradle)

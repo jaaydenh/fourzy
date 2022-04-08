@@ -129,6 +129,15 @@ namespace SkillzSDK.Internal.API.iOS
 		public static extern void _updateProgressionUserData(int requestId, string progressionNamespace, string updatesJSON);
 
 		[DllImport("__Internal")]
+		public static extern void _getProgessionCurrentSeason(int requestId);
+
+		[DllImport("__Internal")]
+		public static extern void _getProgessionPreviousSeasons(int requestId, int count);
+
+		[DllImport("__Internal")]
+		public static extern void _getProgessionNextSeasons(int requestId, int count);
+
+		[DllImport("__Internal")]
 		public static extern void _assignOnProgressionGetSuccess(IntPtr funcPtr);
 
 		[DllImport("__Internal")]
@@ -139,6 +148,24 @@ namespace SkillzSDK.Internal.API.iOS
 
 		[DllImport("__Internal")]
 		public static extern void _assignOnProgressionUpdateFailure(IntPtr funcPtr);
+
+		[DllImport("__Internal")]
+		public static extern void _assignOnProgressionGetCurrentSeasonSuccess(IntPtr funcPtr);
+
+		[DllImport("__Internal")]
+		public static extern void _assignOnProgressionGetCurrentSeasonFailure(IntPtr funcPtr);
+
+		[DllImport("__Internal")]
+		public static extern void _assignOnProgressionGetPreviousSeasonsSuccess(IntPtr funcPtr);
+
+		[DllImport("__Internal")]
+		public static extern void _assignOnProgressionGetPreviousSeasonsFailure(IntPtr funcPtr);
+
+		[DllImport("__Internal")]
+		public static extern void _assignOnProgressionGetNextSeasonsSuccess(IntPtr funcPtr);
+
+		[DllImport("__Internal")]
+		public static extern void _assignOnProgressionGetNextSeasonsFailure(IntPtr funcPtr);
 
 		[DllImport("__Internal")]
 		public static extern void _sendData(IntPtr value, ulong length); //This "UInt64" may need to be an "int"

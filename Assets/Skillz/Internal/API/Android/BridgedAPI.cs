@@ -351,6 +351,33 @@ namespace SkillzSDK.Internal.API.Android
 			}
 		}
 
+		public void GetCurrentSeason(Action<Season> successCallback, Action<string> failureCallback)
+		{
+			using (var skillzProgression = GetSkillzProgression())
+			{
+				CurrentSeasonCallback callback = new CurrentSeasonCallback(successCallback, failureCallback);
+				skillzProgression.CallStatic("getCurrentSeason", callback);
+			}
+		}
+
+		public void GetPreviousSeasons(int count, Action<List<Season>> successCallback, Action<string> failureCallback)
+		{
+			using (var skillzProgression = GetSkillzProgression())
+			{
+				MultipleSeasonCallback callback = new MultipleSeasonCallback(successCallback, failureCallback);
+				skillzProgression.CallStatic("getPreviousSeasons", count, callback);
+			}
+		}
+
+		public void GetNextSeasons(int count, Action<List<Season>> successCallback, Action<string> failureCallback)
+		{
+			using (var skillzProgression = GetSkillzProgression())
+			{
+				MultipleSeasonCallback callback = new MultipleSeasonCallback(successCallback, failureCallback);
+				skillzProgression.CallStatic("getNextSeasons", count, callback);
+			}
+		}
+
 		int ISyncAPI.GetConnectedPlayerCount()
 		{
 			using (var skillzSync = GetSkillzSync())

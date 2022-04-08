@@ -206,7 +206,12 @@ namespace SkillzSDK.Internal.API.iOS
 
 		public bool ReturnToSkillz()
 		{
-			return InteropMethods._returnToSkillz();
+			bool didReturnToSkillz = InteropMethods._returnToSkillz();
+			if (didReturnToSkillz)
+			{
+				_matchInfo = null;
+			}
+			return didReturnToSkillz;
 		}
 
 		public string SDKVersionShort()
@@ -249,6 +254,25 @@ namespace SkillzSDK.Internal.API.iOS
 			// set success/failure Actions that will be called in the progression proxy
 			int requestId = SkillzProgressionProxy.RegisterUpdateCallbacks(successCallback, failureCallback);
 			InteropMethods._updateProgressionUserData(requestId, progressionNamespace, updatesJSON);
+		}
+
+		public void GetCurrentSeason(Action<Season> successCallback, Action<string> failureCallback)
+		{
+			// set success/failure Actions that will be called in the progression proxy
+			int requestId = SkillzProgressionProxy.RegisterGetCurrentSeasonCallbacks(successCallback, failureCallback);
+			InteropMethods._getProgessionCurrentSeason(requestId);
+		}
+
+		public void GetPreviousSeasons(int count, Action<List<Season>> successCallback, Action<string> failureCallback)
+		{
+			int requestId = SkillzProgressionProxy.RegisterGetPreviousSeasonsCallbacks(successCallback, failureCallback);
+			InteropMethods._getProgessionPreviousSeasons(requestId, count);
+		}
+
+		public void GetNextSeasons(int count, Action<List<Season>> successCallback, Action<string> failureCallback)
+		{
+			int requestId = SkillzProgressionProxy.RegisterGetNextSeasonsCallbacks(successCallback, failureCallback);
+			InteropMethods._getProgessionNextSeasons(requestId, count);
 		}
 
 		int ISyncAPI.GetConnectedPlayerCount()
@@ -357,11 +381,23 @@ namespace SkillzSDK.Internal.API.iOS
 			public static Dictionary<int, Action<string>> getFailureCallbackDict;
 			public static Dictionary<int, Action> updateSuccessCallbackDict;
 			public static Dictionary<int, Action<string>> updateFailureCallbackDict;
+			public static Dictionary<int, Action<Season>> getCurrentSeasonSuccessCallbackDict;
+			public static Dictionary<int, Action<string>> getCurrentSeasonFailureCallbackDict;
+			public static Dictionary<int, Action<List<Season>>> getPreviousSeasonsSuccessCallbackDict;
+			public static Dictionary<int, Action<string>> getPreviousSeasonsFailureCallbackDict;
+			public static Dictionary<int, Action<List<Season>>> getNextSeasonsSuccessCallbackDict;
+			public static Dictionary<int, Action<string>> getNextSeasonsFailureCallbackDict;
 
 			private delegate void ProgressionGetSuccess(int requestId, string dataJSON);
 			private delegate void ProgressionGetFailure(int requestId, string errorString);
 			private delegate void ProgressionUpdateSuccess(int requestId);
 			private delegate void ProgressionUpdateFailure(int requestId, string errorString);
+			private delegate void ProgressionGetCurrentSeasonSuccess(int requestId, string seasonJSON);
+			private delegate void ProgressionGetCurrentSeasonFailure(int requestId, string errorString);
+			private delegate void ProgressionGetPreviousSeasonsSuccess(int requestId, string seasonJSON);
+			private delegate void ProgressionGetPreviousSeasonsFailure(int requestId, string errorString);
+			private delegate void ProgressionGetNextSeasonsSuccess(int requestId, string seasonJSON);
+			private delegate void ProgressionGetNextSeasonsFailure(int requestId, string errorString);
 
 			private static int GetNextRequestID()
 			{
@@ -412,6 +448,69 @@ namespace SkillzSDK.Internal.API.iOS
 				}
 			}
 
+			public static int RegisterGetCurrentSeasonCallbacks(Action<Season> successCallback, 
+				Action<string> failureCallback)
+			{
+				int requestId = GetNextRequestID();
+				if (getCurrentSeasonSuccessCallbackDict != null && getCurrentSeasonFailureCallbackDict != null) 
+				{
+					getCurrentSeasonSuccessCallbackDict.Add(requestId, successCallback);
+					getCurrentSeasonFailureCallbackDict.Add(requestId, failureCallback);
+				}
+				return requestId;
+			}
+
+			public static void ClearGetCurrentSeasonCallbacks(int requestId)
+			{
+				if (getCurrentSeasonSuccessCallbackDict != null && getCurrentSeasonFailureCallbackDict != null) 
+				{
+					getCurrentSeasonSuccessCallbackDict.Remove(requestId);
+					getCurrentSeasonFailureCallbackDict.Remove(requestId);
+				}
+			}
+
+			public static int RegisterGetPreviousSeasonsCallbacks(Action<List<Season>> successCallback, 
+				Action<string> failureCallback)
+			{
+				int requestId = GetNextRequestID();
+				if (getPreviousSeasonsSuccessCallbackDict != null && getPreviousSeasonsFailureCallbackDict != null) 
+				{
+					getPreviousSeasonsSuccessCallbackDict.Add(requestId, successCallback);
+					getPreviousSeasonsFailureCallbackDict.Add(requestId, failureCallback);
+				}
+				return requestId;
+			}
+
+			public static void ClearGetPreviousSeasonsCallbacks(int requestId)
+			{
+				if (getPreviousSeasonsSuccessCallbackDict != null && getPreviousSeasonsFailureCallbackDict != null) 
+				{
+					getPreviousSeasonsSuccessCallbackDict.Remove(requestId);
+					getPreviousSeasonsFailureCallbackDict.Remove(requestId);
+				}
+			}
+
+			public static int  RegisterGetNextSeasonsCallbacks(Action<List<Season>> successCallback, 
+				Action<string> failureCallback)
+			{
+				int requestId = GetNextRequestID();
+				if (getNextSeasonsSuccessCallbackDict != null && getNextSeasonsFailureCallbackDict != null) 
+				{
+					getNextSeasonsSuccessCallbackDict.Add(requestId, successCallback);
+					getNextSeasonsFailureCallbackDict.Add(requestId, failureCallback);
+				}
+				return requestId;
+			}
+
+			public static void ClearGetNextSeasonsCallbacks(int requestId)
+			{
+				if (getNextSeasonsSuccessCallbackDict != null && getNextSeasonsFailureCallbackDict != null) 
+				{
+					getNextSeasonsSuccessCallbackDict.Remove(requestId);
+					getNextSeasonsFailureCallbackDict.Remove(requestId);
+				}
+			}
+
 			[MonoPInvokeCallback(typeof(ProgressionGetSuccess))]
 			public static void progressionGetSuccessCallback(int requestId, string dataJSON)
 			{
@@ -459,12 +558,106 @@ namespace SkillzSDK.Internal.API.iOS
 				}
 			}
 
+			[MonoPInvokeCallback(typeof(ProgressionGetCurrentSeasonSuccess))]
+			public static void progressionGetCurrentSeasonSuccessCallback(int requestId, string dataJSON)
+			{
+				if (getCurrentSeasonSuccessCallbackDict != null && getCurrentSeasonSuccessCallbackDict[requestId] != null)
+				{
+					Action<Season> callback = getCurrentSeasonSuccessCallbackDict[requestId];
+					ClearGetCurrentSeasonCallbacks(requestId);	
+					if(dataJSON != null) 
+					{
+						Dictionary<string, object> jsonObj = DeserializeJSONToDictionary(dataJSON);
+        				Season season = new Season(jsonObj);
+						callback(season);
+						return;
+					}
+					callback(null);				
+				}
+			}
+
+			[MonoPInvokeCallback(typeof(ProgressionGetCurrentSeasonFailure))]
+			public static void progressionGetCurrentSeasonFailureCallback(int requestId, string errorString)
+			{
+				if (getCurrentSeasonFailureCallbackDict != null && getCurrentSeasonFailureCallbackDict[requestId] != null)
+				{
+					Action<string> callback = getCurrentSeasonFailureCallbackDict[requestId];
+					ClearGetCurrentSeasonCallbacks(requestId);
+					callback(errorString);
+				}
+			}
+
+			[MonoPInvokeCallback(typeof(ProgressionGetPreviousSeasonsSuccess))]
+			public static void progressionGetPreviousSeasonSuccessCallback(int requestId, string dataJSON)
+			{
+				if (getPreviousSeasonsSuccessCallbackDict != null && getPreviousSeasonsSuccessCallbackDict[requestId] != null)
+				{
+					Action<List<Season>> callback = getPreviousSeasonsSuccessCallbackDict[requestId];
+					ClearGetPreviousSeasonsCallbacks(requestId);	
+					if(dataJSON != null) 
+					{
+						Dictionary<string, object> jsonObj = DeserializeJSONToDictionary(dataJSON);
+						List<Season> parsedSeasons = Season.ParseSeasonsFromJSON(jsonObj);
+						callback(parsedSeasons);
+						return;
+					}
+					callback(null);				
+				}
+			}
+
+			[MonoPInvokeCallback(typeof(ProgressionGetPreviousSeasonsFailure))]
+			public static void progressionGetPreviousSeasonsFailureCallback(int requestId, string errorString)
+			{
+				if (getPreviousSeasonsFailureCallbackDict != null && getPreviousSeasonsFailureCallbackDict[requestId] != null)
+				{
+					Action<string> callback = getPreviousSeasonsFailureCallbackDict[requestId];
+					ClearGetPreviousSeasonsCallbacks(requestId);
+					callback(errorString);
+				}
+			}
+
+			[MonoPInvokeCallback(typeof(ProgressionGetNextSeasonsSuccess))]
+			public static void progressionGetNextSeasonSuccessCallback(int requestId, string dataJSON)
+			{
+				if (getNextSeasonsSuccessCallbackDict != null && getNextSeasonsSuccessCallbackDict[requestId] != null)
+				{
+					Action<List<Season>> callback = getNextSeasonsSuccessCallbackDict[requestId];
+					ClearGetNextSeasonsCallbacks(requestId);	
+					if(dataJSON != null) 
+					{
+						Dictionary<string, object> jsonObj = DeserializeJSONToDictionary(dataJSON);
+						List<Season> parsedSeasons = Season.ParseSeasonsFromJSON(jsonObj);
+						callback(parsedSeasons);
+						return;
+					}
+					callback(null);			
+				}
+			}
+
+			[MonoPInvokeCallback(typeof(ProgressionGetNextSeasonsFailure))]
+			public static void progressionGetNextSeasonsFailureCallback(int requestId, string errorString)
+			{
+				if (getNextSeasonsFailureCallbackDict != null && getNextSeasonsFailureCallbackDict[requestId] != null)
+				{
+					Action<string> callback = getNextSeasonsFailureCallbackDict[requestId];
+					ClearGetNextSeasonsCallbacks(requestId);
+					callback(errorString);
+				}
+			}
+
 			public static void Initialize()
 			{
 				getSuccessCallbackDict = new Dictionary<int, Action<Dictionary<string, ProgressionValue>>>();
 				getFailureCallbackDict = new Dictionary<int, Action<string>>();
 				updateSuccessCallbackDict = new Dictionary<int, Action>();
 				updateFailureCallbackDict = new Dictionary<int, Action<string>>();
+
+				getCurrentSeasonSuccessCallbackDict = new Dictionary<int, Action<Season>>();
+				getCurrentSeasonFailureCallbackDict = new Dictionary<int, Action<string>>();
+				getPreviousSeasonsSuccessCallbackDict = new Dictionary<int, Action<List<Season>>>();
+				getPreviousSeasonsFailureCallbackDict = new Dictionary<int, Action<string>>();
+				getNextSeasonsSuccessCallbackDict = new Dictionary<int, Action<List<Season>>>();
+				getNextSeasonsFailureCallbackDict = new Dictionary<int, Action<string>>();
 
 				var onProgressionGetSuccessFP = new ProgressionGetSuccess(progressionGetSuccessCallback);
 				IntPtr onProgressionGetSuccessIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetSuccessFP);
@@ -481,6 +674,31 @@ namespace SkillzSDK.Internal.API.iOS
 				var onProgressionUpdateFailureFP = new ProgressionUpdateFailure(progressionUpdateFailureCallback);
 				IntPtr onProgressionUpdateFailureIP = Marshal.GetFunctionPointerForDelegate(onProgressionUpdateFailureFP);
 				InteropMethods._assignOnProgressionUpdateFailure(onProgressionUpdateFailureIP);
+
+				var onProgressionGetCurrentSeasonSuccessFP = new ProgressionGetCurrentSeasonSuccess(progressionGetCurrentSeasonSuccessCallback);
+				IntPtr onProgressionGetCurrentSeasonSuccessIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetCurrentSeasonSuccessFP);
+				InteropMethods._assignOnProgressionGetCurrentSeasonSuccess(onProgressionGetCurrentSeasonSuccessIP);
+
+				var onProgressionGetCurrentSeasonFailureFP = new ProgressionGetFailure(progressionGetCurrentSeasonFailureCallback);
+				IntPtr onProgressionGetCurrentSeasonFailureIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetCurrentSeasonFailureFP);
+				InteropMethods._assignOnProgressionGetCurrentSeasonFailure(onProgressionGetCurrentSeasonFailureIP);
+
+				var onProgressionGetPreviousSeasonsSuccessFP = new ProgressionGetPreviousSeasonsSuccess(progressionGetPreviousSeasonSuccessCallback);
+				IntPtr onProgressionGetPreviousSeasonsSuccessIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetPreviousSeasonsSuccessFP);
+				InteropMethods._assignOnProgressionGetPreviousSeasonsSuccess(onProgressionGetPreviousSeasonsSuccessIP);
+
+				var onProgressionGetPreviousSeasonsFailureFP = new ProgressionGetPreviousSeasonsFailure(progressionGetPreviousSeasonsFailureCallback);
+				IntPtr onProgressionGetPreviousSeasonsFailureIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetPreviousSeasonsFailureFP);
+				InteropMethods._assignOnProgressionGetPreviousSeasonsFailure(onProgressionGetPreviousSeasonsFailureIP);
+				
+				var onProgressionGetNextSeasonsSuccessFP = new ProgressionGetNextSeasonsSuccess(progressionGetNextSeasonSuccessCallback);
+				IntPtr onProgressionGetNextSeasonsSuccessIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetNextSeasonsSuccessFP);
+				InteropMethods._assignOnProgressionGetNextSeasonsSuccess(onProgressionGetNextSeasonsSuccessIP);
+
+				var onProgressionGetNextSeasonsFailureFP = new ProgressionGetNextSeasonsFailure(progressionGetNextSeasonsFailureCallback);
+				IntPtr onProgressionGetNextSeasonsFailureIP = Marshal.GetFunctionPointerForDelegate(onProgressionGetNextSeasonsFailureFP);
+				InteropMethods._assignOnProgressionGetNextSeasonsFailure(onProgressionGetNextSeasonsFailureIP);
+
 			}
 		}
 

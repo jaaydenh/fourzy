@@ -16,6 +16,7 @@ namespace SkillzSDK.Internal.Build.iOS
 		private const string LogFormat = "[SKillz] {0}";
 		private const string EnableBitcodeSetting = "ENABLE_BITCODE";
 		private const string No = "NO";
+		private const string CoreImage = "CoreImage.framework";
 
 		public static XcodeProjectSettings Load(string projectPath)
 		{
@@ -75,9 +76,16 @@ namespace SkillzSDK.Internal.Build.iOS
 			ModifyMiscellaneousCore();
 		}
 
+		public void AddFrameworks()
+		{
+			Debug.Log(string.Format(LogFormat, "Adding any necessary frameworks..."));
+			AddFrameworksCore();
+		}
+
 		protected abstract void DisableBitcodeCore();
 		protected abstract void AddRunScriptCore(string buildPhaseName, string shellPath, string shellScript);
 		protected abstract void ModifyMiscellaneousCore();
+		protected abstract void AddFrameworksCore();
 
 		/// <summary>
 		/// Implementation for modifying XCode project settings for Unity 2019.2 and below.
@@ -108,6 +116,11 @@ namespace SkillzSDK.Internal.Build.iOS
 			{
 				// Do nothing
 			}
+
+			protected override void AddFrameworksCore()
+			{
+				// Do nothing
+			}
 		}
 
 #if UNITY_2019_3_OR_NEWER
@@ -128,8 +141,8 @@ namespace SkillzSDK.Internal.Build.iOS
 
 			protected override void DisableBitcodeCore()
 			{
-				xcodeProject.SetBuildProperty(xcodeProject.GetUnityFrameworkTargetGuid(), "ENABLE_BITCODE", "NO");
-				xcodeProject.SetBuildProperty(xcodeProject.GetUnityMainTargetGuid(), "ENABLE_BITCODE", "NO");
+				xcodeProject.SetBuildProperty(xcodeProject.GetUnityFrameworkTargetGuid(), EnableBitcodeSetting, No);
+				xcodeProject.SetBuildProperty(xcodeProject.GetUnityMainTargetGuid(), EnableBitcodeSetting, No);
 			}
 
 			protected override void AddRunScriptCore(string buildPhaseName, string shellPath, string shellScript)
@@ -149,7 +162,21 @@ namespace SkillzSDK.Internal.Build.iOS
 				// Workaround for a 2019.3 bug where `main.mm` won't compile because
 				// <UnityFramework/UnityFramework.h> was missing in the headers search path.
 				xcodeProject.SetBuildProperty(xcodeProject.GetUnityMainTargetGuid(), "HEADER_SEARCH_PATHS", "$(SRCROOT)");
+
+				Debug.Log(string.Format(LogFormat, "Setting validate workspace..."));
+
+				// Workaround for a Xcode 12.3+ change that discourages the use of legacy fat frameworks 
+				// in favor of XCFrameworks
+				xcodeProject.SetBuildProperty(xcodeProject.GetUnityMainTargetGuid(), "VALIDATE_WORKSPACE", "YES");
 			}
+
+			protected override void AddFrameworksCore()
+			{
+				Debug.Log(string.Format(LogFormat, "Adding CoreImage framework to Unity..."));
+				xcodeProject.AddFrameworkToProject(xcodeProject.GetUnityFrameworkTargetGuid(), CoreImage, true);
+			}
+
+
 		}
 #endif
 	}

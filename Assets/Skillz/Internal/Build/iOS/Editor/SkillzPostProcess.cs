@@ -4,6 +4,7 @@ using ActualUnityEditor = UnityEditor;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Google;
 
 namespace SkillzSDK.Internal.Build.iOS
 {
@@ -38,6 +39,37 @@ namespace SkillzSDK.Internal.Build.iOS
 		/// </summary>
 		private const string checkAppendFileName = ".skillzTouch";
 
+		[ActualUnityEditor.Callbacks.PostProcessBuildAttribute(45)] // fires right before pod install
+		public static void PostProcessBuild_iOS(ActualUnityEditor.BuildTarget build, string path)
+		{
+			if (build == ActualUnityEditor.BuildTarget.iOS)
+			{
+				var fileName = path + "/Podfile";
+				List<string> txtLines = File.ReadAllLines(fileName).ToList();
+
+				var mainTargetLine = "target 'Unity-iPhone' do";
+				var scriptLine1 = "  script_phase :name => 'Skillz Postprocess', :script => 'if [ -e \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Skillz.framework/postprocess.sh\" ]; then";
+				var scriptLine2 = "    /bin/sh \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Skillz.framework/postprocess.sh\"";
+				var scriptLine3 = "  fi'";
+
+				txtLines.Insert(txtLines.IndexOf(mainTargetLine) + 1, scriptLine3); // insert lines backwards
+				txtLines.Insert(txtLines.IndexOf(mainTargetLine) + 1, scriptLine2);
+				txtLines.Insert(txtLines.IndexOf(mainTargetLine) + 1, scriptLine1);
+
+				txtLines.Add("post_install do |installer|");
+				txtLines.Add("  installer.pods_project.build_configurations.each do |config|");
+				txtLines.Add("    config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'");
+				txtLines.Add("    config.build_settings['ARCHS'] = 'arm64'");
+				txtLines.Add("    config.build_settings['ENABLE_BITCODE'] = 'NO'");
+				txtLines.Add("  end");
+				txtLines.Add("end");
+
+				txtLines.Add("# This podfile has been modified by the Skillz export");
+
+				File.WriteAllLines(fileName, txtLines);
+			}
+
+		}
 
 		[ActualUnityEditor.Callbacks.PostProcessBuild(9090)]
 		public static void OnPostProcessBuild(ActualUnityEditor.BuildTarget build, string path)
@@ -66,13 +98,6 @@ namespace SkillzSDK.Internal.Build.iOS
 
 			checkAppend.Create().Close();
 
-			bool trySetUp = SetUpSDKFiles (path);
-			if (!trySetUp)
-			{
-				//These failures aren't fatal; the developer can do them manually.
-				UnityEngine.Debug.LogWarning("Skillz XCode export is missing Skillz Framework.");
-			}
-
 			//Set up XCode project settings.
 			var xcodeProjectPath = Path.Combine(path, "Unity-iPhone.xcodeproj/project.pbxproj");
 			Debug.Log($"Loading the XCode project at '{xcodeProjectPath}'");
@@ -82,40 +107,38 @@ namespace SkillzSDK.Internal.Build.iOS
 				using (var xcodeProjectSettings = XcodeProjectSettings.Load(xcodeProjectPath))
 				{
 					xcodeProjectSettings.DisableBitcode();
-					xcodeProjectSettings.AddRunScript();
 					xcodeProjectSettings.ModifyMiscellaneous();
+					xcodeProjectSettings.AddFrameworks();
 				}
 			}
 			catch (System.Exception)
 			{
 				UnityEngine.Debug.LogError("Skillz automated XCode editing failed!");
 			}
-
-			XCProject project = new XCProject (path);
-			if (project != null) {
-				project.AddFile(
-					filePath: path + "/Skillz.framework",
-					parent: project.GetGroup ("Embed Frameworks"),
-					tree: "SOURCE_ROOT",
-					createBuildFiles: true,
-					weak: false,
-					embed: true
-				);
-
-				//AddFile should also add FrameworkSearchPaths if required but doesn't
-				project.AddFrameworkSearchPaths ("$(PROJECT_DIR)");
-				project.AddOtherLDFlags ("-ObjC -lc++ -lz -lsqlite3 -lxml2 -weak_framework PassKit -framework Skillz");
-				project.GccEnableCppExceptions("YES");
-				project.ClangEnableCppStaticDestructors("NO");
-
+#if UNITY_2019_3_OR_NEWER
+			ActualUnityEditor.iOS.Xcode.PBXProject pbProject = new ActualUnityEditor.iOS.Xcode.PBXProject();
+			pbProject.ReadFromString(File.ReadAllText(xcodeProjectPath));
+			if (pbProject != null)
+			{
+				// We need to add the UnityFramework.framework to the "Link Binary with Libraries" step for the main target.
+				// Without this, Skillz won't be able to find the game's app delegate
+				string mainTarget = pbProject.GetUnityMainTargetGuid();
+				pbProject.AddFrameworkToProject(mainTarget, "UnityFramework.framework", false);
+			}
+#endif // UNITY_2019_3_OR_NEWER
+			XCProject project = new XCProject(path);
+			if (project != null)
+			{
 				//Unity_4 doesn't exist so we check for Unity 5 defines.  Unity 6 is used for futureproofing.
 #if !UNITY_5 && !UNITY_6
 				project.AddFile(Path.Combine(Application.dataPath, "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
 				SetAllowSkillzExit(Path.Combine(path, "Libraries", "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
 				SetGameHasSyncBot(Path.Combine(path, "Libraries", "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
-#endif
-				project.Save ();
-			} else {
+#endif // !UNITY_5 && !UNITY_6
+				project.Save();
+			}
+			else
+			{
 				UnityEngine.Debug.LogError("Skillz automated XCode export failed!");
 				return;
 			}
@@ -264,6 +287,6 @@ namespace SkillzSDK.Internal.Build.iOS
 	}
 
 	//Restore the warnings that were disabled.
-	#pragma warning restore 162, 429
+#pragma warning restore 162, 429
 }
 #endif
