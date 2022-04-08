@@ -1012,7 +1012,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            GameplayScreen.SetMatchID(matchId);
+            if (Debug.isDebugBuild) {
+              GameplayScreen.SetMatchID(matchId);
+            }
         }
 
         public void StartNextGame(bool sendResetEvent = false)
