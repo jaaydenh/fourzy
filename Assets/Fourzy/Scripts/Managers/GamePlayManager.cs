@@ -1725,7 +1725,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (game._Type == GameType.SKILLZ_ASYNC)
             {
                 int myMovesLeft = game.myMembers.Count;
+                int movesPlayed = SkillzGameController.Instance.MovesPerMatch - myMovesLeft;
                 int timerLeft = (int)GameplayScreen.MyTimerLeft;
+                int timeTaken = (int)SkillzGameController.Instance.GameInitialTimerValue - (int)GameplayScreen.MyTimerLeft;
+
                 List<PointsEntry> points = new List<PointsEntry>();
                 if (winner)
                 {
@@ -1750,22 +1753,29 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
                 }
                 else
-                {
+                {   
                     points.Add(new PointsEntry(
-                        $"{LocalizationManager.Value("skillz_survival_moves_left_key")}",
-                        myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
+                        $"{LocalizationManager.Value("skillz_loss_moves_played_key")}",
+                        movesPlayed * SkillzGameController.Instance.PointsPerMoveLeftLose));
                 }
 
                 if (SkillzGameController.Instance.GamesPlayed.Count == SkillzGameController.Instance.GamesToPlay - 1)
                 {
-                    //add timer bonus
-                    if (timerLeft > 0)
-                    {
-                        points.Add(new PointsEntry(
-                            $"{LocalizationManager.Value("skillz_time_left_points_key")}",
-                            timerLeft * SkillzGameController.Instance.PointsPerSecond));
+                    if (winner || game.draw) {
+                      //add timer win/draw bonus for time left
+                      if (timerLeft > 0)
+                      {
+                          points.Add(new PointsEntry(
+                              $"{LocalizationManager.Value("skillz_time_left_points_key")}",
+                              timerLeft * SkillzGameController.Instance.PointsPerSecond));
+                      }
+                    } else {
+                      //add timer loss bonus for time taken
+                      points.Add(new PointsEntry(
+                          $"{LocalizationManager.Value("skillz_time_taken_points_key")}",
+                          timeTaken * SkillzGameController.Instance.PointsPerSecond));
                     }
-
+                    
                     // only if this match is more than 1 games
                     if (SkillzGameController.Instance.GamesToPlay > 1)
                     {

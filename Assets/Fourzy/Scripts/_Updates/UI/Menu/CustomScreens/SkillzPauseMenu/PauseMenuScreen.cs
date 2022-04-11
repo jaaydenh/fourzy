@@ -92,6 +92,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         GamePlayManager.Instance.PauseGame();
                         SkillzGameController.Instance.UsePause();
                     }
+                    if (SkillzGameController.Instance.MatchPausesLeft == -1)
+                    {
+                        GamePlayManager.Instance.PauseGame();
+                    }
 
                     break;
 

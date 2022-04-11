@@ -202,7 +202,7 @@
     },
     {
       "key": "exit",
-      "value": "Next"
+      "value": "Quit"
     },
     {
       "key": "failed",
@@ -714,26 +714,34 @@
     },
     {
       "key": "rule_skillz_6",
-      "value": "Score points by winning games, and the amount of time and pieces left."
+      "value": "Score points by winning or drawing games and by the amount of time and pieces used."
     },
     {
       "key": "rule_skillz_6_1",
-      "value": "points for winning a game."
+      "value": "points for a <color=yellow>Win</color>."
     },
     {
       "key": "rule_skillz_6_2",
-      "value": "points for each piece left at the end of the game."
+      "value": "points for each piece left."
     },
     {
       "key": "rule_skillz_6_3",
-      "value": "points for each second left at the end of the game."
+      "value": "point for each second left."
     },
     {
       "key": "rule_skillz_6_4",
-      "value": "points for draw."
+      "value": "points for a <color=yellow>Draw</color>."
     },
     {
       "key": "rule_skillz_6_5",
+      "value": "points for each piece played."
+    },
+    {
+      "key": "rule_skillz_6_6",
+      "value": "point for each second elapsed."
+    },
+    {
+      "key": "rule_skillz_6_7",
       "value": "points for winning all games."
     },
     {
@@ -817,8 +825,12 @@
       "value": "Time left"
     },
     {
-      "key": "skillz_survival_moves_left_key",
-      "value": "Survival bonus"
+      "key": "skillz_time_taken_points_key",
+      "value": "Time elapsed"
+    },
+    {
+      "key": "skillz_loss_moves_played_key",
+      "value": "Moves played"
     },
     {
       "key": "skillz_win_points_key",
@@ -1207,6 +1219,14 @@
     {
       "key": "leaderboard",
       "value": "Leaderboard"
+    },
+    {
+      "key": "win_draw",
+      "value": "Win/Draw"
+    },
+    {
+      "key": "loss",
+      "value": "Loss"
     }
   ]
 }

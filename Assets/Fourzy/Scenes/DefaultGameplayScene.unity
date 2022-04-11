@@ -363,7 +363,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 41
+          selectedMember: 31
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: OnExitTap
@@ -19497,7 +19497,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 39
+          selectedMember: 30
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: OnBGTap
@@ -20635,7 +20635,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 38
+          selectedMember: 28
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: NextGame
@@ -23130,7 +23130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: exit
+  key: next
   updateOnStart: 1
 --- !u!1 &1377256444
 GameObject:
@@ -37602,7 +37602,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 44
+          selectedMember: 34
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: Rematch

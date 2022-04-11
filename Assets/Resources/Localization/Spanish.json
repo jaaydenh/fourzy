@@ -660,6 +660,7 @@
       "key": "room_code",
       "value": "Código de juego"
     },
+    {
       "key": "rule_skillz_1_title",
       "value": "EL OBJETIVO"
     },
@@ -733,6 +734,14 @@
     },
     {
       "key": "rule_skillz_6_5",
+      "value": "puntos por cada pieza jugada al final del juego."
+    },
+    {
+      "key": "rule_skillz_6_6",
+      "value": "puntos por cada segundo pasado al final del juego."
+    },
+    {
+      "key": "rule_skillz_6_7",
       "value": "puntos por ganar todos los juegos."
     },
     {
@@ -836,8 +845,12 @@
       "value": "Tiempo restante"
     },
     {
-      "key": "skillz_survival_moves_left_key",
-      "value": "Bono de supervivencia"
+      "key": "skillz_time_taken_points_key",
+      "value": "Tiempo tomado"
+    },
+    {
+      "key": "skillz_loss_moves_played_key",
+      "value": "Movimientos jugados"
     },
     {
       "key": "skillz_win_points_key",
@@ -1242,6 +1255,14 @@
     {
       "key": "leaderboard",
       "value": "Tabla de Clasificación"
+    },
+    {
+      "key": "win_draw",
+      "value": "Triunfos y Empates"
+    },
+    {
+      "key": "loss",
+      "value": "Derrotas"
     }
   ]
 }

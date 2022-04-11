@@ -99,7 +99,7 @@ namespace Fourzy
         public const int SKILLZ_POINTS_PER_MOVE_LEFT_LOSE = 10;
         public const int SKILLZ_POINTS_PER_MOVE_LEFT_DRAW = 10;
         public const int SKILLZ_GAME_COMPLEXITY = 10;
-        public const int SKILLZ_PAUSES_COUNT_PER_MATCH = 3;
+        public const int SKILLZ_PAUSES_COUNT_PER_MATCH = -1;
         public const int SKILLZ_DEFAULT_AIPROFILE = (int)AIProfile.SimpleAI;
         public const int SKILLZ_DEFAULT_AREA = (int)Area.TRAINING_GARDEN;
         public const string SKILLZ_DEFAULT_OPP_HERD_ID = "red_dragon";
