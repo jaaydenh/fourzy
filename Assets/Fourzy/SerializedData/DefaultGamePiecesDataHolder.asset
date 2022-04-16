@@ -263,3 +263,73 @@ MonoBehaviour:
     profilePicture: {fileID: 21300000, guid: 0f77731c615de8340afe1a9f37be11df, type: 3}
     outlineColor: {r: 0.654902, g: 0.43137258, b: 1, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 0, a: 1}
+  - name: Yerba
+    player1Prefab: {fileID: 1202142597684360824, guid: f2b4944a76863324a81576278ea0ea86,
+      type: 3}
+    player2Prefab: {fileID: 5305385492699706502, guid: e4d6b950e8bfb2944b015cf464347ae6,
+      type: 3}
+    Id: yerba
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.7254902, g: 0.44705886, b: 0.21568629, a: 1}
+    borderColor: {r: 0.627451, g: 0.65882355, b: 0.07450981, a: 1}
+  - name: Walrus
+    player1Prefab: {fileID: 78180811052835537, guid: 96125d02b1c779d4695800cfd4b65eb4,
+      type: 3}
+    player2Prefab: {fileID: 8586467781063211462, guid: 0746ebb87acbce14b951e6b2d19354ce,
+      type: 3}
+    Id: walrus
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.67058825, g: 0.39607847, b: 0.31764707, a: 1}
+    borderColor: {r: 0.17254902, g: 0.09411766, b: 0.058823533, a: 1}
+  - name: Swirl
+    player1Prefab: {fileID: 6188477023890382425, guid: c1d420fdd7db83f4a92369997c37f9bc,
+      type: 3}
+    player2Prefab: {fileID: 9064593978034999151, guid: 243edbd90921a014abc1c936c5b300cf,
+      type: 3}
+    Id: swirl
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.95294124, g: 0.7254902, b: 0.3254902, a: 1}
+    borderColor: {r: 0.30588236, g: 0.07058824, b: 0.08235294, a: 1}
+  - name: Something
+    player1Prefab: {fileID: 6877606298718743324, guid: 8837bc5535a43544d990e8ab21404f81,
+      type: 3}
+    player2Prefab: {fileID: 5058181938613219306, guid: d6de3581c6a8cae4c8c8dab3fbc7f959,
+      type: 3}
+    Id: something
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.9843138, g: 1, b: 0, a: 1}
+    borderColor: {r: 0.42352945, g: 0.13725491, b: 0.13725491, a: 1}
+  - name: SnowFlake
+    player1Prefab: {fileID: 4599403793024128112, guid: 7cce9973d1702cf4f83ef7a85dba32a0,
+      type: 3}
+    player2Prefab: {fileID: 2259838412746510894, guid: eb7472581e4ed6d4b8b2e4309cf835b0,
+      type: 3}
+    Id: snowflake
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.9843138, g: 0.9921569, b: 1, a: 1}
+    borderColor: {r: 0.7058824, g: 0.8196079, b: 0.94117653, a: 1}
+  - name: Skelly
+    player1Prefab: {fileID: 6439039306720856727, guid: 30ba1d1f384f39a4f80739ef2be53440,
+      type: 3}
+    player2Prefab: {fileID: 1026246591571386035, guid: f62156183a0f32c43b714a3df27ddd32,
+      type: 3}
+    Id: skelly
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.9176471, g: 0.86666673, b: 0.8431373, a: 1}
+    borderColor: {r: 0.5882353, g: 0.27450982, b: 0.27450982, a: 1}
+  - name: Serpent
+    player1Prefab: {fileID: 3122855532752495152, guid: 508b2cf8afeb2fb41bb8271c0161bf5e,
+      type: 3}
+    player2Prefab: {fileID: 1957724689536948538, guid: 2f508f9e20a19b843944f20bd627d5a8,
+      type: 3}
+    Id: serpent
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.74509805, g: 0.121568635, b: 0.97647065, a: 1}
+    borderColor: {r: 0.50980395, g: 0, b: 0.94117653, a: 1}
