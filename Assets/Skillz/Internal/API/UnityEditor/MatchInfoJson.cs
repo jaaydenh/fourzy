@@ -12,7 +12,11 @@
 				+ "\"name\": \"Warmup!\""
 				+ "\"isCash\": false, "
 				+ "\"isSynchronous\": false, "
-				+ "\"players\": [{}], "
+                + "\"players\": [{}], "
+				+ "\"isTieBreaker\": false, "
+                + "\"isBracket\": false, "
+                + "\"bracketRound\": 1, "
+                + "\"isVideoAdEntry\": false, "
 				+ "}";
 		}
 	}
