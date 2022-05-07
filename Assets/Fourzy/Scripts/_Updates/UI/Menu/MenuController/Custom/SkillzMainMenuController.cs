@@ -6,9 +6,9 @@ using SkillzSDK;
 using System.Collections;
 using UnityEngine;
 using System;
-// #if UNITY_IOS
+#if UNITY_IOS
 using Unity.Advertisement.IosSupport;
-// #endif
+#endif
 
 namespace Fourzy._Updates.UI.Menu
 {
