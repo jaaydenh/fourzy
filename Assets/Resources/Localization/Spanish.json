@@ -2,11 +2,11 @@
   "items": [
 	{
       "key": "instruction_01",
-      "value": "Fourzy es un juego de 2 jugadores. El objetivo: conseguir 4 seguidos"
+      "value": "Fourzy es un juego de dos jugadores. El objetivo: conectar 4 piezas"
     },
     {
       "key": "instruction_02",
-      "value": "Toca para seleccionar adónde moverte "
+      "value": "Toca para seleccionar adónde moverte"
     },
     {
       "key": "instruction_02a",
@@ -14,7 +14,7 @@
     },
     {
       "key": "instruction_02b",
-      "value": "Toca Fourzy para finalizar tu movimiento."
+      "value": "Toca el Fourzy para finalizar tu movimiento."
     },
     {
       "key": "instruction_03",
@@ -26,23 +26,23 @@
     },
     {
       "key": "instruction_05",
-      "value": "Ahora es el turno del oponente para moverse"
+      "value": "Ahora es el turno de tu oponente para moverse"
     },
     {
       "key": "instruction_06",
-      "value": "Consigue 4 seguidos para ganar"
+      "value": "Conecta 4 piezas para ganar"
     },
     {
       "key": "instruction_07",
-      "value": "También puedes ganar horizontal, vertical o diagonalmente"
+      "value": "También puedes ganar horizontalmente, verticalmente o diagonalmente"
     },
     {
       "key": "instruction_08",
-      "value": "Ahora veamos cuánto has aprendido, ¡pondré a prueba tus habilidades!"
+      "value": "Ahora veamos cuánto has aprendido, ¡probaremos tus habilidades!"
     },
     {
       "key": "instruction_help",
-      "value": "Toca un cuadrado resaltado para obtener ayuda."
+      "value": "Toca uno de los cuadrados resaltados para obtener ayuda."
     },
     {
       "key": "abandoned_room_available",
@@ -454,7 +454,7 @@
     },
     {
       "key": "next",
-      "value": "Próximo"
+      "value": "Siguente"
     },
     {
       "key": "next_game",
@@ -666,11 +666,11 @@
     },
     {
       "key": "rule_skillz_2_title",
-      "value": "HOW TO MOVE"
+      "value": "CÓMO MOVERSE"
     },
     {
       "key": "rule_skillz_3_title",
-      "value": "CÓMO MOVER"
+      "value": "MOVIMIENTO DE PIEZAS"
     },
     {
       "key": "rule_skillz_4_title",
@@ -694,27 +694,27 @@
     },
     {
       "key": "rule_skillz_1",
-      "value": "Fourzy es un juego de estrategia para 2 jugadores. Los jugadores se turnan.\nEl objetivo es conseguir <color=yellow>cuatro seguidos.</color>Esto puede ser horizontal, vertical o diagonal."
+      "value": "Fourzy es un juego de estrategia de dos jugadores. Los jugadores se turnan.\nEl objetivo es <color=yellow>conectar cuatro piezas. </color>Horizontalmente, verticalmente o diagonalmente."
     },
     {
       "key": "rule_skillz_2",
-      "value": "Las piezas comienzan en el exterior del tablero y pueden entrar en cualquier borde <color=yellow>no bloqueado</color>.\nUna pieza entrará en el tablero y continuará en línea recta."
+      "value": "Las piezas comienzan en el exterior del tablero y pueden entrar por cualquier borde <color=yellow>que no este bloqueado</color>.\nCuando una pieza entre al tablero esta continuará en línea recta."
     },
     {
       "key": "rule_skillz_3",
-      "value": "Una pieza continuará hasta que alcance el <color=yellow>borde</color> del tablero o interactúe con una <color=yellow>pieza o ficha</color>."
+      "value": "Una pieza continuará moviéndose hasta que alcance el <color=yellow>borde opuesto</color> del tablero o hasta que interactúe con otra <color=yellow>pieza o ficha</color>."
     },
     {
       "key": "rule_skillz_4",
-      "value": "Las fichas tienen muchos efectos y pueden alterar el movimiento o la dirección de una pieza."
+      "value": "Las fichas tienen varios efectos y pueden alterar el movimiento o la dirección de una pieza."
     },
     {
       "key": "rule_skillz_5",
-      "value": "Tienes un número limitado de piezas. Después de cada movimiento, el número restante de piezas disminuye. Si es tu turno y no tienes piezas, <color=yellow>pierdes el juego</color>."
+      "value": "Tendrás un número limitado de piezas. Después de cada movimiento, el número restante de piezas disminuirá. Si es tu turno y no tienes mas piezas, <color=yellow>perderás el juego</color>."
     },
     {
       "key": "rule_skillz_6",
-      "value": "Gana puntos ganando juegos, y la cantidad de tiempo y piezas restantes."
+      "value": "Ganas puntos por ganar o empatar juegos y por la cantidad de tiempo y piezas restantes."
     },
     {
       "key": "rule_skillz_6_1",
@@ -722,7 +722,7 @@
     },
     {
       "key": "rule_skillz_6_2",
-      "value": "puntos por cada pieza que queda al final del juego."
+      "value": "puntos por cada pieza que quede al final del juego."
     },
     {
       "key": "rule_skillz_6_3",
@@ -746,11 +746,11 @@
     },
     {
       "key": "rule_skillz_7",
-      "value": "Si <color=yellow>ambos</color> jugadores tienen cuatro seguidos, el juego es un <color=yellow>empate</color>. Si un jugador tiene más piezas seguidas, ese jugador gana."
+      "value": "Si <color=yellow>ambos</color> jugadores tienen cuatro piezas seguidas, el juego es un <color=yellow>empate</color>. Si un jugador tiene más piezas seguidas que el otro, este jugador gana."
     },
     {
       "key": "rule_skillz_8",
-      "value": "Cada tablero tendrá una nueva combinación de fichas para aprender y dominar. Use la referencia del token o el signo de interrogación para buscar más información."
+      "value": "Cada tablero tendrá una nueva combinación de fichas para aprender y dominar. Usa el token de signo de interrogación para más información."
     },
     {
       "key": "rule_swipe_down",
@@ -782,7 +782,7 @@
     },
     {
       "key": "rules",
-      "value": "Normas"
+      "value": "Reglas"
     },
     {
       "key": "rules_gauntlet_game",
@@ -830,7 +830,7 @@
     },
     {
       "key": "show_token_instructions",
-      "value": "Mostrar instrucciones de token"
+      "value": "Mostrar las instrucciones de las fichas"
     },
     {
       "key": "skillz_big_win_key",
@@ -990,19 +990,19 @@
     },
     {
       "key": "token_desc_fourway_arrow",
-      "value": "Puede ser izquierda o derecha. Hará que una pieza gire siempre hacia la derecha o hacia la izquierda al pasar por este espacio."
+      "value": "Puede ser izquierda o derecha. Hará que una pieza Fourzy gire siempre hacia la derecha o hacia la izquierda al pasar por este espacio que tenga estas flechas."
     },
     {
       "key": "token_desc_fruit",
-      "value": "Las frutas caen de las fichas de árbol. Cuando un Fourzy pasa sobre una fruta, la fruta se aplasta y se convierte en una ficha pegajosa."
+      "value": "Las frutas son fichas que caen del árbol frutal. Cuando una pieza Fourzy pasa sobre una fruta, la aplasta y esta se convierte en una ficha pegajosa."
     },
     {
       "key": "token_desc_fruit_tree",
-      "value": "Bloqueador. Si un árbol frutal detiene una pieza, aparecerá una fruta en el lado opuesto."
+      "value": "Esta ficha actua como un bloqueador y cuando una pieza Fourzy es detenida por un árbol frutal, una fruta aparecerá en el lado opuesto del que llego la pieza Fourzy."
     },
     {
       "key": "token_desc_ghost",
-      "value": "Un Fourzy puede atravesar un ficha de fantasma pero no puede detenerse en un espacio donde el fantasma esté. "
+      "value": "Una pieza Fourzy puede atravesar un ficha de fantasma pero no puede detenerse en un espacio donde el fantasma esté. "
     },
     {
       "key": "token_desc_hex",
@@ -1010,7 +1010,7 @@
     },
     {
       "key": "token_desc_ice",
-      "value": "FOURZIES se mueven normalmente sobre las hojas de hielo. Pero cuando un Fourzy se encuentre detenido en en una hoja de hielo, otro Fourzy puede empujarlo y la nueva pieza ocupará su lugar."
+      "value": "Las piezas Fourzies se mueven normalmente sobre las hojas de hielo. Pero cuando una pieza Fourzy se encuentre detenida en en una hoja de hielo, otra pieza Fourzy puede empujarla y la nueva pieza ocupará su lugar."
     },
     {
       "key": "token_desc_ice_block",
@@ -1062,7 +1062,7 @@
     },
     {
       "key": "token_fruit_tree",
-      "value": "Árbol de frutas"
+      "value": "Árbol frutal"
     },
     {
       "key": "token_ghost",
