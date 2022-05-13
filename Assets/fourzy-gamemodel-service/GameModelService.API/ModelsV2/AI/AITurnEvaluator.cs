@@ -639,8 +639,10 @@ namespace FourzyGameModel.Model
 
         public SimpleMove GetBestMoveWithoutWinning()
         {
+            //Get some top moves
             List<SimpleMove> Moves = GetTopOkMoves();
-            if (Moves == null) return null;
+            if (Moves == null) Moves = new List<SimpleMove>();
+            
             foreach (SimpleMove m in Moves)
             {
                 bool ok = true;
@@ -650,6 +652,18 @@ namespace FourzyGameModel.Model
                 }
                 if (ok) return m;
             }
+
+            Dictionary<SimpleMove, int> WeightedMoves = ScoreMoves(AvailableSimpleMoves, true);
+            foreach (SimpleMove m in WeightedMoves.Keys)
+            {
+                bool ok = true;
+                foreach (PlayerTurn t in WinningTurns)
+                {
+                    if (t.Moves[0].Equals(m)) { ok = false; break; }
+                }
+                if (ok) return m;
+            }
+
             return null;
         }
 
