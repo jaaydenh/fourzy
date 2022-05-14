@@ -25,6 +25,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 .GetOrAddScreen<OnboardingScreen>()
                 .OpenTutorial(HardcodedTutorials.GetByName("Onboarding"));
         }
+        public void StartTutorialAdventure()
+        {
+            menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
+        }
 
         private void OnPositioningSelected()
         {

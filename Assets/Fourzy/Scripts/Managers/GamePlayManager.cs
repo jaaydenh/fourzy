@@ -1645,6 +1645,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     .CloseOnDecline();
 
                 OnRealtimeOpponentAbandoned();
+                PauseGame();
 
                 otherPlayerForfeit = false;
             }

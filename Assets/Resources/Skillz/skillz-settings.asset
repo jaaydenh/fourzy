@@ -13,26 +13,26 @@ MonoBehaviour:
   m_Name: skillz-settings
   m_EditorClassIdentifier: 
   GameID: 17107
-  Environment: 1
+  Environment: 0
   Orientation: 1
   MatchParameters:
   - Key: Games
-    Value: 1
+    Value: 3
   - Key: Timer
     Value: 60
   - Key: Moves
     Value: 15
   - Key: Level0
-    Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 2, "oppHerdId":
-      "red_dragon", "aiProfile": 27 }'
+    Value: '{ "complexityLow": 300, "complexityHigh": 700, "areaId": 2, "oppHerdId":
+      "red_dragon", "aiProfile": 15 }'
   - Key: Level1
-    Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 4, "oppHerdId":
-      "red_dragon", "aiProfile": 2 }'
+    Value: '{ "complexityLow": 300, "complexityHigh": 350, "areaId": 2, "oppHerdId":"rainbow_bite",
+      "aiProfile": 15 }'
   - Key: Level2
-    Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 8, "oppHerdId":
-      "red_dragon", "aiProfile": 2 }'
-  - Key: RandomSeed
-    Value: 1
+    Value: '{ "complexityLow": 300, "complexityHigh": 400, "areaId": 2, "oppHerdId":
+      "furrzy", "aiProfile": 15 }'
+  - Key: 
+    Value: 
   - Key: 
     Value: 
   - Key: 

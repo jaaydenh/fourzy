@@ -333,7 +333,7 @@ public class MenuItems : MonoBehaviour
         switch (intent)
         {
             case BuildIntent.MOBILE_INFINITY:
-                SetAtlasState("__AdventureMaps", false);
+                SetAtlasState("__AdventureMaps", true);
                 SetAtlasState("__LandscapeBuildOnly", true);
 
                 break;

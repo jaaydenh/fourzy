@@ -102,6 +102,11 @@ namespace Fourzy
                     LoadTutorialBotGames();
 
                     break;
+
+                case BuildIntent.MOBILE_INFINITY:
+                    LoadPuzzlePacks();
+
+                    break;
             }
 
             LoadInstructionBoards();
