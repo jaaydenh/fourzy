@@ -13,7 +13,9 @@
                 
             this.HerdId = HerdId;
 
-            if (Name == "") Name = Constants.GenerateName(4);
+            //if (Name == "") Name = Constants.GenerateName(4);
+            if (Name == "") Name = "Fourzy";
+
             this.Name = Name;
         }
     }

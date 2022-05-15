@@ -23,12 +23,48 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes = new Dictionary<BoardRecipe, int>();
 
             //Easy
-            this.Recipes.Add(SimpleArrow1(), 2);
-            this.Recipes.Add(SimpleArrow2(), 2);
-            this.Recipes.Add(SimpleArrow3(), 2);
-            this.Recipes.Add(SimpleArrow4(), 2);
-            this.Recipes.Add(SimpleArrow5(), 2);
-            this.Recipes.Add(SimpleArrow6(), 2);
+            this.Recipes.Add(SimpleArrow1(), 1);
+            this.Recipes.Add(SimpleArrow2(), 1);
+            this.Recipes.Add(SimpleArrow3(), 1);
+            this.Recipes.Add(SimpleArrow4(), 1);
+            this.Recipes.Add(SimpleArrow5(), 1);
+            this.Recipes.Add(SimpleArrow6(), 1);
+
+
+            this.Recipes.Add(DoubleLoop1(), 2);
+            this.Recipes.Add(DoubleLoop2(), 4);
+            this.Recipes.Add(TripleLoop(), 2);
+            this.Recipes.Add(FourLoops(), 1);
+            this.Recipes.Add(ArrowTurns(), 4);
+
+            this.Recipes.Add(CrossArrows1(), 4);
+            this.Recipes.Add(CrossArrows2(), 4);
+
+            this.Recipes.Add(FourWayArrows1(), 4);
+            this.Recipes.Add(FourWayArrows2(), 4);
+            this.Recipes.Add(FourWayArrows3(), 4);
+            this.Recipes.Add(FourWayArrows4(), 4);
+            this.Recipes.Add(Rifts1(), 4);
+
+            this.Recipes.Add(BackAndFourth2(), 4);
+            this.Recipes.Add(BackAndFourth4(), 4);
+
+
+            this.Recipes.Add(ArrowSurroundTwoSpaces(), 4);
+            this.Recipes.Add(ArrowSurroundFourSpaces(), 4);
+            this.Recipes.Add(ArrowFullSurroundTwoSpaces(), 4);
+            this.Recipes.Add(RiverOfArrows(), 4);
+            this.Recipes.Add(RiverOfArrowsWithTree(), 8);
+            this.Recipes.Add(TwoRiversOfArrows(), 4);
+            this.Recipes.Add(PathOfArrows(), 4);
+            this.Recipes.Add(TwoPathsOfArrows(), 10);
+
+
+            this.Recipes.Add(SimpleBlockers1(), 4);
+            this.Recipes.Add(SimpleBlockers2(), 4);
+            this.Recipes.Add(SimpleBlockers3(), 4);
+            this.Recipes.Add(SimpleBlockers4(), 4);
+            this.Recipes.Add(SimpleBlockers5(), 4);
             this.Recipes.Add(Simple1(), 2);
             this.Recipes.Add(Simple2(), 2);
             this.Recipes.Add(Simple3(), 2);
@@ -90,12 +126,12 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes.Add(HalfArrows(), 10);
             this.Recipes.Add(HalfStickyFruit(), 10);
             this.Recipes.Add(StickyTiles(), 10);
-            this.Recipes.Add(StickyTiles2(), 20);
+            this.Recipes.Add(StickyTiles2(), 10);
             this.Recipes.Add(MiniCircles(), 10);
-            this.Recipes.Add(StickyRiverRecipe(), 30);
-            this.Recipes.Add(StickyRiver3(), 30);
-            this.Recipes.Add(StickyRiver2(), 30);
-            this.Recipes.Add(DoubleStickyRiver2(), 30);
+            this.Recipes.Add(StickyRiverRecipe(), 10);
+            this.Recipes.Add(StickyRiver3(), 10);
+            this.Recipes.Add(StickyRiver2(), 10);
+            this.Recipes.Add(DoubleStickyRiver2(), 10);
         }
 
         //SIMPLE
@@ -148,12 +184,235 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             return Garden;
         }
 
+        private BoardRecipe DoubleLoop1()
+        {
+            BoardRecipe Garden = new BoardRecipe("DoubleLoop1", 300, 500);
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new ArrowCycleFeature());
+            return Garden;
+        }
+
+        private BoardRecipe DoubleLoop2()
+        {
+            BoardRecipe Garden = new BoardRecipe("DoubleLoop2", 300, 500);
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
+
+            return Garden;
+        }
+
+        private BoardRecipe TripleLoop()
+        {
+            BoardRecipe Garden = new BoardRecipe("TripleLoop", 300, 500);
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new ArrowCycleFeature());
+
+            return Garden;
+        }
+
+        private BoardRecipe FourLoops()
+        {
+            BoardRecipe Garden = new BoardRecipe("FourLoops", 300, 600);
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new ArrowCycleFeature());
+
+            return Garden;
+        }
+
+        private BoardRecipe ArrowTurns()
+        {
+            BoardRecipe Garden = new BoardRecipe("ArrowTurns", 400, 600);
+            Garden.AddIngredient(new ArrowDoubleTurnFeature());
+            Garden.AddIngredient(new ArrowDoubleTurnFeature());
+
+            return Garden;
+        }
+
+        private BoardRecipe BackAndFourth2()
+        {
+            BoardRecipe Garden = new BoardRecipe("BackAndForth2", 400, 600);
+            Garden.AddIngredient(new BackAndForthArrowFeature());
+            Garden.AddIngredient(new BackAndForthArrowFeature());
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+
+            return Garden;
+        }
+
+
+        private BoardRecipe BackAndFourth4()
+        {
+            BoardRecipe Garden = new BoardRecipe("BackAndForth4", 400, 600);
+            Garden.AddIngredient(new BackAndForthArrowFeature());
+            Garden.AddIngredient(new BackAndForthArrowFeature());
+            Garden.AddIngredient(new BackAndForthArrowFeature());
+            Garden.AddIngredient(new BackAndForthArrowFeature());
+
+            return Garden;
+        }
+
+
+
+        private BoardRecipe RiverOfArrows()
+        {
+            BoardRecipe Garden = new BoardRecipe("RiverOfArrows", 400, 600);
+            Garden.AddIngredient(new RiverOfArrowsFeature());
+
+            return Garden;
+        }
+
+        private BoardRecipe PathOfArrows()
+        {
+            BoardRecipe Garden = new BoardRecipe("PathOfArrows", 400, 600);
+            Garden.AddIngredient(new PathOfArrowsFeature());
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+
+
+            return Garden;
+        }
+
+        private BoardRecipe TwoPathsOfArrows()
+        {
+            BoardRecipe Garden = new BoardRecipe("TwoPathsOfArrows", 400, 600);
+            Garden.AddIngredient(new PathOfArrowsFeature());
+            Garden.AddIngredient(new PathOfArrowsFeature());
+
+            return Garden;
+        }
+
+
+        private BoardRecipe RiverOfArrowsWithTree()
+        {
+            BoardRecipe Garden = new BoardRecipe("RiverOfArrowsWithTree", 400, 600);
+            Garden.AddIngredient(new RiverOfArrowsFeature());
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.EMPTY, true));
+
+            return Garden;
+        }
+
+
+        private BoardRecipe TwoRiversOfArrows()
+        {
+            BoardRecipe Garden = new BoardRecipe("TwoRiversOfArrows", 400, 600);
+            Garden.AddIngredient(new RiverOfArrowsFeature());
+            Garden.AddIngredient(new RiverOfArrowsFeature());
+
+            return Garden;
+        }
+
+
+        private BoardRecipe CrossArrows1()
+        {
+            BoardRecipe Garden = new BoardRecipe("CrossArrows1", 300, 500);
+            Garden.AddIngredient(new CrossArrowFeature());
+            Garden.AddIngredient(new CrossArrowFeature());
+ 
+            return Garden;
+        }
+
+        private BoardRecipe CrossArrows2()
+        {
+            BoardRecipe Garden = new BoardRecipe("CrossArrows2", 700, 800);
+            Garden.AddIngredient(new CrossArrowFeature());
+            Garden.AddIngredient(new CrossArrowFeature());
+            Garden.AddIngredient(new CrossArrowFeature());
+            Garden.AddIngredient(new CrossArrowFeature());
+
+
+            return Garden;
+        }
+
+        private BoardRecipe ArrowSurroundTwoSpaces()
+        {
+            BoardRecipe Garden = new BoardRecipe("ArrowSurroundTwoSpaces", 100, 600);
+            Garden.AddIngredient(new ArrowFourSidesFeature(Rotation.CLOCKWISE));
+            Garden.AddIngredient(new ArrowFourSidesFeature(Rotation.COUNTER_CLOCKWISE));
+
+            return Garden;
+        }
+
+        private BoardRecipe ArrowSurroundFourSpaces()
+        {
+            BoardRecipe Garden = new BoardRecipe("ArrowSurroundFourSpaces", 100, 600);
+            Garden.AddIngredient(new ArrowFourSidesFeature(new BoardLocation(3,3), Rotation.CLOCKWISE));
+            Garden.AddIngredient(new ArrowFourSidesFeature(Rotation.COUNTER_CLOCKWISE));
+            Garden.AddIngredient(new ArrowFourSidesFeature(Rotation.CLOCKWISE));
+            Garden.AddIngredient(new ArrowFourSidesFeature(Rotation.COUNTER_CLOCKWISE));
+
+
+            return Garden;
+        }
+
+        private BoardRecipe ArrowFullSurroundTwoSpaces()
+        {
+            BoardRecipe Garden = new BoardRecipe("ArrowFullSurroundTwoSpaces", 100, 600);
+            Garden.AddIngredient(new ArrowFullSurroundFeature(Rotation.CLOCKWISE));
+            Garden.AddIngredient(new ArrowFullSurroundFeature(Rotation.COUNTER_CLOCKWISE));
+
+            return Garden;
+        }
+
+
+
+
+        private BoardRecipe FourWayArrows1()
+        {
+            BoardRecipe Garden = new BoardRecipe("FourWayArrows1", 100, 600);
+            Garden.AddIngredient(new ArrowSingularityFeature());
+
+            return Garden;
+        }
+
+        private BoardRecipe FourWayArrows2()
+        {
+            BoardRecipe Garden = new BoardRecipe("FourWayArrows2", 100, 800);
+            Garden.AddIngredient(new ArrowSingularityFeature());
+            Garden.AddIngredient(new ArrowSingularityFeature());
+
+
+            return Garden;
+        }
+
+        private BoardRecipe FourWayArrows3()
+        {
+            BoardRecipe Garden = new BoardRecipe("FourWayArrows3", 100, 800);
+            Garden.AddIngredient(new ArrowSingularityFeature());
+            Garden.AddIngredient(new ArrowSingularityFeature());
+            Garden.AddIngredient(new ArrowSingularityFeature());
+            Garden.AddIngredient(new ArrowSingularityFeature());
+
+            return Garden;
+        }
+
+        private BoardRecipe FourWayArrows4()
+        {
+            BoardRecipe Garden = new BoardRecipe("FourWayArrows4", 100, 800);
+            Garden.AddIngredient(new ArrowSingularityFeature());
+            Garden.AddIngredient(new ArrowSingularityFeature());
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Garden;
+        }
+
+
+
+        private BoardRecipe Rifts1()
+        {
+            BoardRecipe Garden = new BoardRecipe("Rifts1", 100, 800);
+            Garden.AddIngredient(new ZipperFeature());
+
+            return Garden;
+        }
+
         private BoardRecipe Empty1()
         {
             BoardRecipe Garden = new BoardRecipe("Empty1",336, 336);
             Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
+
         private BoardRecipe Empty2()
         {
             BoardRecipe Garden = new BoardRecipe("Empty2",362,362);
@@ -201,6 +460,45 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
+
+        private BoardRecipe SimpleBlockers1()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleBlockers1", 200, 500);
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.FourRandomRingTwo, AddTokenMethod.ALWAYS, true));
+            return Garden;
+        }
+
+        private BoardRecipe SimpleBlockers2()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleBlockers2", 200, 500);
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoSymmetricRingTwo, AddTokenMethod.ALWAYS, true));
+            return Garden;
+        }
+
+        private BoardRecipe SimpleBlockers3()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleBlockers3", 200, 500);
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.ACouple, AddTokenMethod.ALWAYS, true));
+            return Garden;
+        }
+
+        private BoardRecipe SimpleBlockers4()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleBlockers4", 200, 400);
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
+            return Garden;
+        }
+
+        private BoardRecipe SimpleBlockers5()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleBlockers5", 200, 500);
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.OneRandomRingThree, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.OneRandomRingTwo, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.OneRandomRingOne, AddTokenMethod.ALWAYS, true));
+            return Garden;
+        }
+
+
 
         private BoardRecipe OneLineOfGoop()
         {

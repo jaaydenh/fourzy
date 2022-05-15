@@ -8,14 +8,14 @@ namespace FourzyGameModel.Model
     //Do not always make winning move
     //Do not always make the best move, by evaluating top 10 moves and picking one at random.
 
-    public class WelcomeBotAI : AIPlayer
+    public class WelcomeBotAIOrig : AIPlayer
     {
         private GameState EvalState { get; set; }
         private int NumberOfMovesToConsider = 6;
-        private int NumberOfMovesBeforeStopBlocking = 8;
+        private int NumberOfMovesBeforeStopBlocking = 6;
         private int NumberTurnsBeforeWinning = 30;
 
-        public WelcomeBotAI(GameState State)
+        public WelcomeBotAIOrig(GameState State)
         {
             this.EvalState = State;
         }
@@ -39,10 +39,6 @@ namespace FourzyGameModel.Model
                 }
             }
 
-            //If there are no moves that do not win, make the first one.
-            if (Moves.Count == 0)
-                return new PlayerTurn(AI.AvailableSimpleMoves.First());
-                    
             //Create a new evaluator minus the winning moves.
             AI = new AITurnEvaluator(EvalState, Moves);
 
@@ -55,12 +51,7 @@ namespace FourzyGameModel.Model
                 Move = AI.GetRandomOkMove(NumberOfMovesToConsider);
 
             //If there are no ok moves, then make the best move possible.
-            if (Move == null)
-            {
-                return new PlayerTurn(AI.GetBestMoveWithoutWinning());
-            }
-                        
-            //return new PlayerTurn(AI.GetBestLostCauseMove());
+            if (Move == null) return new PlayerTurn(AI.GetBestLostCauseMove());
 
             return new PlayerTurn(Move);
         }
