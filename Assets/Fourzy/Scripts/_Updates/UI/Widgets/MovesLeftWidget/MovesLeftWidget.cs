@@ -2,18 +2,25 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
+using Fourzy._Updates.UI.Helpers;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class MovesLeftWidget : WidgetBase
     {
-        public RectTransform container;
-        public GameObject gamePieceHolderPrefab;
-        public Material colorBlendMaterial;
+        [SerializeField]
+        private RectTransform container;
+        [SerializeField]
+        private GameObject gamePieceHolderPrefab;
+        [SerializeField]
+        private Material colorBlendMaterial;
 
         private List<GameObject> gamePieceHolders = new List<GameObject>();
+        private OnRatio onRatio;
+        private ContentSizeFitter contentSizeFitter;
         private ClientFourzyPuzzle puzzle;
 
         public MovesLeftWidget SetData(ClientFourzyPuzzle puzzle)
@@ -75,6 +82,24 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 Show(.3f);
             }
+        }
+
+        public void OnPositionUpdated()
+        {
+            onRatio.CheckOrientation();
+        }
+
+        public void AutoResize(bool value)
+        {
+            contentSizeFitter.enabled = value;
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            onRatio = GetComponent<OnRatio>();
+            contentSizeFitter = GetComponent<ContentSizeFitter>();
         }
     }
 }

@@ -456,31 +456,43 @@ namespace Fourzy
 
         public static void AddHints(int number, string ticket = "")
         {
-#if !MOBILE_SKILLZ
-            if (number > 0)
+
+            switch (GameManager.Instance.buildIntent)
             {
-                PlayFabClientAPI.AddUserVirtualCurrency(
-                    new AddUserVirtualCurrencyRequest()
-                    {
-                        VirtualCurrency = Constants.HINTS_CURRENCY_KEY,
-                        Amount = number
-                    },
-                    OnHintsAdded,
-                    ModifyCurrencyError,
-                    ticket);
+                // case BuildIntent.DESKTOP_REGULAR:
+                // case BuildIntent.MOBILE_REGULAR:
+                //     if (number > 0)
+                //     {
+                //         PlayFabClientAPI.AddUserVirtualCurrency(
+                //             new AddUserVirtualCurrencyRequest()
+                //             {
+                //                 VirtualCurrency = Constants.HINTS_CURRENCY_KEY,
+                //                 Amount = number
+                //             },
+                //             OnHintsAdded,
+                //             ModifyCurrencyError,
+                //             ticket);
+                //     }
+                //     else if (number < 0)
+                //     {
+                //         PlayFabClientAPI.SubtractUserVirtualCurrency(
+                //             new SubtractUserVirtualCurrencyRequest()
+                //             {
+                //                 VirtualCurrency = Constants.HINTS_CURRENCY_KEY,
+                //                 Amount = -number,
+                //             },
+                //             OnHintsAdded,
+                //             ModifyCurrencyError,
+                //             ticket);
+                //     }
+                //     break;
+
+                case BuildIntent.MOBILE_INFINITY:
+                case BuildIntent.MOBILE_SKILLZ:
+                    OnHintsValueUpdated(PlayerPrefsWrapper.GetHints() + number, ticket);
+
+                    break;
             }
-            else if (number < 0)
-            {
-                PlayFabClientAPI.SubtractUserVirtualCurrency(new SubtractUserVirtualCurrencyRequest()
-                {
-                    VirtualCurrency = Constants.HINTS_CURRENCY_KEY,
-                    Amount = -number,
-                },
-                OnHintsAdded,
-                ModifyCurrencyError,
-                ticket);
-            }
-#endif
         }
 
         public static void OnHintsValueUpdated(int value, string token = "")

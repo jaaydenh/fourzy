@@ -29,23 +29,45 @@ namespace FourzyGameModel.Model
             this.Width = Width;
             this.Height = Height;
         }
+        
+        public ArrowFourSidesFeature(Rotation Rotation)
+        {
+            this.Insert = new BoardLocation(0,0);
+            this.Rotation = Rotation;
+            this.Name = "Arrow Four Sides " + Rotation.ToString();
+            this.Type = IngredientType.SMALLFEATURE;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
+            this.Width = Width;
+            this.Height = Height;
+        }
 
         //Not perfect.  The insert location might not match the dot convention.
         public void Build(GameBoard Board)
         {
-            if (Rotation == Rotation.CLOCKWISE)
+            BoardLocation execute = new BoardLocation(0, 0);
+
+            if (Insert.Row == 0 && Insert.Column == 0)
             {
-                Board.AddToken(new ArrowToken(Direction.RIGHT), Insert.Neighbor(Direction.UP));
-                Board.AddToken(new ArrowToken(Direction.DOWN), Insert.Neighbor(Direction.RIGHT));
-                Board.AddToken(new ArrowToken(Direction.LEFT), Insert.Neighbor(Direction.DOWN));
-                Board.AddToken(new ArrowToken(Direction.UP), Insert.Neighbor(Direction.LEFT));
+                execute = Board.Random.RandomLocation(new BoardLocation(3, 3), 2, 2);
             }
             else
             {
-                Board.AddToken(new ArrowToken(Direction.LEFT), Insert.Neighbor(Direction.UP));
-                Board.AddToken(new ArrowToken(Direction.UP), Insert.Neighbor(Direction.RIGHT));
-                Board.AddToken(new ArrowToken(Direction.RIGHT), Insert.Neighbor(Direction.DOWN));
-                Board.AddToken(new ArrowToken(Direction.DOWN), Insert.Neighbor(Direction.LEFT));
+                execute = Insert;
+            }
+
+            if (Rotation == Rotation.CLOCKWISE)
+            {
+                Board.AddToken(new ArrowToken(Direction.RIGHT), execute.Neighbor(Direction.UP));
+                Board.AddToken(new ArrowToken(Direction.DOWN), execute.Neighbor(Direction.RIGHT));
+                Board.AddToken(new ArrowToken(Direction.LEFT), execute.Neighbor(Direction.DOWN));
+                Board.AddToken(new ArrowToken(Direction.UP), execute.Neighbor(Direction.LEFT));
+            }
+            else
+            {
+                Board.AddToken(new ArrowToken(Direction.LEFT), execute.Neighbor(Direction.UP));
+                Board.AddToken(new ArrowToken(Direction.UP), execute.Neighbor(Direction.RIGHT));
+                Board.AddToken(new ArrowToken(Direction.RIGHT), execute.Neighbor(Direction.DOWN));
+                Board.AddToken(new ArrowToken(Direction.DOWN), execute.Neighbor(Direction.LEFT));
             }
 
         }

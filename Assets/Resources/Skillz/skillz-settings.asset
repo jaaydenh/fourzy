@@ -21,24 +21,24 @@ MonoBehaviour:
   - Key: Timer
     Value: 60
   - Key: Moves
-    Value: 15
+    Value: 28
   - Key: Level0
     Value: '{ "complexityLow": 300, "complexityHigh": 700, "areaId": 2, "oppHerdId":
-      "red_dragon", "aiProfile": 15 }'
+      "red_dragon", "aiProfile": 28 }'
   - Key: Level1
     Value: '{ "complexityLow": 300, "complexityHigh": 350, "areaId": 2, "oppHerdId":"rainbow_bite",
-      "aiProfile": 15 }'
+      "aiProfile": 28 }'
   - Key: Level2
     Value: '{ "complexityLow": 300, "complexityHigh": 400, "areaId": 2, "oppHerdId":
-      "furrzy", "aiProfile": 15 }'
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
-  - Key: 
-    Value: 
+      "furrzy", "aiProfile": 28 }'
+  - Key: WinPoints
+    Value: 1000
+  - Key: DrawPoints
+    Value: 500
+  - Key: PointsPerSecond
+    Value: 1
+  - Key: PointsPerMoveWin
+    Value: 10
   SimulateMatchWins: 0
   AllowSkillzExit: 1
   HasSyncBot: 0

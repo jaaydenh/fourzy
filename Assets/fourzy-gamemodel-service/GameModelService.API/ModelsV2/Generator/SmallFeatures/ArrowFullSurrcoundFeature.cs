@@ -31,30 +31,55 @@ namespace FourzyGameModel.Model
             this.Height = Height;
         }
 
+        public ArrowFullSurroundFeature(Rotation Rotation)
+        {
+            this.Insert = new BoardLocation(0,0);
+            this.Rotation = Rotation;
+            this.Name = "Arrow Four Sides " + Rotation.ToString();
+            this.Type = IngredientType.SMALLFEATURE;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
+
+            this.Width = Width;
+            this.Height = Height;
+        }
+
+
         //Not perfect.  The insert location might not match the dot convention.
         public void Build(GameBoard Board)
         {
-            if (Rotation == Rotation.CLOCKWISE)
+
+            BoardLocation execute = new BoardLocation(0, 0);
+
+            if (Insert.Row == 0 && Insert.Column == 0)
             {
-                Board.AddToken(new ArrowToken(Direction.DOWN), Insert.Neighbor(CompassDirection.E));
-                Board.AddToken(new ArrowToken(Direction.LEFT), Insert.Neighbor(CompassDirection.SE));
-                Board.AddToken(new ArrowToken(Direction.LEFT), Insert.Neighbor(CompassDirection.S));
-                Board.AddToken(new ArrowToken(Direction.UP), Insert.Neighbor(CompassDirection.SW));
-                Board.AddToken(new ArrowToken(Direction.UP), Insert.Neighbor(CompassDirection.W));
-                Board.AddToken(new ArrowToken(Direction.RIGHT), Insert.Neighbor(CompassDirection.NW));
-                Board.AddToken(new ArrowToken(Direction.RIGHT), Insert.Neighbor(CompassDirection.N));
-                Board.AddToken(new ArrowToken(Direction.DOWN), Insert.Neighbor(CompassDirection.NE));
+                execute = Board.Random.RandomLocation(new BoardLocation(3, 3), 2, 2);
             }
             else
             {
-                Board.AddToken(new ArrowToken(Direction.UP), Insert.Neighbor(CompassDirection.E));
-                Board.AddToken(new ArrowToken(Direction.RIGHT), Insert.Neighbor(CompassDirection.SE));
-                Board.AddToken(new ArrowToken(Direction.RIGHT), Insert.Neighbor(CompassDirection.S));
-                Board.AddToken(new ArrowToken(Direction.DOWN), Insert.Neighbor(CompassDirection.SW));
-                Board.AddToken(new ArrowToken(Direction.DOWN), Insert.Neighbor(CompassDirection.W));
-                Board.AddToken(new ArrowToken(Direction.LEFT), Insert.Neighbor(CompassDirection.NW));
-                Board.AddToken(new ArrowToken(Direction.LEFT), Insert.Neighbor(CompassDirection.N));
-                Board.AddToken(new ArrowToken(Direction.UP), Insert.Neighbor(CompassDirection.NE));
+                execute = Insert;
+            }
+
+            if (Rotation == Rotation.CLOCKWISE)
+            {
+                Board.AddToken(new ArrowToken(Direction.DOWN), execute.Neighbor(CompassDirection.E));
+                Board.AddToken(new ArrowToken(Direction.LEFT), execute.Neighbor(CompassDirection.SE));
+                Board.AddToken(new ArrowToken(Direction.LEFT), execute.Neighbor(CompassDirection.S));
+                Board.AddToken(new ArrowToken(Direction.UP), execute.Neighbor(CompassDirection.SW));
+                Board.AddToken(new ArrowToken(Direction.UP), execute.Neighbor(CompassDirection.W));
+                Board.AddToken(new ArrowToken(Direction.RIGHT), execute.Neighbor(CompassDirection.NW));
+                Board.AddToken(new ArrowToken(Direction.RIGHT), execute.Neighbor(CompassDirection.N));
+                Board.AddToken(new ArrowToken(Direction.DOWN), execute.Neighbor(CompassDirection.NE));
+            }
+            else
+            {
+                Board.AddToken(new ArrowToken(Direction.UP), execute.Neighbor(CompassDirection.E));
+                Board.AddToken(new ArrowToken(Direction.UP), execute.Neighbor(CompassDirection.SE));
+                Board.AddToken(new ArrowToken(Direction.RIGHT), execute.Neighbor(CompassDirection.S));
+                Board.AddToken(new ArrowToken(Direction.RIGHT), execute.Neighbor(CompassDirection.SW));
+                Board.AddToken(new ArrowToken(Direction.DOWN), execute.Neighbor(CompassDirection.W));
+                Board.AddToken(new ArrowToken(Direction.DOWN), execute.Neighbor(CompassDirection.NW));
+                Board.AddToken(new ArrowToken(Direction.LEFT), execute.Neighbor(CompassDirection.N));
+                Board.AddToken(new ArrowToken(Direction.LEFT), execute.Neighbor(CompassDirection.NE));
             }
 
         }

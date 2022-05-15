@@ -41,54 +41,73 @@ namespace FourzyGameModel.Model
         public void Build(GameBoard Board)
         {
             if (FirstDirection == Direction.RANDOM) FirstDirection = Board.Random.RandomDirection();
-            if (SecondDirection == Direction.RANDOM) SecondDirection = Board.Random.RandomDirection();
+            if (SecondDirection == Direction.RANDOM)
+            {
+                SecondDirection = Board.Random.RandomDirection();
+                while (SecondDirection==FirstDirection) SecondDirection= Board.Random.RandomDirection();
+            }
             Insert = Board.Random.RandomLocation(new BoardLocation(2, 2), Board.Rows - 4, Board.Columns - 4);
-            int count = 4;
+            int count = 3;
+            BoardLocation l = new BoardLocation(Insert);
+            Direction d = Direction.NONE;
+
             for (int i = 0; i < count; i++)
             {
-                BoardLocation l = new BoardLocation(Insert);
-                Direction d = Direction.NONE;
-
-                if (i % 2 == 0)
-                    d = FirstDirection;
-                else
-                    d = SecondDirection;
+    
+                Board.AddToken(new ArrowToken(FirstDirection), l);
 
                     switch (FirstDirection)
                     {
                         case Direction.UP:
-                            l.Row-= (i+1)/2;
-                            break;
+                        //l.Row-= (i+1)/2;
+                        l.Row--;
+                        break;
                         case Direction.DOWN:
-                            l.Row += (i + 1) / 2;
-                            break;
+                        //l.Row += (i + 1) / 2;
+                        l.Row++;
+                        break;
                         case Direction.LEFT:
-                            l.Column -= (i + 1) / 2;
-                            break;
+                        //l.Column -= (i + 1) / 2;
+                        l.Column--;
+                        break;
                         case Direction.RIGHT:
-                            l.Column -= (i + 1) / 2;
-                            break;
+                        //l.Column -= (i + 1) / 2;
+                        l.Column++;
+                        break;
 
                     }
 
+                
+            }
+
+            l = new BoardLocation(Insert);
+            for (int i = 0; i < count; i++)
+            {
+
+                Board.AddToken(new ArrowToken(SecondDirection), l);
                 switch (SecondDirection)
                 {
                     case Direction.UP:
-                        l.Row -= i/2;
+                        //l.Row -= i/2;
+                        l.Row--;
                         break;
                     case Direction.DOWN:
-                        l.Row += i / 2;
+                        //l.Row += i / 2;
+                        l.Row++;
                         break;
                     case Direction.LEFT:
-                        l.Column-=i/2;
+                        //l.Column-=i/2;
+                        l.Column--;
                         break;
                     case Direction.RIGHT:
-                        l.Column += i/2;
+                        //l.Column += i/2;
+                        l.Column++;
                         break;
                 }
 
-                Board.AddToken(new ArrowToken(d), l);
+                
             }
+
         }
     }
 }

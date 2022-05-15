@@ -42,22 +42,46 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (value)
             {
                 case SkillzValues.WINNER_POINTS:
-                    //return SkillzGameController.Instance.WinPoints;
-                    return Constants.SKILLZ_WIN_POINTS;
+                    if (SkillzGameController.Instance.WinPoints == -1) {
+                        return Constants.SKILLZ_WIN_POINTS;
+                    } else {
+                        return SkillzGameController.Instance.WinPoints;
+                    }
 
-                case SkillzValues.POINTS_PER_MOVES_LEFT:
-                    //return SkillzGameController.Instance.PointsPerMoveLeftWin;
-                    return Constants.SKILLZ_POINTS_PER_MOVE_LEFT_WIN;
+                case SkillzValues.POINTS_PER_MOVE_LEFT_WIN:
+                    if (SkillzGameController.Instance.PointsPerMoveLeftWin == -1) {
+                        return Constants.SKILLZ_POINTS_PER_MOVE_LEFT_WIN;
+                    } else {
+                        return SkillzGameController.Instance.PointsPerMoveLeftWin;
+                    }
+
+                case SkillzValues.POINTS_PER_MOVE_LEFT_LOSE:
+                    if (SkillzGameController.Instance.PointsPerMoveLeftLose == -1) {
+                        return Constants.SKILLZ_POINTS_PER_MOVE_LEFT_LOSE;
+                    } else {
+                        return SkillzGameController.Instance.PointsPerMoveLeftLose;
+                    }
 
                 case SkillzValues.POINTS_PER_SECOND_LEFT:
-                    //return SkillzGameController.Instance.PointsPerSecond;
-                    return Constants.SKILLZ_POINTS_PER_SECOND_REMAINING;
+                    if (SkillzGameController.Instance.PointsPerSecond == -1) {
+                        return Constants.SKILLZ_POINTS_PER_SECOND_REMAINING;
+                    } else {
+                        return SkillzGameController.Instance.PointsPerSecond;
+                    }
 
                 case SkillzValues.DRAW_POINTS:
-                    return Constants.SKILLZ_DRAW_POINTS;
+                    if (SkillzGameController.Instance.DrawPoints == -1) {
+                        return Constants.SKILLZ_DRAW_POINTS;
+                    } else {
+                        return SkillzGameController.Instance.DrawPoints;
+                    }
 
                 case SkillzValues.BIG_WIN_POINTS:
-                    return Constants.SKILLZ_WIN_ALL_GAMES_BONUS;
+                    if (SkillzGameController.Instance.WinAllGamesBonus == -1) {
+                        return Constants.SKILLZ_WIN_ALL_GAMES_BONUS;
+                    } else {
+                        return SkillzGameController.Instance.WinAllGamesBonus;
+                    }
             }
 
             return 0;
@@ -67,7 +91,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public enum SkillzValues
     {
         WINNER_POINTS,
-        POINTS_PER_MOVES_LEFT,
+        POINTS_PER_MOVE_LEFT_WIN,
+        POINTS_PER_MOVE_LEFT_LOSE,
         POINTS_PER_SECOND_LEFT,
         DRAW_POINTS,
         BIG_WIN_POINTS,

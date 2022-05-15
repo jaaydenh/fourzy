@@ -101,7 +101,7 @@ namespace Fourzy._Updates.Managers
                 SkillzLevelParams info = 
                     GetLevelInfo(levelIndex) ?? 
                     LevelsInfo.Last() ?? 
-                    new SkillzLevelParams() { areaId = Constants.SKILLZ_DEFAULT_AREA, complexityLow = Constants.SKILLZ_GAME_COMPLEXITY, complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY, oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID };
+                    new SkillzLevelParams() { areaId = Constants.SKILLZ_DEFAULT_AREA, complexityLow = Constants.SKILLZ_GAME_COMPLEXITY_LOW, complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY_HIGH, oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID };
 
                 LevelsInfo.Add(info);
             }
