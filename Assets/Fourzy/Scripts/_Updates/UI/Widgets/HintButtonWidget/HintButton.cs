@@ -8,7 +8,9 @@ namespace Fourzy._Updates.UI.Widgets
     public class HintButton : CurrencyWidget
     {
         public Badge label;
+
         private UIOutline outline;
+        private OnRatio onRatio;
 
         public override void Show(float time = 0f)
         {
@@ -39,11 +41,17 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void SetOutline(float value) => outline.intensity = value;
 
+        public void OnPositionUpdated()
+        {
+            onRatio.CheckOrientation();
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
             outline = GetComponentInChildren<UIOutline>();
+            onRatio = GetComponent<OnRatio>();
         }
     }
 }

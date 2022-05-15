@@ -20,8 +20,14 @@ namespace Fourzy._Updates.UI.Helpers
         private DisplayRatioOption previousRatio = DisplayRatioOption.NONE;
 
         private float previousAspect;
+        private RectTransform rectTransform;
 
         private static float aspect => (float)Screen.width / Screen.height;
+
+        private void Awake()
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
 
         protected void Start()
         {
@@ -89,6 +95,16 @@ namespace Fourzy._Updates.UI.Helpers
             {
                 layoutGroup.padding = new RectOffset(layoutGroup.padding.left, layoutGroup.padding.right, layoutGroup.padding.top, value);
             }
+        }
+
+        public void SetAnchorMin(Vector2 min)
+        {
+            rectTransform.anchorMin = min;
+        }
+
+        public void SetAnchorMax(Vector2 max)
+        {
+            rectTransform.anchorMax = max;
         }
 
         public static DisplayRatioOption GetRatio(DeviceOrientation orientation)

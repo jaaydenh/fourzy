@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Fourzy/Scenes/StartSceneDefault.unity
     guid: 3d7de46172b55e6428ad01b7276860e0
   - enabled: 1
-    path: Assets/Fourzy/Scenes/MainMenuScenePortrait.unity
-    guid: 097b1549cd8b1864182578f5913cbcfb
+    path: Assets/Fourzy/Scenes/MainMenuSceneInfinity.unity
+    guid: 1bf6a248f26cb954296d48d4301611ab
   - enabled: 1
     path: Assets/Fourzy/Scenes/DefaultGameplayScene.unity
     guid: 5ac49ce917313314ca626e8b6c3217fe

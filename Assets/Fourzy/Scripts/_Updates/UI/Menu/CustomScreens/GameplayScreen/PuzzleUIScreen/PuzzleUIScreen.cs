@@ -9,19 +9,30 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class PuzzleUIScreen : MenuScreen
     {
-        public MovesLeftWidget movesLeftWidget;
-        public ButtonExtended nextButton;
-        public HintButton hintButton;
+        [SerializeField]
+        private Transform topPanel;
+        [SerializeField]
+        private Transform body;
 
-        public TMP_Text rule;
-        public TMP_Text level;
-        public TweenBase completeIcon;
-        public AlphaTween packInfoTween;
+        [SerializeField]
+        private MovesLeftWidget movesLeftWidget;
+        [SerializeField]
+        private ButtonExtended nextButton;
+        [SerializeField]
+        private HintButton hintButton;
+        
+        [SerializeField]
+        private TMP_Text rule;
+        [SerializeField]
+        private TweenBase completeIcon;
+        [SerializeField]
+        private AlphaTween packInfoTween;
 
         private int prevHintsCount = -1;
 
@@ -82,7 +93,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         }
 
                         rule.text = game.puzzleData.Instructions;
-                        //level.text = "Level " + (game.puzzleData.pack.enabledPuzzlesData.IndexOf(game.puzzleData) + 1);
 
                         break;
                 }
@@ -111,6 +121,30 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 movesLeftWidget.SetData(game.asFourzyPuzzle);
             }
+
+            // check device orientation
+            if(GameManager.Instance.Landscape)
+            {
+                // adjust moves left widget
+                movesLeftWidget.transform.SetParent(topPanel);
+                movesLeftWidget.AutoResize(false);
+
+                // adjust hints button
+                hintButton.transform.SetParent(topPanel);
+                hintButton.transform.SetSiblingIndex(0);
+            }
+            else
+            {
+                // adjust moves left widget
+                movesLeftWidget.transform.SetParent(body);
+                movesLeftWidget.AutoResize(true);
+
+                // adjust hints button
+                hintButton.transform.SetParent(body);
+            }
+
+            movesLeftWidget.OnPositionUpdated();
+            hintButton.OnPositionUpdated();
         }
 
         public void OnMoveStarted()
