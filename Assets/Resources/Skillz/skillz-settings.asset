@@ -17,14 +17,14 @@ MonoBehaviour:
   Orientation: 1
   MatchParameters:
   - Key: Games
-    Value: 3
+    Value: 1
   - Key: Timer
-    Value: 20
+    Value: 200
   - Key: Moves
-    Value: 5
+    Value: 20
   - Key: Level0
     Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 2, "oppHerdId":
-      "red_dragon", "aiProfile": 2 }'
+      "red_dragon", "aiProfile": 28 }'
   - Key: Level1
     Value: '{ "complexityLow": 10, "complexityHigh": 10, "areaId": 4, "oppHerdId":
       "red_dragon", "aiProfile": 2 }'

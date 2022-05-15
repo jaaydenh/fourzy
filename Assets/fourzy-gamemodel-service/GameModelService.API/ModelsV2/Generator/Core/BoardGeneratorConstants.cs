@@ -47,7 +47,9 @@ namespace FourzyGameModel.Model
         ARROW_DOUBLETURN,
         ARROW_WING,
         SINGULARITY,
-        FILL_THE_RING
+        FILL_THE_RING,
+        PATH_OF_ARROWS,
+        BACK_AND_FORTH
     }
 
     public enum IngredientType { TERRAIN, LARGEFEATURE, SMALLFEATURE, NOISE,
