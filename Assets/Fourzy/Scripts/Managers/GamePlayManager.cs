@@ -127,14 +127,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CheckGameMode();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                Debug.Log(Game._FirstState.ActivePlayerId);
-            }
-        }
-
         protected void OnDestroy()
         {
             if (BoardView)
