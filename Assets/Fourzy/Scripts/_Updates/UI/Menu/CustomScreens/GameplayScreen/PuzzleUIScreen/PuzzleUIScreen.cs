@@ -51,7 +51,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
 
-            //!hint button controls, should be uncommented when hints are brought back
+            //!hint button controls
             if (game.puzzleData.Solution.Count > 0)
             {
                 hintButton.Show();
@@ -145,6 +145,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             movesLeftWidget.OnPositionUpdated();
             hintButton.OnPositionUpdated();
+
+            // hint button is unlimited on infinity table
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_INFINITY:
+                    hintButton.SetLabelParentState(false);
+
+                    break;
+
+                default:
+                    hintButton.SetLabelParentState(true);
+
+                    break;
+            }
         }
 
         public void OnMoveStarted()

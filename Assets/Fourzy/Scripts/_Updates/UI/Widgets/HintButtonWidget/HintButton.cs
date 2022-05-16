@@ -2,12 +2,16 @@
 
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class HintButton : CurrencyWidget
     {
-        public Badge label;
+        [SerializeField]
+        private Badge label;
+        [SerializeField]
+        private GameObject labelParent;
 
         private UIOutline outline;
         private OnRatio onRatio;
@@ -44,6 +48,11 @@ namespace Fourzy._Updates.UI.Widgets
         public void OnPositionUpdated()
         {
             onRatio.CheckOrientation();
+        }
+
+        public void SetLabelParentState(bool state)
+        {
+            labelParent.SetActive(state);
         }
 
         protected override void OnInitialized()
