@@ -36,7 +36,9 @@ namespace FourzyGameModel.Model
                 case AIProfile.UnevenBotAI:
                     return new UnevenBotAI(State);
                 case AIProfile.WelcomeBot:
-                    return new WelcomeBotAI(State);
+                    return new WelcomeBotAIOrig(State);
+                case AIProfile.ApprenticeBot:
+                    return new ApprenticeBotAI(State);
 
                 //The following AIs have a preference on direction.
 
@@ -119,10 +121,9 @@ namespace FourzyGameModel.Model
                     switch (Personality)
                     {
                         case 0:
-                            return AIProfile.BadBot;
+                            return AIProfile.ApprenticeBot;
                         case 1:
                             return AIProfile.WelcomeBot;
-
                     }
                     break;
 
@@ -151,7 +152,6 @@ namespace FourzyGameModel.Model
                             return AIProfile.UnevenBotAI;
                         case 9:
                             return AIProfile.OrthoBot;
-
                     }
                     break;
 
@@ -183,8 +183,6 @@ namespace FourzyGameModel.Model
                             return AIProfile.AggressiveAI;
                         case 2:
                             return AIProfile.SmartBot;
-                            //case 2:
-                            //    //return AIProfile.SmartBot;
                             //case 3:
                             //    //return AIProfile.ScoreBot;
 
@@ -213,7 +211,6 @@ namespace FourzyGameModel.Model
                 case AIProfile.OrthoBot:
                     return "Ortho";
 
-
                 //This bot will make a good move, but will not win unless last resort.
                 case AIProfile.ExtenderBotAI:
                     return "Extender";
@@ -222,6 +219,9 @@ namespace FourzyGameModel.Model
                     return "Uneven";
                 case AIProfile.WelcomeBot:
                     return "Welcome";
+                //This bot will almost never win    
+                case AIProfile.ApprenticeBot:
+                    return "Apprentice";
 
                 //The following AIs have a preference on direction.
 
@@ -279,11 +279,9 @@ namespace FourzyGameModel.Model
                 //Used for Puzzles. Always returns the same move
                 case AIProfile.PuzzleAI:
                     return "PuzzlePlayer";
-               
             }
 
             return "The Unknown Player";
-
         }
 
         public static string GenerateAIPlayerName(AIDifficulty Difficulty, int length = -1, bool CreateFullName = true)

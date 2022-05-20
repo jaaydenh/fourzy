@@ -8,14 +8,14 @@ namespace FourzyGameModel.Model
     //Do not always make winning move
     //Do not always make the best move, by evaluating top 10 moves and picking one at random.
 
-    public class WelcomeBotAI : AIPlayer
+    public class ApprenticeBotAI : AIPlayer
     {
         private GameState EvalState { get; set; }
         private int NumberOfMovesToConsider = 6;
         private int NumberOfMovesBeforeStopBlocking = 8;
         private int NumberTurnsBeforeWinning = 30;
 
-        public WelcomeBotAI(GameState State)
+        public ApprenticeBotAI(GameState State)
         {
             this.EvalState = State;
         }

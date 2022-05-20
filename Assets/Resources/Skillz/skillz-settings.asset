@@ -24,13 +24,13 @@ MonoBehaviour:
     Value: 28
   - Key: Level0
     Value: '{ "complexityLow": 300, "complexityHigh": 700, "areaId": 2, "oppHerdId":
-      "red_dragon", "aiProfile": 28 }'
+      "red_dragon", "aiProfile": 29 }'
   - Key: Level1
     Value: '{ "complexityLow": 300, "complexityHigh": 350, "areaId": 2, "oppHerdId":"rainbow_bite",
-      "aiProfile": 28 }'
+      "aiProfile": 29 }'
   - Key: Level2
     Value: '{ "complexityLow": 300, "complexityHigh": 400, "areaId": 2, "oppHerdId":
-      "furrzy", "aiProfile": 28 }'
+      "furrzy", "aiProfile": 29 }'
   - Key: WinPoints
     Value: 1000
   - Key: DrawPoints
