@@ -11,10 +11,12 @@
             url "http://nexus.skillz.com/content/groups/public/" // Assets/Skillz/Editor/SkillzDependencies.xml:5
         }
         maven {
+            url (unityProjectPath + "/Assets/GeneratedLocalRepo/Firebase/m2repository") // Assets/Firebase/Editor/AppDependencies.xml:22, Assets/Firebase/Editor/MessagingDependencies.xml:20
+        }
+        maven {
             url "https://s3.amazonaws.com/moat-sdk-builds" // Assets/Skillz/Editor/SkillzDependencies.xml:118
         }
         mavenLocal()
-        jcenter()
         mavenCentral()
     }
 }
@@ -59,14 +61,20 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.11.0' // Assets/Skillz/Editor/SkillzDependencies.xml:120
     // implementation 'com.google.android.exoplayer:exoplayer:2.7.3' // Assets/Skillz/Editor/SkillzDependencies.xml:45
     implementation 'com.google.android.gms:play-services-ads-identifier:15.0.0' // Assets/Skillz/Editor/SkillzDependencies.xml:65
-    implementation 'com.google.android.gms:play-services-base:17.2.1' // Assets/Skillz/Editor/SkillzDependencies.xml:59
+    // implementation 'com.google.android.gms:play-services-base:17.2.1' // Assets/Skillz/Editor/SkillzDependencies.xml:59
+    implementation 'com.google.android.gms:play-services-base:18.0.1' // Assets/Firebase/Editor/AppDependencies.xml:17
     implementation 'com.google.android.gms:play-services-gcm:17.0.0' // Assets/Skillz/Editor/SkillzDependencies.xml:61
     implementation 'com.google.android.gms:play-services-location:17.1.0' // Assets/Skillz/Editor/SkillzDependencies.xml:43
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0' // Assets/Skillz/Editor/SkillzDependencies.xml:63
     implementation 'com.google.android.material:material:1.4.0' // Assets/Skillz/Editor/SkillzDependencies.xml:15
     implementation 'com.google.dagger:dagger:2.19' // Assets/Skillz/Editor/SkillzDependencies.xml:51
     implementation 'com.google.dagger:dagger-android-support:2.19' // Assets/Skillz/Editor/SkillzDependencies.xml:53
-    implementation 'com.google.firebase:firebase-messaging:23.0.0' // Assets/Skillz/Editor/SkillzDependencies.xml:19
+    implementation 'com.google.firebase:firebase-analytics:20.1.2' // Assets/Firebase/Editor/MessagingDependencies.xml:15
+    implementation 'com.google.firebase:firebase-app-unity:8.10.1' // Assets/Firebase/Editor/AppDependencies.xml:22
+    implementation 'com.google.firebase:firebase-common:20.1.0' // Assets/Firebase/Editor/AppDependencies.xml:13
+    // implementation 'com.google.firebase:firebase-messaging:23.0.0' // Assets/Skillz/Editor/SkillzDependencies.xml:19
+    implementation 'com.google.firebase:firebase-messaging:23.0.3' // Assets/Firebase/Editor/MessagingDependencies.xml:13
+    implementation 'com.google.firebase:firebase-messaging-unity:8.10.1' // Assets/Firebase/Editor/MessagingDependencies.xml:20
     implementation 'com.kochava.base:tracker:3.10.1' // Assets/Skillz/Editor/SkillzDependencies.xml:41
     implementation 'com.paypal.sdk:paypal-android-sdk:2.14.4' // Assets/Skillz/Editor/SkillzDependencies.xml:7
     implementation 'com.react-native-spring-scrollview:react-native-spring-scrollview-android:3.0.2-skillz' // Assets/Skillz/Editor/SkillzDependencies.xml:99

@@ -31,13 +31,19 @@
     <package>com.google.android.exoplayer:exoplayer:2.7.3</package>
     <package>com.google.android.gms:play-services-ads-identifier:15.0.0</package>
     <package>com.google.android.gms:play-services-base:17.2.1</package>
+    <package>com.google.android.gms:play-services-base:18.0.1</package>
     <package>com.google.android.gms:play-services-gcm:17.0.0</package>
     <package>com.google.android.gms:play-services-location:17.1.0</package>
     <package>com.google.android.gms:play-services-safetynet:17.0.0</package>
     <package>com.google.android.material:material:1.4.0</package>
     <package>com.google.dagger:dagger:2.19</package>
     <package>com.google.dagger:dagger-android-support:2.19</package>
+    <package>com.google.firebase:firebase-analytics:20.1.2</package>
+    <package>com.google.firebase:firebase-app-unity:8.10.1</package>
+    <package>com.google.firebase:firebase-common:20.1.0</package>
     <package>com.google.firebase:firebase-messaging:23.0.0</package>
+    <package>com.google.firebase:firebase-messaging:23.0.3</package>
+    <package>com.google.firebase:firebase-messaging-unity:8.10.1</package>
     <package>com.kochava.base:tracker:3.10.1</package>
     <package>com.paypal.sdk:paypal-android-sdk:2.14.4</package>
     <package>com.react-native-spring-scrollview:react-native-spring-scrollview-android:3.0.2-skillz</package>
@@ -58,7 +64,12 @@
     <package>org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.71</package>
     <package>org.webkit:android-jsc:r245459</package>
   </packages>
-  <files />
+  <files>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-app-unity/8.10.1/firebase-app-unity-8.10.1.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-app-unity/8.10.1/firebase-app-unity-8.10.1.pom</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-messaging-unity/8.10.1/firebase-messaging-unity-8.10.1.aar</file>
+    <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-messaging-unity/8.10.1/firebase-messaging-unity-8.10.1.pom</file>
+  </files>
   <settings>
     <setting name="androidAbis" value="arm64-v8a,armeabi-v7a" />
     <setting name="bundleId" value="com.mindisle.fourzyskillz.Android" />

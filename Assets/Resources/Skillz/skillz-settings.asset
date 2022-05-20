@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: skillz-settings
   m_EditorClassIdentifier: 
   GameID: 17107
-  Environment: 0
+  Environment: 1
   Orientation: 1
   MatchParameters:
   - Key: Games
