@@ -39,7 +39,8 @@
         UnevenBotAI,  // 25
         MeBot,      // 26
         OrthoBot,    // 27
-        WelcomeBot //28
+        WelcomeBot, //28,
+        ApprenticeBot //29
     }
 
     public enum AIDifficulty { Pushover, Easy, Medium, Hard, Doctor}

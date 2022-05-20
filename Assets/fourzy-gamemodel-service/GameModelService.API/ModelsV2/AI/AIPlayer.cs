@@ -36,7 +36,9 @@ namespace FourzyGameModel.Model
                 case AIProfile.UnevenBotAI:
                     return new UnevenBotAI(State);
                 case AIProfile.WelcomeBot:
-                    return new WelcomeBotAI(State);
+                    return new WelcomeBotAIOrig(State);
+                case AIProfile.ApprenticeBot:
+                    return new ApprenticeBotAI(State);
 
                 //The following AIs have a preference on direction.
 
@@ -119,10 +121,9 @@ namespace FourzyGameModel.Model
                     switch (Personality)
                     {
                         case 0:
-                            return AIProfile.BadBot;
+                            return AIProfile.ApprenticeBot;
                         case 1:
                             return AIProfile.WelcomeBot;
-
                     }
                     break;
 
@@ -151,7 +152,6 @@ namespace FourzyGameModel.Model
                             return AIProfile.UnevenBotAI;
                         case 9:
                             return AIProfile.OrthoBot;
-
                     }
                     break;
 
@@ -183,8 +183,6 @@ namespace FourzyGameModel.Model
                             return AIProfile.AggressiveAI;
                         case 2:
                             return AIProfile.SmartBot;
-                            //case 2:
-                            //    //return AIProfile.SmartBot;
                             //case 3:
                             //    //return AIProfile.ScoreBot;
 
@@ -197,6 +195,94 @@ namespace FourzyGameModel.Model
             return AIProfile.SimpleAI;
         }
 
+        public static string GetAIPlayerName(AIProfile AI)
+        {
+            switch (AI)
+            {
+                //These AI are limited to make it easier for the player.
+                case AIProfile.BeginnerAI:
+                    return "DaisyPicker";
+                case AIProfile.EasyAI:
+                    return "TulipMasher";
+                case AIProfile.BlindBot:
+                    return "Blinder";
+                case AIProfile.BadBot:
+                    return "Uggg";
+                case AIProfile.OrthoBot:
+                    return "Ortho";
+
+                //This bot will make a good move, but will not win unless last resort.
+                case AIProfile.ExtenderBotAI:
+                    return "Extender";
+                //This bot will make a good move, but will not win unless last resort.
+                case AIProfile.UnevenBotAI:
+                    return "Uneven";
+                case AIProfile.WelcomeBot:
+                    return "Welcome";
+                //This bot will almost never win    
+                case AIProfile.ApprenticeBot:
+                    return "Apprentice";
+
+                //The following AIs have a preference on direction.
+
+                case AIProfile.UpBot:
+                    return "Dr. Uptown";
+                case AIProfile.DownAI:
+                    return "Dr. Downtown";
+                case AIProfile.RightAI:
+                    return "Righty";
+                case AIProfile.LeftAI:
+                    return "Lefty";
+                case AIProfile.VerticalBot:
+                    return "Vator";
+                case AIProfile.HorizontalBot:
+                    return "Horice";
+
+                //This AI tries to change up the direction every turn.
+
+                case AIProfile.RotatorBot:
+                    return "Rotator";
+
+                //This bot tinkers with Heuristics on only score it's own pieces
+
+                case AIProfile.MeBot:
+                    return "Selvagio";
+
+                //These AI are a bit easier since they will sometimes skip a turn.
+
+                case AIProfile.PassBot:
+                    return "PassyGassy";
+                case AIProfile.PanicBot:
+                    return "Mr. Panic";
+                case AIProfile.WaitBot:
+                    return "Mr. Wait";
+
+                //The position bot values center position over potential lines of four.  
+                case AIProfile.PositionBot:
+                    return "Positronic";
+
+                //The Basic AI.  Fast and fairly good, but not perfect.
+                case AIProfile.SimpleAI:
+                    return "Simpleton";
+                case AIProfile.SmartBot:
+                    return "Sammy Smartz";
+
+                //Basic AI but scores using opponents position for more accurate move.
+                case AIProfile.ScoreBot:
+                    return "Scorey";
+
+                case AIProfile.AggressiveAI:
+                    return "Aggro";
+                case AIProfile.DoctorBot:
+                    return "Doctor Four";
+
+                //Used for Puzzles. Always returns the same move
+                case AIProfile.PuzzleAI:
+                    return "PuzzlePlayer";
+            }
+
+            return "The Unknown Player";
+        }
 
         public static string GenerateAIPlayerName(AIDifficulty Difficulty, int length = -1, bool CreateFullName = true)
         {
