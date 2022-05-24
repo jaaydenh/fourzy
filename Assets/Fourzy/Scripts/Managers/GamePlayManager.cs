@@ -205,7 +205,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             GameplayScreen.skillzGameScreen.DeductTimer(inPauseTime);
                         }
 
-                        if (GameplayScreen.skillzGameScreen.Timer > 0f)
+                        if (GameplayScreen.skillzGameScreen.Timer > 0f && GameState != GameState.PREGAME_DISPLAY_INSTRUCTION)
                         {
                             menuController.GetOrAddScreen<PauseMenuScreen>()._Open();
                         }
@@ -833,6 +833,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             yield return ShowTokensInstructionsRoutine(tokens, showRibbon);
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_SKILLZ:
+                    UnpauseGame();
+
+                    break;
+            }
         }
 
         private IEnumerator FadeGameScreen(float alpha, float fadeTime)
@@ -2353,6 +2361,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private IEnumerator GameInitRoutine()
         {
             if (Game == null) yield break;
+
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_SKILLZ:
+                    // Add custom pause here!
+                    PauseGame();
+
+                    break;
+            }
 
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
 
