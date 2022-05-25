@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>46444527925-hjmc6qmnaro630noq1ed0663erk3ut5k.apps.googleusercontent.com</string>
+	<string>990665726548-ist8bkd6niir3n12mbn2vo1u801a9o5r.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.46444527925-hjmc6qmnaro630noq1ed0663erk3ut5k</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>46444527925-l4g6751r054hmnnss3fti6movdeqmngk.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.990665726548-ist8bkd6niir3n12mbn2vo1u801a9o5r</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBksnE-F50tj3znmh9ZvULgnwsqmRUFJLM</string>
+	<string>AIzaSyBFExCPyvO538m3oiBYUQAKgGV5tgfdTio</string>
 	<key>GCM_SENDER_ID</key>
-	<string>46444527925</string>
+	<string>990665726548</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.PartyTroll.Fourzy</string>
+	<string>com.mindisle.fourzyskillz.IOS</string>
 	<key>PROJECT_ID</key>
-	<string>crafty-fourzy-725</string>
+	<string>fourzyskillz</string>
 	<key>STORAGE_BUCKET</key>
-	<string>crafty-fourzy-725.appspot.com</string>
+	<string>fourzyskillz.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:46444527925:ios:1f1237922610a6a0</string>
-	<key>DATABASE_URL</key>
-	<string>https://crafty-fourzy-725.firebaseio.com</string>
+	<string>1:990665726548:ios:e4d59a58a49e388046abc1</string>
 </dict>
 </plist>

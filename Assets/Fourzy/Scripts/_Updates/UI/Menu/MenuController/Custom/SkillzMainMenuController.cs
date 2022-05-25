@@ -59,6 +59,7 @@ namespace Fourzy._Updates.UI.Menu
 
         private void LaunchSkillz()
         {
+            SkillzCrossPlatform.setSkillzBackgroundMusic("MenuMusic.mp3");
             SkillzCrossPlatform.LaunchSkillz(SkillzGameController.Instance);
         }
 

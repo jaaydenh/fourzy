@@ -224,6 +224,8 @@ namespace FourzyGameModel.Model
                 //This bot will almost never win    
                 case AIProfile.ApprenticeBot:
                     return "Apprentice";
+                case AIProfile.EventuallyBot:
+                    return "The Coach";
 
                 //The following AIs have a preference on direction.
 
