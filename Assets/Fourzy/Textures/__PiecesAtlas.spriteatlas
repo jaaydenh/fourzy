@@ -244,7 +244,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: bf713327d46d4534aaedccf1fce831b1, type: 3}
   - {fileID: 21300000, guid: 706f8327fa3c6c5478de639dc897ad44, type: 3}
   - {fileID: 21300000, guid: e90eca27134d6fc40a207c40ca2d8e6b, type: 3}
-  - {fileID: 21300000, guid: 07415c275105e3846946b46fa2a91ab0, type: 3}
   - {fileID: 21300000, guid: df8df337786fa8b4a8426644547efa6f, type: 3}
   - {fileID: 21300000, guid: f50d8737058755240b8fccd3afc6dd9f, type: 3}
   - {fileID: 21300000, guid: 9db8f8370f420684cb60f65d689ead30, type: 3}
@@ -695,7 +694,6 @@ SpriteAtlas:
   - Fourzy05b_Eyes-win
   - Fourzy15_Eyes-win
   - Porcupine
-  - Fourzy11_Body
   - Fourzy38_Eyes-win
   - 6-01
   - RoboCat

@@ -86,6 +86,8 @@ namespace Fourzy
             realtimeLobbyGameEnd,
             realtimeGameCreated,
             realtimeGameCompleted,
+            skillzAsyncGameCreated,
+            skillzAsyncGameCompleted,
         }
 
         public enum GameResultType
@@ -108,7 +110,6 @@ namespace Fourzy
         {
             base.Awake();
 
-#if !MOBILE_SKILLZ
             // amplitude setup
             string apiKey = AMP_PROD_KEY;
 
@@ -122,7 +123,6 @@ namespace Fourzy
             amplitude.trackSessionEvents(true);
             amplitude.useAdvertisingIdForDeviceId();
             amplitude.init(apiKey);
-#endif
         }
 
         protected void OnApplicationQuit()
@@ -419,6 +419,36 @@ namespace Fourzy
                     _values.Add("initialBoard ", game._FirstState.CompressedString);
 
                     break;
+
+                case AnalyticsEvents.skillzAsyncGameCreated:
+                    _values.Add("complexityScoreLow", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityLow);
+                    _values.Add("complexityScoreHigh", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityHigh);
+                    _values.Add("recipe", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].seed);
+                    _values.Add("initialBoard", game._State.Board.ContentString);
+                    _values.Add("timer", SkillzGameController.Instance.GameInitialTimerValue);
+                    _values.Add("numGames", SkillzGameController.Instance.GamesToPlay);
+                    _values.Add("gameIndex", SkillzGameController.Instance.GamesPlayed.Count);
+
+                    break;
+
+                case AnalyticsEvents.skillzAsyncGameCompleted:
+                    _values.Add("complexityScoreLow", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityLow);
+                    _values.Add("complexityScoreHigh", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityHigh);
+                    _values.Add("recipe", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].seed);
+                    _values.Add("initialBoard", game._State.Board.ContentString);
+                    _values.Add("finalScore", SkillzGameController.Instance.Points);
+                    _values.Add("aiProfile", (AIProfile)SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].aiProfile);
+                    _values.Add("isCash", SkillzGameController.Instance.CurrentMatch.IsCash ?? false);
+                    _values.Add("entryCash", SkillzGameController.Instance.CurrentMatch.EntryCash ?? 0f);
+                    _values.Add("entryPoints", SkillzGameController.Instance.CurrentMatch.EntryPoints ?? 0f);
+                    _values.Add("skillzId", SkillzGameController.Instance.CurrentMatch.ID ?? 0l);
+                    _values.Add("isTieBreaker", SkillzGameController.Instance.CurrentMatch.IsTieBreaker);
+                    _values.Add("skillzName", SkillzGameController.Instance.CurrentMatch.Name);
+                    _values.Add("templateID", SkillzGameController.Instance.CurrentMatch.TemplateID ?? 0);
+                    _values.Add("isBracket", SkillzGameController.Instance.CurrentMatch.IsBracket);
+                    _values.Add("bracketRound", SkillzGameController.Instance.CurrentMatch.BracketRound);
+
+                    break;
             }
 
             foreach (var p in _params)
@@ -517,37 +547,27 @@ namespace Fourzy
 
         public void AmplitudeSetUserProperty(string property, bool value)
         {
-#if !MOBILE_SKILLZ
             Amplitude.Instance.setUserProperty(property, value);
-#endif
         }
 
         public void AmplitudeSetUserProperty(string property, int value)
         {
-#if !MOBILE_SKILLZ
             Amplitude.Instance.setUserProperty(property, value);
-#endif
         }
 
         public void AmplitudeSetUserProperty(string property, string value)
         {
-#if !MOBILE_SKILLZ
             Amplitude.Instance.setUserProperty(property, value);
-#endif
         }
 
         public void AmplitudeSetUserProperty(string property, float value)
         {
-#if !MOBILE_SKILLZ
             Amplitude.Instance.setUserProperty(property, value);
-#endif
         }
 
         public void LogAmplitudeEvent(string @event, IDictionary<string, object> values)
         {
-#if !MOBILE_SKILLZ
             Amplitude.Instance.logEvent(@event, values);
-#endif
         }
 
         public void LogEvent(
@@ -566,8 +586,8 @@ namespace Fourzy
 
                             break;
 
-                        case AnalyticsProvider.PLAYFAB:
 #if !MOBILE_SKILLZ
+                        case AnalyticsProvider.PLAYFAB:
                             if (PlayFabClientAPI.IsClientLoggedIn())
                             {
                                 PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
@@ -584,7 +604,6 @@ namespace Fourzy
                             {
                                 playFabCachedEvents += () => LogEvent(@event, values, AnalyticsProvider.PLAYFAB);
                             }
-#endif
 
                             break;
 
@@ -592,6 +611,7 @@ namespace Fourzy
                             Analytics.CustomEvent(@event, values);
 
                             break;
+#endif
                     }
                 }
             }

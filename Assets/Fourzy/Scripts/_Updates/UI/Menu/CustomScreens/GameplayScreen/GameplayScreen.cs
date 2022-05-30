@@ -330,21 +330,35 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             CheckBackButton();
 
-            //initialize timer
-            if (timersEnabled)
-            {
-                myTimer.AssignPlayer(me);
-                opponentTimer.AssignPlayer(opponent);
-            }
-            //disable timer widgets if not needed
-            else
-            {
-                //close tap overlay of opened
-                CancelRoutine("waitFotTap");
+            #region Timer Visuals
 
-                myTimer.Hide(0f);
-                opponentTimer.Hide(0f);
+            switch (game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+
+                    break;
+
+                default:
+                    //initialize timer
+                    if (timersEnabled)
+                    {
+                        myTimer.AssignPlayer(me);
+                        opponentTimer.AssignPlayer(opponent);
+                    }
+                    //disable timer widgets if not needed
+                    else
+                    {
+                        //close tap overlay of opened
+                        CancelRoutine("waitFotTap");
+
+                        myTimer.Hide(0f);
+                        opponentTimer.Hide(0f);
+                    }
+
+                    break;
             }
+
+            #endregion
 
             //check if help button available
             switch (game._Type)
@@ -655,15 +669,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
 #region Timers
 
-            if (timersEnabled)
+            switch (game._Type)
             {
-                if (game._FirstState.ActivePlayerId == turn.PlayerId)
-                {
-                    gameTurnCounter++;
-                }
+                case GameType.SKILLZ_ASYNC:
 
-                AdjustTimer(myTimer);
-                AdjustTimer(opponentTimer);
+                    break;
+
+                default:
+                    if (timersEnabled)
+                    {
+                        if (game._FirstState.ActivePlayerId == turn.PlayerId)
+                        {
+                            gameTurnCounter++;
+                        }
+
+                        AdjustTimer(myTimer);
+                        AdjustTimer(opponentTimer);
+                    }
+
+                    break;
             }
 
 #endregion
@@ -721,14 +745,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
 #region Timers
 
-            if (timersEnabled)
+            switch (game._Type)
             {
-                //activate timer
-                ActivatePlayerTimer(game._State.ActivePlayerId);
+                case GameType.SKILLZ_ASYNC:
 
-                //reset timers
-                ResetTimer(myTimer);
-                ResetTimer(opponentTimer);
+                    break;
+
+                default:
+                    if (timersEnabled)
+                    {
+                        //activate timer
+                        ActivatePlayerTimer(game._State.ActivePlayerId);
+
+                        //reset timers
+                        ResetTimer(myTimer);
+                        ResetTimer(opponentTimer);
+                    }
+
+                    break;
             }
 
             void ResetTimer(TimerSliderWidget widget)

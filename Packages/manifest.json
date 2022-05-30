@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.amplitude.unityplugin": "https://github.com/amplitude/unity-plugin.git?path=/Assets",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
     "com.coffee.unmask": "https://github.com/mob-sakai/UnmaskForUGUI.git",
     "com.tayx.graphy": "https://github.com/Tayx94/graphy.git",

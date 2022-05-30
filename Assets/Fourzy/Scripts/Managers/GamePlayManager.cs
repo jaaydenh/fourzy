@@ -234,6 +234,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.LOCAL_GAME:
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
                     LogGameComplete(true);
 
                     break;
@@ -295,6 +296,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.LOCAL_GAME:
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
                     LogGameComplete(true);
 
                     break;
@@ -977,26 +979,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     Area area = (Area)levelParams.areaId;
                     AIProfile aiProfile = (AIProfile)levelParams.aiProfile;
                     BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
-                    int explicitSeed = SkillzGameController.Instance.ExplicitSeed;
 
-                    string randomSeed;
-                    if (explicitSeed > -1)
-                    {
-                        randomSeed = explicitSeed + "";
-                    }
-                    else
-                    {
-                        randomSeed = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzGameController.Instance.CurrentLevelIndex;
-                    }
-
-                    matchId = randomSeed;
-
+                    matchId = levelParams.seed;
                     string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
                     //string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
                     string opponentName = AIPlayerFactory.GetAIPlayerNameForSkillz(aiProfile);
 
                     preferences.RequestedRecipe = "";
-                    preferences.RecipeSeed = randomSeed;
+                    preferences.RecipeSeed = levelParams.seed;
                     preferences.TargetComplexityLow = levelParams.complexityLow;
                     preferences.TargetComplexityHigh = levelParams.complexityHigh;
 
@@ -1798,6 +1788,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 SkillzGameController.Instance.FinishGame(winner, points.ToArray());
 
+                //add time and moves consumed
+                SkillzGameController.Instance.SetLastGameTimeConsumed(GameplayScreen.MyTimerLeft);
+                SkillzGameController.Instance.SetLastGameMovesConsumed(game.myMembers.Count);
+
                 //force end game due to empty timer
                 if (GameplayScreen.skillzGameScreen.Timer == 0)
                 {
@@ -1819,9 +1813,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameplayScreen.OnGameFinished();
 
-#if !MOBILE_SKILLZ
-
-#region Amplitude user properties update
+            #region Amplitude user properties update
 
             switch (GameManager.Instance.ExpectedGameType)
             {
@@ -1852,6 +1844,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     GameManager.Instance.ReportAreaProgression((Area)PlayerPrefsWrapper.GetCurrentArea());
 
                     break;
+
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                     if (game.draw)
                     {
@@ -1874,48 +1867,69 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             AnalyticsManager.Instance.AmplitudeSetUserProperty("totalPrivateGamesLost", PlayerPrefsWrapper.GetPrivateGamesLost());
                         }
                     }
+
+                    break;
+
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
+                    // Skillz user properties.
+
                     break;
             }
 
-            if (GameManager.Instance.ExpectedGameType == GameTypeLocal.LOCAL_GAME)
+            switch (game._Mode)
             {
-                switch (game._Type)
-                {
-                    case GameType.TRY_TOKEN:
-                    case GameType.ONBOARDING:
-                    case GameType.PRESENTATION:
+                case GameMode.PUZZLE_PACK:
+                case GameMode.AI_PACK:
+                case GameMode.BOSS_AI_PACK:
+                    if (winner)
+                    {
+                        AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdventurePuzzlesCompleted", GameManager.Instance.currentMap.totalGamesComplete);
+                    }
+                    else
+                    {
+                        PlayerPrefsWrapper.AddAdventurePuzzlesFailedTimes();
 
-                        break;
+                        AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdventurePuzzleFailures", PlayerPrefsWrapper.GetAdventurePuzzleFailedTimes());
+                    }
 
-                    default:
-                        LogGameComplete(false);
-
-                        break;
-                }
-
-                switch (game._Mode)
-                {
-                    case GameMode.PUZZLE_PACK:
-                    case GameMode.AI_PACK:
-                    case GameMode.BOSS_AI_PACK:
-                        if (winner)
-                        {
-                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdventurePuzzlesCompleted", GameManager.Instance.currentMap.totalGamesComplete);
-                        }
-                        else
-                        {
-                            PlayerPrefsWrapper.AddAdventurePuzzlesFailedTimes();
-
-                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalAdventurePuzzleFailures", PlayerPrefsWrapper.GetAdventurePuzzleFailedTimes());
-                        }
-
-                        break;
-                }
+                    break;
             }
 
-#endregion
+            #endregion
 
-#region Realtime game complete (both vs and bot)
+            switch (GameManager.Instance.ExpectedGameType) 
+            {
+                case GameTypeLocal.LOCAL_GAME:
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
+                    switch (game._Type)
+                    {
+                        case GameType.TRY_TOKEN:
+                        case GameType.ONBOARDING:
+                        case GameType.PRESENTATION:
+
+                            break;
+
+                        default:
+                            LogGameComplete(false);
+
+                            break;
+                    }
+
+                    break;
+            }
+
+            switch (GameManager.Instance.ExpectedGameType)
+            {
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
+                    SkillzGameController.Instance.LastPlayedLevelIndex++;
+
+                    break;
+            }
+
+
+#if !MOBILE_SKILLZ
+
+            #region Realtime game complete (both vs and bot)
 
             if (game._Type == GameType.REALTIME)
             {
@@ -1977,11 +1991,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 ratingUpdated = true;
             }
 
-#endregion
+            #endregion
 
 #endif
 
-#region Rewards
+            #region Rewards
 
             switch (game._Type)
             {
@@ -2186,7 +2200,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.ONBOARDING:
                 case GameType.TRY_TOKEN:
                 case GameType.PRESENTATION:
-                case GameType.SKILLZ_ASYNC:
 
                     return;
             }
@@ -2209,22 +2222,36 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (GameplayScreen.timersEnabled)
             {
-                float player1TimeLeft = isPlayer1 ? GameplayScreen.MyTimerLeft : GameplayScreen.OpponentTimerLeft;
-                float player2TimeLeft = isPlayer1 ? GameplayScreen.OpponentTimerLeft : GameplayScreen.MyTimerLeft;
-
-                extraParams.Add("player1TimeRemaining", player1TimeLeft);
-                extraParams.Add("player2TimeRemaining", player2TimeLeft);
-
-                if (!abandoned)
+                switch (Game._Type)
                 {
-                    if (player1TimeLeft <= 0f)
-                    {
-                        gameResult = AnalyticsManager.GameResultType.player1TimeExpired;
-                    }
-                    else if (player2TimeLeft <= 0f)
-                    {
-                        gameResult = AnalyticsManager.GameResultType.player2TimeExpired;
-                    }
+                    case GameType.SKILLZ_ASYNC:
+                        SkillzGameResult lastResult = SkillzGameController.Instance.GamesPlayed.ElementAtOrDefault(SkillzGameController.Instance.LastPlayedLevelIndex);
+
+                        extraParams.Add("timeConsumedGame" + SkillzGameController.Instance.LastPlayedLevelIndex, lastResult != null ? lastResult.timeConsumed : 0f);
+                        extraParams.Add("movesTakenGame" + SkillzGameController.Instance.LastPlayedLevelIndex, lastResult != null ? lastResult.movesConsumed : 0);
+
+                        break;
+
+                    default:
+                        float player1TimeLeft = isPlayer1 ? GameplayScreen.MyTimerLeft : GameplayScreen.OpponentTimerLeft;
+                        float player2TimeLeft = isPlayer1 ? GameplayScreen.OpponentTimerLeft : GameplayScreen.MyTimerLeft;
+
+                        extraParams.Add("player1TimeRemaining", player1TimeLeft);
+                        extraParams.Add("player2TimeRemaining", player2TimeLeft);
+
+                        if (!abandoned)
+                        {
+                            if (player1TimeLeft <= 0f)
+                            {
+                                gameResult = AnalyticsManager.GameResultType.player1TimeExpired;
+                            }
+                            else if (player2TimeLeft <= 0f)
+                            {
+                                gameResult = AnalyticsManager.GameResultType.player2TimeExpired;
+                            }
+                        }
+
+                        break;
                 }
             }
 

@@ -3,7 +3,6 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
-using Sirenix.Utilities;
 using System;
 using System.Collections;
 using System.Globalization;

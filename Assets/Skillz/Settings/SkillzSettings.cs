@@ -6,7 +6,7 @@ namespace SkillzSDK.Settings
 	[Serializable]
 	public sealed class SkillzSettings : ScriptableObject
 	{
-		public const int MaxMatchParameters = 10;
+		public const int MaxMatchParameters = 20;
 
 		private static SkillzSettings instance;
 		private static SettingsLoader settingsLoader;

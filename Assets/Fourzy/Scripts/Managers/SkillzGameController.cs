@@ -38,11 +38,14 @@ namespace Fourzy._Updates.Managers
         private int pointsPerMoveLeftLose;
         private int pointsPerMoveLeftDraw;
         private int matchPausesLeft;
+        private float lastGameFinishedAt;
+        private int lastGameMovesCount;
 
-        internal Match CurrentMatch { get; set; }
+        internal Match CurrentMatch { get; private set; }
         internal bool OngoingMatch { get; set; }
         internal float GameInitialTimerValue => random - timer;
         internal int CurrentLevelIndex => GamesPlayed.Count;
+        internal int LastPlayedLevelIndex { get; set; }
         internal int WinPoints => random - winPoints;
         internal int DrawPoints => random - drawPoints;
         internal int WinAllGamesBonus => random - winAllGamesBonus;
@@ -70,6 +73,7 @@ namespace Fourzy._Updates.Managers
             random = UnityEngine.Random.Range(10000, 99999);
             GamesPlayed.Clear();
             ReturnToSkillzCalled = false;
+            LastPlayedLevelIndex = 0;
 
             //assign timer value
             timer = GetMatchParamInt(Constants.SKILLZ_GAME_TIMER_KEY, Constants.SKILLZ_DEFAULT_GAME_TIMER);
@@ -94,14 +98,35 @@ namespace Fourzy._Updates.Managers
             //match pauses left
             matchPausesLeft = GetMatchParamInt(Constants.SKILLZ_MATCH_PAUSES_KEY, Constants.SKILLZ_PAUSES_COUNT_PER_MATCH);
 
+            lastGameFinishedAt = GameInitialTimerValue;
+            lastGameMovesCount = MovesPerMatch;
             LevelsInfo = new List<SkillzLevelParams>();
             //levels info
-            for (int levelIndex = 0; levelIndex < gamesToPlay; levelIndex++)
+            for (int levelIndex = 0; levelIndex < GamesToPlay; levelIndex++)
             {
-                SkillzLevelParams info = 
-                    GetLevelInfo(levelIndex) ?? 
-                    LevelsInfo.Last() ?? 
-                    new SkillzLevelParams() { areaId = Constants.SKILLZ_DEFAULT_AREA, complexityLow = Constants.SKILLZ_GAME_COMPLEXITY_LOW, complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY_HIGH, oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID };
+                SkillzLevelParams info =
+                    GetLevelInfo(levelIndex) ??
+                    LevelsInfo.Last() ??
+                    new SkillzLevelParams() { 
+                        areaId = Constants.SKILLZ_DEFAULT_AREA, 
+                        complexityLow = Constants.SKILLZ_GAME_COMPLEXITY_LOW, 
+                        complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY_HIGH, 
+                        oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID };
+
+                int explicitSeed = ExplicitSeed;
+                if (explicitSeed > -1)
+                {
+                    info.seed = explicitSeed + "";
+
+                    if (levelIndex > 0)
+                    {
+                        info.seed += "_" + levelIndex;
+                    }
+                }
+                else
+                {
+                    info.seed = (CurrentMatch?.ID.Value.ToString() ?? "default") + levelIndex;
+                }
 
                 LevelsInfo.Add(info);
             }
@@ -133,12 +158,31 @@ namespace Fourzy._Updates.Managers
 
         public void FinishGame(bool state, params PointsEntry[] points)
         {
-            GamesPlayed.Add(new SkillzGameResult() { state = state, pointsEntries = new List<PointsEntry>(points) });
+            GamesPlayed.Add(new SkillzGameResult() 
+            { 
+                state = state, 
+                pointsEntries = new List<PointsEntry>(points) 
+            });
+        }
+
+        public void SetLastGameTimeConsumed(float currentTime)
+        {
+            float timeConsumed = lastGameFinishedAt - currentTime;
+            GamesPlayed.Last().timeConsumed = timeConsumed;
+
+            lastGameFinishedAt = currentTime;
+        }
+
+        public void SetLastGameMovesConsumed(int currentMovesCount)
+        {
+            int movesConsumed = lastGameMovesCount - currentMovesCount;
+            GamesPlayed.Last().movesConsumed = movesConsumed;
+
+            lastGameMovesCount = currentMovesCount;
         }
 
         public void OnMatchFinished()
         {
-            CurrentMatch = null;
             OngoingMatch = false;
         }
 
@@ -210,6 +254,8 @@ namespace Fourzy._Updates.Managers
     public class SkillzGameResult
     {
         internal bool state;
+        internal float timeConsumed;
+        internal int movesConsumed;
         internal List<PointsEntry> pointsEntries = new List<PointsEntry>();
 
         internal int Points => pointsEntries.Sum(_entry => _entry.amount);
@@ -235,5 +281,7 @@ namespace Fourzy._Updates.Managers
         public int areaId;
         public string oppHerdId;
         public int aiProfile;
+
+        public string seed;
     }
 }

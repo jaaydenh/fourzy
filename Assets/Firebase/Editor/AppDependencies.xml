@@ -20,5 +20,16 @@ FirebaseApp iOS and Android Dependencies.
         <repository>Assets/Firebase/m2repository</repository>
       </repositories>
     </androidPackage>
+	<androidPackage spec="com.amplitude:android-sdk:2.25.2">
+      <repositories>
+        <repository>https://maven.google.com</repository>
+      </repositories>
+    </androidPackage>
+
+    <androidPackage spec="com.squareup.okhttp3:okhttp:4.2.2">
+      <repositories>
+        <repository>https://maven.google.com</repository>
+      </repositories>
+    </androidPackage>
   </androidPackages>
 </dependencies>

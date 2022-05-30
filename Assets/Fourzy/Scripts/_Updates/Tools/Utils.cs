@@ -605,6 +605,11 @@ namespace Fourzy._Updates.Tools
                         AnalyticsManager.AnalyticsEvents.realtimeGameCreated :
                         AnalyticsManager.AnalyticsEvents.realtimeGameCompleted;
 
+                case GameTypeLocal.ASYNC_SKILLZ_GAME:
+                    return start ?
+                        AnalyticsManager.AnalyticsEvents.skillzAsyncGameCreated :
+                        AnalyticsManager.AnalyticsEvents.skillzAsyncGameCompleted;
+
                 case GameTypeLocal.LOCAL_GAME:
                     switch (game._Mode)
                     {
@@ -667,6 +672,9 @@ namespace Fourzy._Updates.Tools
                     }
 
                     break;
+
+                case GameType.SKILLZ_ASYNC:
+                    return true;
 
                 default:
                     return false;
