@@ -2389,14 +2389,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (Game == null) yield break;
 
-            switch (GameManager.Instance.buildIntent)
-            {
-                case BuildIntent.MOBILE_SKILLZ:
-                    // Add custom pause here!
-                    PauseGame();
+            // This breaks the game and prevents players from making a move
+            // switch (GameManager.Instance.buildIntent)
+            // {
+            //     case BuildIntent.MOBILE_SKILLZ:
+            //         // Add custom pause here!
+            //         PauseGame();
 
-                    break;
-            }
+            //         break;
+            // }
 
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
 
