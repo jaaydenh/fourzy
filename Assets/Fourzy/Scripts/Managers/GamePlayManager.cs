@@ -2380,16 +2380,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private IEnumerator GameInitRoutine()
         {
             if (Game == null) yield break;
-
-            switch (GameManager.Instance.buildIntent)
-            {
-                case BuildIntent.MOBILE_SKILLZ:
-                    // Add custom pause here!
-                    PauseGame();
-
-                    break;
-            }
 			
+            // switch (GameManager.Instance.buildIntent)
+            // {
+            //     case BuildIntent.MOBILE_SKILLZ:
+            //         // Add custom pause here!
+            //         PauseGame();
+
+            //         break;
+            // }
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
 
             MenuScreen _screen = menuController.GetScreen<PrePackPrompt>();
