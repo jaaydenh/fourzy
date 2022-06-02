@@ -796,6 +796,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (Game == null || Game._Type == GameType.ONBOARDING) yield break;
 
+            HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
             bool includePreviouslyDisplayed = false;
 
             switch (GameManager.Instance.buildIntent)
@@ -806,14 +807,22 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            HashSet<TokensDataHolder.TokenData> tokens = TokenInstructionsToDisplay(Game, includePreviouslyDisplayed);
-
-            if (tokens.Count == 0)
+            foreach (BoardSpace boardSpace in Game.boardContent)
             {
-                yield break;
+                foreach (IToken token in boardSpace.Tokens.Values)
+                {
+                    if ((!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) || includePreviouslyDisplayed) &&
+                        !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
+                    {
+                        tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
+                    }
+                }
             }
 
-            GameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
+            if (tokens.Count > 0)
+            {
+                GameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
+            }
 
             //"token unlock ribbon" condition
             bool showRibbon = false;
@@ -838,25 +847,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             FadePieces(alpha, fadeTime);
             yield return new WaitForSeconds(fadeTime - .2f);
-        }
-
-        private HashSet<TokensDataHolder.TokenData> TokenInstructionsToDisplay(IClientFourzy _game, bool includePreviouslyDisplayed)
-        {
-            HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
-
-            foreach (BoardSpace boardSpace in _game.boardContent)
-            {
-                foreach (IToken token in boardSpace.Tokens.Values)
-                {
-                    if ((!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) || includePreviouslyDisplayed) &&
-                        !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
-                    {
-                        tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
-                    }
-                }
-            }
-
-            return tokens;
         }
 
         private void FadeTokens(float alpha, float fadeTime)
@@ -1234,30 +1224,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             previousGameState = GameState;
             GameState = GameState.PAUSED;
             GameplayScreen.OnGamePaused();
-
-            // Also pause the board.
-            switch (Game._Type)
-            {
-                case GameType.SKILLZ_ASYNC:
-                    BoardView.Pause();
-
-                    break;
-            }
         }
 
         public void UnpauseGame()
         {
             GameState = previousGameState;
             GameplayScreen.OnGameUnpaused();
-
-            // Also unpause the board.
-            switch (Game._Type)
-            {
-                case GameType.SKILLZ_ASYNC:
-                    BoardView.Resume();
-
-                    break;
-            }
         }
 
         public void RecordLastBoardStateAsRoomProperty(bool bothPlayers)
@@ -2412,13 +2384,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (GameManager.Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_SKILLZ:
-                    HashSet<TokensDataHolder.TokenData> instructions = TokenInstructionsToDisplay(Game, true);
-
-                    if (instructions.Count > 0 && SettingsManager.Get(SettingsManager.KEY_TOKEN_INSTRUCTION))
-                    {
-                        // Add custom pause here!
-                        PauseGame();
-                    }
+                    // Add custom pause here!
+                    PauseGame();
 
                     break;
             }

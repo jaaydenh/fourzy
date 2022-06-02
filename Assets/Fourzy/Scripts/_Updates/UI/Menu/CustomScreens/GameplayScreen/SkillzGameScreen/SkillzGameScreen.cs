@@ -89,7 +89,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (game == null || game._Type != GameType.SKILLZ_ASYNC) return;
 
-            if (game.isMyTurn && GamePlayManager.Instance.GameState != GameState.PAUSED)
+            if (game.isMyTurn)
             {
                 Unpause();
             }
