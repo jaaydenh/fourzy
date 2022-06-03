@@ -42,6 +42,7 @@ namespace Fourzy._Updates.Managers
         private int lastGameMovesCount;
 
         internal Match CurrentMatch { get; private set; }
+        internal Match LastMatch { get; private set; }
         internal bool OngoingMatch { get; set; }
         internal float GameInitialTimerValue => random - timer;
         internal int CurrentLevelIndex => GamesPlayed.Count;
@@ -135,6 +136,7 @@ namespace Fourzy._Updates.Managers
         public void OnMatchWillBegin(Match matchInfo)
         {
             CurrentMatch = matchInfo;
+            LastMatch = matchInfo;
             OngoingMatch = true;
             SubmitRetries = 3;
             InitializeMatchData();
@@ -183,6 +185,7 @@ namespace Fourzy._Updates.Managers
 
         public void OnMatchFinished()
         {
+            CurrentMatch = null;
             OngoingMatch = false;
         }
 

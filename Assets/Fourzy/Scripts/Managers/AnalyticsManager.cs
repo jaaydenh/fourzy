@@ -438,15 +438,15 @@ namespace Fourzy
                     _values.Add("initialBoard", game._State.Board.ContentString);
                     _values.Add("finalScore", SkillzGameController.Instance.Points);
                     _values.Add("aiProfile", (AIProfile)SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].aiProfile);
-                    _values.Add("isCash", SkillzGameController.Instance.CurrentMatch.IsCash ?? false);
-                    _values.Add("entryCash", SkillzGameController.Instance.CurrentMatch.EntryCash ?? 0f);
-                    _values.Add("entryPoints", SkillzGameController.Instance.CurrentMatch.EntryPoints ?? 0f);
-                    _values.Add("skillzId", SkillzGameController.Instance.CurrentMatch.ID ?? 0l);
-                    _values.Add("isTieBreaker", SkillzGameController.Instance.CurrentMatch.IsTieBreaker);
-                    _values.Add("skillzName", SkillzGameController.Instance.CurrentMatch.Name);
-                    _values.Add("templateID", SkillzGameController.Instance.CurrentMatch.TemplateID ?? 0);
-                    _values.Add("isBracket", SkillzGameController.Instance.CurrentMatch.IsBracket);
-                    _values.Add("bracketRound", SkillzGameController.Instance.CurrentMatch.BracketRound);
+                    _values.Add("isCash", SkillzGameController.Instance.LastMatch.IsCash ?? false);
+                    _values.Add("entryCash", SkillzGameController.Instance.LastMatch.EntryCash ?? 0f);
+                    _values.Add("entryPoints", SkillzGameController.Instance.LastMatch.EntryPoints ?? 0f);
+                    _values.Add("skillzId", SkillzGameController.Instance.LastMatch.ID ?? 0l);
+                    _values.Add("isTieBreaker", SkillzGameController.Instance.LastMatch.IsTieBreaker);
+                    _values.Add("skillzName", SkillzGameController.Instance.LastMatch.Name);
+                    _values.Add("templateID", SkillzGameController.Instance.LastMatch.TemplateID ?? 0);
+                    _values.Add("isBracket", SkillzGameController.Instance.LastMatch.IsBracket);
+                    _values.Add("bracketRound", SkillzGameController.Instance.LastMatch.BracketRound);
 
                     break;
             }
