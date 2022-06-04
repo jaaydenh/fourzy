@@ -395,14 +395,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CancelRoutine("postGameRoutine");
             CancelRoutine("tokensInstruction");
 
-            if (GameState != GameState.PAUSED)
-            {
-                GameState = GameState.OPENNING_GAME;
-            }
-            else
-            {
-                previousGameState = GameState.OPENNING_GAME;
-            }
+            Debug.Log("LoadGame: GameState: " + GameState);
+            Debug.Log("LoadGame: previousGameState: " + previousGameState);
+
+            GameState = GameState.OPENNING_GAME;
+            previousGameState = GameState.OPENNING_GAME;
 
             GameStarted = false;
             IsBoardReady = false;
@@ -2381,14 +2378,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (Game == null) yield break;
 			
-            // switch (GameManager.Instance.buildIntent)
-            // {
-            //     case BuildIntent.MOBILE_SKILLZ:
-            //         // Add custom pause here!
-            //         PauseGame();
-
-            //         break;
-            // }
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
 
             MenuScreen _screen = menuController.GetScreen<PrePackPrompt>();
