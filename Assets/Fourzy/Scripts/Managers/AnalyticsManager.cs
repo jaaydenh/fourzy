@@ -46,6 +46,7 @@ namespace Fourzy
                 {
                     Initialize();
                     SetProductVersion();
+                    AppLoad();
                 }
 
                 return instance;
@@ -142,6 +143,22 @@ namespace Fourzy
                     AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "Desktop");
                     break;
             }
+        }
+
+        protected static void AppLoad() {
+            int timesOpened = PlayerPrefsWrapper.GetAppOpened();
+            if (timesOpened >= 1)
+            {
+                AnalyticsManager.Instance.AmplitudeSetUserProperty("firstEntry", false);
+            }
+
+            //get seconds since last opened
+            long lastOpened = PlayerPrefsWrapper.GetSecondsSinceLastOpen();
+            PlayerPrefsWrapper.AddDaysPlayed(lastOpened / 60f / 24f);
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalDaysPlayed", PlayerPrefsWrapper.GetDaysPlayed());
+            PlayerPrefsWrapper.SetAppOpenedTime();
+
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSessions", timesOpened);
         }
 
         protected void OnApplicationQuit()
