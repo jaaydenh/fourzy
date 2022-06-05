@@ -87,6 +87,7 @@ namespace Fourzy
         public const string SKILLZ_POINTS_PER_MOVE_LOSE_KEY = "PointsPerMoveLose";
         public const string SKILLZ_POINTS_PER_MOVE_DRAW_KEY = "PointsPerMoveDraw";
         public const string SKILLZ_MATCH_PAUSES_KEY = "PauseLimit";
+        public const string SKILLZ_CRAFTED_BOARD_PERCENTAGE_KEY = "CraftedBoardPercentage";
         public const int SKILLZ_DEFAULT_GAMES_COUNT = 1;
         public const int SKILLZ_DEFAULT_GAME_TIMER = 180;
         public const int SKILLZ_MOVES_PER_MATCH = 28;
@@ -103,6 +104,7 @@ namespace Fourzy
         public const int SKILLZ_DEFAULT_AIPROFILE = (int)AIProfile.SimpleAI;
         public const int SKILLZ_DEFAULT_AREA = (int)Area.TRAINING_GARDEN;
         public const string SKILLZ_DEFAULT_OPP_HERD_ID = "red_dragon";
+        public const string SKILLZ_CRAFTED_BOARD_PERCENTAGE = "0.25";
 
         public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 10;
         public const int SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME = 10;
@@ -152,6 +154,7 @@ namespace Fourzy
         public const string INSTRUCTION_BOARDS_FOLDER = BOARDS_ROOT + "/InstructionBoards";
         public const string TRY_IT_BOARDS_FOLDER = BOARDS_ROOT + "/TryItBoards";
         public const string MISC_BOARDS_FOLDER = BOARDS_ROOT + "/MiscBoards";
+        public const string SKILLZ_BOARDS_FOLDER = BOARDS_ROOT + "/Skillz";
 
         public const string LOCALIZATION_FOLDER = "Localization";
 

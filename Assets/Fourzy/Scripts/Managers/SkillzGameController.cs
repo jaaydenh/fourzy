@@ -40,6 +40,7 @@ namespace Fourzy._Updates.Managers
         private int matchPausesLeft;
         private float lastGameFinishedAt;
         private int lastGameMovesCount;
+        private bool lastGameIsCraftedBoard;
 
         internal Match CurrentMatch { get; private set; }
         internal Match LastMatch { get; private set; }
@@ -112,7 +113,8 @@ namespace Fourzy._Updates.Managers
                         areaId = Constants.SKILLZ_DEFAULT_AREA, 
                         complexityLow = Constants.SKILLZ_GAME_COMPLEXITY_LOW, 
                         complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY_HIGH, 
-                        oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID };
+                        oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID,
+                        craftedBoardPercentage = Constants.SKILLZ_CRAFTED_BOARD_PERCENTAGE };
 
                 int explicitSeed = ExplicitSeed;
                 if (explicitSeed > -1)
@@ -257,6 +259,7 @@ namespace Fourzy._Updates.Managers
     public class SkillzGameResult
     {
         internal bool state;
+        internal bool isCraftedBoard;
         internal float timeConsumed;
         internal int movesConsumed;
         internal List<PointsEntry> pointsEntries = new List<PointsEntry>();
@@ -284,7 +287,8 @@ namespace Fourzy._Updates.Managers
         public int areaId;
         public string oppHerdId;
         public int aiProfile;
-
+        public string craftedBoardPercentage;
+        public bool isCraftedBoard;
         public string seed;
     }
 }

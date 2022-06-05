@@ -44,6 +44,7 @@ namespace Fourzy
         internal List<ResourceItem> instructionBoards { get; private set; }
         internal List<ResourceItem> realtimeBotBoards { get; private set; }
         internal List<GameBoardDefinition> passAndPlayBoards { get; private set; }
+        internal List<ResourceItem> skillzBoards { get; private set; }
         internal List<ResourceItem> miscBoards { get; private set; }
 
         internal AreasDataHolder.GameArea currentArea
@@ -100,18 +101,23 @@ namespace Fourzy
                     LoadAllFastPuzzles();
                     LoadPuzzlePacks();
                     LoadTutorialBotGames();
-
                     break;
 
                 case BuildIntent.MOBILE_INFINITY:
                     LoadPuzzlePacks();
+                    break;
 
+                case BuildIntent.MOBILE_SKILLZ:
+                    LoadSkillzBoards();
                     break;
             }
 
             LoadInstructionBoards();
             LoadMiscBoards();
-            LoadPassAndPlayBoards();
+            if (GameManager.Instance.buildIntent != BuildIntent.MOBILE_SKILLZ)
+            {
+                LoadPassAndPlayBoards();
+            }
         }
 
         public void GetItemsCataloge()
@@ -214,6 +220,12 @@ namespace Fourzy
             {
                 return null;
             }
+        }
+
+        public GameBoardDefinition GetRandomSkillzBoard()
+        {
+            ResourceItem _file = skillzBoards[UnityEngine.Random.Range(0, skillzBoards.Count)];
+            return JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text);
         }
 
         public void StartTryItBoard(TokenType token)
@@ -459,6 +471,23 @@ namespace Fourzy
             if (Application.isEditor || Debug.isDebugBuild)
             {
                 Debug.Log($"Loaded {passAndPlayBoards.Count} pass and play boards");
+            }
+        }
+
+        /// <summary>
+        /// Skillz boards
+        /// </summary>
+        private void LoadSkillzBoards()
+        {
+            skillzBoards = new List<ResourceItem>(ResourceDB
+                .GetFolder(Constants.SKILLZ_BOARDS_FOLDER)
+                .GetChild("Z2", ResourceItem.Type.Folder)
+                .GetChilds("", ResourceItem.Type.Asset)
+                .Where(_file => _file.Ext == "json"));
+
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.Log($"Loaded {skillzBoards.Count} skillz boards");
             }
         }
 

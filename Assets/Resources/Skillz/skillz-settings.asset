@@ -17,20 +17,20 @@ MonoBehaviour:
   Orientation: 1
   MatchParameters:
   - Key: Games
-    Value: 1
+    Value: 3
   - Key: Timer
     Value: 100
   - Key: Moves
     Value: 2
   - Key: Level0
     Value: '{ "complexityLow": 300, "complexityHigh": 700, "areaId": 2, "oppHerdId":
-      "red_dragon", "aiProfile": 29 }'
+      "red_dragon", "aiProfile": 29, "craftedBoardPercentage": "0.8" }'
   - Key: Level1
     Value: '{ "complexityLow": 300, "complexityHigh": 350, "areaId": 2, "oppHerdId":"rainbow_bite",
-      "aiProfile": 29 }'
+      "aiProfile": 29, "craftedBoardPercentage": "0.1"  }'
   - Key: Level2
     Value: '{ "complexityLow": 300, "complexityHigh": 400, "areaId": 2, "oppHerdId":
-      "furrzy", "aiProfile": 29 }'
+      "furrzy", "aiProfile": 29, "craftedBoardPercentage": "0.99"  }'
   - Key: WinPoints
     Value: 1000
   - Key: DrawPoints
@@ -39,6 +39,8 @@ MonoBehaviour:
     Value: 1
   - Key: PointsPerMoveWin
     Value: 10
+  - Key: 
+    Value: 
   SimulateMatchWins: 0
   AllowSkillzExit: 1
   HasSyncBot: 0

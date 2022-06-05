@@ -160,6 +160,22 @@ namespace Fourzy
 
         public static string GetAbandonedRealtimeRoomName() => PlayerPrefs.GetString("abandoned_room_name", "");
 
+        public static void AddSkillzAsyncGamesWon() => PlayerPrefs.SetInt("skillz_async_games_won", GetSkillzAsyncGamesWon() + 1);
+
+        public static int GetSkillzAsyncGamesWon() => PlayerPrefs.GetInt("skillz_async_games_won", 0);
+
+        public static void AddSkillzAsyncGamesLost() => PlayerPrefs.SetInt("skillz_async_games_lost", GetSkillzAsyncGamesLost() + 1);
+
+        public static int GetSkillzAsyncGamesLost() => PlayerPrefs.GetInt("skillz_async_games_lost");
+
+        public static void AddSkillzAsyncGamesDraw() => PlayerPrefs.SetInt("skillz_async_games_draw", GetSkillzAsyncGamesDraw() + 1);
+
+        public static int GetSkillzAsyncGamesDraw() => PlayerPrefs.GetInt("skillz_async_games_draw", 0);
+
+        public static void AddSkillzAsyncGamesPlayed() => PlayerPrefs.SetInt("skillz_async_games_played", GetSkillzAsyncGamesPlayed() + 1);
+
+        public static int GetSkillzAsyncGamesPlayed() => PlayerPrefs.GetInt("skillz_async_games_played", 0);
+
         /// <summary>
         /// Turn-based games related
         /// </summary>

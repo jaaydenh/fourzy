@@ -325,7 +325,9 @@ namespace Fourzy._Updates.ClientModel
         public ClientFourzyGame(
             GameBoardDefinition definition,
             Player Player1,
-            Player Player2) : base(definition, Player1, Player2)
+            Player Player2,
+            int FirstPlayerId = 1,
+            GameOptions Options = null) : base(definition, Player1, Player2, FirstPlayerId, Options)
         {
             initialMoves = new List<SimpleMove>(definition.InitialMoves);
             BoardID = definition.ID;

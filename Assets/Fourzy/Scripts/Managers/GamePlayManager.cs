@@ -865,7 +865,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public void CheckGameMode()
         {
             GameManager.Instance.botGameType = GameManager.BotGameType.NONE;
-            string matchId = "";
 
             //auto load game if its not realtime mdoe
             switch (GameManager.Instance.ExpectedGameType)
@@ -964,26 +963,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameTypeLocal.ASYNC_SKILLZ_GAME:
-                    SkillzLevelParams levelParams = SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.CurrentLevelIndex];
-                    Area area = (Area)levelParams.areaId;
-                    AIProfile aiProfile = (AIProfile)levelParams.aiProfile;
-                    BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
-
-                    matchId = levelParams.seed;
-                    string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
-                    //string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
-                    string opponentName = AIPlayerFactory.GetAIPlayerNameForSkillz(aiProfile);
-
-                    preferences.RequestedRecipe = "";
-                    preferences.RecipeSeed = levelParams.seed;
-                    preferences.TargetComplexityLow = levelParams.complexityLow;
-                    preferences.TargetComplexityHigh = levelParams.complexityHigh;
-
-                    Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
-                    Player opponent = new Player(2, opponentName, aiProfile) { HerdId = levelParams.oppHerdId };
-
-                    GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
-                    ClientFourzyGame game = new ClientFourzyGame(area, player, opponent, 1, options, preferences);
+                    ClientFourzyGame game = CreateSkillzGame();
                     game._Type = GameType.SKILLZ_ASYNC;
                     game.State.InitializeHerd(1, SkillzGameController.Instance.MovesPerMatch);
                     game.State.InitializeHerd(2, 999);
@@ -998,9 +978,42 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+        }
+
+        public ClientFourzyGame CreateSkillzGame()
+        {
+            SkillzLevelParams levelParams = SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.CurrentLevelIndex];
+            
+            AIProfile aiProfile = (AIProfile)levelParams.aiProfile;
+            string matchId = levelParams.seed;
+            string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
+            string opponentName = AIPlayerFactory.GetAIPlayerNameForSkillz(aiProfile);
+            Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
+            Player opponent = new Player(2, opponentName, aiProfile) { HerdId = levelParams.oppHerdId };
+            GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
 
             if (Debug.isDebugBuild) {
               GameplayScreen.SetMatchID(matchId);
+            }
+
+            float random = SkillzCrossPlatform.Random.Value();
+            Debug.Log("Random for Board generation: " + random);
+            Debug.Log("levelParams.handcraftedBoardPercentage: " + float.Parse(levelParams.craftedBoardPercentage));
+            if (random <= float.Parse(levelParams.craftedBoardPercentage)) {
+            // Create game using a random handcrafted board
+              levelParams.isCraftedBoard = true;
+              GameBoardDefinition boardDefinition = GameContentManager.Instance.GetRandomSkillzBoard();
+              return new ClientFourzyGame(boardDefinition, player, opponent, 1, options);
+            } else {
+            // Create game using board generation
+              levelParams.isCraftedBoard = false;
+              Area area = (Area)levelParams.areaId;
+              BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
+              preferences.RequestedRecipe = "";
+              preferences.RecipeSeed = levelParams.seed;
+              preferences.TargetComplexityLow = levelParams.complexityLow;
+              preferences.TargetComplexityHigh = levelParams.complexityHigh;
+              return new ClientFourzyGame(area, player, opponent, 1, options, preferences);
             }
         }
 
@@ -1860,8 +1873,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameTypeLocal.ASYNC_SKILLZ_GAME:
-                    // Skillz user properties.
-
+                    if (game.draw) {
+                        PlayerPrefsWrapper.AddSkillzAsyncGamesDraw();
+                        AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesDraw", PlayerPrefsWrapper.GetSkillzAsyncGamesDraw());
+                    } else {
+                        if (game.IsWinner()) {
+                            PlayerPrefsWrapper.AddSkillzAsyncGamesWon();
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesWon", PlayerPrefsWrapper.GetSkillzAsyncGamesWon());
+                        } else {
+                            PlayerPrefsWrapper.AddSkillzAsyncGamesLost();
+                            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesLost", PlayerPrefsWrapper.GetSkillzAsyncGamesLost());
+                        }
+                    }
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesPlayed", PlayerPrefsWrapper.GetSkillzAsyncGamesPlayed());
                     break;
             }
 

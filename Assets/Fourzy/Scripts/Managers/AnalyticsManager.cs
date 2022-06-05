@@ -45,6 +45,7 @@ namespace Fourzy
                 if (instance == null)
                 {
                     Initialize();
+                    SetProductVersion();
                 }
 
                 return instance;
@@ -125,11 +126,30 @@ namespace Fourzy
             amplitude.init(apiKey);
         }
 
+        protected static void SetProductVersion() {
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_REGULAR:
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "Mobile");
+                    break;
+                case BuildIntent.MOBILE_SKILLZ:
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "Skillz");
+                    break;
+                case BuildIntent.MOBILE_INFINITY:
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "InfinityGameTable");
+                    break;
+                case BuildIntent.DESKTOP_REGULAR:
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "Desktop");
+                    break;
+            }
+        }
+
         protected void OnApplicationQuit()
         {
             switch (GameManager.Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_REGULAR:
+                case BuildIntent.MOBILE_SKILLZ:
                 case BuildIntent.MOBILE_INFINITY:
                     AnalyticsManager.Instance.AmplitudeSetUserProperty("lastSeenDate", DateTime.Now.ToString());
 
@@ -421,6 +441,7 @@ namespace Fourzy
                     break;
 
                 case AnalyticsEvents.skillzAsyncGameCreated:
+                    _values.Add("isCraftedBoard", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].isCraftedBoard);
                     _values.Add("complexityScoreLow", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityLow);
                     _values.Add("complexityScoreHigh", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityHigh);
                     _values.Add("recipe", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].seed);
@@ -432,6 +453,7 @@ namespace Fourzy
                     break;
 
                 case AnalyticsEvents.skillzAsyncGameCompleted:
+                    _values.Add("isCraftedBoard", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].isCraftedBoard);
                     _values.Add("complexityScoreLow", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityLow);
                     _values.Add("complexityScoreHigh", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].complexityHigh);
                     _values.Add("recipe", SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.LastPlayedLevelIndex].seed);
