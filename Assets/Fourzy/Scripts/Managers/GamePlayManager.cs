@@ -997,9 +997,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             float random = SkillzCrossPlatform.Random.Value();
-            Debug.Log("Random for Board generation: " + random);
-            Debug.Log("levelParams.handcraftedBoardPercentage: " + float.Parse(levelParams.craftedBoardPercentage));
-            if (random <= float.Parse(levelParams.craftedBoardPercentage)) {
+            float craftedBoardPercentage = float.Parse(Constants.SKILLZ_DEFAULT_CRAFTED_BOARD_PERCENTAGE);
+            if (levelParams.craftedBoardPercentage != null) {
+              craftedBoardPercentage = float.Parse(levelParams.craftedBoardPercentage);
+            } 
+            Debug.Log("Random value: " + random);
+            Debug.Log("levelParams.handcraftedBoardPercentage: " + craftedBoardPercentage);
+
+            if (random <= craftedBoardPercentage) {
             // Create game using a random handcrafted board
               levelParams.isCraftedBoard = true;
               GameBoardDefinition boardDefinition = GameContentManager.Instance.GetRandomSkillzBoard();
@@ -1885,6 +1890,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesLost", PlayerPrefsWrapper.GetSkillzAsyncGamesLost());
                         }
                     }
+                    PlayerPrefsWrapper.AddSkillzAsyncGamesPlayed();
                     AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesPlayed", PlayerPrefsWrapper.GetSkillzAsyncGamesPlayed());
                     break;
             }

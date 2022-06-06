@@ -45,8 +45,6 @@ namespace Fourzy
                 if (instance == null)
                 {
                     Initialize();
-                    SetProductVersion();
-                    AppLoad();
                 }
 
                 return instance;
@@ -127,7 +125,13 @@ namespace Fourzy
             amplitude.init(apiKey);
         }
 
-        protected static void SetProductVersion() {
+        protected void Start()
+        {
+            SetProductVersion();
+            SetUserProperties();
+        }
+
+        protected void SetProductVersion() {
             switch (GameManager.Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_REGULAR:
@@ -145,7 +149,7 @@ namespace Fourzy
             }
         }
 
-        protected static void AppLoad() {
+        protected void SetUserProperties() {
             int timesOpened = PlayerPrefsWrapper.GetAppOpened();
             if (timesOpened >= 1)
             {

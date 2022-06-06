@@ -114,7 +114,7 @@ namespace Fourzy._Updates.Managers
                         complexityLow = Constants.SKILLZ_GAME_COMPLEXITY_LOW, 
                         complexityHigh = Constants.SKILLZ_GAME_COMPLEXITY_HIGH, 
                         oppHerdId = Constants.SKILLZ_DEFAULT_OPP_HERD_ID,
-                        craftedBoardPercentage = Constants.SKILLZ_CRAFTED_BOARD_PERCENTAGE };
+                        craftedBoardPercentage = Constants.SKILLZ_DEFAULT_CRAFTED_BOARD_PERCENTAGE };
 
                 int explicitSeed = ExplicitSeed;
                 if (explicitSeed > -1)

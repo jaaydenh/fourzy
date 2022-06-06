@@ -224,7 +224,7 @@ namespace Fourzy
 
         public GameBoardDefinition GetRandomSkillzBoard()
         {
-            ResourceItem _file = skillzBoards[UnityEngine.Random.Range(0, skillzBoards.Count)];
+            ResourceItem _file = skillzBoards[UnityEngine.Random.Range(0, skillzBoards.Count-1)];
             return JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text);
         }
 

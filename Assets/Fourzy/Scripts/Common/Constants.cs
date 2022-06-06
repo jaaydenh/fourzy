@@ -104,7 +104,7 @@ namespace Fourzy
         public const int SKILLZ_DEFAULT_AIPROFILE = (int)AIProfile.SimpleAI;
         public const int SKILLZ_DEFAULT_AREA = (int)Area.TRAINING_GARDEN;
         public const string SKILLZ_DEFAULT_OPP_HERD_ID = "red_dragon";
-        public const string SKILLZ_CRAFTED_BOARD_PERCENTAGE = "0.25";
+        public const string SKILLZ_DEFAULT_CRAFTED_BOARD_PERCENTAGE = "0.25";
 
         public const int SKILLZ_PROGRESSION_POPUP_WAIT_TIME = 10;
         public const int SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME = 10;
