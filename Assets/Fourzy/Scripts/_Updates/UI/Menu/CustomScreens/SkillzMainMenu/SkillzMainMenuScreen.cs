@@ -33,6 +33,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            GameManager.Instance.CloseApp();
+        }
+
         public void StartSkillz()
         {
             SkillzMainMenuController.Instance.StartSkillzUI();
