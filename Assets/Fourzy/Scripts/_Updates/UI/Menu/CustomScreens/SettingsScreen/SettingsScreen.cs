@@ -57,6 +57,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleSfx() => SettingsManager.Toggle(SettingsManager.KEY_SFX);
 
+        // Audio is for Music
         public void ToggleAudio() => SettingsManager.Toggle(SettingsManager.KEY_AUDIO);
 
         public void ToggleDemoMode() => SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
