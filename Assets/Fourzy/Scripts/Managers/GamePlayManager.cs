@@ -176,6 +176,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 return;
             }
 
+            if (GameState == GameState.PREGAME_DISPLAY_INSTRUCTION)
+            {
+                return;
+            }
+
             switch (Game._Type)
             {
                 case GameType.SKILLZ_ASYNC:
@@ -791,6 +796,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
         {
+            // break if game is null or TUTORIAL game
             if (Game == null || Game._Type == GameType.ONBOARDING) yield break;
 
             HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
@@ -800,6 +806,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case BuildIntent.MOBILE_SKILLZ:
                     includePreviouslyDisplayed = true;
+
+                    // Add custom pause here!
+                    PauseGame();
 
                     break;
             }
@@ -832,6 +841,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             yield return ShowTokensInstructionsRoutine(tokens, showRibbon);
+
+            //unpause if built for skillz
+            switch (GameManager.Instance.buildIntent)
+            {
+                case BuildIntent.MOBILE_SKILLZ:
+                    UnpauseGame();
+
+                    break;
+            }
         }
 
         private IEnumerator FadeGameScreen(float alpha, float fadeTime)
@@ -992,33 +1010,40 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             Player opponent = new Player(2, opponentName, aiProfile) { HerdId = levelParams.oppHerdId };
             GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
 
-            if (Debug.isDebugBuild) {
-              GameplayScreen.SetMatchID(matchId);
+            if (Debug.isDebugBuild) 
+            {
+                GameplayScreen.SetMatchID(matchId);
             }
 
             float random = SkillzCrossPlatform.Random.Value();
             float craftedBoardPercentage = float.Parse(Constants.SKILLZ_DEFAULT_CRAFTED_BOARD_PERCENTAGE);
-            if (levelParams.craftedBoardPercentage != null) {
-              craftedBoardPercentage = float.Parse(levelParams.craftedBoardPercentage);
+            if (levelParams.craftedBoardPercentage != null) 
+            {
+                craftedBoardPercentage = float.Parse(levelParams.craftedBoardPercentage);
             } 
             Debug.Log("Random value: " + random);
             Debug.Log("levelParams.handcraftedBoardPercentage: " + craftedBoardPercentage);
 
-            if (random <= craftedBoardPercentage) {
+            if (random <= craftedBoardPercentage) 
+            {
             // Create game using a random handcrafted board
-              levelParams.isCraftedBoard = true;
-              GameBoardDefinition boardDefinition = GameContentManager.Instance.GetRandomSkillzBoard();
-              return new ClientFourzyGame(boardDefinition, player, opponent, 1, options);
-            } else {
+                levelParams.isCraftedBoard = true;
+                GameBoardDefinition boardDefinition = GameContentManager.Instance.GetRandomSkillzBoard();
+
+                return new ClientFourzyGame(boardDefinition, player, opponent, 1, options);
+            } 
+            else 
+            {
             // Create game using board generation
-              levelParams.isCraftedBoard = false;
-              Area area = (Area)levelParams.areaId;
-              BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
-              preferences.RequestedRecipe = "";
-              preferences.RecipeSeed = levelParams.seed;
-              preferences.TargetComplexityLow = levelParams.complexityLow;
-              preferences.TargetComplexityHigh = levelParams.complexityHigh;
-              return new ClientFourzyGame(area, player, opponent, 1, options, preferences);
+                levelParams.isCraftedBoard = false;
+                Area area = (Area)levelParams.areaId;
+                BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
+                preferences.RequestedRecipe = "";
+                preferences.RecipeSeed = levelParams.seed;
+                preferences.TargetComplexityLow = levelParams.complexityLow;
+                preferences.TargetComplexityHigh = levelParams.complexityHigh;
+
+                return new ClientFourzyGame(area, player, opponent, 1, options, preferences);
             }
         }
 
@@ -1239,12 +1264,30 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             previousGameState = GameState;
             GameState = GameState.PAUSED;
             GameplayScreen.OnGamePaused();
+
+            // Also pause the board.
+            switch (Game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    BoardView.Pause();
+
+                    break;
+            }
         }
 
         public void UnpauseGame()
         {
             GameState = previousGameState;
             GameplayScreen.OnGameUnpaused();
+
+            // Also unpause the board.
+            switch (Game._Type)
+            {
+                case GameType.SKILLZ_ASYNC:
+                    BoardView.Resume();
+
+                    break;
+            }
         }
 
         public void RecordLastBoardStateAsRoomProperty(bool bothPlayers)
