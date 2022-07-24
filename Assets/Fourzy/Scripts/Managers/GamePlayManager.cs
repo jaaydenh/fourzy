@@ -1075,7 +1075,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             bool switchActivePlayer = false;
 
-            // Switch active player on rematch?c
+            // Switch active player on rematch?
             switch (GameManager.Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_INFINITY:
