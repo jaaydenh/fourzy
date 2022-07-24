@@ -5,21 +5,13 @@ using Fourzy._Updates.Tools;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
-#if !MOBILE_SKILLZ
 using ExitGames.Client.Photon;
-using Hellmade.Net;
 using Photon.Pun;
 using Photon.Realtime;
-#endif
 
 namespace Fourzy
 {
-#if !MOBILE_SKILLZ
     public class FourzyPhotonManager : MonoBehaviourPunCallbacks, IOnEventCallback
-#else
-    public class FourzyPhotonManager : MonoBehaviour
-#endif
     {
         public static FourzyPhotonManager Instance
         {
@@ -40,7 +32,6 @@ namespace Fourzy
         public static Action onJoinRandomFailed;
         public static Action<string> onCreateRoom;
         public static Action<string> onJoinedRoom;
-#if !MOBILE_SKILLZ
         public static Action<Player> onPlayerEnteredRoom;
         public static Action<Player> onPlayerLeftRoom;
         public static Action<Hashtable> onRoomPropertiesUpdate;
@@ -49,7 +40,6 @@ namespace Fourzy
         public static Action<List<RoomInfo>> onRoomsListUpdated;
         public static Action<Player, Hashtable> onPlayerPpopertiesUpdate;
         public List<RoomInfo> cachedRooms = new List<RoomInfo>();
-#endif
         public static Action onRoomLeft;
         public static Action onConnectionTimeOut;
 
@@ -62,12 +52,7 @@ namespace Fourzy
 
         private Coroutine connectionTimedOutRoutine;
 
-        public static bool ConnectedAndReady =>
-#if !MOBILE_SKILLZ
-            PhotonNetwork.IsConnectedAndReady;
-#else
-            false;
-#endif
+        public static bool ConnectedAndReady => PhotonNetwork.IsConnectedAndReady;
 
         public static void Initialize(bool DEBUG = true)
         {
@@ -87,9 +72,8 @@ namespace Fourzy
             DontDestroyOnLoad(go);
         }
 
-        #region Callbacks
+#region Callbacks
 
-#if !MOBILE_SKILLZ
         public override void OnEnable()
         {
             base.OnEnable();
@@ -406,7 +390,6 @@ namespace Fourzy
             if (DEBUG)
             {
                 Debug.Log($"Disconnected from server.");
-                EazyNetChecker.StartConnectionCheck(false, true);
             }
 
             onDisconnectedFromServer?.Invoke();
@@ -431,15 +414,12 @@ namespace Fourzy
 
             onPlayerPpopertiesUpdate?.Invoke(targetPlayer, changedProps);
         }
-#endif
 
 #endregion
 
         public static void SetClientReadyState(bool state)
         {
-#if !MOBILE_SKILLZ
             SetRoomProperty(PhotonNetwork.IsMasterClient ? Constants.REALTIME_ROOM_PLAYER_1_READY : Constants.REALTIME_ROOM_PLAYER_2_READY, state);
-#endif
         }
 
         public static void SetClientsReadyState(bool state)
@@ -450,48 +430,36 @@ namespace Fourzy
 
         public static void SetClientRematchReady()
         {
-#if !MOBILE_SKILLZ
             SetRoomProperty(PhotonNetwork.IsMasterClient ? Constants.REALTIME_ROOM_PLAYER_1_REMATCH : Constants.REALTIME_ROOM_PLAYER_2_REMATCH, true);
-#endif
         }
 
         public static void SetRoomProperty<T>(string key, T value)
         {
-#if !MOBILE_SKILLZ
             if (PhotonNetwork.CurrentRoom == null) return;
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
             {
                 [key] = value,
             });
-#endif
         }
 
         public static void TryLeaveRoom()
         {
-#if !MOBILE_SKILLZ
             if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.NetworkClientState != ClientState.Leaving)
             {
                 PhotonNetwork.LeaveRoom();
             }
-#endif
         }
 
         public static T GetRoomProperty<T>(string key, T defaultValue)
         {
-#if !MOBILE_SKILLZ
             if (PhotonNetwork.CurrentRoom == null) return defaultValue;
 
             return GetRoomProperty(PhotonNetwork.CurrentRoom.CustomProperties, key, defaultValue);
-#else
-            return defaultValue;
-#endif
         }
 
-#if !MOBILE_SKILLZ
         public static T GetRoomProperty<T>(Hashtable values, string key, T defaultValue)
             => values.ContainsKey(key) ? (T)values[key] : defaultValue;
-#endif
 
         public static bool CheckPlayersReady() =>
                GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_2_READY, false) && 
@@ -502,17 +470,12 @@ namespace Fourzy
             GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_2_REMATCH, false);
 
         public static bool CheckPlayerRematchReady() =>
-#if !MOBILE_SKILLZ
             PhotonNetwork.IsMasterClient ? 
                 GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_1_REMATCH, false) : 
                 GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_2_REMATCH, false);
-#else 
-            false;
-#endif
 
         public static void ResetRematchState()
         {
-#if !MOBILE_SKILLZ
             if (PhotonNetwork.CurrentRoom == null) return;
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
@@ -520,12 +483,10 @@ namespace Fourzy
                 [Constants.REALTIME_ROOM_PLAYER_1_REMATCH] = false,
                 [Constants.REALTIME_ROOM_PLAYER_2_REMATCH] = false,
             });
-#endif
         }
 
         public static void JoinRandomRoom()
         {
-#if !MOBILE_SKILLZ
             tasks.Push(new KeyValuePair<string, Action>("joinRandomRoom", JoinRandomRoom));
 
             if (!PhotonNetwork.IsConnected)
@@ -548,12 +509,10 @@ namespace Fourzy
 
             PhotonNetwork.JoinRandomRoom(customProperties, 0);
             instance.RunTimeoutRoutine();
-#endif
         }
 
         public static void JoinRoom(string roomName, bool rejoin = false)
         {
-#if !MOBILE_SKILLZ
             tasks.Push(new KeyValuePair<string, Action>("joinRoom", () => JoinRoom(roomName)));
 
             if (!PhotonNetwork.IsConnected)
@@ -583,12 +542,10 @@ namespace Fourzy
             {
                 PhotonNetwork.JoinRoom(roomName);
             }
-#endif
         }
 
         public static void CreateRoom(RoomType type, string password = "", string expectedUser = "")
         {
-#if !MOBILE_SKILLZ
             tasks.Push(new KeyValuePair<string, Action>("createRoom", () => CreateRoom(type, password, expectedUser)));
 
             if (!PhotonNetwork.IsConnected)
@@ -677,19 +634,14 @@ namespace Fourzy
                 expectedUsers.ToArray());
 
             instance.RunTimeoutRoutine();
-#endif
         }
 
         public static T GetOpponentProperty<T>(string key, T defaultValue)
         {
-#if !MOBILE_SKILLZ
             if (PhotonNetwork.PlayerListOthers == null || PhotonNetwork.PlayerListOthers.Length == 0) 
                 return defaultValue;
 
             return GetPlayerProperty(PhotonNetwork.PlayerListOthers[0], key, defaultValue);
-#else
-            return default;
-#endif
         }
 
         public static int GetOpponentTotalGames()
@@ -702,15 +654,12 @@ namespace Fourzy
 
         public static void SetMyProperty(string key, object value)
         {
-#if !MOBILE_SKILLZ
             if (PhotonNetwork.IsConnected)
             {
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { [key] = value, });
             }
-#endif
         }
 
-#if !MOBILE_SKILLZ
         public static T GetPlayerProperty<T>(Player player, string key, T defaultValue)
         {
             if (player == null) return defaultValue;
@@ -718,35 +667,27 @@ namespace Fourzy
 
             return (T)player.CustomProperties[key];
         }
-#endif
 
-#if !MOBILE_SKILLZ
         public static int GetPlayerTotalGamesCount(Player player)
         {
             return GetPlayerProperty(player, Constants.REALTIME_WINS_KEY, 0) +
                 GetPlayerProperty(player, Constants.REALTIME_LOSES_KEY, 0) +
                 GetPlayerProperty(player, Constants.REALTIME_DRAWS_KEY, 0);
         }
-#endif
 
-#if !MOBILE_SKILLZ
         public void OnEvent(EventData photonEvent)
         {
             onEvent?.Invoke(photonEvent);
         }
-#endif
 
         public void ConnectUsingSettings(bool runTimeOutRoutine = true)
         {
-#if !MOBILE_SKILLZ
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = "1";
 
             if (runTimeOutRoutine) RunTimeoutRoutine();
-#endif
         }
 
-#if !MOBILE_SKILLZ
         public void JoinLobby(TypedLobby lobby = null)
         {
             TypedLobby _copy = lobby;
@@ -770,14 +711,13 @@ namespace Fourzy
             PhotonNetwork.JoinLobby(lobby);
             RunTimeoutRoutine();
         }
-#else
-        public void JoinLobby()
+
+        public void JoinOrCreateRoom(string roomName)
         {
-
+            Debug.Log("First time connecting to Master Server, creating and joining room");
+            PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions { MaxPlayers = 2 }, default);
         }
-#endif
 
-#if !MOBILE_SKILLZ
         private void RunTimeoutRoutine()
         {
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
@@ -793,7 +733,6 @@ namespace Fourzy
 
             connectionTimedOutRoutine = null;
         }
-#endif
     }
 
     [Flags]
@@ -803,6 +742,6 @@ namespace Fourzy
         QUICKMATCH = 1,
         DIRECT_INVITE = 2,
         LOBBY_ROOM = 4,
-
+        SKILLZ_SYNC,
     }
 }

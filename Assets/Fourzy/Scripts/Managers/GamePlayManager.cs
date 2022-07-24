@@ -1,10 +1,7 @@
 ﻿//modded @vadym udod
 
-#if !MOBILE_SKILLZ
 using ExitGames.Client.Photon;
 using Photon.Pun;
-#endif
-
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
@@ -46,19 +43,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public FourzyGameMenuController menuController;
         public WinningParticleGenerator winningParticleGenerator;
         public Transform bgParent;
-        public GameObject noNetworkOverlay;
         public RectTransform hintBlocksParent;
         public GameCameraManager gameCameraManager;
         public ButtonExtended backButton;
-
-        [HideInInspector]
-        public bool rematchRequested = false;
 
         private AudioHolder.BGAudio gameplayBGAudio;
         private PromptScreen realtimeWaitingOtherScreen;
         private PromptScreen playerLeftScreen;
 
-        private bool ratingUpdated = true;
         /// <summary>
         /// for adventure map
         /// </summary>
@@ -86,11 +78,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             get
             {
-#if !MOBILE_SKILLZ
                 return Mathf.Min(PhotonNetwork.GetPing() * .002f, .5f);
-#else
-                return 0f;
-#endif
             }
         }
         public bool IsBoardReady { get; private set; }
@@ -114,17 +102,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             touchZone.onPointerUpData += OnPointerRelease;
 
             GameManager.onNetworkAccess += OnNetwork;
-            GameManager.ratingDataReceived += OnRatingDataAquired;
-            LoginManager.OnDeviceLoginComplete += OnLogin;
 
             UserManager.onHintsUpdate += OnHintUpdate;
 
-#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent += OnEventCall;
-#endif
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
             {
@@ -149,17 +133,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             GameManager.onNetworkAccess -= OnNetwork;
-            GameManager.ratingDataReceived -= OnRatingDataAquired;
-            LoginManager.OnDeviceLoginComplete -= OnLogin;
 
             UserManager.onHintsUpdate -= OnHintUpdate;
 
-#if !MOBILE_SKILLZ
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent -= OnEventCall;
-#endif
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
             {
@@ -219,7 +199,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-#if !MOBILE_SKILLZ
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
@@ -231,7 +210,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
-#endif
         }
 
         protected void OnApplicationQuit()
@@ -268,7 +246,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
-#if !MOBILE_SKILLZ
                 //for editor/pc
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
@@ -278,10 +255,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     break;
-#endif
             }
 
-#if !MOBILE_SKILLZ
             //for editor/pc
             switch (GameManager.Instance.ExpectedGameType)
             {
@@ -293,7 +268,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
-#endif
         }
 
         public void BackButtonOnClick()
@@ -306,7 +280,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
-#if !MOBILE_SKILLZ
                 case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
@@ -322,7 +295,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     break;
-#endif
             }
 
             GameManager.Instance.OpenMainMenu();
@@ -339,7 +311,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     case GameTypeLocal.REALTIME_BOT_GAME:
                         int percent = UserManager.Instance.MyComplexityPercent();
 
-                        Tuple<int, int> minMax = BoardFactory.NormalizeComplexity((Area)PlayerPrefsWrapper.GetCurrentArea(), percent);
+                        var minMax = BoardFactory.NormalizeComplexity((Area)PlayerPrefsWrapper.GetCurrentArea(), percent);
 
                         BoardGenerationPreferences preferences = new BoardGenerationPreferences();
                         preferences.TargetComplexityLow = minMax.Item1;
@@ -408,7 +380,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameStarted = false;
             IsBoardReady = false;
-            ratingUpdated = false;
             gauntletRechargedViaAds = 0;
 
             SetGameIfNull(_game);
@@ -437,7 +408,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void CreateRealtimeGame()
         {
-#if !MOBILE_SKILLZ
             //only continue if master
             if (PhotonNetwork.IsMasterClient)
             {
@@ -450,8 +420,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, UserManager.Instance.lastCachedRating));
 
                 //get complexity scores
-                Tuple<int, int> myMinMax = BoardFactory.NormalizeComplexity(_area, myPercent);
-                Tuple<int, int> oppMinMax = BoardFactory.NormalizeComplexity(_area, opponentPercent);
+                var myMinMax = BoardFactory.NormalizeComplexity(_area, myPercent);
+                var oppMinMax = BoardFactory.NormalizeComplexity(_area, opponentPercent);
 
                 (int, int) actualMinMax = (Mathf.Min(myMinMax.Item1, oppMinMax.Item1), Mathf.Min(myMinMax.Item2, oppMinMax.Item2));
 
@@ -506,7 +476,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 LoadGame(_game);
             }
-#endif
         }
 
         public void OnPointerDown(Vector2 position, int pointerId)
@@ -732,20 +701,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 BoardView.OnPointerMove(screenPos);
                 BoardView.OnPointerRelease(screenPos);
             }
-        }
-
-        public void ReportRematchResult(bool result)
-        {
-            rematchRequested = false;
-
-            AnalyticsManager.Instance.LogEvent(
-                result ? "acceptRealtimeRematch" : "declineRealtimeRematch",
-                AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("isWinner", Game.IsOver),
-                new KeyValuePair<string, object>(
-                    "isBotOpponent",
-                    GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_BOT_GAME),
-                new KeyValuePair<string, object>("isPrivate", false));
         }
 
         public void ShowTokensInstructions(IEnumerable<TokensDataHolder.TokenData> tokens, bool ribbon)
@@ -1531,48 +1486,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-#region Turn Base Calls
-
-        // private void OnChallengeUpdate(ChallengeData gameData)
-        // {
-        //     StartRoutine("takeTurn", PlayTurnBaseTurn(gameData));
-        // }
-
-        // private void OnChallengesUpdate(List<ChallengeData> challenges)
-        // {
-        //     //if game waits for rematch challenge
-        //     if (!string.IsNullOrEmpty(awaitingChallengeID))
-        //     {
-        //         //find the event we ve been waiting for
-        //         ChallengeData challenge = challenges.Find(_challenge => _challenge.challengeInstanceId == awaitingChallengeID);
-
-        //         if (challenge == null) return;
-
-        //         GameManager.Instance.StartGame(challenge.lastTurnGame);
-        //     }
-        // }
-
-        // private void CreateTurnBasedGameSuccess(LogEventResponse response)
-        // {
-        //     awaitingChallengeID = response.ScriptData.GetString("challengeInstanceId");
-        //     Debug.Log($"Game created {awaitingChallengeID}");
-        // }
-
-        // private void CreateTurnBasedGameError(LogEventResponse response)
-        // {
-        //     Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
-        //     AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.create_turn_base_game);
-
-        //     if (loadingPrompt && loadingPrompt.isOpened)
-        //     {
-        //         loadingPrompt.UpdateInfo("Failed to create new game...\n" + response.Errors.JSON);
-        //         StartRoutine("closingLoadingPrompt", 5f, () => menuController.CloseCurrentScreen());
-        //     }
-        // }
-
-#endregion
-
-#if !MOBILE_SKILLZ
         private void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable values)
         {
             if (PhotonNetwork.IsMasterClient)
@@ -1647,29 +1560,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case Constants.TAKE_TURN:
                     StartRoutine("takeTurn", PlayRealtimeTurn(
                         JsonConvert.DeserializeObject<ClientPlayerTurn>(data.CustomData.ToString())));
-
-                    break;
-
-                case Constants.REMATCH_REQUEST:
-                    realtimeWaitingOtherScreen = menuController.GetOrAddScreen<PromptScreen>()
-                        .Prompt(string.Format(LocalizationManager.Value("rematch_request"), Game.opponent.DisplayName), LocalizationManager.Value("play"),
-                        () =>
-                        {
-                            ReportRematchResult(true);
-
-                            FourzyPhotonManager.SetClientRematchReady();
-                            GameplayScreen.realtimeScreen.SetMessage(LocalizationManager.Value("waiting_for_game"));
-                        },
-                        () =>
-                        {
-                            ReportRematchResult(false);
-
-                            BackButtonOnClick();
-                        })
-                        .CloseOnAccept()
-                        .CloseOnDecline();
-
-                    rematchRequested = true;
 
                     break;
 
@@ -1777,7 +1667,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
         }
-#endif
 
 
         internal void OnGameFinished(IClientFourzy game)
@@ -2004,75 +1893,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-
-#if !MOBILE_SKILLZ
-
-            #region Realtime game complete (both vs and bot)
-
-            if (game._Type == GameType.REALTIME)
-            {
-                switch (GameManager.Instance.ExpectedGameType)
-                {
-                    case GameTypeLocal.REALTIME_LOBBY_GAME:
-                    case GameTypeLocal.REALTIME_QUICKMATCH:
-                        if (PhotonNetwork.IsMasterClient)
-                        {
-                            if (winner)
-                            {
-                                GameManager.Instance.ReportRealtimeGameFinished(
-                                    game,
-                                    LoginManager.playfabId,
-                                    GameManager.Instance.RealtimeOpponent.Id,
-                                    false);
-                            }
-                            else
-                            {
-                                GameManager.Instance.ReportRealtimeGameFinished(
-                                    game,
-                                    GameManager.Instance.RealtimeOpponent.Id,
-                                    LoginManager.playfabId,
-                                    false);
-                            }
-
-                            //reset game ttl
-                            PhotonNetwork.CurrentRoom.EmptyRoomTtl = 0;
-                            PhotonNetwork.CurrentRoom.PlayerTtl = 0;
-                        }
-                        else
-                        {
-                            //for other player update value manually 
-                            UserManager.Instance.realtimeGamesComplete += 1;
-                        }
-                        rejoinGame = false;
-                        PlayerPrefsWrapper.SetAbandonedRealtimeRoomName("");
-
-                        break;
-
-                    case GameTypeLocal.REALTIME_BOT_GAME:
-                        switch (GameManager.Instance.botGameType)
-                        {
-                            case GameManager.BotGameType.FTUE_RATED:
-                            case GameManager.BotGameType.REGULAR:
-                                GameManager.Instance.ReportBotGameFinished(game, true, false);
-
-                                break;
-
-                            case GameManager.BotGameType.FTUE_NOT_RATED:
-                                GameManager.Instance.ReportBotGameFinished(game, false, false);
-
-                                break;
-                        }
-
-                        break;
-                }
-
-                ratingUpdated = true;
-            }
-
-            #endregion
-
-#endif
-
             #region Rewards
 
             switch (game._Type)
@@ -2216,57 +2036,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             BackButtonOnClick();
                         });
                 }
-
-                switch (Game._Type)
-                {
-                    case GameType.FRIEND:
-                    case GameType.LEADERBOARD:
-                    case GameType.TURN_BASED:
-                        noNetworkOverlay.SetActive(true);
-
-                        break;
-                }
-            }
-        }
-
-        private void OnRatingDataAquired(RatingGameCompleteResult data)
-        {
-            foreach (RatingGamePlayer player in data.players)
-            {
-                if (player.playfabID == LoginManager.playfabId)
-                {
-                    string ratingText = "Rating ";
-                    if (player.winner)
-                    {
-                        ratingText += "+";
-                    }
-
-                    int diff =
-                        InternalSettings.Current.GAMES_BEFORE_RATING_USED -
-                        UserManager.Instance.totalRatedGames;
-                    string message;
-                    if (diff > 0)
-                    {
-                        message = $"Rating revealed in {diff} more game{(diff == 1 ? "" : "s")}.";
-                    }
-                    else
-                    {
-                        message = ratingText + player.ratingChange;
-                    }
-
-                    if (playerLeftScreen)
-                    {
-                        playerLeftScreen.promptText.text += $"\n{message}";
-                        playerLeftScreen = null;
-                    }
-                    else if (GameWinLoseScreen.isOpened)
-                    {
-                        if (player.ratingChange != 0)
-                        {
-                            GameWinLoseScreen.SetInfoLabel(message);
-                        }
-                    }
-                }
             }
         }
 
@@ -2385,14 +2154,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        private void OnLogin(bool state)
-        {
-            if (state)
-            {
-                noNetworkOverlay.SetActive(false);
-            }
-        }
-
         private void OnHintUpdate(int amount, string token)
         {
             if (token == hintRemovedToken)
@@ -2441,27 +2202,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             gameCameraManager.Wiggle();
         }
 
-#if !MOBILE_SKILLZ
         private void OnRealtimeOpponentAbandoned()
         {
             //reset game ttl
             PhotonNetwork.CurrentRoom.EmptyRoomTtl = 0;
             PhotonNetwork.CurrentRoom.PlayerTtl = 0;
 
-            //report score
-            if (!ratingUpdated)
-            {
-                GameManager.Instance.ReportRealtimeGameFinished(
-                    Game,
-                    LoginManager.playfabId,
-                    GameManager.Instance.RealtimeOpponent.Id,
-                    true);
-            }
-
             PlayerPrefsWrapper.AddRealtimeGamesOpponentAbandoned();
             AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesOpponentAbandoned", PlayerPrefsWrapper.GetRealtimeGamesOpponentAbandoned());
         }
-#endif
 
         private IEnumerator GameInitRoutine()
         {
@@ -2573,24 +2322,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //    GameplayScreen.timerWidgets[1].SmallTimerValue -= realtimeTimerDelay;
             //}
         }
-
-        //private IEnumerator PlayTurnBaseTurn(ChallengeData gameData)
-        //{
-        //    if (gameData.lastTurnGame._Type != GameType.TURN_BASED) yield break;
-
-        //    yield return new WaitUntil(() => !board.isAnimating && isBoardReady);
-
-        //    PlayerTurn lastTurn = gameData.lastTurn;
-
-        //    if (game.asFourzyGame.playerTurnRecord.Count > 0 &&
-        //        game.asFourzyGame.playerTurnRecord[game.asFourzyGame.playerTurnRecord.Count - 1].PlayerId == lastTurn.PlayerId) yield break;
-
-        //    //compare challenges
-        //    if (gameData.challengeInstanceId != game.asFourzyGame.challengeData.challengeInstanceId) yield break;
-
-        //    board.TakeTurn(lastTurn);
-        //    UpdatePlayerTurn();
-        //}
 
         private IEnumerator PlayRealtimeTurn(ClientPlayerTurn turn)
         {
@@ -2729,7 +2460,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-#if !MOBILE_SKILLZ
         private IEnumerator PlayerLeftRealtimeRoutine(Photon.Realtime.Player otherPlayer)
         {
             int waitTime = Constants.REALTIME_TTL_SECONDS;
@@ -2759,7 +2489,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //and close gameplay scene
             BackButtonOnClick();
         }
-#endif
     }
 
     public enum GameState
