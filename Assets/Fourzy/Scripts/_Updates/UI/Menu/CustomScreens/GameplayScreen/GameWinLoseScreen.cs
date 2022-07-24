@@ -450,13 +450,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnBGTap()
         {
-            switch (GameManager.Instance.buildIntent)
-            {
-                //skip bg taps for infinity table build
-                case BuildIntent.MOBILE_INFINITY:
-                    return;
-            }
-
             switch (game._Mode)
             {
                 case GameMode.GAUNTLET:
@@ -570,6 +563,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             break;
 
                         default:
+                            //skip bg taps for infinity table build
+                            switch (GameManager.Instance.buildIntent)
+                            {
+                                case BuildIntent.MOBILE_INFINITY:
+                                    if (game._Type == GameType.PASSANDPLAY)
+                                        return;
+
+                                    break;
+                            }
+
                             if (rematchButton.gameObject.activeInHierarchy)
                             {
                                 switch (game._Type)

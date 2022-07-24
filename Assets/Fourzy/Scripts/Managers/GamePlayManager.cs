@@ -1075,10 +1075,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             bool switchActivePlayer = false;
 
+            // Switch active player on rematch?c
             switch (GameManager.Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_INFINITY:
-                    switchActivePlayer = true;
+                    switch (Game._Type)
+                    {
+                        case GameType.AI:
+                            switchActivePlayer = true;
+
+                            break;
+                    }
 
                     break;
             }
@@ -1225,23 +1232,32 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 Game.IsOver ||
                 !Game.puzzleData ||
                 Game.puzzleData.Solution.Count == 0) return;
-
-            if (UserManager.Instance.hints <= 0)
+            
+            switch (GameManager.Instance.buildIntent)
             {
-                //currently unavailable
-                menuController
-                    .GetOrAddScreen<PromptScreen>()
-                    .Prompt(
-                        LocalizationManager.Value("not_available"),
-                        LocalizationManager.Value("not_supported_functionality"),
-                        LocalizationManager.Value("back"),
-                        "")
-                    .CloseOnAccept();
-                //PersistantMenuController.Instance
-                //    .GetOrAddScreen<StorePromptScreen>()
-                //    .Prompt(StorePromptScreen.StoreItemType.HINTS);
+                case BuildIntent.MOBILE_INFINITY:
+                    break;
 
-                return;
+                default:
+                    if (UserManager.Instance.hints <= 0)
+                    {
+                        //currently unavailable
+                        menuController
+                            .GetOrAddScreen<PromptScreen>()
+                            .Prompt(
+                                LocalizationManager.Value("not_available"),
+                                LocalizationManager.Value("not_supported_functionality"),
+                                LocalizationManager.Value("back"),
+                                "")
+                            .CloseOnAccept();
+                        //PersistantMenuController.Instance
+                        //    .GetOrAddScreen<StorePromptScreen>()
+                        //    .Prompt(StorePromptScreen.StoreItemType.HINTS);
+
+                        return;
+                    }
+
+                    break;
             }
 
             hintRemovedToken = Guid.NewGuid().ToString();

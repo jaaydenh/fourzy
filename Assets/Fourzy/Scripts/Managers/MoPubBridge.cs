@@ -127,8 +127,6 @@ namespace Fourzy._Updates.Mechanics
         {
             string adUniID = _rewardedVideoAdUnits[0];
 
-            Debug.Log("requesting video ad, location lat:" + GameManager.Instance.latitude + ", lon:" + GameManager.Instance.longitude);
-
             cancelRewardedVideo = false;
             loadingPrompt = PersistantMenuController.Instance.GetOrAddScreen<LoadingPromptScreen>();
             loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"), () => CancelRewardedVideo(adUniID));

@@ -78,8 +78,6 @@ namespace Fourzy
         public BotGameType botGameType = BotGameType.NONE;
         public BuildIntent buildIntent = BuildIntent.MOBILE_REGULAR;
         public string customUserId = "";
-        public float fallbackLatitude = 37.7833f;
-        public float fallbackLongitude = 122.4167f;
         public List<TokenType> excludeInstructionsFor;
         private PlacementStyle _placementStyle;
         private string lastErrorMessage;
@@ -168,36 +166,6 @@ namespace Fourzy
                 }
 
                 return mainMenuLoaded;
-            }
-        }
-
-        public float latitude
-        {
-            get
-            {
-                if (lastLocation == null)
-                {
-                    return fallbackLatitude;
-                }
-                else
-                {
-                    return lastLocation.Value.latitude;
-                }
-            }
-        }
-
-        public float longitude
-        {
-            get
-            {
-                if (lastLocation == null)
-                {
-                    return fallbackLongitude;
-                }
-                else
-                {
-                    return lastLocation.Value.longitude;
-                }
             }
         }
 
