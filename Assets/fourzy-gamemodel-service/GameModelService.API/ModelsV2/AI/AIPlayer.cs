@@ -41,6 +41,8 @@ namespace FourzyGameModel.Model
                     return new ApprenticeBotAI(State);
                 case AIProfile.EventuallyBot:
                     return new EventuallyBot(State);
+                case AIProfile.BlockerBotAI:
+                    return new BlockerBotAI(State);
 
                 //The following AIs have a preference on direction.
 

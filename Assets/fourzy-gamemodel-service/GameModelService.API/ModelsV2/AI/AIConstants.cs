@@ -41,7 +41,8 @@
         OrthoBot,    // 27
         WelcomeBot, //28
         ApprenticeBot, //29
-        EventuallyBot  //30
+        EventuallyBot,  //30
+        BlockerBotAI, //31
     }
 
     public enum AIDifficulty { Pushover, Easy, Medium, Hard, Doctor}
