@@ -263,12 +263,12 @@ MonoBehaviour:
     profilePicture: {fileID: 21300000, guid: 0f77731c615de8340afe1a9f37be11df, type: 3}
     outlineColor: {r: 0.654902, g: 0.43137258, b: 1, a: 1}
     borderColor: {r: 0.89019614, g: 0.007843138, b: 0, a: 1}
-  - name: Yerba
+  - name: Yebra
     player1Prefab: {fileID: 1202142597684360824, guid: f2b4944a76863324a81576278ea0ea86,
       type: 3}
     player2Prefab: {fileID: 5305385492699706502, guid: e4d6b950e8bfb2944b015cf464347ae6,
       type: 3}
-    Id: yerba
+    Id: yebra
     enabled: 1
     profilePicture: {fileID: 0}
     outlineColor: {r: 0.7254902, g: 0.44705886, b: 0.21568629, a: 1}
@@ -333,3 +333,203 @@ MonoBehaviour:
     profilePicture: {fileID: 0}
     outlineColor: {r: 0.74509805, g: 0.121568635, b: 0.97647065, a: 1}
     borderColor: {r: 0.50980395, g: 0, b: 0.94117653, a: 1}
+  - name: Munchie
+    player1Prefab: {fileID: 3218144962503734195, guid: 95147be61aa31d74ea99d9a8d6bf2d30,
+      type: 3}
+    player2Prefab: {fileID: 1354891083792840804, guid: d47d5c3a5a6ce3e48bd0fa3da41d2b9b,
+      type: 3}
+    Id: munchie
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.4156863, g: 0.87843144, b: 0.72156864, a: 1}
+    borderColor: {r: 0.39607847, g: 0.8705883, b: 1, a: 1}
+  - name: Dark Knight
+    player1Prefab: {fileID: 2588979206158912982, guid: c831d946c8b14624eab52f5a35612597,
+      type: 3}
+    player2Prefab: {fileID: 4906643275286266488, guid: 7bfccf1ae7ac26245947801dc8e2289a,
+      type: 3}
+    Id: dark_knight
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 1, g: 1, b: 0.03137255, a: 1}
+    borderColor: {r: 0.8745099, g: 0.654902, b: 0.81568635, a: 1}
+  - name: Bot
+    player1Prefab: {fileID: 623252981254735550, guid: 5de4dff5e328a134f8d7a3ebdc0c5fc4,
+      type: 3}
+    player2Prefab: {fileID: 9115207620473877126, guid: dca5d0e587e8f434ea59dea01f88cd65,
+      type: 3}
+    Id: bot
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.15686275, g: 0.32156864, b: 0.3647059, a: 1}
+    borderColor: {r: 0.39607847, g: 0.08627451, b: 0.427451, a: 1}
+  - name: Pirate Parrot
+    player1Prefab: {fileID: 7339877667007882943, guid: 59685ce780de48442bed501354304e43,
+      type: 3}
+    player2Prefab: {fileID: 7983033490286200936, guid: 01e389f690aa78c44a2328447d38d50c,
+      type: 3}
+    Id: pirate_parrot
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.7019608, g: 0.97647065, b: 0, a: 1}
+    borderColor: {r: 0.20392159, g: 0.20000002, b: 0.41176474, a: 1}
+  - name: HedgeHog
+    player1Prefab: {fileID: 5709281310422080987, guid: 97fbed692c3f6e14aadba9b9a7005396,
+      type: 3}
+    player2Prefab: {fileID: 4132841715535431516, guid: 546d039d217598c409790a6a18af4ba6,
+      type: 3}
+    Id: hedge_hog
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.98823535, g: 0.7607844, b: 0.7294118, a: 1}
+    borderColor: {r: 0.98823535, g: 0.6666667, b: 0.6313726, a: 1}
+  - name: Mecha Owl
+    player1Prefab: {fileID: 2890486445019525443, guid: fb429dbf5a880304a809d44e7e51838f,
+      type: 3}
+    player2Prefab: {fileID: 6799905858320530897, guid: a2f865a69c7953a418621de2ae04e8fa,
+      type: 3}
+    Id: mecha_owl
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 1, g: 0.9490197, b: 0.30980393, a: 1}
+    borderColor: {r: 0.25882354, g: 1, b: 1, a: 1}
+  - name: Butterfly
+    player1Prefab: {fileID: 4065304638598914859, guid: 34343da622d9e9f40a628185393f2c79,
+      type: 3}
+    player2Prefab: {fileID: 3880904431640331563, guid: 803185d1266622243bc0aa9f6f25f011,
+      type: 3}
+    Id: butterfly
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.90196085, g: 0.019607844, b: 0.86274517, a: 1}
+    borderColor: {r: 0.97647065, g: 0.9921569, b: 0.6313726, a: 1}
+  - name: Penguin
+    player1Prefab: {fileID: 7321078043147195529, guid: 0e439738e2e246c48ac68b5560541e1a,
+      type: 3}
+    player2Prefab: {fileID: 6456165845960449385, guid: 875ad81c0e3c3104eadeaa473dbf1b4d,
+      type: 3}
+    Id: penguin
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 1, g: 0.7019608, b: 0.43529415, a: 1}
+    borderColor: {r: 0.36862746, g: 0.14509805, b: 0.14509805, a: 1}
+  - name: Jester
+    player1Prefab: {fileID: 3754354107095037376, guid: c9ffd6209b207094aacb096d0acc6c8d,
+      type: 3}
+    player2Prefab: {fileID: 7158329512526459585, guid: de138a25c8232304e832ea2cbd70a50e,
+      type: 3}
+    Id: jester
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.82745105, g: 0.20784315, b: 0.16078432, a: 1}
+    borderColor: {r: 0.8941177, g: 0.97647065, b: 0, a: 1}
+  - name: Clam
+    player1Prefab: {fileID: 7703058435525897386, guid: 80be64a5fe21d484c9797b7a56b26f97,
+      type: 3}
+    player2Prefab: {fileID: 293740715486148899, guid: 21b492fa9f645054b8cf2a0eeaffa85b,
+      type: 3}
+    Id: clam
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.5647059, g: 0.2901961, b: 0.7686275, a: 1}
+    borderColor: {r: 0.7843138, g: 0.18431373, b: 0.49411768, a: 1}
+  - name: Ninja
+    player1Prefab: {fileID: 5979383724217209445, guid: fea68442b844a3c43aa21ca07a16d82f,
+      type: 3}
+    player2Prefab: {fileID: 2214903637496090971, guid: 91823140cb2f90b469da2f3149756ee2,
+      type: 3}
+    Id: ninja
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.4431373, g: 0.1137255, b: 0.3647059, a: 1}
+    borderColor: {r: 0.19607845, g: 0.40000004, b: 0.40000004, a: 1}
+  - name: Golden Pig
+    player1Prefab: {fileID: 8456907515721473571, guid: 2f57d5544e4ae1042ac04fa830dcf67d,
+      type: 3}
+    player2Prefab: {fileID: 2630245061792680700, guid: 80e39b8f4d32ce44cb2021dd06319932,
+      type: 3}
+    Id: golden_pig
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.97647065, g: 0.96470594, b: 0.5411765, a: 1}
+    borderColor: {r: 0.6901961, g: 0.7568628, b: 0.8196079, a: 1}
+  - name: Puffer
+    player1Prefab: {fileID: 421848417229578355, guid: ec55384195a23cf499ecd290af9f4e25,
+      type: 3}
+    player2Prefab: {fileID: 8156956965916697588, guid: fe52433f67cd54648a1db4302716d46f,
+      type: 3}
+    Id: puffer
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.69411767, g: 0.18431373, b: 0.45882356, a: 1}
+    borderColor: {r: 0.7725491, g: 0.6784314, b: 0, a: 1}
+  - name: Crabby
+    player1Prefab: {fileID: 9185401511111310781, guid: 117fdb7d0ef07cc4ea34eb90d1148004,
+      type: 3}
+    player2Prefab: {fileID: 3829610157309396791, guid: ceffbbd4f7fb99b4da5302897ca96c72,
+      type: 3}
+    Id: crabby
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.9686275, g: 0.34509805, b: 0.24705884, a: 1}
+    borderColor: {r: 0.89019614, g: 0.4039216, b: 0.8352942, a: 1}
+  - name: Dark Rabbit
+    player1Prefab: {fileID: 415688030825144429, guid: 67dd185eb60bce6468177ed2560e3765,
+      type: 3}
+    player2Prefab: {fileID: 7039376197579973265, guid: 92172090244f59742ba931064ba4fa87,
+      type: 3}
+    Id: dark_rabbit
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 1, g: 0, b: 1, a: 1}
+    borderColor: {r: 0, g: 1, b: 0.5647059, a: 1}
+  - name: ElderDragon
+    player1Prefab: {fileID: 5717495845549951898, guid: 25c3b2d6f5f127940b593bf79eba2568,
+      type: 3}
+    player2Prefab: {fileID: 4136080013776174744, guid: bb4573fc5c7cdd84f89b583902237d50,
+      type: 3}
+    Id: elder_dragon
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 1, g: 0.63529414, b: 1, a: 1}
+    borderColor: {r: 0.882353, g: 0.6, b: 0.5568628, a: 1}
+  - name: Evil Eye
+    player1Prefab: {fileID: 7094113822611415736, guid: 8704347d53d7dcb4f9df443a688f34c9,
+      type: 3}
+    player2Prefab: {fileID: 702764067394658639, guid: bb9b00ab57a2c4742bb67bd0941e1923,
+      type: 3}
+    Id: evil_eye
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.59607846, g: 0.16470589, b: 0.7725491, a: 1}
+    borderColor: {r: 1, g: 0.33333334, b: 0.58431375, a: 1}
+  - name: Froggy
+    player1Prefab: {fileID: 6879627574616095067, guid: 57e47143243633a47b87d700934f10f6,
+      type: 3}
+    player2Prefab: {fileID: 1490499852373282600, guid: 4c2253006ba417045bc9bc24a55b4ed2,
+      type: 3}
+    Id: froggy
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.7411765, g: 0.8000001, b: 0, a: 1}
+    borderColor: {r: 0.6, g: 0.41176474, b: 0.85098046, a: 1}
+  - name: Daruma
+    player1Prefab: {fileID: 8391634551940748915, guid: 67dbb82d5d848724e9e4f2c65f7c4eff,
+      type: 3}
+    player2Prefab: {fileID: 3493019204756429110, guid: 52a68547d5d48eb498ad75967088adc2,
+      type: 3}
+    Id: daruma
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 0.9215687, g: 0.627451, b: 0.011764707, a: 1}
+    borderColor: {r: 0.9843138, g: 0.9176471, b: 0.9176471, a: 1}
+  - name: Muertos
+    player1Prefab: {fileID: 4205809077925381176, guid: 238b83ea3f118984e82cb230ad605eb1,
+      type: 3}
+    player2Prefab: {fileID: 1913277283275141864, guid: 8ebb55c7f02b3b94bb4f42c3ffb37270,
+      type: 3}
+    Id: muertos
+    enabled: 1
+    profilePicture: {fileID: 0}
+    outlineColor: {r: 1, g: 0.38431376, b: 0.18823531, a: 1}
+    borderColor: {r: 0.54509807, g: 0.2784314, b: 0.74509805, a: 1}

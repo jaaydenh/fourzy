@@ -456,7 +456,6 @@ namespace Fourzy
 
         public static void AddHints(int number, string ticket = "")
         {
-
             switch (GameManager.Instance.buildIntent)
             {
                 // case BuildIntent.DESKTOP_REGULAR:
@@ -489,7 +488,7 @@ namespace Fourzy
 
                 case BuildIntent.MOBILE_INFINITY:
                 case BuildIntent.MOBILE_SKILLZ:
-                    OnHintsValueUpdated(PlayerPrefsWrapper.GetHints() + number, ticket);
+                    OnHintsValueUpdated(0, ticket);
 
                     break;
             }

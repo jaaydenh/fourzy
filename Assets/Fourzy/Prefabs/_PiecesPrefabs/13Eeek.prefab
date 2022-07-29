@@ -28,12 +28,12 @@ PrefabInstance:
     - target: {fileID: 4628688794635487434, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.09
+      value: 0.029
       objectReference: {fileID: 0}
     - target: {fileID: 4894820131291420832, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_Name
-      value: Fourzy-13 Variant
+      value: 13Eeek
       objectReference: {fileID: 0}
     - target: {fileID: 5984503093931803834, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}

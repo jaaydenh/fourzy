@@ -37351,6 +37351,7 @@ MonoBehaviour:
   valueLabel: {fileID: 1990368336}
   slider: {fileID: 0}
   label: {fileID: 824137167}
+  labelParent: {fileID: 313067817}
 --- !u!114 &1898803441
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -125,13 +125,22 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             get
             {
-                switch (game._Type)
+                switch (GameManager.Instance.buildIntent)
                 {
-                    case GameType.ONBOARDING:
-                        return false;
+                    case BuildIntent.MOBILE_INFINITY:
+                        switch (game._Type)
+                        {
+                            case GameType.ONBOARDING:
+                            case GameType.AI:
+                            case GameType.PUZZLE:
+                                return false;
+
+                            default:
+                                return gameplayManager && acrossLayout;
+                        }
 
                     default:
-                        return gameplayManager && acrossLayout;
+                        return false;
                 }
             }
         }
@@ -1557,7 +1566,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public void Initialize(IClientFourzy game, bool hintAreas = true, bool createBits = true)
         {
             this.game = game;
-            acrossLayout = GameManager.Instance.buildIntent == BuildIntent.MOBILE_INFINITY && PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS && game._Type != GameType.AI;
+            acrossLayout = PlayerPositioningPromptScreen.PlayerPositioning == PlayerPositioning.ACROSS;
             upsideDown = game.activePlayer == game.player2;
             turn = null;
             lastCol = 0;
