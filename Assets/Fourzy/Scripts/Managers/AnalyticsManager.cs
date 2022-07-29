@@ -484,7 +484,7 @@ namespace Fourzy
                     _values.Add("isCash", SkillzGameController.Instance.LastMatch.IsCash ?? false);
                     _values.Add("entryCash", SkillzGameController.Instance.LastMatch.EntryCash ?? 0f);
                     _values.Add("entryPoints", SkillzGameController.Instance.LastMatch.EntryPoints ?? 0f);
-                    _values.Add("skillzId", SkillzGameController.Instance.LastMatch.ID ?? 0l);
+                    _values.Add("skillzId", SkillzGameController.Instance.LastMatch.ID ?? 0L);
                     _values.Add("isTieBreaker", SkillzGameController.Instance.LastMatch.IsTieBreaker);
                     _values.Add("skillzName", SkillzGameController.Instance.LastMatch.Name);
                     _values.Add("templateID", SkillzGameController.Instance.LastMatch.TemplateID ?? 0);
