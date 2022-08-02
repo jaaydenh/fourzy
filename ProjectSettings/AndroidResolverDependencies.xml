@@ -19,6 +19,7 @@
     <package>com.amplitude:android-sdk:2.25.2</package>
     <package>com.amplitude:android-sdk:2.34.1</package>
     <package>com.anjlab.android.iab.v3:library:1.0.36</package>
+    <package>com.applovin:applovin-sdk:11.3.1</package>
     <package>com.braintreepayments.api:braintree:3.17.2</package>
     <package>com.braintreepayments.api:data-collector:3.17.2</package>
     <package>com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0</package>
@@ -38,6 +39,7 @@
     <package>com.google.android.gms:play-services-location:17.1.0</package>
     <package>com.google.android.gms:play-services-safetynet:17.0.0</package>
     <package>com.google.android.material:material:1.4.0</package>
+    <package>com.google.code.gson:gson:2.8.6</package>
     <package>com.google.dagger:dagger:2.19</package>
     <package>com.google.dagger:dagger-android-support:2.19</package>
     <package>com.google.firebase:firebase-analytics:20.1.2</package>
@@ -50,7 +52,6 @@
     <package>com.paypal.sdk:paypal-android-sdk:2.14.4</package>
     <package>com.react-native-spring-scrollview:react-native-spring-scrollview-android:3.0.2-skillz</package>
     <package>com.scottyab:rootbeer-lib:0.0.8</package>
-    <package>com.skillz-mopub:mopub-sdk-base:5.12.1-skillz</package>
     <package>com.squareup.okhttp3:logging-interceptor:3.4.1</package>
     <package>com.squareup.okhttp3:okhttp:3.14.1</package>
     <package>com.squareup.okhttp3:okhttp:4.2.2</package>

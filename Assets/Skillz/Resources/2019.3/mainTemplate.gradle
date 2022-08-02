@@ -5,7 +5,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
-	implementation ("com.skillz.sdk:skillz-sdk-android:28.0.11")
+	implementation ("com.skillz.sdk:skillz-sdk-android:28.0.5")
 	{
 		transitive = false
 	}

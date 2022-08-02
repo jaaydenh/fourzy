@@ -109,12 +109,7 @@
     </androidPackage>
     <androidPackage spec="io.card:card-io:6.0-skillz">
     </androidPackage>
-    <androidPackage spec="com.skillz-mopub:mopub-sdk-base:5.12.1-skillz">
-        <repositories>
-            <!-- MoPub depends on the `com.moat.analytics.mobile.mpub:moat-mobile-app-kit` library. -->
-            <!-- `com.moat.*` dependencies are stored in a specific repo -->
-            <repository>https://s3.amazonaws.com/moat-sdk-builds</repository>
-        </repositories>
+    <androidPackage spec="com.applovin:applovin-sdk:11.3.1">
     </androidPackage>
     <androidPackage spec="com.google.android.exoplayer:exoplayer:2.11.0">
     </androidPackage>
@@ -122,8 +117,10 @@
     </androidPackage>
     <androidPackage spec="com.yqritc:android-scalablevideoview:1.0.4">
     </androidPackage>
+    <androidPackage spec="com.google.code.gson:gson:2.8.6">
+    </androidPackage>
   </androidPackages>
   <iosPods>
-    <iosPod name="Skillz" minTargetSdk="12.0" addToAllTargets="true" version="28.0.11"/>
+    <iosPod name="Skillz" minTargetSdk="12.0" addToAllTargets="true" version="28.0.17"/>
   </iosPods>
 </dependencies>
