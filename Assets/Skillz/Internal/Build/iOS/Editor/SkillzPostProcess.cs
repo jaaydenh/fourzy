@@ -115,7 +115,7 @@ namespace SkillzSDK.Internal.Build.iOS
 			{
 				UnityEngine.Debug.LogError("Skillz automated XCode editing failed!");
 			}
-			#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER
 			ActualUnityEditor.iOS.Xcode.PBXProject pbProject = new ActualUnityEditor.iOS.Xcode.PBXProject();
 			pbProject.ReadFromString(File.ReadAllText(xcodeProjectPath));
 			if (pbProject != null)
@@ -125,17 +125,16 @@ namespace SkillzSDK.Internal.Build.iOS
 				string mainTarget = pbProject.GetUnityMainTargetGuid();
 				pbProject.AddFrameworkToProject(mainTarget, "UnityFramework.framework", false);
 			}
-			#endif // UNITY_2019_3_OR_NEWER
+#endif // UNITY_2019_3_OR_NEWER
 			XCProject project = new XCProject(path);
 			if (project != null)
 			{
 				//Unity_4 doesn't exist so we check for Unity 5 defines.  Unity 6 is used for futureproofing.
-				#if !UNITY_5 && !UNITY_6
-								project.AddFile(Path.Combine(Application.dataPath, "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
-								SetAllowSkillzExit(Path.Combine(path, "Libraries", "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
-								SetGameHasSyncBot(Path.Combine(path, "Libraries", "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
-				#endif // !UNITY_5 && !UNITY_6
-				BuildTime(path);
+#if !UNITY_5 && !UNITY_6
+				project.AddFile(Path.Combine(Application.dataPath, "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
+				SetAllowSkillzExit(Path.Combine(path, "Libraries", "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
+				SetGameHasSyncBot(Path.Combine(path, "Libraries", "Skillz", "Internal", "Build", "iOS", "IncludeInXcode", "Skillz+Unity.mm"));
+#endif // !UNITY_5 && !UNITY_6
 				project.Save();
 			}
 			else
@@ -285,23 +284,9 @@ namespace SkillzSDK.Internal.Build.iOS
 										"integrations@skillz.com.\n\nError: " + e.Message;
 			ActualUnityEditor.EditorUtility.DisplayDialog("Skillz SDK setup failed!", manualInstructions, "OK");
 		}
-		private static void BuildTime(string parentFolderPath)
-		{
-			// Load the target file
-			string filePath = parentFolderPath + "/MainApp/main.mm";
-			string contents = File.ReadAllText(filePath);
-			
-			// Add timestamp to NSLog
-			System.DateTime now = System.DateTime.Now;
-			contents = contents.Replace("return 0;", "NSLog(@\"Build Time = " + now.ToString() + "\");\n\t\treturn 0;");
-			
-			// Replace existing file with new version
-			File.Delete(filePath);
-			File.WriteAllText(filePath, contents);
-		}
 	}
 
 	//Restore the warnings that were disabled.
-	#pragma warning restore 162, 429
+#pragma warning restore 162, 429
 }
 #endif

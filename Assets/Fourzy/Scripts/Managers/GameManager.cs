@@ -1362,6 +1362,7 @@ namespace Fourzy
         REALTIME_QUICKMATCH,
         REALTIME_BOT_GAME,
         ASYNC_SKILLZ_GAME,
+        SYNC_SKILLZ_GAME,
     }
 
     public enum BuildIntent

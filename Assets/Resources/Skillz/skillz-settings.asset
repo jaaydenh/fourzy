@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: skillz-settings
   m_EditorClassIdentifier: 
   GameID: 17107
-  Environment: 1
+  Environment: 0
   Orientation: 1
   MatchParameters:
   - Key: Games
@@ -43,4 +43,4 @@ MonoBehaviour:
     Value: 
   SimulateMatchWins: 0
   AllowSkillzExit: 1
-  HasSyncBot: 0
+  HasSyncBot: 1

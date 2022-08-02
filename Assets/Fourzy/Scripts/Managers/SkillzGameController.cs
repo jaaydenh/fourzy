@@ -40,7 +40,6 @@ namespace Fourzy._Updates.Managers
         private int matchPausesLeft;
         private float lastGameFinishedAt;
         private int lastGameMovesCount;
-        private bool lastGameIsCraftedBoard;
 
         internal Match CurrentMatch { get; private set; }
         internal Match LastMatch { get; private set; }
@@ -143,7 +142,14 @@ namespace Fourzy._Updates.Managers
             SubmitRetries = 3;
             InitializeMatchData();
 
-            GameManager.Instance.StartGame(GameTypeLocal.ASYNC_SKILLZ_GAME);
+            if (matchInfo.IsCustomSynchronousMatch)
+            {
+                FourzyPhotonManager.Instance.JoinOrCreateRoom(SkillzCrossPlatform.GetMatchInfo().CustomServerConnectionInfo.MatchId);
+            }
+            else
+            {
+                GameManager.Instance.StartGame(GameTypeLocal.ASYNC_SKILLZ_GAME);
+            }
         }
 
         public void OnProgressionRoomEnter()

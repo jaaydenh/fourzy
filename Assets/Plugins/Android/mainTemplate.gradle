@@ -19,9 +19,6 @@
         maven {
             url "https://maven.google.com" // Assets/Firebase/Editor/AppDependencies.xml:27, Packages/com.amplitude.unityplugin/Editor/AmplitudeDependencies.xml:17, Packages/com.amplitude.unityplugin/Editor/AmplitudeDependencies.xml:11
         }
-        maven {
-            url "https://s3.amazonaws.com/moat-sdk-builds" // Assets/Skillz/Editor/SkillzDependencies.xml:118
-        }
         mavenLocal()
         mavenCentral()
     }
@@ -32,7 +29,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
-	implementation ("com.skillz.sdk:skillz-sdk-android:28.0.11")
+	implementation ("com.skillz.sdk:skillz-sdk-android:28.0.17")
 	{
 		transitive = false
 	}
@@ -56,17 +53,18 @@ dependencies {
     // implementation 'com.amplitude:android-sdk:2.25.2' // Assets/Firebase/Editor/AppDependencies.xml:27
     implementation 'com.amplitude:android-sdk:2.34.1' // Packages/com.amplitude.unityplugin/Editor/AmplitudeDependencies.xml:11
     implementation 'com.anjlab.android.iab.v3:library:1.0.36' // Assets/Skillz/Editor/SkillzDependencies.xml:23
+    implementation 'com.applovin:applovin-sdk:11.3.1' // Assets/Skillz/Editor/SkillzDependencies.xml:113
     implementation 'com.braintreepayments.api:braintree:3.17.2' // Assets/Skillz/Editor/SkillzDependencies.xml:35
     implementation 'com.braintreepayments.api:data-collector:3.17.2' // Assets/Skillz/Editor/SkillzDependencies.xml:37
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0' // Assets/Skillz/Editor/SkillzDependencies.xml:27
-    implementation 'com.eightbitlab:blurview:1.6.5' // Assets/Skillz/Editor/SkillzDependencies.xml:122
+    implementation 'com.eightbitlab:blurview:1.6.5' // Assets/Skillz/Editor/SkillzDependencies.xml:117
     implementation 'com.facebook.fresco:animated-base-support:1.3.0' // Assets/Skillz/Editor/SkillzDependencies.xml:73
     implementation 'com.facebook.fresco:animated-gif:1.3.0' // Assets/Skillz/Editor/SkillzDependencies.xml:75
     implementation 'com.facebook.react:react-native:0.65.1' // Assets/Skillz/Editor/SkillzDependencies.xml:29
     implementation 'com.github.bumptech.glide:glide:4.12.0' // Assets/Skillz/Editor/SkillzDependencies.xml:95
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.12.0' // Assets/Skillz/Editor/SkillzDependencies.xml:97
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0' // Assets/Skillz/Editor/SkillzDependencies.xml:47
-    implementation 'com.google.android.exoplayer:exoplayer:2.11.0' // Assets/Skillz/Editor/SkillzDependencies.xml:120
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.0' // Assets/Skillz/Editor/SkillzDependencies.xml:115
     // implementation 'com.google.android.exoplayer:exoplayer:2.7.3' // Assets/Skillz/Editor/SkillzDependencies.xml:45
     implementation 'com.google.android.gms:play-services-ads-identifier:15.0.0' // Assets/Skillz/Editor/SkillzDependencies.xml:65
     // implementation 'com.google.android.gms:play-services-base:17.2.1' // Assets/Skillz/Editor/SkillzDependencies.xml:59
@@ -75,6 +73,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.1.0' // Assets/Skillz/Editor/SkillzDependencies.xml:43
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0' // Assets/Skillz/Editor/SkillzDependencies.xml:63
     implementation 'com.google.android.material:material:1.4.0' // Assets/Skillz/Editor/SkillzDependencies.xml:15
+    implementation 'com.google.code.gson:gson:2.8.6' // Assets/Skillz/Editor/SkillzDependencies.xml:121
     implementation 'com.google.dagger:dagger:2.19' // Assets/Skillz/Editor/SkillzDependencies.xml:51
     implementation 'com.google.dagger:dagger-android-support:2.19' // Assets/Skillz/Editor/SkillzDependencies.xml:53
     implementation 'com.google.firebase:firebase-analytics:20.1.2' // Assets/Firebase/Editor/MessagingDependencies.xml:15
@@ -87,13 +86,12 @@ dependencies {
     implementation 'com.paypal.sdk:paypal-android-sdk:2.14.4' // Assets/Skillz/Editor/SkillzDependencies.xml:7
     implementation 'com.react-native-spring-scrollview:react-native-spring-scrollview-android:3.0.2-skillz' // Assets/Skillz/Editor/SkillzDependencies.xml:99
     implementation 'com.scottyab:rootbeer-lib:0.0.8' // Assets/Skillz/Editor/SkillzDependencies.xml:101
-    implementation 'com.skillz-mopub:mopub-sdk-base:5.12.1-skillz' // Assets/Skillz/Editor/SkillzDependencies.xml:118
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1' // Assets/Skillz/Editor/SkillzDependencies.xml:77
     // implementation 'com.squareup.okhttp3:okhttp:3.14.1' // Assets/Skillz/Editor/SkillzDependencies.xml:49
     implementation 'com.squareup.okhttp3:okhttp:4.2.2' // Packages/com.amplitude.unityplugin/Editor/AmplitudeDependencies.xml:17
     implementation 'com.squareup.picasso:picasso:2.71828' // Assets/Skillz/Editor/SkillzDependencies.xml:71
     implementation 'com.squareup.retrofit:retrofit:1.9.0' // Assets/Skillz/Editor/SkillzDependencies.xml:69
-    implementation 'com.yqritc:android-scalablevideoview:1.0.4' // Assets/Skillz/Editor/SkillzDependencies.xml:124
+    implementation 'com.yqritc:android-scalablevideoview:1.0.4' // Assets/Skillz/Editor/SkillzDependencies.xml:119
     implementation 'io.card:card-io:6.0-skillz' // Assets/Skillz/Editor/SkillzDependencies.xml:111
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2' // Assets/Skillz/Editor/SkillzDependencies.xml:55
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0' // Assets/Skillz/Editor/SkillzDependencies.xml:57

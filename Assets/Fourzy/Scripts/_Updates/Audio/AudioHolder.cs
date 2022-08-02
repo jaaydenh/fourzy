@@ -76,9 +76,15 @@ namespace Fourzy._Updates.Audio
 
         public void SetMasterVolume(float value) => mixer.SetFloat("MasterVolume", Mathf.Clamp01(1f - value) * -80f);
 
-        public void SfxVolume(float value) => mixer.SetFloat("SfxVolume", Mathf.Clamp01(1f - value) * -80f);
+        public void SfxVolume(float value) {
+          mixer.SetFloat("SfxVolume", Mathf.Clamp01(1f - value) * -80f);
+          SkillzCrossPlatform.setSFXVolume(value);
+        } 
 
-        public void AudioVolume(float value) => mixer.SetFloat("AudioVolume", Mathf.Clamp01(1f - value) * -80f);
+        public void AudioVolume(float value) {
+          mixer.SetFloat("AudioVolume", Mathf.Clamp01(1f - value) * -80f);
+          SkillzCrossPlatform.setSkillzMusicVolume(value);
+        } 
 
         public bool PlaySfxOneShotTracked(string type, AudioSource source, float volume = 1f)
         {

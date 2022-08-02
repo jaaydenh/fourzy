@@ -3,8 +3,6 @@ using UnityEditor;
 using UnityEngine;
 using SkillzSDK;
 using SkillzSDK.Settings;
-using System;
-using System.Collections.Generic;
 
 public sealed class SkillzSettingsWindow : EditorWindow
 {
@@ -91,7 +89,7 @@ public sealed class SkillzSettingsWindow : EditorWindow
 		EditorGUILayout.Space();
 
 		SkillzSettings.Instance.GameID = EditorGUILayout.IntField("Game ID", SkillzSettings.Instance.GameID);
-		SkillzSettings.Instance.Environment = (SkillzSDK.Environment)EditorGUILayout.EnumPopup("Skillz Environment", SkillzSettings.Instance.Environment);
+		SkillzSettings.Instance.Environment = (Environment)EditorGUILayout.EnumPopup("Skillz Environment", SkillzSettings.Instance.Environment);
 		SkillzSettings.Instance.Orientation = (Orientation)EditorGUILayout.EnumPopup("Skillz Orientation", SkillzSettings.Instance.Orientation);
 		SkillzSettings.Instance.AllowSkillzExit = EditorGUILayout.Toggle(
 			new GUIContent(
@@ -157,24 +155,9 @@ public sealed class SkillzSettingsWindow : EditorWindow
 		EditorGUILayout.LabelField("Simulate match parameters when running your game within the Unity editor.", wrappedLabelStyle);
 		EditorGUILayout.Space();
 
-		int toRemove = -1;
-		for (var i = 0; i < SkillzSettings.Instance.MatchParameters.Length; i++)
+		for (var i = 0; i < SkillzSettings.MaxMatchParameters; i++)
 		{
-			toRemove = Mathf.Max(DrawKeyValueField(i), toRemove);
-		}
-
-		if (toRemove > -1)
-        {
-			List<StringKeyValue> temp = new List<StringKeyValue>(SkillzSettings.Instance.MatchParameters);
-			temp.RemoveAt(toRemove);
-			SkillzSettings.Instance.MatchParameters = temp.ToArray();
-		}
-
-		if (GUILayout.Button("Add"))
-        {
-			StringKeyValue[] newParams = new StringKeyValue[SkillzSettings.Instance.MatchParameters.Length + 1];
-			Array.Copy(SkillzSettings.Instance.MatchParameters, newParams, SkillzSettings.Instance.MatchParameters.Length);
-			SkillzSettings.Instance.MatchParameters = newParams;
+			DrawKeyValueField(i);
 		}
 
 		EditorGUI.indentLevel--;
@@ -192,7 +175,7 @@ public sealed class SkillzSettingsWindow : EditorWindow
 		AssetDatabase.SaveAssets();
 	}
 
-	private int DrawKeyValueField(int index)
+	private void DrawKeyValueField(int index)
 	{
 		var textStyle = new GUIStyle(EditorStyles.textField);
 		textStyle.alignment = TextAnchor.MiddleLeft;
@@ -205,15 +188,7 @@ public sealed class SkillzSettingsWindow : EditorWindow
 		SkillzSettings.Instance.MatchParameters[index].Key = CoerceNumChars(EditorGUILayout.TextField($"Key {index + 1}", SkillzSettings.Instance.MatchParameters[index].Key ?? string.Empty, textStyle), MaxKeyLength);
 		SkillzSettings.Instance.MatchParameters[index].Value = CoerceNumChars(EditorGUILayout.TextField($"Value {index + 1}", SkillzSettings.Instance.MatchParameters[index].Value ?? string.Empty, textStyle), MaxValueLength);
 
-		int toRemove = -1;
-		if (GUILayout.Button("-", GUILayout.Width(30)))
-        {
-			toRemove = index;
-		}
-
 		EditorGUILayout.EndHorizontal();
-
-		return toRemove;
 	}
 
 	private static string CoerceNumChars(string value, uint maxChars)
