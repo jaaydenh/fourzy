@@ -98,8 +98,11 @@ namespace FourzyGameModel.Model
             return false;
         }
 
+
+        //If the player passes, can they make a winning move.  If so, this move is a threat to win. 
         public bool IsAThreat()
         {
+            
             GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
 
             TurnEvaluator TE = new TurnEvaluator(GSReview);
@@ -108,22 +111,28 @@ namespace FourzyGameModel.Model
             //if (AITE.WinningTurns.Count > 0) return true;
 
             return false;
-        }
+           
+
+        //If you can win no matter what move the opponent makes, this move is unstoppable.
         public bool IsUnstoppableThreat()
         {
             GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
- 
+            //GameState GSReview = new GameState(EvalState);
+
             TurnEvaluator TE = new TurnEvaluator(GSReview);
-            if (TE.GetFirstWinningMove() != null) return true;
+                         //If there are no winning move, it's not a threat to win.
+            if (TE.GetFirstWinningMove() == null) return false;
             //AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
             //if (AITE.WinningTurns.Count == 0) return false;
 
+            GSReview = new GameState(EvalState);
+            TE = new TurnEvaluator(GSReview);
 
-            Evaluator.Reset();
-            foreach (SimpleMove m in Evaluator.GetAvailableSimpleMoves())
+            foreach (SimpleMove m in TE.GetAvailableSimpleMoves())
             {
-                GSReview = Evaluator.EvaluateTurn(m);
-                TurnEvaluator WinEvaluator = new TurnEvaluator(GSReview);
+                TE.Reset();
+                GameState GSReview2 = TE.EvaluateTurn(m);
+                TurnEvaluator WinEvaluator = new TurnEvaluator(GSReview2);
                 if (WinEvaluator.GetFirstWinningMove() == null) return false;
             }
 

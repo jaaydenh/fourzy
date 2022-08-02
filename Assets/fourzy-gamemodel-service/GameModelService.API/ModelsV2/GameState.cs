@@ -100,6 +100,9 @@ namespace FourzyGameModel.Model
             this.Random = new RandomTools(this);
             this.ActiveSpaces = new List<BoardLocation>();
 
+            //TO DO. Handle Turncount in GSD
+            this.TurnCount = 0;
+
             this.Options = new GameOptions();
         }
 
@@ -137,6 +140,7 @@ namespace FourzyGameModel.Model
             this.ActivePlayerId = OriginalState.ActivePlayerId;
             this.WinnerId = OriginalState.WinnerId;
             this.ActiveSpaces = new List<BoardLocation>();
+            this.TurnCount = OriginalState.TurnCount;
             foreach (BoardLocation l in OriginalState.ActiveSpaces)
             {
                 ActiveSpaces.Add(l);
@@ -185,6 +189,7 @@ namespace FourzyGameModel.Model
             this.Board = new GameBoard(definition);
             this.Board.Parent = this;
             this.RealTime = false;
+            this.TurnCount = 0;
             Initialize();
             this.Board.Random = this.Random;
 
@@ -230,6 +235,7 @@ namespace FourzyGameModel.Model
             this.ActiveSpaces = new List<BoardLocation>();
             this.Herds = new Dictionary<int, Herd>();
             this.Options = new GameOptions();
+            this.TurnCount = 0;
         }
 
         public void InitializeHerd(int PlayerId, string HerdId, int HerdCount)

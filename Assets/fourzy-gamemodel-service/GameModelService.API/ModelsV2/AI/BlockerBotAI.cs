@@ -12,13 +12,13 @@ namespace FourzyGameModel.Model
     {
         private GameState EvalState { get; set; }
         private int NumberOfMovesToConsider = 6;
-        private int NumberOfMovesToLookForSetups = 12;
-        private int MinNumberOfMovesBeforeStopBlocking = 10;
-        private int MaxNumberOfMovesBeforeStopBlocking = 16;
-        private int MinNumberTurnsBeforeWinning = 8;
-        private int MaxNumberTurnsBeforeWinning = 16;
+        private int NumberOfMovesToLookForSetups = 16;
+        private int MinNumberOfMovesBeforeStopBlocking = 20;
+        private int MaxNumberOfMovesBeforeStopBlocking = 30;
+        private int MinNumberTurnsBeforeWinning = 20;
+        private int MaxNumberTurnsBeforeWinning = 30;
 
-        public EventuallyBot(GameState State)
+        public BlockerBotAI(GameState State)
         {
             this.EvalState = State;
         }
@@ -50,9 +50,13 @@ namespace FourzyGameModel.Model
             //Create a new evaluator minus the winning moves.
             AI = new AITurnEvaluator(EvalState, Moves);
 
-            if (Moves.Count < NumberOfMovesToLookForSetups)
-               AI.AIHeuristics.LookForSetups = true;
-                        
+            if (EvalState.TurnCount <= NumberOfMovesToLookForSetups)
+            {
+                //if (EvalState.TurnCount < NumberOfMovesToLookForSetups)
+                AI.AIHeuristics.AvoidSetups = true;
+                AI.AIHeuristics.AvoidUnstoppable = true;
+            }
+
             SimpleMove Move = null;
 
             int NumberOfMovesBeforeStopBlocking = MinNumberOfMovesBeforeStopBlocking + (MaxNumberOfMovesBeforeStopBlocking - MinNumberOfMovesBeforeStopBlocking) * EvalState.Board.Random.RandomInteger(0, 100) / 100;

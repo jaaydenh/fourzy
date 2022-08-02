@@ -281,25 +281,33 @@ namespace FourzyGameModel.Model
                     //bool Prune = false;
                     //if (!Prune) Moves.Add(m);
 
+
+                    
                     if (AIHeuristics.AvoidSetups)
                     {
-                        TurnEvaluator TENext = new TurnEvaluator(OPP.EvalState);
                         bool opp_setup = false;
+                        //For each move the opponent can make
+                        //is it a threat? no. then look at other moves.
+                        //  is it a setup? ok. then flag move as setup
+                        //  is it unstoppbable? ok. then flag move as setup
+
+                        TurnEvaluator TENext = new TurnEvaluator(OPP.EvalState);
                         foreach (SimpleMove m2 in TENext.GetAvailableSimpleMoves())
                         {
                             TENext.Reset();
                             GameState GSNext = TENext.EvaluateTurn(m2);
                             AIScoreEvaluator AISE = new AIScoreEvaluator(GSNext);
                             if (!AISE.IsAThreat()) continue;
-                            if (AIHeuristics.AvoidSetups)
-                                if (AISE.IsASetup())
-                                { opp_setup = true; break; }
+                            //if (AIHeuristics.AvoidSetups)
+                            //    if (AISE.IsASetup())
+                            //    { opp_setup = true; break; }
 
                             if (AIHeuristics.AvoidUnstoppable)
                                 if (AISE.IsUnstoppableThreat())
                                 { opp_setup = true; break; }
-                            if (opp_setup) continue;
                         }
+                        if (opp_setup) continue;
+
                     }
 
                     Moves.Add(m);

@@ -331,7 +331,7 @@ namespace FourzyGameModel.Model
                 }
                 
             }
-
+            EvalState.TurnCount++;
             return EvalState;
         }
 
