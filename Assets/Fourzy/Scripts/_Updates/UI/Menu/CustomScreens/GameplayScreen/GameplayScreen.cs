@@ -61,7 +61,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RealtimeScreen realtimeScreen { get; private set; }
         public DemoGameScreen demoGameScreen { get; private set; }
         public GauntletGameScreen gauntletGameScreen { get; private set; }
-        public SkillzGameScreen skillzGameScreen { get; private set; }
         public float MyTimerLeft
         {
             get
@@ -72,14 +71,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
                 else
                 {
-                    switch (game._Type)
-                    {
-                        case GameType.SKILLZ_ASYNC:
-                            return skillzGameScreen.Timer;
-
-                        default:
-                            return timersEnabled ? myTimer.TotalTimeLeft : -1f;
-                    }
+                    return timersEnabled ? myTimer.TotalTimeLeft : -1f;
                 }
             }
         }
@@ -100,7 +92,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             realtimeScreen = GetComponentInChildren<RealtimeScreen>();
             demoGameScreen = GetComponentInChildren<DemoGameScreen>();
             gauntletGameScreen = GetComponentInChildren<GauntletGameScreen>();
-            skillzGameScreen = GetComponentInChildren<SkillzGameScreen>();
 
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
@@ -371,7 +362,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             realtimeScreen.Open(game);
             demoGameScreen.Open(game);
             gauntletGameScreen.Open(game);
-            skillzGameScreen.Open(game);
 
             gameWinLoseScreen.CloseIfOpened();
             puzzleWinLoseScreen.CloseIfOpened();
@@ -536,17 +526,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         demoGameScreen.GameComplete();
 
                         break;
-
-                    case GameType.SKILLZ_ASYNC:
-                        PauseMenuScreen pauseMenu = menuController.GetScreen<PauseMenuScreen>();
-                        if (pauseMenu && pauseMenu.isOpened)
-                        {
-                            pauseMenu._Close();
-                        }
-
-                        skillzGameScreen.GameComplete();
-
-                        break;
                 }
 
                 //win/lose screen
@@ -575,38 +554,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnGamePaused()
         {
-            switch (game._Type)
-            {
-                case GameType.SKILLZ_ASYNC:
-                    skillzGameScreen.Pause();
-
-                    break;
-
-                default:
-                    //pause timers
-                    myTimer.Pause();
-                    opponentTimer.Pause();
-
-                    break;
-            }
+            //pause timers
+            myTimer.Pause();
+            opponentTimer.Pause();
         }
 
         public void OnGameUnpaused()
         {
-            switch (game._Type)
-            {
-                case GameType.SKILLZ_ASYNC:
-                    skillzGameScreen.Unpause();
-
-                    break;
-
-                default:
-                    //unpause timers
-                    myTimer.Unpause();
-                    opponentTimer.Unpause();
-
-                    break;
-            }
+            //unpause timers
+            myTimer.Unpause();
+            opponentTimer.Unpause();
         }
 
         private void CheckBackButton()
@@ -631,7 +588,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             puzzleUI.OnMoveStarted();
             gauntletGameScreen.OnMoveStarted();
-            skillzGameScreen.OnMoveStarted();
 
             if (turn == null || turn.PlayerId < 1) return;
 
@@ -683,7 +639,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             puzzleUI.UpdatePlayerTurn();
             passAndPlayUI.UpdatePlayerTurn();
             gauntletGameScreen.UpdatePlayerTurn();
-            skillzGameScreen.UpdatePlayerTurn();
 
             if (game.IsOver) return;
 

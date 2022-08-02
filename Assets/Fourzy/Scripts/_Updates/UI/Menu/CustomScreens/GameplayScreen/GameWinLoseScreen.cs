@@ -28,8 +28,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private TMP_Text tapToContinueLabel;
         [SerializeField]
         private RectTransform piecesParent;
-        [SerializeField]
-        private Image loaderBar;
+        // uncomment if loader bar is needed.
+/*        [SerializeField]
+        private Image loaderBar;*/
 
         [SerializeField]
         private GameObject buttonsRow;
@@ -57,7 +58,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Awake();
 
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
-            loaderBar.gameObject.SetActive(false);
+            //loaderBar.gameObject.SetActive(false);
         }
 
         protected override void Start()
@@ -77,7 +78,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Close(animate);
 
             CancelRoutine("autoClose");
-            loaderBar.gameObject.SetActive(false);
+            //loaderBar.gameObject.SetActive(false);
         }
 
         public void Open(IClientFourzy game)
@@ -129,29 +130,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         switch (GameManager.Instance.ExpectedGameType)
                         {
-                            case GameTypeLocal.ASYNC_SKILLZ_GAME:
-                                if (game.IsWinner())
-                                {
-                                    stateLabel.text = $"{game.me.DisplayName} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
-                                }
-                                else if (game.myMembers.Count == 0)
-                                {
-                                    stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("out_of_moves")}</color>";
-                                }
-                                else if (gameplayScreen.MyTimerLeft == 0f)
-                                {
-                                    stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("out_of_time")}</color>";
-                                }
-                                else
-                                {
-                                    //player 2 won
-                                    stateLabel.text = $"{game.opponent.DisplayName} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
-                                }
-
-                                CloseAfter(3f);
-
-                                break;
-
                             case GameTypeLocal.LOCAL_GAME:
                                 if (game.IsWinner())
                                 {
@@ -217,7 +195,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             tapToContinue.AtProgress(0f);
-            if (RewardsScreen.WillDisplayRewardsScreen(game) || (game.puzzleData && game.puzzleData.pack) || game._Type == GameType.SKILLZ_ASYNC)
+            if (RewardsScreen.WillDisplayRewardsScreen(game) || (game.puzzleData && game.puzzleData.pack))
             {
                 //display 'tap to continue'
                 if (string.IsNullOrEmpty(bgTapText))
@@ -277,7 +255,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
             }
         }
-
+/*
         /// <summary>
         /// Will auto close after 
         /// </summary>
@@ -286,7 +264,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             loaderBar.gameObject.SetActive(true);
             StartRoutine("autoClose", CloseBarAnimation(duration), OnBGTap);
-        }
+        }*/
 
         public void SetInfoLabel(string text)
         {
@@ -545,59 +523,47 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 default:
-                    switch (game._Type)
+                    //skip bg taps for infinity table build
+                    switch (GameManager.Instance.buildIntent)
                     {
-                        case GameType.SKILLZ_ASYNC:
-                            //open skillz match result screen
-                            menuController.GetOrAddScreen<SkillzProgressionPromptScreen>().OpenSkillzprogressionPrompt();
+                        case BuildIntent.MOBILE_INFINITY:
+                            if (game._Type == GameType.PASSANDPLAY)
+                                return;
 
                             break;
+                    }
 
-                        default:
-                            //skip bg taps for infinity table build
-                            switch (GameManager.Instance.buildIntent)
-                            {
-                                case BuildIntent.MOBILE_INFINITY:
-                                    if (game._Type == GameType.PASSANDPLAY)
-                                        return;
+                    if (rematchButton.gameObject.activeInHierarchy)
+                    {
+                        switch (game._Type)
+                        {
+                            case GameType.REALTIME:
+                                //GamePlayManager.Instance.BackButtonOnClick();
 
-                                    break;
-                            }
+                                break;
 
-                            if (rematchButton.gameObject.activeInHierarchy)
-                            {
-                                switch (game._Type)
-                                {
-                                    case GameType.REALTIME:
-                                        //GamePlayManager.Instance.BackButtonOnClick();
+                            default:
+                                Rematch();
 
-                                        break;
-
-                                    default:
-                                        Rematch();
-
-                                        break;
-                                }
-                            }
-                            else if (nextGameButton.gameObject.activeInHierarchy)
-                            {
-                                NextGame();
-                            }
-                            else
-                            {
-                                if (game.puzzleData && !game.puzzleData.lastInPack)
-                                {
-                                    menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
-                                        game.puzzleData.pack,
-                                        () => GamePlayManager.Instance.GameplayScreen.OnBack());
-                                }
-                                else
-                                {
-                                    GamePlayManager.Instance.BackButtonOnClick();
-                                }
-                            }
-
-                            break;
+                                break;
+                        }
+                    }
+                    else if (nextGameButton.gameObject.activeInHierarchy)
+                    {
+                        NextGame();
+                    }
+                    else
+                    {
+                        if (game.puzzleData && !game.puzzleData.lastInPack)
+                        {
+                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
+                                game.puzzleData.pack,
+                                () => GamePlayManager.Instance.GameplayScreen.OnBack());
+                        }
+                        else
+                        {
+                            GamePlayManager.Instance.BackButtonOnClick();
+                        }
                     }
 
                     break;
@@ -762,7 +728,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             botRematchesLeft = InternalSettings.Current.BOT_SETTINGS.randomRematchTimes;
         }
 
-        private System.Collections.IEnumerator CloseBarAnimation(float time)
+/*        private System.Collections.IEnumerator CloseBarAnimation(float time)
         {
             loaderBar.fillAmount = 1f;
             float timer = time;
@@ -772,6 +738,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 yield return null;
             }
             loaderBar.fillAmount = 0f;
-        }
+        }*/
     }
 }

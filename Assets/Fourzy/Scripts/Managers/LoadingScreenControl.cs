@@ -50,11 +50,6 @@ namespace Fourzy
 
                     break;
 
-                case BuildIntent.MOBILE_SKILLZ:
-                    StartCoroutine(SkillzLoadRoutine());
-
-                    break;
-
                 case BuildIntent.MOBILE_INFINITY:
                     StartCoroutine(InfinityLoadRoutine());
 
@@ -119,27 +114,6 @@ namespace Fourzy
             if (displayTutorial)
             {
                 onboardingScreen.OpenTutorial(HardcodedTutorials.GetByName("Onboarding"));
-            }
-        }
-
-        private IEnumerator SkillzLoadRoutine()
-        {
-            while (EazyNetChecker.Status != NetStatus.Connected)
-            {
-                yield return null;
-            }
-
-            AsyncOperation async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
-
-            if (async != null)
-            {
-                async.allowSceneActivation = true;
-
-                while (!async.isDone)
-                {
-                    slider.value = async.progress;
-                    yield return null;
-                }
             }
         }
 

@@ -42,7 +42,6 @@ namespace Fourzy
 
             switch (GameManager.Instance.buildIntent)
             {
-                case BuildIntent.MOBILE_SKILLZ:
                 case BuildIntent.MOBILE_INFINITY:
                     return;
             }
@@ -58,7 +57,6 @@ namespace Fourzy
         {
             switch (GameManager.Instance.buildIntent)
             {
-                case BuildIntent.MOBILE_SKILLZ:
                 case BuildIntent.MOBILE_INFINITY:
                     return;
             }
@@ -71,7 +69,6 @@ namespace Fourzy
         {
             switch (GameManager.Instance.buildIntent)
             {
-                case BuildIntent.MOBILE_SKILLZ:
                 case BuildIntent.MOBILE_INFINITY:
                     return;
             }

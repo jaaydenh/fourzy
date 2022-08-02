@@ -479,7 +479,6 @@ namespace Fourzy
                     break;
 
                 case BuildIntent.MOBILE_INFINITY:
-                case BuildIntent.MOBILE_SKILLZ:
                     OnHintsValueUpdated(0, ticket);
 
                     break;

@@ -16,7 +16,6 @@
         ONBOARDING,
         PRESENTATION,
         TRY_TOKEN,
-        SKILLZ_ASYNC,
     };
 
     public enum GameMode { NONE, PUZZLE_FAST, PUZZLE_PACK, AI_PACK, BOSS_AI_PACK, GAUNTLET, VERSUS }

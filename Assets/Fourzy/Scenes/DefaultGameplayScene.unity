@@ -578,7 +578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &41182451
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14057,7 +14057,7 @@ MonoBehaviour:
           selectedComponent: 2
           selectedMember: 26
           isDynamic: 0
-        target: {fileID: 577774582}
+        target: {fileID: 0}
         memberName: Continue
         memberType: 8
         arguments: []
@@ -15803,7 +15803,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 43
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -15823,7 +15823,6 @@ MonoBehaviour:
   infoLabel: {fileID: 810311173}
   tapToContinueLabel: {fileID: 2129654979}
   piecesParent: {fileID: 1402039692}
-  loaderBar: {fileID: 41182452}
   buttonsRow: {fileID: 1594210383}
   nextGameButton: {fileID: 1122577625}
   rematchButton: {fileID: 1944413860}
@@ -20208,7 +20207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1100637891
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20225,10 +20224,10 @@ RectTransform:
   m_Father: {fileID: 1197571244}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 285.00003, y: -706.73}
+  m_SizeDelta: {x: 510.00006, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1100637892
 CanvasRenderer:
@@ -23461,7 +23460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1392475735
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23477,10 +23476,10 @@ RectTransform:
   m_Father: {fileID: 1197571244}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 285.00003, y: -446.72998}
+  m_SizeDelta: {x: 510.00006, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1392475736
 MonoBehaviour:

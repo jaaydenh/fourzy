@@ -110,9 +110,6 @@ namespace Fourzy
             {
                 switch (buildIntent)
                 {
-                    case BuildIntent.MOBILE_SKILLZ:
-                        return Constants.MAIN_MENU_SKILLZ_SCENE_NAME;
-
                     case BuildIntent.DESKTOP_REGULAR:
                         return Constants.MAIN_MENU_L_SCENE_NAME;
 
@@ -955,7 +952,6 @@ namespace Fourzy
                     break;
 
                 case BuildIntent.DESKTOP_REGULAR:
-                case BuildIntent.MOBILE_SKILLZ:
                     MMVibrationManager.Haptic(type);
 
                     break;
@@ -1322,14 +1318,12 @@ namespace Fourzy
         REALTIME_LOBBY_GAME,
         REALTIME_QUICKMATCH,
         REALTIME_BOT_GAME,
-        ASYNC_SKILLZ_GAME,
     }
 
     public enum BuildIntent
     {
         MOBILE_REGULAR,
         DESKTOP_REGULAR,
-        MOBILE_SKILLZ,
         MOBILE_INFINITY,
     }
 }

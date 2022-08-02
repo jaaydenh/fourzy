@@ -1,5 +1,7 @@
 fileFormatVersion: 2
-guid: cf9d24646c8de5144bd2d45c415e20f8
+guid: a3261fa64588d4a4d830baf1aa430ce1
+labels:
+- gpsr
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -14,7 +16,7 @@ PluginImporter:
   - first:
       Android: Android
     second:
-      enabled: 0
+      enabled: 1
       settings: {}
   - first:
       Any: 

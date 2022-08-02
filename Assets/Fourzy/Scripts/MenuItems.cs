@@ -39,12 +39,6 @@ public class MenuItems : MonoBehaviour
         SetBuildIntent(BuildIntent.MOBILE_REGULAR);
     }
 
-    [MenuItem("Fourzy/Set For Mobile Skillz")]
-    public static void SetMobileSkillz()
-    {
-        SetBuildIntent(BuildIntent.MOBILE_SKILLZ);
-    }
-
     [MenuItem("Fourzy/Set For Desktop")]
     public static void SetDesktop()
     {
@@ -305,7 +299,6 @@ public class MenuItems : MonoBehaviour
                 break;
 
             case BuildIntent.MOBILE_REGULAR:
-            case BuildIntent.MOBILE_SKILLZ:
                 plugin.SetCompatibleWithPlatform(BuildTarget.Android, false);
 
                 break;
@@ -328,12 +321,6 @@ public class MenuItems : MonoBehaviour
             case BuildIntent.DESKTOP_REGULAR:
                 SetAtlasState("__AdventureMaps", false);
                 SetAtlasState("__LandscapeBuildOnly", true);
-
-                break;
-
-            case BuildIntent.MOBILE_SKILLZ:
-                SetAtlasState("__AdventureMaps", false);
-                SetAtlasState("__LandscapeBuildOnly", false);
 
                 break;
 
@@ -362,13 +349,6 @@ public class MenuItems : MonoBehaviour
             case BuildIntent.MOBILE_REGULAR:
                 scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SCENE_NAME)[0]), true));
                 scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.MAIN_MENU_P_SCENE_NAME)[0]), true));
-                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.GAMEPLAY_SCENE_NAME)[0]), true));
-
-                break;
-
-            case BuildIntent.MOBILE_SKILLZ:
-                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.LOGO_SCENE_NAME)[0]), true));
-                scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.MAIN_MENU_SKILLZ_SCENE_NAME)[0]), true));
                 scenes.Add(new EditorBuildSettingsScene(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets(Fourzy.Constants.GAMEPLAY_SCENE_NAME)[0]), true));
 
                 break;
@@ -407,7 +387,6 @@ public class MenuItems : MonoBehaviour
                 break;
 
             case BuildIntent.MOBILE_REGULAR:
-            case BuildIntent.MOBILE_SKILLZ:
                 PlayerSettings.defaultInterfaceOrientation = UIOrientation.Portrait;
                 PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
                 PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel29;

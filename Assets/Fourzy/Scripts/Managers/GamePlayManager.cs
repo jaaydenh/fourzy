@@ -165,42 +165,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 return;
             }
 
-            switch (Game._Type)
-            {
-                case GameType.SKILLZ_ASYNC:
-                    if (pause)
-                    {
-                        if (Game.IsOver)
-                        {
-                            if (SkillzGameController.Instance.HaveNextGame)
-                            {
-                                Rematch();
-                            }
-                        }
-
-                        if (SkillzGameController.Instance.MatchPausesLeft == 0)
-                        {
-                            inPauseTime = Time.realtimeSinceStartup;
-                        }
-                    }
-                    else
-                    {
-                        //deduct wait time
-                        if (SkillzGameController.Instance.MatchPausesLeft == 0)
-                        {
-                            inPauseTime = Time.realtimeSinceStartup - inPauseTime;
-                            GameplayScreen.skillzGameScreen.DeductTimer(inPauseTime);
-                        }
-
-                        if (GameplayScreen.skillzGameScreen.Timer > 0f)
-                        {
-                            menuController.GetOrAddScreen<PauseMenuScreen>()._Open();
-                        }
-                    }
-
-                    break;
-            }
-
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
@@ -569,14 +533,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
-                case GameType.SKILLZ_ASYNC:
-                    if (!Game.IsOver && !Game.isMyTurn)
-                    {
-                        BoardView.TakeAITurn();
-                    }
-
-                    break;
-
                 case GameType.PUZZLE:
                     if (!Game.IsOver && !Game.isMyTurn)
                     {
@@ -927,35 +883,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
-                case GameTypeLocal.ASYNC_SKILLZ_GAME:
-                    SkillzLevelParams levelParams = SkillzGameController.Instance.LevelsInfo[SkillzGameController.Instance.CurrentLevelIndex];
-                    Area area = (Area)levelParams.areaId;
-                    BoardGenerationPreferences preferences = new BoardGenerationPreferences(area);
-                    string recipe = (SkillzGameController.Instance.CurrentMatch?.ID.Value.ToString() ?? "default") + SkillzCrossPlatform.Random.Value();
-                    matchId = recipe;
-
-                    string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? "Player";
-                    string opponentName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => !_player.IsCurrentPlayer)?.DisplayName ?? "Player 2";
-
-                    preferences.RequestedRecipe = recipe;
-                    preferences.RecipeSeed = recipe;
-                    preferences.TargetComplexityLow = levelParams.complexityLow;
-                    preferences.TargetComplexityHigh = levelParams.complexityHigh;
-
-                    Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
-                    Player opponent = new Player(2, opponentName, (AIProfile)levelParams.aiProfile) { HerdId = levelParams.oppHerdId };
-
-                    GameOptions options = new GameOptions() { PlayersUseSpells = false, MovesReduceHerd = true };
-                    ClientFourzyGame game = new ClientFourzyGame(area, player, opponent, 1, options, preferences);
-                    game._Type = GameType.SKILLZ_ASYNC;
-                    game.State.InitializeHerd(1, SkillzGameController.Instance.MovesPerMatch);
-                    game.State.InitializeHerd(2, 999);
-                    game.UpdateFirstState();
-
-                    LoadGame(game);
-
-                    break;
-
                 default:
                     LoadGame(GameManager.Instance.activeGame);
 
@@ -1046,19 +973,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case GameType.REALTIME:
                     ResetBoard();
-
-                    break;
-
-                case GameType.SKILLZ_ASYNC:
-                    if (SkillzGameController.Instance.HaveNextGame)
-                    {
-                        CheckGameMode();
-                    }
-                    else
-                    {
-                        SkillzGameController.Instance.CloseGameOnBack = true;
-                        SkillzCrossPlatform.ReturnToSkillz();
-                    }
 
                     break;
             }
@@ -1670,78 +1584,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             onGameFinished?.Invoke(game);
             bool winner = game.IsWinner();
 
-            #region Skillz Game Check
-
-            if (game._Type == GameType.SKILLZ_ASYNC)
-            {
-                int myMovesLeft = game.myMembers.Count;
-                int timerLeft = (int)GameplayScreen.MyTimerLeft;
-                List<PointsEntry> points = new List<PointsEntry>();
-                if (winner)
-                {
-                    points.Add(new PointsEntry(LocalizationManager.Value("skillz_win_points_key"), SkillzGameController.Instance.WinPoints));
-
-                    if (myMovesLeft > 0)
-                    {
-                        points.Add(new PointsEntry(
-                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftWin}/{LocalizationManager.Value("move")})",
-                            myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftWin));
-                    }
-                }
-                else if (game.draw)
-                {
-                    if (myMovesLeft > 0)
-                    {
-                        points.Add(new PointsEntry(
-                            $"{LocalizationManager.Value("skillz_moves_left_points_key")} ({SkillzGameController.Instance.PointsPerMoveLeftDraw}/{LocalizationManager.Value("move")})",
-                            myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftDraw));
-                    }
-                }
-                else
-                {
-                    points.Add(new PointsEntry(
-                        $"{LocalizationManager.Value("skillz_survival_moves_left_key")} ({SkillzGameController.Instance.PointsPerMoveLeftLose}/{LocalizationManager.Value("move")})",
-                        myMovesLeft * SkillzGameController.Instance.PointsPerMoveLeftLose));
-                }
-
-                if (SkillzGameController.Instance.GamesPlayed.Count == SkillzGameController.Instance.GamesToPlay - 1)
-                {
-                    //add timer bonus
-                    if (timerLeft > 0)
-                    {
-                        points.Add(new PointsEntry(
-                            $"{LocalizationManager.Value("skillz_time_left_points_key")} ({SkillzGameController.Instance.PointsPerSecond}/{LocalizationManager.Value("second")})",
-                            timerLeft * SkillzGameController.Instance.PointsPerSecond));
-                    }
-
-                    //big win bonus
-                    if (SkillzGameController.Instance.GamesPlayed.TrueForAll(_game => _game.state) && winner)
-                    {
-                        points.Add(new PointsEntry(LocalizationManager.Value("skillz_big_win_key"), 2000));
-                    }
-                }
-
-                SkillzGameController.Instance.FinishGame(winner, points.ToArray());
-
-                //force end game due to empty timer
-                if (GameplayScreen.skillzGameScreen.Timer == 0)
-                {
-                    while (SkillzGameController.Instance.HaveNextGame)
-                    {
-                        SkillzGameController.Instance.FinishGame(false);
-                    }
-                }
-
-                //report score
-                if (!SkillzGameController.Instance.HaveNextGame)
-                {
-                    SkillzGameController.Instance.OnMatchFinished();
-                    SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
-                }
-            }
-
-            #endregion
-
             GameplayScreen.OnGameFinished();
 
             #region Amplitude user properties update
@@ -1947,43 +1789,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             StartRoutine("postGameRoutine", PostGameFinished());
         }
 
-        private void OnSkillzScoreReported()
-        {
-            CancelRoutine("skillzScorehelper");
-        }
-
-        private void OnSkillzScoreReportedError(string error)
-        {
-            Debug.Log($"Failed to report Skillz score: {error}");
-            Debug.Log($"Starting up skillz score helper");
-
-            StartRoutine("skillzScorehelper", SkillzScoreReportHelper());
-        }
-
-        /// <summary>
-        /// When failed to report score
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator SkillzScoreReportHelper()
-        {
-            int tries = 3;
-
-            for (int _try = 0; _try < tries; _try++)
-            {
-                SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, null);
-
-                yield return new WaitForSeconds(2f);
-            }
-
-            if (!SkillzGameController.Instance.HaveNextGame)
-            {
-                Debug.Log("Failed to report score");
-                Debug.Log("Last effort, using DisplayTournamentResultsWithScore");
-
-                SkillzCrossPlatform.DisplayTournamentResultsWithScore(SkillzGameController.Instance.Points);
-            }
-        }
-
         private void OnDraw(IClientFourzy game)
         {
             //channel into gamefinished pipeline
@@ -2007,17 +1812,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     case GameMode.GAUNTLET:
                         //SetHintAreaColliderState(false);
                         OnGameFinished(Game);
-
-                        break;
-
-                    case GameMode.VERSUS:
-                        switch (Game._Type)
-                        {
-                            case GameType.SKILLZ_ASYNC:
-                                OnGameFinished(Game);
-
-                                break;
-                        }
 
                         break;
                 }
@@ -2116,7 +1910,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.ONBOARDING:
                 case GameType.TRY_TOKEN:
                 case GameType.PRESENTATION:
-                case GameType.SKILLZ_ASYNC:
 
                     return;
             }
@@ -2310,7 +2103,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
                 case GameType.PRESENTATION:
-                case GameType.SKILLZ_ASYNC:
                     break;
 
                 default:
@@ -2468,7 +2260,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.TURN_BASED:
                 case GameType.REALTIME:
                 case GameType.TRY_TOKEN:
-                case GameType.SKILLZ_ASYNC:
                     if (Game.IsWinner())
                     {
                         winningParticleGenerator.ShowParticles();
