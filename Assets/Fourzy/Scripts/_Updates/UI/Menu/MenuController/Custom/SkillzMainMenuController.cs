@@ -59,9 +59,9 @@ namespace Fourzy._Updates.UI.Menu
 
         private void LaunchSkillz()
         {
-            SkillzCrossPlatform.setSkillzBackgroundMusic("MenuMusic.mp3");
             if (SettingsManager.Get(SettingsManager.KEY_AUDIO) == true)
             {
+                SkillzCrossPlatform.setSkillzBackgroundMusic("MenuMusic.mp3");
                 SkillzCrossPlatform.setSkillzMusicVolume(1f);
             } else {
                 SkillzCrossPlatform.setSkillzMusicVolume(0);
