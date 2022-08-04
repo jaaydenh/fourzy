@@ -102,7 +102,7 @@ namespace FourzyGameModel.Model
         //If the player passes, can they make a winning move.  If so, this move is a threat to win. 
         public bool IsAThreat()
         {
-            
+
             GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
 
             TurnEvaluator TE = new TurnEvaluator(GSReview);
@@ -111,7 +111,7 @@ namespace FourzyGameModel.Model
             //if (AITE.WinningTurns.Count > 0) return true;
 
             return false;
-           
+        }
 
         //If you can win no matter what move the opponent makes, this move is unstoppable.
         public bool IsUnstoppableThreat()
