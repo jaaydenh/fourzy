@@ -194,8 +194,8 @@ namespace SkillzSDK
             Name = jsonData.SafeGetStringValue("name");
             IsCash = jsonData.SafeGetBoolValue("isCash");
             IsSynchronous = (bool)jsonData.SafeGetBoolValue("isSynchronous");
-            IsTieBreaker = (bool)jsonData.SafeGetBoolValue("isTieBreaker");
-            IsBracket = (bool)jsonData.SafeGetBoolValue("isBracket");
+            IsTieBreaker = jsonData.SafeGetBoolValue("isTieBreaker") ?? false;
+            IsBracket = jsonData.SafeGetBoolValue("isBracket") ?? false;
             BracketRound = jsonData.SafeGetIntValue("bracketRound");
             IsVideoAdEntry = jsonData.SafeGetBoolValue("isVideoAdEntry");
 
