@@ -12,9 +12,9 @@ namespace FourzyGameModel.Model
     {
         private GameState EvalState { get; set; }
         private int NumberOfMovesToConsider = 6;
-        private int MinNumberOfMovesBeforeStopBlocking = 10;
+        private int MinNumberOfMovesBeforeStopBlocking = 8;
         private int MaxNumberOfMovesBeforeStopBlocking = 16;
-        private int MinNumberTurnsBeforeWinning = 8;
+        private int MinNumberTurnsBeforeWinning = 11;
         private int MaxNumberTurnsBeforeWinning = 16;
 
         public EventuallyBot(GameState State)
