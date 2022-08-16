@@ -68,6 +68,23 @@ namespace Fourzy._Updates.Managers
         internal List<SkillzLevelParams> LevelsInfo { get; private set; }
         internal int SubmitRetries { get; set; }
         internal int ExplicitSeed => random - GetMatchParamInt("RandomSeed", -1);
+        internal Player CurrentPlayer => CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer);
+
+        public static void StartEditorSkillzUI()
+        {
+            if (SettingsManager.Get(SettingsManager.KEY_AUDIO) == true)
+            {
+                SkillzCrossPlatform.setSkillzBackgroundMusic("MenuMusic.mp3");
+                SkillzCrossPlatform.setSkillzMusicVolume(1f);
+            }
+            else
+            {
+                SkillzCrossPlatform.setSkillzMusicVolume(0);
+            }
+
+            SkillzState.SetAsyncDelegate(Instance);
+            SkillzCrossPlatform.SetEditorBridgeAPI();
+        }
 
         public void InitializeMatchData()
         {
@@ -140,11 +157,12 @@ namespace Fourzy._Updates.Managers
             LastMatch = matchInfo;
             OngoingMatch = true;
             SubmitRetries = 3;
+
             InitializeMatchData();
 
             if (matchInfo.IsCustomSynchronousMatch)
             {
-                FourzyPhotonManager.Instance.JoinOrCreateRoom(SkillzCrossPlatform.GetMatchInfo().CustomServerConnectionInfo.MatchId);
+                GameManager.Instance.JoinSkillzSyncGame(SkillzCrossPlatform.GetMatchInfo().CustomServerConnectionInfo.MatchId);
             }
             else
             {

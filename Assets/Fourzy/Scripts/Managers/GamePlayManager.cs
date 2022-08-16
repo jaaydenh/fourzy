@@ -203,6 +203,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
+                case GameTypeLocal.SYNC_SKILLZ_GAME:
                     if (Game != null && !Game.IsOver)
                     {
                         PlayerPrefsWrapper.SetAbandonedRealtimeRoomName(PhotonNetwork.CurrentRoom.Name);
@@ -249,6 +250,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 //for editor/pc
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
+                case GameTypeLocal.SYNC_SKILLZ_GAME:
                     if (Game != null && !Game.IsOver)
                     {
                         PlayerPrefsWrapper.SetAbandonedRealtimeRoomName(PhotonNetwork.CurrentRoom.Name);
@@ -263,6 +265,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
+                case GameTypeLocal.SYNC_SKILLZ_GAME:
                     PlayerPrefsWrapper.AddRealtimGamesAbandoned();
                     AnalyticsManager.Instance.AmplitudeSetUserProperty("totalRealtimeGamesAbandoned", PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
 
@@ -283,6 +286,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
+                case GameTypeLocal.SYNC_SKILLZ_GAME:
                     if (PhotonNetwork.CurrentRoom != null)
                     {
                         //let other player know we forfeit
@@ -844,6 +848,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
+                case GameTypeLocal.SYNC_SKILLZ_GAME:
                     //unload tutorial screen
                     OnboardingScreen.CloseTutorial();
 
@@ -959,7 +964,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             
             AIProfile aiProfile = (AIProfile)levelParams.aiProfile;
             string matchId = levelParams.seed;
-            string myName = SkillzGameController.Instance.CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer)?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
+            string myName = SkillzGameController.Instance.CurrentPlayer?.DisplayName ?? CharacterNameFactory.GeneratePlayerName();
             string opponentName = AIPlayerFactory.GetAIPlayerNameForSkillz(aiProfile);
             Player player = new Player(1, myName) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceId };
             Player opponent = new Player(2, opponentName, aiProfile) { HerdId = levelParams.oppHerdId };
@@ -1826,20 +1831,28 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameTypeLocal.ASYNC_SKILLZ_GAME:
-                    if (game.draw) {
+                case GameTypeLocal.SYNC_SKILLZ_GAME:
+                    if (game.draw) 
+                    {
                         PlayerPrefsWrapper.AddSkillzAsyncGamesDraw();
                         AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesDraw", PlayerPrefsWrapper.GetSkillzAsyncGamesDraw());
-                    } else {
-                        if (game.IsWinner()) {
+                    } 
+                    else 
+                    {
+                        if (game.IsWinner()) 
+                        {
                             PlayerPrefsWrapper.AddSkillzAsyncGamesWon();
                             AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesWon", PlayerPrefsWrapper.GetSkillzAsyncGamesWon());
-                        } else {
+                        } 
+                        else 
+                        {
                             PlayerPrefsWrapper.AddSkillzAsyncGamesLost();
                             AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesLost", PlayerPrefsWrapper.GetSkillzAsyncGamesLost());
                         }
                     }
                     PlayerPrefsWrapper.AddSkillzAsyncGamesPlayed();
                     AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSkillzAsyncGamesPlayed", PlayerPrefsWrapper.GetSkillzAsyncGamesPlayed());
+
                     break;
             }
 

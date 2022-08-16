@@ -62,6 +62,13 @@ namespace SkillzSDK
             FlagURL = playerJSON.SafeGetStringValue("flagUrl");
             IsCurrentPlayer = (bool)playerJSON.SafeGetBoolValue("isCurrentPlayer");
             TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
+#else
+            ID = playerJSON.SafeGetUintValue("userId");
+            DisplayName = playerJSON.SafeGetStringValue("userName");
+            AvatarURL = playerJSON.SafeGetStringValue("avatarUrl");
+            FlagURL = playerJSON.SafeGetStringValue("flagUrl");
+            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer") ?? false;
+            TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
 #endif
         }
 
@@ -215,10 +222,11 @@ namespace SkillzSDK
 
             if (Application.isEditor)
             {
-                GameParams = LoadSimulatedMatchParameters();
             }
 
-#if UNITY_IOS
+#if !DEVELOPMENT_BUILD && !UNITY_EDITOR
+
+    #if UNITY_IOS
             GameParams = new Dictionary<string, string>();
             object parameters = jsonData.SafeGetValue("gameParameters");
             if (parameters != null && parameters.GetType() == typeof(JSONDict)) {
@@ -235,10 +243,14 @@ namespace SkillzSDK
                     }
                 }
             }
-#elif UNITY_ANDROID
+    #elif UNITY_ANDROID
             GameParams = HashtableToDictionary(SkillzCrossPlatform.GetMatchRules());
             SkillzDifficulty = jsonData.SafeGetUintValue("skillzDifficulty");
+    #endif
+#else
+            GameParams = LoadSimulatedMatchParameters();
 #endif
+
         }
 
         public override string ToString()

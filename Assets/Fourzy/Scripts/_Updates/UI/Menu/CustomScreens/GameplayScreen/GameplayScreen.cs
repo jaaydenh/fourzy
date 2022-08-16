@@ -169,6 +169,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         case GameTypeLocal.REALTIME_LOBBY_GAME:
                         case GameTypeLocal.REALTIME_QUICKMATCH:
+                        case GameTypeLocal.SYNC_SKILLZ_GAME:
                             magicState =
                                 (MagicState)FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_MAGIC_KEY, 0);
 

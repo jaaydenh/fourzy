@@ -179,6 +179,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             case GameTypeLocal.REALTIME_BOT_GAME:
                             case GameTypeLocal.REALTIME_LOBBY_GAME:
                             case GameTypeLocal.REALTIME_QUICKMATCH:
+                            case GameTypeLocal.SYNC_SKILLZ_GAME:
                                 if (game.IsWinner())
                                 {
                                     stateLabel.text = $"{game.me.DisplayName} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";

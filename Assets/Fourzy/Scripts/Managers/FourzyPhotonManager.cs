@@ -135,6 +135,14 @@ namespace Fourzy
                         tasks.Pop().Value();
 
                         break;
+
+                    default:
+                        if (PhotonNetwork.CurrentLobby == null && PhotonNetwork.NetworkClientState != ClientState.JoiningLobby)
+                        {
+                            JoinLobby();
+                        }
+
+                        break;
                 }
             }
             else
@@ -161,7 +169,11 @@ namespace Fourzy
             }
 
             //update name
-            PhotonNetwork.NickName = UserManager.Instance.userName;
+            if (SkillzGameController.Instance.CurrentMatch != null)
+            {
+                PhotonNetwork.NickName = SkillzGameController.Instance.CurrentPlayer?.DisplayName;
+            }
+
             onJoinedLobby?.Invoke(PhotonNetwork.CurrentLobby.Name);
 
             if (tasks.Count > 0)
@@ -170,6 +182,7 @@ namespace Fourzy
                 {
                     case "joinRandomRoom":
                     case "createRoom":
+                    case "joinOrCreateRoom":
                         tasks.Pop().Value();
 
                         break;
@@ -556,51 +569,19 @@ namespace Fourzy
             else if (PhotonNetwork.CurrentLobby == null)
             {
                 instance.JoinLobby();
-
                 return;
             }
 
             tasks.Pop();
 
-            PASSWORD = password;
-
-            Hashtable properties = new ExitGames.Client.Photon.Hashtable()
-            {
-                [Constants.REALTIME_ROOM_TIMER_KEY] =
-                    SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
-                [Constants.REALTIME_ROOM_MAGIC_KEY] =
-                    SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC) ? 2 : 0,
-                [Constants.REALTIME_ROOM_GAMEPIECE_KEY] =
-                    UserManager.Instance.gamePieceId,
-                [Constants.REALTIME_ROOM_AREA] =
-                    PlayerPrefsWrapper.GetCurrentArea(),
-                [Constants.REALTIME_ROOM_RATING_KEY] =
-                    UserManager.Instance.lastCachedRating,
-                [Constants.REALTIME_ROOM_GAMES_TOTAL_KEY] =
-                    UserManager.Instance.totalRatedGames,
-            };
-            string roomName;
-            List<string> lobbyProperties = new List<string>() { 
-                Constants.REALTIME_ROOM_GAMEPIECE_KEY, 
-                Constants.REALTIME_ROOM_RATING_KEY,
-                Constants.REALTIME_ROOM_GAMES_TOTAL_KEY,
-                Constants.REALTIME_ROOM_MAGIC_KEY,
-                Constants.REALTIME_ROOM_TIMER_KEY,
-                Constants.REALTIME_ROOM_AREA
-            };
             List<string> expectedUsers = new List<string>();
-
-            if (!string.IsNullOrEmpty(expectedUser)) expectedUsers.Add(expectedUser);
-
-            lobbyProperties.Add(Constants.REALTIME_ROOM_TYPE_KEY);
-            properties.Add(Constants.REALTIME_ROOM_TYPE_KEY, (int)type);
-
-            if (!string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(expectedUser))
             {
-                lobbyProperties.Add(Constants.REALTIME_ROOM_PASSWORD);
-                properties.Add(Constants.REALTIME_ROOM_PASSWORD, password);
+                expectedUsers.Add(expectedUser);
             }
 
+            PASSWORD = password;
+            string roomName;
             switch (type)
             {
                 case RoomType.LOBBY_ROOM:
@@ -623,13 +604,7 @@ namespace Fourzy
             //create new room
             PhotonNetwork.CreateRoom(
                 roomName,
-                new RoomOptions
-                {
-                    MaxPlayers = 2,
-                    CustomRoomProperties = properties,
-                    CustomRoomPropertiesForLobby = lobbyProperties.ToArray(),
-                    PublishUserId = true,
-                },
+                RoomOptionsFromSettings(type, password),
                 null,
                 expectedUsers.ToArray());
 
@@ -714,14 +689,72 @@ namespace Fourzy
 
         public void JoinOrCreateRoom(string roomName)
         {
-            Debug.Log("First time connecting to Master Server, creating and joining room");
-            PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions { MaxPlayers = 2 }, default);
+            tasks.Push(new KeyValuePair<string, Action>("joinOrCreateRoom", () => JoinOrCreateRoom(roomName)));
+
+            if (!PhotonNetwork.IsConnected)
+            {
+                instance.ConnectUsingSettings();
+                return;
+            }
+            else if (PhotonNetwork.CurrentLobby == null)
+            {
+                instance.JoinLobby();
+                return;
+            }
+
+            tasks.Pop();
+
+            PhotonNetwork.JoinOrCreateRoom(roomName, RoomOptionsFromSettings(RoomType.SKILLZ_SYNC), default);
         }
 
         private void RunTimeoutRoutine()
         {
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
             connectionTimedOutRoutine = StartCoroutine(OnConnectionTimedOut());
+        }
+
+        private static RoomOptions RoomOptionsFromSettings(RoomType type, string password = "")
+        {
+            Hashtable properties = new ExitGames.Client.Photon.Hashtable()
+            {
+                [Constants.REALTIME_ROOM_TIMER_KEY] =
+                    SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                [Constants.REALTIME_ROOM_MAGIC_KEY] =
+                    SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC) ? 2 : 0,
+                [Constants.REALTIME_ROOM_GAMEPIECE_KEY] =
+                    UserManager.Instance.gamePieceId,
+                [Constants.REALTIME_ROOM_AREA] =
+                    PlayerPrefsWrapper.GetCurrentArea(),
+                [Constants.REALTIME_ROOM_RATING_KEY] =
+                    UserManager.Instance.lastCachedRating,
+                [Constants.REALTIME_ROOM_GAMES_TOTAL_KEY] =
+                    UserManager.Instance.totalRatedGames,
+            };
+            List<string> lobbyProperties = new List<string>() {
+                Constants.REALTIME_ROOM_GAMEPIECE_KEY,
+                Constants.REALTIME_ROOM_RATING_KEY,
+                Constants.REALTIME_ROOM_GAMES_TOTAL_KEY,
+                Constants.REALTIME_ROOM_MAGIC_KEY,
+                Constants.REALTIME_ROOM_TIMER_KEY,
+                Constants.REALTIME_ROOM_AREA
+            };
+
+            lobbyProperties.Add(Constants.REALTIME_ROOM_TYPE_KEY);
+            properties.Add(Constants.REALTIME_ROOM_TYPE_KEY, (int)type);
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                lobbyProperties.Add(Constants.REALTIME_ROOM_PASSWORD);
+                properties.Add(Constants.REALTIME_ROOM_PASSWORD, password);
+            }
+
+            return new RoomOptions
+            {
+                MaxPlayers = 2,
+                CustomRoomProperties = properties,
+                CustomRoomPropertiesForLobby = lobbyProperties.ToArray(),
+                PublishUserId = true,
+            };
         }
 
         private System.Collections.IEnumerator OnConnectionTimedOut()
@@ -742,6 +775,6 @@ namespace Fourzy
         QUICKMATCH = 1,
         DIRECT_INVITE = 2,
         LOBBY_ROOM = 4,
-        SKILLZ_SYNC,
+        SKILLZ_SYNC = 5,
     }
 }
