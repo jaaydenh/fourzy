@@ -8,28 +8,31 @@ namespace FourzyGameModel.Model
     //Make winning moves only after 1-n turns
     //Make blocking moves until 1-b turns
 
-    public class EventuallyBot : AIPlayer
+    public class StrongBlockAI : AIPlayer
     {
         private GameState EvalState { get; set; }
-        private int NumberOfMovesToConsider = 6;
-        private int MinNumberOfMovesBeforeStopBlocking = 8;
-        private int MaxNumberOfMovesBeforeStopBlocking = 16;
-        private int MinNumberTurnsBeforeWinning = 11;
-        private int MaxNumberTurnsBeforeWinning = 16;
+        private int NumberOfMovesToConsider = 10;
+        //private int NumberOfMovesToLookForSetups = 16;
+        //private int NumberOfMovesBeforeStartBlocking = 4;
+        //private int MinNumberOfMovesBeforeStopBlocking = 30;
+        //private int MaxNumberOfMovesBeforeStopBlocking = 40;
+        private int MinNumberTurnsBeforeWinning = 20;
+        private int MaxNumberTurnsBeforeWinning = 30;
 
-        public EventuallyBot(GameState State)
+        public StrongBlockAI(GameState State)
         {
             this.EvalState = State;
         }
 
         public PlayerTurn GetTurn()
         {
+
             List<SimpleMove> Moves = new List<SimpleMove>() { };
-            AITurnEvaluator AI = new AITurnEvaluator(EvalState);
+            AITurnEvaluatorRevised AI = new AITurnEvaluatorRevised(EvalState);
             Moves = AI.AvailableSimpleMoves;
             if (AI.WinningTurns.Count > 0)
             {
-                int NumberTurnsBeforeWinning = MinNumberTurnsBeforeWinning + (MaxNumberOfMovesBeforeStopBlocking - MinNumberTurnsBeforeWinning) * EvalState.Board.Random.RandomInteger(0, 100) / 100;
+                int NumberTurnsBeforeWinning = MinNumberTurnsBeforeWinning + (MaxNumberTurnsBeforeWinning - MinNumberTurnsBeforeWinning) * EvalState.Board.Random.RandomInteger(0, 100) / 100;
 
                 //If beyond the turn limit, start making winning moves
                 if (EvalState.TurnCount > NumberTurnsBeforeWinning)
@@ -47,17 +50,13 @@ namespace FourzyGameModel.Model
                 return new PlayerTurn(AI.AvailableSimpleMoves.First());
 
             //Create a new evaluator minus the winning moves.
-            AI = new AITurnEvaluator(EvalState, Moves);
+            AI = new AITurnEvaluatorRevised(EvalState, Moves);
 
             SimpleMove Move = null;
-
-            int NumberOfMovesBeforeStopBlocking = MinNumberOfMovesBeforeStopBlocking + (MaxNumberOfMovesBeforeStopBlocking - MinNumberOfMovesBeforeStopBlocking) * EvalState.Board.Random.RandomInteger(0, 100) / 100;
-
-            //Only make blocking moves for a couple of turns, but eventually make a mistake.
-            if (EvalState.TurnCount > NumberOfMovesBeforeStopBlocking)
-                Move = AI.GetRandomTopAvailableMove(NumberOfMovesToConsider);
-            else
-                Move = AI.GetRandomOkMove(NumberOfMovesToConsider);
+            foreach (SimpleMove m in AI.TopScoringMoves(AI.AvailableSimpleMoves,NumberOfMovesToConsider))
+            {
+                if (AI.IsMoveOk(m)) { Move = m; break; }
+            }
 
             //If there are no ok moves, then make the best move possible.
             if (Move == null)

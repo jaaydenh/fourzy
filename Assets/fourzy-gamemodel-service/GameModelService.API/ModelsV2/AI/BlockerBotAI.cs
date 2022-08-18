@@ -11,10 +11,11 @@ namespace FourzyGameModel.Model
     public class BlockerBotAI : AIPlayer
     {
         private GameState EvalState { get; set; }
-        private int NumberOfMovesToConsider = 6;
+        private int NumberOfMovesToConsider = 2;
         private int NumberOfMovesToLookForSetups = 16;
-        private int MinNumberOfMovesBeforeStopBlocking = 20;
-        private int MaxNumberOfMovesBeforeStopBlocking = 30;
+        private int NumberOfMovesBeforeStartBlocking = 4;
+        private int MinNumberOfMovesBeforeStopBlocking = 30;
+        private int MaxNumberOfMovesBeforeStopBlocking = 40;
         private int MinNumberTurnsBeforeWinning = 20;
         private int MaxNumberTurnsBeforeWinning = 30;
 
@@ -25,12 +26,14 @@ namespace FourzyGameModel.Model
 
         public PlayerTurn GetTurn()
         {
+
+
             List<SimpleMove> Moves = new List<SimpleMove>() { };
-            AITurnEvaluator AI = new AITurnEvaluator(EvalState);
+            AITurnEvaluatorRevised AI = new AITurnEvaluatorRevised(EvalState);
             Moves = AI.AvailableSimpleMoves;
             if (AI.WinningTurns.Count > 0)
             {
-                int NumberTurnsBeforeWinning = MinNumberTurnsBeforeWinning + (MaxNumberOfMovesBeforeStopBlocking - MinNumberTurnsBeforeWinning) * EvalState.Board.Random.RandomInteger(0, 100) / 100;
+                int NumberTurnsBeforeWinning = MinNumberTurnsBeforeWinning + (MaxNumberTurnsBeforeWinning - MinNumberTurnsBeforeWinning) * EvalState.Board.Random.RandomInteger(0, 100) / 100;
 
                 //If beyond the turn limit, start making winning moves
                 if (EvalState.TurnCount > NumberTurnsBeforeWinning)
@@ -48,21 +51,21 @@ namespace FourzyGameModel.Model
                 return new PlayerTurn(AI.AvailableSimpleMoves.First());
 
             //Create a new evaluator minus the winning moves.
-            AI = new AITurnEvaluator(EvalState, Moves);
+            AI = new AITurnEvaluatorRevised(EvalState, Moves);
 
             if (EvalState.TurnCount <= NumberOfMovesToLookForSetups)
             {
                 //if (EvalState.TurnCount < NumberOfMovesToLookForSetups)
-                AI.AIHeuristics.AvoidSetups = true;
-                AI.AIHeuristics.AvoidUnstoppable = true;
+                AI.AIHeuristics.AvoidSetups = false;
+                AI.AIHeuristics.AvoidUnstoppable = false;
+                AI.AIHeuristics.LookForUnstoppable = false;
             }
 
             SimpleMove Move = null;
 
             int NumberOfMovesBeforeStopBlocking = MinNumberOfMovesBeforeStopBlocking + (MaxNumberOfMovesBeforeStopBlocking - MinNumberOfMovesBeforeStopBlocking) * EvalState.Board.Random.RandomInteger(0, 100) / 100;
 
-            //Only make blocking moves for a couple of turns, but eventually make a mistake.
-            if (EvalState.TurnCount > NumberOfMovesBeforeStopBlocking)
+            if (EvalState.TurnCount < NumberOfMovesBeforeStartBlocking || EvalState.TurnCount > NumberOfMovesBeforeStopBlocking)
                 Move = AI.GetRandomTopAvailableMove(NumberOfMovesToConsider);
             else
                 Move = AI.GetRandomOkMove(NumberOfMovesToConsider);

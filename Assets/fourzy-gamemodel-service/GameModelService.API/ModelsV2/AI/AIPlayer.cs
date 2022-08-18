@@ -44,6 +44,9 @@ namespace FourzyGameModel.Model
                 case AIProfile.BlockerBotAI:
                     return new BlockerBotAI(State);
 
+                case AIProfile.StrongBlockAI:
+                    return new StrongBlockAI(State);
+
                 //The following AIs have a preference on direction.
 
                 case AIProfile.UpBot:
@@ -228,6 +231,8 @@ namespace FourzyGameModel.Model
                     return "Apprentice";
                 case AIProfile.EventuallyBot:
                     return "The Coach";
+                case AIProfile.BlockerBotAI:
+                    return "Big Blocker";
 
                 //The following AIs have a preference on direction.
 

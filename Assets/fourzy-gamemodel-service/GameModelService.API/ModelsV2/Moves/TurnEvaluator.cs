@@ -17,6 +17,7 @@ namespace FourzyGameModel.Model
             this.OriginalState = new GameState(GameState);
             this.EvalState = new GameState(OriginalState);
             this.EvalState.SetActionRecorder(RecordAction);
+            this.ResultActions = new List<GameAction>() { };
             if (!this.EvalState.ProcessStartOfTurn) this.EvalState.StartOfTurn(this.EvalState.ActivePlayerId);
         }
         
@@ -241,6 +242,14 @@ namespace FourzyGameModel.Model
         
         public GameState EvaluateTurn(PlayerTurn Turn, bool IgnoreActivePlayer = false, bool TriggerStartOfTurn = true, bool TriggerEndOfTurn = true)
         {
+
+            //if (TriggerStartOfTurn && TriggerEndOfTurn)
+            //{
+            //    GameState GSCache = AITurnEvaluatorCache.GetState(this.EvalState.StateString, Turn.Notation);
+            //    if (GSCache != null)
+            //        return GSCache;
+            //}
+
             this.ResultActions = new List<GameAction>();
             this.EvalState = new GameState(OriginalState);
             this.EvalState.SetActionRecorder(RecordAction);
@@ -332,6 +341,9 @@ namespace FourzyGameModel.Model
                 
             }
             EvalState.TurnCount++;
+
+            AITurnEvaluatorCache.AddState(EvalState.StateString, Turn.Notation, EvalState);
+
             return EvalState;
         }
 

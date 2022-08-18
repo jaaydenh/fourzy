@@ -43,6 +43,7 @@
         ApprenticeBot, //29
         EventuallyBot,  //30
         BlockerBotAI, //31
+        StrongBlockAI //32
     }
 
     public enum AIDifficulty { Pushover, Easy, Medium, Hard, Doctor}
