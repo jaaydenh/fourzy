@@ -28,7 +28,7 @@ namespace FourzyGameModel.Model
         {
 
             List<SimpleMove> Moves = new List<SimpleMove>() { };
-            AITurnEvaluator AI = new AITurnEvaluator(EvalState);
+            AITurnEvaluatorRevised AI = new AITurnEvaluatorRevised(EvalState);
             Moves = AI.AvailableSimpleMoves;
             if (AI.WinningTurns.Count > 0)
             {
@@ -50,7 +50,7 @@ namespace FourzyGameModel.Model
                 return new PlayerTurn(AI.AvailableSimpleMoves.First());
 
             //Create a new evaluator minus the winning moves.
-            AI = new AITurnEvaluator(EvalState, Moves);
+            AI = new AITurnEvaluatorRevised(EvalState, Moves);
 
             SimpleMove Move = null;
             foreach (SimpleMove m in AI.TopScoringMoves(AI.AvailableSimpleMoves,NumberOfMovesToConsider))
