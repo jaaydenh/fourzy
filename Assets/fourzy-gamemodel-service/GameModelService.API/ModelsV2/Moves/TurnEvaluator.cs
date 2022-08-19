@@ -342,7 +342,7 @@ namespace FourzyGameModel.Model
             }
             EvalState.TurnCount++;
 
-            AITurnEvaluatorCache.AddState(EvalState.StateString, Turn.Notation, EvalState);
+            //AITurnEvaluatorCache.AddState(EvalState.StateString, Turn.Notation, EvalState);
 
             return EvalState;
         }
