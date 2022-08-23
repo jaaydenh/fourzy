@@ -14,10 +14,10 @@ namespace FourzyGameModel.Model
         private int NumberOfMovesToConsider = 2;
         private int NumberOfMovesToLookForSetups = 16;
         private int NumberOfMovesBeforeStartBlocking = 4;
-        private int MinNumberOfMovesBeforeStopBlocking = 30;
-        private int MaxNumberOfMovesBeforeStopBlocking = 40;
-        private int MinNumberTurnsBeforeWinning = 20;
-        private int MaxNumberTurnsBeforeWinning = 30;
+        private int MinNumberOfMovesBeforeStopBlocking = 24;
+        private int MaxNumberOfMovesBeforeStopBlocking = 34;
+        private int MinNumberTurnsBeforeWinning = 24;
+        private int MaxNumberTurnsBeforeWinning = 34;
 
         public BlockerBotAI(GameState State)
         {
