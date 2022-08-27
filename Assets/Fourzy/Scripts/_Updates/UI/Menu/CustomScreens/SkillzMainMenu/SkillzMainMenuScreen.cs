@@ -1,8 +1,6 @@
 //@vadym udod
 
-using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
-using SkillzSDK;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -68,22 +66,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void StartSkillz()
         {
             SkillzMainMenuController.Instance.StartSkillzUI();
-
-#if UNITY_EDITOR
-            var matchInfoJson = SkillzSDK.Internal.API.UnityEditor.MatchInfoJson.Build(SkillzSDK.Settings.SkillzSettings.Instance.GameID);
-            SkillzCrossPlatform.InitializeSimulatedMatch(matchInfoJson);
-            SkillzState.NotifyMatchWillBegin(matchInfoJson);
-#endif
-        }
-
-        public void StartFakeSyncGame()
-        {
-            SkillzGameController.StartEditorSkillzUI();
-
-            string matchJson = SkillzInfoJson.BuildForSyncGame(1, true);
-
-            SkillzCrossPlatform.InitializeSimulatedMatch(matchJson);
-            SkillzState.NotifyMatchWillBegin(matchJson);
         }
 
         public void GetProgressionData()

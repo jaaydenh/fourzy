@@ -4,7 +4,6 @@
 using Photon.Realtime;
 #endif
 
-using Photon.Realtime;
 using System;
 
 namespace Fourzy._Updates
@@ -17,7 +16,9 @@ namespace Fourzy._Updates
         public bool useExternalRatingValue = false;
         public bool useExternalTotalGamesValue = false;
 
+#if !MOBILE_SKILLZ
         private Player _player;
+#endif
 
         private int rating;
         private int totalGames;
@@ -80,12 +81,12 @@ namespace Fourzy._Updates
 
         public OpponentData() { }
 
-        // Currently other player's ID will not be specified, thus "not_specified: field will be added to analytics data.
-        //public OpponentData(Player player) : this(player.UserId, FourzyPhotonManager.GetPlayerProperty(player, Constants.REALTIME_RATING_KEY, -1), FourzyPhotonManager.GetPlayerTotalGamesCount(player))
-        public OpponentData(Player player) : this("not_specified", FourzyPhotonManager.GetPlayerProperty(player, Constants.REALTIME_RATING_KEY, -1), FourzyPhotonManager.GetPlayerTotalGamesCount(player))
+#if !MOBILE_SKILLZ
+        public OpponentData(Player player) : this(player.UserId, FourzyPhotonManager.GetPlayerProperty(player, Constants.REALTIME_RATING_KEY, -1), FourzyPhotonManager.GetPlayerTotalGamesCount(player))
         {
             _player = player;
         }
+#endif
 
         public OpponentData(string id, int rating, int totalGames) : this()
         {

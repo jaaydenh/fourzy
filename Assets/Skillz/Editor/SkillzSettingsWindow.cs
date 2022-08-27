@@ -30,7 +30,6 @@ public sealed class SkillzSettingsWindow : EditorWindow
 	private bool showGameSettings;
 	private bool showMockMatchResults;
 	private bool showMockedMatchParameters;
-	private Vector2 scrollView;
 
 	private GUIStyle horizontalLine;
 	private GUIStyle wrappedLabelStyle;
@@ -52,22 +51,17 @@ public sealed class SkillzSettingsWindow : EditorWindow
 
 	private void OnGUI()
 	{
-		scrollView = EditorGUILayout.BeginScrollView(scrollView);
-		{
-			InitializeStyles();
-			DrawGameSettingsPane();
-			DrawHorizontalLine();
-			DrawMockMatchResultsPane();
-			DrawHorizontalLine();
-			DrawSimulatedMatchParamtersPane();
-			DrawCustomServerConnectionInfo();
-		}
-		EditorGUILayout.EndScrollView();
+		InitializeStyles();
+		DrawGameSettingsPane();
+		DrawHorizontalLine();
+		DrawMockMatchResultsPane();
+		DrawHorizontalLine();
+		DrawSimulatedMatchParamtersPane();
 
 		SaveChanges();
 	}
 
-    private void InitializeStyles()
+	private void InitializeStyles()
 	{
 		if (wrappedLabelStyle != null)
 		{
@@ -167,11 +161,6 @@ public sealed class SkillzSettingsWindow : EditorWindow
 		}
 
 		EditorGUI.indentLevel--;
-	}
-
-	private void DrawCustomServerConnectionInfo()
-	{
-
 	}
 
 	private void SaveChanges()

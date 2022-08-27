@@ -1214,7 +1214,6 @@ namespace Fourzy._Updates.Mechanics.Board
                         {
                             case GameTypeLocal.REALTIME_LOBBY_GAME:
                             case GameTypeLocal.REALTIME_QUICKMATCH:
-                            case GameTypeLocal.SYNC_SKILLZ_GAME:
                                 gameplayManager.RecordLastBoardStateAsRoomProperty(false);
 
                                 break;

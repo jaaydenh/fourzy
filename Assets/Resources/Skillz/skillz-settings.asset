@@ -24,13 +24,13 @@ MonoBehaviour:
     Value: 2
   - Key: Level0
     Value: '{ "complexityLow": 300, "complexityHigh": 700, "areaId": 2, "oppHerdId":
-      "red_dragon", "aiProfile": 30, "craftedBoardPercentage": "1" }'
+      "red_dragon", "aiProfile": 29, "craftedBoardPercentage": "0.8" }'
   - Key: Level1
     Value: '{ "complexityLow": 300, "complexityHigh": 350, "areaId": 2, "oppHerdId":"rainbow_bite",
-      "aiProfile": 30, "craftedBoardPercentage": "1  }'
+      "aiProfile": 29, "craftedBoardPercentage": "0.1"  }'
   - Key: Level2
     Value: '{ "complexityLow": 300, "complexityHigh": 400, "areaId": 2, "oppHerdId":
-      "furrzy", "aiProfile": 30, "craftedBoardPercentage": "1"  }'
+      "furrzy", "aiProfile": 29, "craftedBoardPercentage": "0.99"  }'
   - Key: WinPoints
     Value: 1000
   - Key: DrawPoints

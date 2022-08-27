@@ -1,7 +1,6 @@
 ﻿//modded
 
 using Fourzy._Updates;
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
@@ -49,7 +48,18 @@ namespace Fourzy
         {
             get
             {
-                return SkillzGameController.Instance.CurrentPlayer?.ID.GetValueOrDefault(0).ToString() ?? "-1";
+                string id = LoginManager.playfabId;
+                if (string.IsNullOrEmpty(id))
+                {
+                    id = PlayerPrefs.GetString("mapReferenceSeed", "");
+                    if (string.IsNullOrEmpty(id))
+                    {
+                        id = SystemInfo.deviceUniqueIdentifier;
+                        PlayerPrefs.SetString("mapReferenceSeed", id);
+                    }
+                }
+
+                return id;
             }
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FourzyGameModel.Model
 {
-    public class AITurnEvaluator
+    public class AITurnEvaluatorRevised
     {
 
         #region "Properties and Initialization"
@@ -17,21 +17,21 @@ namespace FourzyGameModel.Model
         public List<PlayerTurn> WinningTurns { get; set; }
         public List<SimpleMove> AvailableSimpleMoves { get; set; }
         //Alive Spaces are places where a player can make a move in the next turn.
-        public HashSet<BoardLocation> AliveSpaces { get; set; }
-        public HashSet<BoardLocation> DeadSpaces { get; set; }
+        //public HashSet<BoardLocation> AliveSpaces { get; set; }
+        //public HashSet<BoardLocation> DeadSpaces { get; set; }
         public int ActivePlayerId { get { return EvalState.ActivePlayerId; } }
         public AIHeuristicWeight AIHeuristics { get; set; }
 
-        bool WinningMove
-        {
-            get
-            {
-                if (WinningTurns.Count > 0) return true;
-                return false;
-            }
-        }
+        //bool WinningMove
+        //{
+        //    get
+        //    {
+        //        if (WinningTurns.Count > 0) return true;
+        //        return false;
+        //    }
+        //}
 
-        public AITurnEvaluator(GameState State, AIHeuristicWeight Heuristics = null)
+        public AITurnEvaluatorRevised(GameState State, AIHeuristicWeight Heuristics = null)
         {
             this.EvalState = State;
             this.Evaluator = new TurnEvaluator(this.EvalState);
@@ -42,36 +42,15 @@ namespace FourzyGameModel.Model
             else
                 this.AIHeuristics = Heuristics;
 
-            this.AliveSpaces = new HashSet<BoardLocation>();
-            this.WinningTurns = new List<PlayerTurn>();
+            //this.AliveSpaces = new HashSet<BoardLocation>();
+           
             this.AvailableSimpleMoves = new List<SimpleMove>();
 
             this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
 
-            //THIS CODE IS TOO SLOW.
+            //this.DeadSpaces = Evaluator.FindDeadLocations();
 
-            //Dictionary<SimpleMove, GameState> MoveInfo = Evaluator.GetAvailableMoveInfo();
-            ////Weed out a few moves if they do the same thing.
-            //List<string> UniqueMoves = new List<string>();
-            //foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
-            //{
-            //    if (UniqueMoves.Contains(move.Value.StateString)) continue;
-            //    UniqueMoves.Add(move.Value.StateString);
-            //    if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
-            //    this.AvailableSimpleMoves.Add(move.Key);
-            //    foreach (BoardLocation l in move.Value.ActiveSpaces)
-            //    {
-            //        if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
-            //    }
-            //    //this.AliveSpaces.AddRange(move.Value.ActiveSpaces);
-            //}
-
-
-            this.DeadSpaces = Evaluator.FindDeadLocations();
-
-            //this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
-            //this.WinningTurns = new List<PlayerTurn>();
-
+            this.WinningTurns = new List<PlayerTurn>();
             foreach (SimpleMove m in Evaluator.GetWinningMoves(EvalState.ActivePlayerId, AIHeuristics.ConsiderDiagonals))
             {
                 this.WinningTurns.Add(new PlayerTurn(m));
@@ -80,13 +59,13 @@ namespace FourzyGameModel.Model
         }
 
         //Use this constructor when only a subset of moves are to be considered.
-        public AITurnEvaluator(GameState State, List<SimpleMove> AvailableMoves)
+        public AITurnEvaluatorRevised(GameState State, List<SimpleMove> AvailableMoves)
         {
             this.EvalState = State;
             this.Evaluator = new TurnEvaluator(this.EvalState);
             this.EvalState = Evaluator.EvaluateStartOfTurn();
-            this.AliveSpaces = new HashSet<BoardLocation>();
-            this.WinningTurns = new List<PlayerTurn>();
+            //this.AliveSpaces = new HashSet<BoardLocation>();
+            //this.WinningTurns = new List<PlayerTurn>();
             
             this.AvailableSimpleMoves = new List<SimpleMove>();
             if (AvailableMoves != null)
@@ -94,31 +73,10 @@ namespace FourzyGameModel.Model
                     this.AvailableSimpleMoves = AvailableMoves;
             if (AvailableSimpleMoves.Count ==0) this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
 
-            //Dictionary<SimpleMove, GameState> MoveInfo = null;
-
-            //if (AvailableMoves != null)
-            //    if (AvailableMoves.Count > 0)
-            //        MoveInfo = Evaluator.GetAvailableMoveInfo(AvailableMoves);
-            //if (MoveInfo == null) MoveInfo = Evaluator.GetAvailableMoveInfo();
-
-            //Weed out moves that are idential.
-            //List<string> UniqueMoves = new List<string>();
-            //foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
-            //{
-            //    if (UniqueMoves.Contains(move.Value.StateString)) continue;
-            //    UniqueMoves.Add(move.Value.StateString);
-            //    if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
-            //    this.AvailableSimpleMoves.Add(move.Key);
-            //    foreach (BoardLocation l in move.Value.ActiveSpaces)
-            //    {
-            //        if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
-            //    }
-
-            //}
-            this.DeadSpaces = Evaluator.FindDeadLocations();
+            //this.DeadSpaces = Evaluator.FindDeadLocations();
             this.AIHeuristics = new AIHeuristicWeight();
 
-            //this.AvailableSimpleMoves = AvailableMoves;
+            ////this.AvailableSimpleMoves = AvailableMoves;
             this.WinningTurns = new List<PlayerTurn>();
             foreach (SimpleMove m in Evaluator.GetWinningMoves(EvalState.ActivePlayerId, AIHeuristics.ConsiderDiagonals))
             {
@@ -127,7 +85,7 @@ namespace FourzyGameModel.Model
 
         }
 
-        public AITurnEvaluator(GameState State, PlayerTurn Turn)
+        public AITurnEvaluatorRevised(GameState State, PlayerTurn Turn)
         {
             this.EvalState = State;
             this.Evaluator = new TurnEvaluator(this.EvalState);
@@ -136,27 +94,12 @@ namespace FourzyGameModel.Model
             this.Evaluator = new TurnEvaluator(this.EvalState);
 
 
-            this.AliveSpaces = new HashSet<BoardLocation>();
-            this.WinningTurns = new List<PlayerTurn>();
+            //this.AliveSpaces = new HashSet<BoardLocation>();
+            //this.WinningTurns = new List<PlayerTurn>();
+
+            //this.DeadSpaces = Evaluator.FindDeadLocations();
+
             this.AvailableSimpleMoves = new List<SimpleMove>();
-            //Dictionary<SimpleMove, GameState> MoveInfo = Evaluator.GetAvailableMoveInfo();
-
-            ////Weed out identical moves.
-            //List<string> UniqueMoves = new List<string>();
-            //foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
-            //{
-            //    if (UniqueMoves.Contains(move.Value.StateString)) continue;
-            //    UniqueMoves.Add(move.Value.StateString);
-            //    if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
-            //    this.AvailableSimpleMoves.Add(move.Key);
-            //    foreach (BoardLocation l in move.Value.ActiveSpaces)
-            //    {
-            //        if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
-            //    }
-            //}
-            this.DeadSpaces = Evaluator.FindDeadLocations();
-
-
             this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
             this.WinningTurns = new List<PlayerTurn>();
             foreach (SimpleMove m in Evaluator.GetWinningMoves(EvalState.ActivePlayerId, AIHeuristics.ConsiderDiagonals))
@@ -202,80 +145,167 @@ namespace FourzyGameModel.Model
             //Return moves that are not pruned.
             List<SimpleMove> Moves = new List<SimpleMove>();
 
-            bool Threat = false;
-            bool Setup = false;
-            foreach (SimpleMove m in AvailableSimpleMoves)
+            foreach (SimpleMove ai_m1 in AvailableSimpleMoves)
             {
-                TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(m)));
+                //TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(ai_m1)));
+
+                TurnEvaluator TE0 = new TurnEvaluator(new GameState(this.EvalState));
+                GameState GS1 = TE0.EvaluateTurn(ai_m1);
 
                 //Only look at unique moves.
-                if (UniqueMoves.ContainsValue(OPP.EvalState.StateString)) continue;
-                UniqueMoves.Add(m, OPP.EvalState.StateString);
+                if (UniqueMoves.ContainsValue(GS1.StateString)) continue;
+                UniqueMoves.Add(ai_m1, GS1.StateString);
 
                 //Did I Win?? I'll just return this move and be done.
-                if (OPP.EvalState.WinnerId == m.Piece.PlayerId)
+                if (GS1.WinnerId == ai_m1.Piece.PlayerId)
                 {
-                    UniqueMoves.Clear();
-                    UniqueMoves.Add(m, OPP.EvalState.StateString);
-                    break;
+                    Moves.Clear();
+                    Moves.Add(ai_m1);
+                    return Moves;
                 }
 
                 //Did I make my Opponent Win.  Ignore this move.
-                if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
+                if (GS1.WinnerId == EvalState.Opponent(ai_m1.Piece.PlayerId)) continue;
+
+                //If I make this move, will it lose?
+                //foreach move my opponent can make:
+                //  1. can they win?
+                //  2. do they have an unstoppable move?
+
+                bool ok_move = true;
+                bool unstoppable_move = true;
+
+                TurnEvaluator TE = new TurnEvaluator(GS1);
+                foreach (SimpleMove opp_m2 in TE.GetAvailableSimpleMoves())
+                {
+                    GameState GS2 = TE.EvaluateTurn(opp_m2);
+
+                    //if my opponent can win, this is not ok.
+                    if (GS2.WinnerId == opp_m2.Piece.PlayerId ) { ok_move = false; break; }
+                }
+
+
+                if (ok_move)
+                {
+                    //my oppponent can't immediately win. 
+                    //look for unstoppable
+                    //this means no matter what I do, opp can win.
+
+                    //for each of my opponent moves
+                    //for all of my moves
+                    //is there a move where the opponent doesn't win.
+                    TE.Reset();
+                    foreach (SimpleMove opp_m2 in TE.GetAvailableSimpleMoves())
+                    {
+                        GameState GS2 = TE.EvaluateTurn(opp_m2);
+                        //ignore winning/drawing moves. We covered above.
+                        //need to think about draws...
+                        if (GS2.WinnerId > 0) { continue; }
+
+                        bool is_good_option = false;
+                        bool is_winning_move = false;
+                         
+                        //If an opp makes this move, what are my options?
+                        TurnEvaluator TE2 = new TurnEvaluator(GS2);
+                        foreach (SimpleMove ai_m3 in TE2.GetAvailableSimpleMoves())
+                        {
+                            GameState GS3 = TE2.EvaluateTurn(ai_m3);
+
+                            //I made a move and I won. No need to eval further.
+                            if (GS3.WinnerId == ai_m3.Piece.PlayerId) { is_good_option = true;  is_winning_move = true; break; }
+                                                    
+                            //Can my opponent make a winning move?
+                            bool can_opp_win = false;
+                            TurnEvaluator TE3 = new TurnEvaluator(GS3);
+                            foreach (SimpleMove opp_m4 in TE3.GetAvailableSimpleMoves())
+                            {
+                                GameState GS4 = TE3.EvaluateTurn(opp_m4);
+                                if (GS4.WinnerId == opp_m4.Piece.PlayerId) {
+                                    can_opp_win = true;
+                                    break;
+                                }
+                            }
+                            
+                            //opponent can win. try for another move.
+                            if (can_opp_win) continue;
+                           
+                            //if get here, there is at least one move I can make
+                            is_good_option = true;
+
+                            //if not looking for unstoppable or found a good opp move, then break
+                            if (!AIHeuristics.LookForUnstoppable || !unstoppable_move) break;
+
+                        }
+                        if (!AIHeuristics.LookForUnstoppable || !is_winning_move) unstoppable_move = false;
+
+                        //if there was at least one move, without any good options, this is bad.
+                        if (!is_good_option) { ok_move = false; break; }
+
+                    }
+                }
+
+                if (!ok_move) continue;
+                
+                if (unstoppable_move)
+                {
+                    Moves.Clear();
+                    Moves.Add(ai_m1);
+                    break;
+                }
 
                 //Otherwise. Check if My Opponent can win.  Don't make a move where opp can win immediately
-                if (OPP.GetFirstWinningMove(EvalState.Opponent(m.Piece.PlayerId),AIHeuristics.ConsiderDiagonals) == null)
-                {
+                //if (OPP.GetFirstWinningMove(EvalState.Opponent(m.Piece.PlayerId),AIHeuristics.ConsiderDiagonals) == null)
+                //{
                     //Make the Unblockable move
-                    if (AIHeuristics.LookForUnstoppable)
-                    {
-                        if (IsUnstoppableThreat())
-                        {
-                            UniqueMoves.Clear();
-                            UniqueMoves.Add(m, OPP.EvalState.StateString);
-                            break;
-                        }
-                    }
+                    //if (AIHeuristics.LookForUnstoppable)
+                    //{
+                    //    if (IsUnstoppableThreat())
+                    //    {
+                    //        Moves.Clear();
+                    //        Moves.Add(m);
+                    //        return Moves;
+                    //    }
+                    //}
 
-                    //Use setups if there.
-                    if (AIHeuristics.LookForSetups)
-                    {
-                        if (IsASetup())
-                        {
-                            //When discovering first setup, clear the rest of the moves.
-                            // only make setup moves.
-                            if (!Setup)
-                            {
-                                UniqueMoves.Clear();
-                                Setup = true;
-                            }
-                        }
-                        else
-                        {
-                            //If we have found a setup, ignore this move.
-                            if (Setup) continue;
-                        }
-                    }
+                    ////Use setups if there.
+                    //if (AIHeuristics.LookForSetups)
+                    //{
+                    //    if (IsASetup())
+                    //    {
+                    //        //When discovering first setup, clear the rest of the moves.
+                    //        // only make setup moves.
+                    //        if (!Setup)
+                    //        {
+                    //            UniqueMoves.Clear();
+                    //            Setup = true;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        //If we have found a setup, ignore this move.
+                    //        if (Setup) continue;
+                    //    }
+                    //}
 
 
                     //If I'm Aggressive, always consider the threat first.
-                    if (AIHeuristics.IsAggressive)
-                    {
-                        if (IsAThreat())
-                        {
-                            //When discovering first threat, clear the rest of the moves.
-                            if (!Threat)
-                            {
-                                UniqueMoves.Clear();
-                                Threat = true;
-                            }
-                        }
-                        else
-                        {
-                            //If found a threat, ignore this move.
-                            if (Threat) continue;
-                        }
-                    }
+                    //if (AIHeuristics.IsAggressive)
+                    //{
+                    //    if (IsAThreat())
+                    //    {
+                    //        //When discovering first threat, clear the rest of the moves.
+                    //        if (!Threat)
+                    //        {
+                    //            UniqueMoves.Clear();
+                    //            Threat = true;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        //If found a threat, ignore this move.
+                    //        if (Threat) continue;
+                    //    }
+                    //}
 
                     //Eventually do some additional pruning checks.
                     //bool Prune = false;
@@ -283,38 +313,42 @@ namespace FourzyGameModel.Model
 
 
                     
-                    if (AIHeuristics.AvoidSetups)
-                    {
-                        bool opp_setup = false;
-                        //For each move the opponent can make
-                        //is it a threat? no. then look at other moves.
-                        //  is it a setup? ok. then flag move as setup
-                        //  is it unstoppbable? ok. then flag move as setup
+                    //if (AIHeuristics.AvoidSetups)
+                    //{
+                    //    bool opp_setup = false;
+                    //    //For each move the opponent can make
+                    //    //is it a threat? no. then look at other moves.
+                    //    //  is it a setup? ok. then flag move as setup
+                    //    //  is it unstoppbable? ok. then flag move as setup
 
-                        TurnEvaluator TENext = new TurnEvaluator(OPP.EvalState);
-                        foreach (SimpleMove m2 in TENext.GetAvailableSimpleMoves())
-                        {
-                            TENext.Reset();
-                            GameState GSNext = TENext.EvaluateTurn(m2);
-                            AIScoreEvaluator AISE = new AIScoreEvaluator(GSNext);
-                            //if (!AISE.IsAThreat()) continue;
-                            //if (AIHeuristics.AvoidSetups)
-                            //    if (AISE.IsASetup())
-                            //    { opp_setup = true; break; }
+                    //    TurnEvaluator TENext = new TurnEvaluator(OPP.EvalState);
+                    //    foreach (SimpleMove m2 in TENext.GetAvailableSimpleMoves())
+                    //    {
+                    //        TENext.Reset();
+                    //        GameState GSNext = TENext.EvaluateTurn(m2);
+                    //        AIScoreEvaluator AISE = new AIScoreEvaluator(GSNext);
 
-                            if (AIHeuristics.AvoidUnstoppable)
-                                if (AISE.IsUnstoppableThreat())
-                                { opp_setup = true; break; }
-                        }
-                        if (opp_setup) continue;
+                    //        if (AIHeuristics.AvoidUnstoppable)
+                    //            if (AISE.IsUnstoppableThreat())
+                    //            { opp_setup = true; break; }
 
-                    }
+                    //        //if (!AISE.IsAThreat()) continue;
 
-                    Moves.Add(m);
+
+                    //        //if (AIHeuristics.AvoidSetups)
+                    //        //    if (AISE.IsASetup())
+                    //        //    { opp_setup = true; break; }
+
+
+                    //    }
+                    //    if (opp_setup) continue;
+
+                    //}
+
+                    Moves.Add(ai_m1);
                 }
-            }
+           
             return Moves;
-
         }
 
         ////Convert a list of Moves into UniqueMoves.
@@ -433,7 +467,7 @@ namespace FourzyGameModel.Model
                 if (AITE.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
 
                 //If no winning moves
-                if (!AITE.WinningMove)
+                if (AITE.WinningTurns.Count == 0)
                 {
                        //Make the Unblockable move
                         if (AIHeuristics.LookForUnstoppable)
@@ -650,7 +684,7 @@ namespace FourzyGameModel.Model
             //Get some top moves
             List<SimpleMove> Moves = GetTopOkMoves();
             if (Moves == null) Moves = new List<SimpleMove>();
-            
+
             foreach (SimpleMove m in Moves)
             {
                 bool ok = true;
@@ -926,6 +960,108 @@ namespace FourzyGameModel.Model
             return WeightedMoves.ElementAt(Evaluator.EvalState.Random.RandomInteger(0, Math.Min(NumberMoves, WeightedMoves.Count-1))).Key;
 
         }
+
+        public bool IsMoveOk(SimpleMove Move)
+        {
+
+            TurnEvaluator TE0 = new TurnEvaluator(new GameState(this.EvalState));
+            
+            GameState GS1 = TE0.EvaluateTurn(Move);
+                      
+
+            //Did I Win?? I'll just return this move and be done.
+            if (GS1.WinnerId == Move.Piece.PlayerId)
+            {
+                return true;
+            }
+
+            //Did I make my Opponent Win.  Ignore this move.
+            if (GS1.WinnerId == EvalState.Opponent(Move.Piece.PlayerId)) return false;
+
+            //If I make this move, will it lose?
+            //foreach move my opponent can make:
+            //  1. can they win?
+            //  2. do they have an unstoppable move?
+
+            bool ok_move = true;
+            bool unstoppable_move = true;
+
+            TurnEvaluator TE = new TurnEvaluator(GS1);
+            foreach (SimpleMove opp_m2 in TE.GetAvailableSimpleMoves())
+            {
+                GameState GS2 = TE.EvaluateTurn(opp_m2);
+
+                //if my opponent can win, this is not ok.
+                if (GS2.WinnerId == opp_m2.Piece.PlayerId) { ok_move = false; break; }
+            }
+
+            if (!ok_move) return false;
+
+        
+                //my oppponent can't immediately win. 
+                //look for unstoppable
+                //this means no matter what I do, opp can win.
+
+                //for each of my opponent moves
+                //for all of my moves
+                //is there a move where the opponent doesn't win.
+                TE.Reset();
+                foreach (SimpleMove opp_m2 in TE.GetAvailableSimpleMoves())
+                {
+                    GameState GS2 = TE.EvaluateTurn(opp_m2);
+                    //ignore winning/drawing moves. We covered above.
+                    //need to think about draws...
+                    if (GS2.WinnerId > 0) { continue; }
+
+                    bool is_good_option = false;
+                    bool is_winning_move = false;
+
+                    //If an opp makes this move, what are my options?
+                    TurnEvaluator TE2 = new TurnEvaluator(GS2);
+                    foreach (SimpleMove ai_m3 in TE2.GetAvailableSimpleMoves())
+                    {
+                        GameState GS3 = TE2.EvaluateTurn(ai_m3);
+
+                        //I made a move and I won. No need to eval further.
+                        if (GS3.WinnerId == ai_m3.Piece.PlayerId) { is_good_option = true; is_winning_move = true; break; }
+
+                        //Can my opponent make a winning move?
+                        bool can_opp_win = false;
+                        TurnEvaluator TE3 = new TurnEvaluator(GS3);
+                        foreach (SimpleMove opp_m4 in TE3.GetAvailableSimpleMoves())
+                        {
+                            GameState GS4 = TE3.EvaluateTurn(opp_m4);
+                            if (GS4.WinnerId == opp_m4.Piece.PlayerId)
+                            {
+                                can_opp_win = true;
+                                break;
+                            }
+                        }
+
+                        //opponent can win. try for another move.
+                        if (can_opp_win) continue;
+
+                        //if get here, there is at least one move I can make
+                        is_good_option = true;
+
+                        //if not looking for unstoppable or found a good opp move, then break
+                        if (!AIHeuristics.LookForUnstoppable || !unstoppable_move) break;
+
+                    }
+                    if (!AIHeuristics.LookForUnstoppable || !is_winning_move) unstoppable_move = false;
+
+                    //if there was at least one move, without any good options, this is bad.
+                    if (!is_good_option) { ok_move = false; break; }
+
+                }
+            
+
+            if (!ok_move) return false;
+
+
+            return true;
+        }
+
 
         public SimpleMove GetRandomTopAvailableMove(int NumberMoves = 1)
         {
@@ -2350,24 +2486,24 @@ namespace FourzyGameModel.Model
             return true;
         }
 
-        public bool WinInTwoMoves(int PlayerId)
-        {
-            if (WinningTurns.Count > 0) return true;
+        //public bool WinInTwoMoves(int PlayerId)
+        //{
+        //    if (WinningTurns.Count > 0) return true;
 
-            foreach (SimpleMove m in Evaluator.GetAvailableSimpleMoves(PlayerId))
-            {
-                Evaluator.Reset();
-                EvalState.ActivePlayerId = PlayerId;
-                GameState GSReview = Evaluator.EvaluateTurn(m);
+        //    foreach (SimpleMove m in Evaluator.GetAvailableSimpleMoves(PlayerId))
+        //    {
+        //        Evaluator.Reset();
+        //        EvalState.ActivePlayerId = PlayerId;
+        //        GameState GSReview = Evaluator.EvaluateTurn(m);
 
-                TurnEvaluator TEPass = new TurnEvaluator(GSReview);
-                GameState GSReview2 = TEPass.EvaluateTurn(new PlayerTurn(GSReview.ActivePlayerId, new PassMove()));
-                TurnEvaluator TEWin = new TurnEvaluator(GSReview2);
-                if (TEWin.GetFirstWinningMove() != null) return true;
-            }
+        //        TurnEvaluator TEPass = new TurnEvaluator(GSReview);
+        //        GameState GSReview2 = TEPass.EvaluateTurn(new PlayerTurn(GSReview.ActivePlayerId, new PassMove()));
+        //        TurnEvaluator TEWin = new TurnEvaluator(GSReview2);
+        //        if (TEWin.GetFirstWinningMove() != null) return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         //public List<SimpleMoveSequence> LookAhead(int SearchDepth)
         //{

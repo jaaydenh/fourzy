@@ -610,11 +610,6 @@ namespace Fourzy._Updates.Tools
                         AnalyticsManager.AnalyticsEvents.skillzAsyncGameCreated :
                         AnalyticsManager.AnalyticsEvents.skillzAsyncGameCompleted;
 
-                case GameTypeLocal.SYNC_SKILLZ_GAME:
-                    return start ?
-                        AnalyticsManager.AnalyticsEvents.skillzSyncGameCreated :
-                        AnalyticsManager.AnalyticsEvents.skillzSyncGameCompleted;
-
                 case GameTypeLocal.LOCAL_GAME:
                     switch (game._Mode)
                     {
@@ -668,7 +663,6 @@ namespace Fourzy._Updates.Tools
                     {
                         case GameTypeLocal.REALTIME_LOBBY_GAME:
                         case GameTypeLocal.REALTIME_QUICKMATCH:
-                        case GameTypeLocal.SYNC_SKILLZ_GAME:
                             return FourzyPhotonManager.GetRoomProperty(
                                 Constants.REALTIME_ROOM_TIMER_KEY,
                                 false);

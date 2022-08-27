@@ -40,15 +40,7 @@ public static class SkillzCrossPlatform
 
 	private static IBridgedAPI bridgedAPI;
 
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-	public static void SetEditorBridgeAPI()
-	{
-		bridgedAPI = new SkillzSDK.Internal.API.UnityEditor.BridgedAPI();
-	}
-
-#endif
-
-#region Standard API
+	#region Standard API
 	/// <summary>
 	/// Starts up the Skillz UI. Should be used as soon as the player clicks your game's "Multiplayer" button.
 	/// <param name="_matchDelegate"> This should be </param>
@@ -413,9 +405,9 @@ public static class SkillzCrossPlatform
 		BridgedAPI.AddMetadataForMatchInProgress(metadataJson, forMatchInProgress);
 	}
 
-#endregion // Standard API
+	#endregion // Standard API
 
-#region Audio API
+	#region Audio API
 
 	/// <summary>
 	/// Call this method to set background music to be played inside our Skillz Lobby.
@@ -477,9 +469,9 @@ public static class SkillzCrossPlatform
 		BridgedAPI.SoundEffectsVolume = volume;
 	}
 
-#endregion // Audio API
+	#endregion // Audio API
 
-#region Progression API
+	#region Progression API
 
 	/// <summary>
 	/// Call this method to request progression data for the currently logged in user.
@@ -551,9 +543,9 @@ public static class SkillzCrossPlatform
 		BridgedAPI.GetNextSeasons(count, successCallback, failureCallback);
 	}
 
-#endregion // Progression API
+	#endregion // Progression API
 
-#region Sync API
+	#region Sync API
 
 	public static void SendData(byte[] data)
 	{
@@ -590,7 +582,7 @@ public static class SkillzCrossPlatform
 		return BridgedAPI.GetTimeLeftForReconnection(playerId);
 	}
 
-#endregion // Sync API
+	#endregion // Sync API
 
 	internal static void Initialize(int gameID, SkillzSDK.Environment environment, SkillzSDK.Orientation orientation)
 	{
@@ -599,10 +591,11 @@ public static class SkillzCrossPlatform
 
 	internal static void InitializeSimulatedMatch(string matchInfoJson)
 	{
-#if !(DEVELOPMENT_BUILD || UNITY_EDITOR)
-		Debug.LogWarning($"Called SkillzCrossPlatform.InitializeSimulatedMatch() from other than the Unity editor!");
-		return;
-#endif
+		if (!Application.isEditor)
+		{
+			Debug.LogWarning($"Called SkillzCrossPlatform.InitializeSimulatedMatch() from other than the Unity editor!");
+			return;
+		}
 
 		var editorBridgedApi = BridgedAPI as SkillzSDK.Internal.API.UnityEditor.BridgedAPI;
 		if (editorBridgedApi == null)

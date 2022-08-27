@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "127.0.0.1:5555",
+    "m_SelectedDeviceId": "420036ead6cba4ad",
     "m_SelectedPackage": {
-        "deviceId": "127.0.0.1:5555",
-        "name": "com.mindisle.fourzyskillz.Android",
-        "processId": 4981,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -54,12 +54,6 @@
             "deviceId": "420036ead6cba4ad",
             "name": "com.sec.android.app.launcher",
             "processId": 2790,
-            "exited": false
-        },
-        {
-            "deviceId": "127.0.0.1:5555",
-            "name": "com.mindisle.fourzyskillz.Android",
-            "processId": 4981,
             "exited": false
         }
     ],

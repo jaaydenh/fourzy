@@ -112,17 +112,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ClearPointsEntries();
 
             SkillzGameResult lastGameResult = SkillzGameController.Instance.GamesPlayed.FindLast(entries => entries.Points > 0);
-            if (lastGameResult != null)
+            //display points
+            foreach (PointsEntry pointsEntry in lastGameResult.pointsEntries)
             {
-                //display points
-                foreach (PointsEntry pointsEntry in lastGameResult.pointsEntries)
-                {
-                    AddPointsWidget(pointsEntry.name, pointsEntry.amount);
-                }
-                AddPointsWidget("", lastGameResult.Points)
-                    .SetSize(48)
-                    .SetColor(Color.green);
+                AddPointsWidget(pointsEntry.name, pointsEntry.amount);
             }
+            AddPointsWidget("", lastGameResult.Points)
+                .SetSize(48)
+                .SetColor(Color.green);
 
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
 

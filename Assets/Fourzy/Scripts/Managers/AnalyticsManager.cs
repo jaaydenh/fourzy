@@ -88,8 +88,6 @@ namespace Fourzy
             realtimeGameCompleted,
             skillzAsyncGameCreated,
             skillzAsyncGameCompleted,
-            skillzSyncGameCreated,
-            skillzSyncGameCompleted,
         }
 
         public enum GameResultType
@@ -133,47 +131,38 @@ namespace Fourzy
             SetUserProperties();
         }
 
-        protected void SetProductVersion() 
-        {
+        protected void SetProductVersion() {
             switch (GameManager.Instance.buildIntent)
             {
                 case BuildIntent.MOBILE_REGULAR:
-                    AmplitudeSetUserProperty("productVersion", "Mobile");
-
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "Mobile");
                     break;
-
                 case BuildIntent.MOBILE_SKILLZ:
-                    AmplitudeSetUserProperty("productVersion", "Skillz");
-
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "Skillz");
                     break;
-
                 case BuildIntent.MOBILE_INFINITY:
-                    AmplitudeSetUserProperty("productVersion", "InfinityGameTable");
-
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "InfinityGameTable");
                     break;
-
                 case BuildIntent.DESKTOP_REGULAR:
-                    AmplitudeSetUserProperty("productVersion", "Desktop");
-
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("productVersion", "Desktop");
                     break;
             }
         }
 
-        protected void SetUserProperties()
-        {
+        protected void SetUserProperties() {
             int timesOpened = PlayerPrefsWrapper.GetAppOpened();
             if (timesOpened >= 1)
             {
-                AmplitudeSetUserProperty("firstEntry", false);
+                AnalyticsManager.Instance.AmplitudeSetUserProperty("firstEntry", false);
             }
 
             //get seconds since last opened
             long lastOpened = PlayerPrefsWrapper.GetSecondsSinceLastOpen();
             PlayerPrefsWrapper.AddDaysPlayed(lastOpened / 60f / 24f);
-            AmplitudeSetUserProperty("totalDaysPlayed", PlayerPrefsWrapper.GetDaysPlayed());
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalDaysPlayed", PlayerPrefsWrapper.GetDaysPlayed());
             PlayerPrefsWrapper.SetAppOpenedTime();
 
-            AmplitudeSetUserProperty("totalSessions", timesOpened);
+            AnalyticsManager.Instance.AmplitudeSetUserProperty("totalSessions", timesOpened);
         }
 
         protected void OnApplicationQuit()
@@ -183,7 +172,7 @@ namespace Fourzy
                 case BuildIntent.MOBILE_REGULAR:
                 case BuildIntent.MOBILE_SKILLZ:
                 case BuildIntent.MOBILE_INFINITY:
-                    AmplitudeSetUserProperty("lastSeenDate", DateTime.Now.ToString());
+                    AnalyticsManager.Instance.AmplitudeSetUserProperty("lastSeenDate", DateTime.Now.ToString());
 
                     break;
             }

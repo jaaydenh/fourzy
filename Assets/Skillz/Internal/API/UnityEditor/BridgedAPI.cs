@@ -103,7 +103,7 @@ namespace SkillzSDK.Internal.API.UnityEditor
 
 		public void LaunchSkillz()
 		{
-			//SDKScenesLoader.Load(SDKScenesLoader.TournamentSelectionScene);
+			SDKScenesLoader.Load(SDKScenesLoader.TournamentSelectionScene);
 		}
 
 		public Hashtable GetMatchRules()

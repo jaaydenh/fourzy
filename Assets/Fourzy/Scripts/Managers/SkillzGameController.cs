@@ -189,12 +189,11 @@ namespace Fourzy._Updates.Managers
             LastMatch = matchInfo;
             OngoingMatch = true;
             SubmitRetries = 3;
-
             InitializeMatchData();
 
             if (matchInfo.IsCustomSynchronousMatch)
             {
-                GameManager.Instance.JoinSkillzSyncGame(SkillzCrossPlatform.GetMatchInfo().CustomServerConnectionInfo.MatchId);
+                FourzyPhotonManager.Instance.JoinOrCreateRoom(SkillzCrossPlatform.GetMatchInfo().CustomServerConnectionInfo.MatchId);
             }
             else
             {

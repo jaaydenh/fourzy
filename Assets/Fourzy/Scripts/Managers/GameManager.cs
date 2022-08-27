@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
@@ -16,7 +15,6 @@ using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
-using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,7 +30,9 @@ using PlayFab.ClientModels;
 #endif
 
 #if !MOBILE_SKILLZ
+using ExitGames.Client.Photon;
 using Hellmade.Net;
+using Photon.Pun;
 #endif
 
 namespace Fourzy
@@ -200,11 +200,11 @@ namespace Fourzy
 #if !MOBILE_SKILLZ
             EazyNetChecker.OnConnectionStatusChanged += OnNetStatusChanged;
             EazyNetChecker.OnCheckTimeout += OnNetStatusChanged;
-#endif
 
             FourzyPhotonManager.onEvent += OnEventCall;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEntered;
             FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
+#endif
 
             //to modify manifest file
             bool value = false;
@@ -268,9 +268,11 @@ namespace Fourzy
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
             Application.logMessageReceived -= HandleException;
 
+#if !MOBILE_SKILLZ
             FourzyPhotonManager.onEvent -= OnEventCall;
             FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEntered;
+#endif
 
             //NetworkAccess.onNetworkAccess -= OnNetworkAccess;
 
@@ -691,7 +693,6 @@ namespace Fourzy
                         case GameTypeLocal.REALTIME_BOT_GAME:
                         case GameTypeLocal.REALTIME_LOBBY_GAME:
                         case GameTypeLocal.REALTIME_QUICKMATCH:
-                        case GameTypeLocal.SYNC_SKILLZ_GAME:
                             checkPlayer1or2Win = true;
 
                             break;
@@ -805,6 +806,7 @@ namespace Fourzy
 
         public void StartRealtimeQuickGame()
         {
+#if !MOBILE_SKILLZ
             //check if there is abandoned realtime game
             string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
             if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
@@ -830,15 +832,7 @@ namespace Fourzy
             {
                 MenuController.activeMenu.GetScreen<MatchmakingScreen>().OpenRealtime();
             }
-        }
-
-        public void JoinSkillzSyncGame(string roomName)
-        {
-            // If changes in connection state are present, display them in separate prompt.
-            SkillzSyncConnectionScreen.WaitingForConnection = true;
-
-            FourzyPhotonManager.Instance.JoinOrCreateRoom(roomName);
-            FourzyPhotonManager.onJoinedRoom += OnSkillzSyncRoomJoined;
+#endif
         }
 
         public void CloseApp()
@@ -858,6 +852,7 @@ namespace Fourzy
 
         public void OpenLobbyGame()
         {
+#if !MOBILE_SKILLZ
             //check if there is abandoned realtime game
             string roomName = PlayerPrefsWrapper.GetAbandonedRealtimeRoomName();
             if (!string.IsNullOrEmpty(roomName) && FourzyPhotonManager.Instance.cachedRooms.Any(info => info.Name == roomName && info.IsOpen))
@@ -913,6 +908,7 @@ namespace Fourzy
                     })
                     .CloseOnAccept();
             }
+#endif
         }
 
         private void OnRoomJoined(string roomName)
@@ -927,6 +923,7 @@ namespace Fourzy
 
         private void OnRoomJoinedRematch(string roomName)
         {
+#if !MOBILE_SKILLZ
             RoomType roomType = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE);
             switch (roomType)
             {
@@ -946,20 +943,15 @@ namespace Fourzy
 
             FourzyPhotonManager.onJoinedRoom -= OnRoomJoinedRematch;
             StartGame(ExpectedGameType);
-        }
-
-        private void OnSkillzSyncRoomJoined(string roomName)
-        {
-            //RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
-            FourzyPhotonManager.onJoinedRoom -= OnSkillzSyncRoomJoined;
-
-            StartGame(GameTypeLocal.SYNC_SKILLZ_GAME);
+#endif
         }
 
         private void OnRejoinRoomFailed(string roomName)
         {
+#if !MOBILE_SKILLZ
             RejoinAbandonedGame = false;
             FourzyPhotonManager.onJoinRoomFailed -= OnRejoinRoomFailed;
+#endif
         }
 
         public static void Vibrate(HapticTypes type)
@@ -1203,6 +1195,7 @@ namespace Fourzy
             onSceneChanged?.Invoke(SceneManager.GetActiveScene().name);
         }
 
+#if !MOBILE_SKILLZ
         private void OnPlayerEntered(Photon.Realtime.Player obj)
         {
             //lock room 
@@ -1229,6 +1222,7 @@ namespace Fourzy
                 }
             }
         }
+#endif
 
         private void OnNetStatusChanged()
         {
@@ -1259,6 +1253,7 @@ namespace Fourzy
             }
         }
 
+#if !MOBILE_SKILLZ
         private void OnEventCall(EventData data)
         {
             switch (data.Code)
@@ -1270,6 +1265,7 @@ namespace Fourzy
                     break;
             }
         }
+#endif
 
         private IEnumerator StartingGameRoutine()
         {
