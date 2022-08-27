@@ -1,6 +1,9 @@
 //@vadym udod
 
 using Fourzy._Updates.Managers;
+using SkillzSDK;
+using SkillzSDK.Internal.API.UnityEditor;
+using SkillzSDK.Settings;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -18,8 +21,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (SkillzGameController.Instance.LatestDefaultPlayerData == null)
             {
-                SkillzGameController.Instance.OnDefaultPlayerDataReceived += OnPlayerDataReceived;
+                SkillzGameController.OnDefaultPlayerDataReceived += OnPlayerDataReceived;
             }
+        }
+
+        private void OnDestroy()
+        {
+            SkillzGameController.OnDefaultPlayerDataReceived -= OnPlayerDataReceived;
         }
 
         private void Update()

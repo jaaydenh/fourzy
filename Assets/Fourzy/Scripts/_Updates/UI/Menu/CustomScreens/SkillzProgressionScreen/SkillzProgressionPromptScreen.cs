@@ -100,6 +100,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         (SkillzGameController.Instance.GamesPlayed[gameIndex].state ? gameWonSprite : gameLostSprite) :
                         null);
                 }
+
+                //start timer routine
+                StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME), () => Decline(), null);
             }
             else
             {
@@ -122,9 +125,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 .SetColor(Color.green);
 
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
-
-            //start timer routine
-            StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_WAIT_TIME), () => Decline(), null);
 
             //open screen
             Prompt(titleText, null, null, buttonText);
@@ -209,7 +209,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Open();
 
             //start timer routine
-            StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME), () => Decline());
+            //StartRoutine("timer", TimerRoutine(Constants.SKILLZ_PROGRESSION_POPUP_FINAL_WAIT_TIME), () => Decline());
 
             openFinalScreen = false;
         }

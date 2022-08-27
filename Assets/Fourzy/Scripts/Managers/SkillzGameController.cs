@@ -32,6 +32,9 @@ namespace Fourzy._Updates.Managers
         }
         private static SkillzGameController instance;
 
+        public static Action OnDefaultPlayerDataReceived { get; set; }
+        public static Action OnDefaultPlayerDataUpdated { get; set; }
+
         private static List<string> defaultPlayerDataKeys = new List<string>()
         {
             "games_played",
@@ -83,8 +86,6 @@ namespace Fourzy._Updates.Managers
         internal int ExplicitSeed => random - GetMatchParamInt("RandomSeed", -1);
         internal Player CurrentPlayer => CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer);
         internal Dictionary<string, ProgressionValue> LatestDefaultPlayerData { get; private set; }
-        internal Action OnDefaultPlayerDataReceived { get; set; }
-        internal Action OnDefaultPlayerDataUpdated { get; set; }
 
         internal int PlayerData_GamesPlayed
         {
