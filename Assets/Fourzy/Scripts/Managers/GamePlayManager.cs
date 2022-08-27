@@ -63,6 +63,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private int gauntletRechargedViaGems = 0;
         private int gauntletRechargedViaAds = 0;
         private string hintRemovedToken;
+        private bool gameCompleteLogged;
 
         public BackgroundConfigurationData CurrentBGConfiguration { get; private set; }
         public GameboardView BoardView { get; private set; }
@@ -385,6 +386,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             GameStarted = false;
             IsBoardReady = false;
             gauntletRechargedViaAds = 0;
+            gameCompleteLogged = false;
 
             SetGameIfNull(_game);
 
@@ -1099,11 +1101,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     else
                     {
                         SkillzGameController.Instance.CloseGameOnBack = true;
+                        Debug.Log("---------------Set to close game on returning from Skillz.");
 
                         if (!SkillzGameController.Instance.ReturnToSkillzCalled)
                         {
                             if (SkillzCrossPlatform.ReturnToSkillz())
                             {
+                                Debug.Log("---------------Returning to Skillz UI.");
                                 SkillzGameController.Instance.ReturnToSkillzCalled = true;
                             }
                         }
@@ -1765,7 +1769,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 if (!SkillzGameController.Instance.HaveNextGame)
                 {
                     SkillzGameController.Instance.OnMatchFinished();
-                    TrySubmitScore();
+                    SkillzGameController.Instance.TrySubmitScore();
                 }
             }
 
@@ -1935,50 +1939,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             StartRoutine("postGameRoutine", PostGameFinished());
         }
 
-        private void TrySubmitScore()
-        {
-            SkillzCrossPlatform.SubmitScore(SkillzGameController.Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
-        }
-
-        private void OnSkillzScoreReported()
-        {
-            Debug.Log("Skillz Score submited. All good.");
-        }
-
-        private void OnSkillzScoreReportedError(string error)
-        {
-            Debug.Log($"Failed to report Skillz score: {error}");
-
-            StartCoroutine(SkillzScoreReportHelper());
-        }
-
-        /// <summary>
-        /// When failed to report score
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator SkillzScoreReportHelper()
-        {
-            if (SkillzGameController.Instance.SubmitRetries > 0)
-            {
-                //wait for 3 seconds for the next try
-                yield return new WaitForSeconds(3f);
-
-                SkillzGameController.Instance.SubmitRetries--;
-                TrySubmitScore();
-            }
-            else
-            {
-                Debug.Log("Failed to report score");
-                Debug.Log("Last effort, using DisplayTournamentResultsWithScore");
-
-                if (!SkillzGameController.Instance.ReturnToSkillzCalled)
-                {
-                    SkillzGameController.Instance.ReturnToSkillzCalled = true;
-                    SkillzCrossPlatform.DisplayTournamentResultsWithScore(SkillzGameController.Instance.Points);
-                }
-            }
-        }
-
         private void OnDraw(IClientFourzy game)
         {
             //channel into gamefinished pipeline
@@ -2072,6 +2032,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void LogGameComplete(bool abandoned)
         {
+            if (gameCompleteLogged) return;
             if (Game._Type == GameType.ONBOARDING) return;
 
             AnalyticsManager.AnalyticsEvents _event = Game.GameToAnalyticsEvent(false);
@@ -2165,6 +2126,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 AnalyticsManager.Instance.LogGame(_event, Game, extraParams);
             }
+
+            gameCompleteLogged = true;
+            Debug.Log("---------------GameComplete logged.");
         }
 
         private void OnHintUpdate(int amount, string token)

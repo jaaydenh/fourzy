@@ -74,7 +74,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             foreach (GamePieceWidgetMedium widget in gamePieces)
             {
                 //highlight selected one
-                widget.SetSelectedState(widget.data.Id == UserManager.Instance.gamePieceId);
+                widget.SetSelectedState(widget.Data.Id == UserManager.Instance.gamePieceId);
             }
 
             PlaceGamepieceWidgets();
@@ -202,7 +202,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             foreach (GamePieceWidgetMedium widget in gamePieces)
             {
-                switch (widget.data.State)
+                switch (widget.Data.State)
                 {
                     case GamePieceState.FoundAndUnlocked:
                         unlocked.Add(widget);

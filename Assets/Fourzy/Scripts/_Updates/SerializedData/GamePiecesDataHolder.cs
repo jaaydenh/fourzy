@@ -27,6 +27,9 @@ namespace Fourzy._Updates.Serialized
             {
                 if (gamePieceData.enabled)
                 {
+                    // Skillz mod.
+                    gamePieceData.PiecesToUnlock = 1;
+
                     gamePiecesFastAccess.Add(gamePieceData.Id, gamePieceData);
                 }
             }

@@ -281,20 +281,19 @@ namespace SkillzSDK.Internal.API.UnityEditor
 		public void GetProgressionUserData(string progressionNamespace, List<string> userDataKeys, Action<Dictionary<string, ProgressionValue>> successCallback, Action<string> failureCallback)
 		{
 			Debug.Log("Called GetProgressionUserData from inside the Unity Editor");
-			if (successCallback != null)
+
+            successCallback?.Invoke(new Dictionary<string, ProgressionValue>()
 			{
-				successCallback(new Dictionary<string, ProgressionValue>());
-			}
-		}
+				{ "games_played", new ProgressionValue("1", "int", "", "Games Played", null) },
+				{ "cash_games_played", new ProgressionValue("1", "int", "", "Cash Games Played", null) },
+			});
+        }
 
 		public void UpdateProgressionUserData(string progressionNamespace, Dictionary<string, object> userDataUpdates, Action successCallback, Action<string> failureCallback)
 		{
 			Debug.Log("Called UpdateProgressionUserData from inside the Unity Editor");
-			if (successCallback != null)
-			{
-				successCallback();
-			}
-		}
+            successCallback?.Invoke();
+        }
 
 		public void GetCurrentSeason(Action<Season> successCallback, Action<string> failureCallback)
 		{

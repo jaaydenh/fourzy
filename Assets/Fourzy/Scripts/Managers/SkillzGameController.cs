@@ -1,15 +1,18 @@
 //@vadym udod
 
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Tools;
 using Newtonsoft.Json;
 using SkillzSDK;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Fourzy._Updates.Managers
 {
-    public class SkillzGameController : SkillzMatchDelegate
+    public class SkillzGameController : RoutinesBase, SkillzMatchDelegate
     {
         public static SkillzGameController Instance
         {
@@ -17,13 +20,23 @@ namespace Fourzy._Updates.Managers
             {
                 if (instance == null)
                 {
-                    instance = new SkillzGameController();
+                    GameObject go = new GameObject("SKillzGameController");
+                    DontDestroyOnLoad(go);
+                    instance = go.AddComponent<SkillzGameController>();
+
+                    //instance.GetProgressionData();
                 }
 
                 return instance;
             }
         }
         private static SkillzGameController instance;
+
+        private static List<string> defaultPlayerDataKeys = new List<string>()
+        {
+            "games_played",
+            "cash_games_played"
+        };
 
         private int random = -1;
 
@@ -69,9 +82,25 @@ namespace Fourzy._Updates.Managers
         internal int SubmitRetries { get; set; }
         internal int ExplicitSeed => random - GetMatchParamInt("RandomSeed", -1);
         internal Player CurrentPlayer => CurrentMatch?.Players.Find(_player => _player.IsCurrentPlayer);
+        internal Dictionary<string, ProgressionValue> LatestDefaultPlayerData { get; private set; }
+        internal Action OnDefaultPlayerDataReceived { get; set; }
+        internal Action OnDefaultPlayerDataUpdated { get; set; }
+
+        internal int PlayerData_GamesPlayed
+        {
+            get => int.Parse(LatestDefaultPlayerData["games_played"].Value);
+            private set => LatestDefaultPlayerData["games_played"] = new ProgressionValue(value + "", "int", "", "Games Played", null);
+        }
+
+        internal int PlayerData_CashGamesPlayed
+        {
+            get => int.Parse(LatestDefaultPlayerData["cash_games_played"].Value);
+            private set => LatestDefaultPlayerData["cash_games_played"] = new ProgressionValue(value + "", "int", "", "Cash Games Played", null);
+        }
 
         public static void StartEditorSkillzUI()
         {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
             if (SettingsManager.Get(SettingsManager.KEY_AUDIO) == true)
             {
                 SkillzCrossPlatform.setSkillzBackgroundMusic("MenuMusic.mp3");
@@ -84,6 +113,7 @@ namespace Fourzy._Updates.Managers
 
             SkillzState.SetAsyncDelegate(Instance);
             SkillzCrossPlatform.SetEditorBridgeAPI();
+#endif
         }
 
         public void InitializeMatchData()
@@ -153,6 +183,8 @@ namespace Fourzy._Updates.Managers
 
         public void OnMatchWillBegin(Match matchInfo)
         {
+            CancelRoutine("scoreResubmit");
+
             CurrentMatch = matchInfo;
             LastMatch = matchInfo;
             OngoingMatch = true;
@@ -180,8 +212,51 @@ namespace Fourzy._Updates.Managers
             if (CloseGameOnBack)
             {
                 CloseGameOnBack = false;
+                Debug.Log("---------------Close game from returning from Skillz.");
                 GamePlayManager.Instance.BackButtonOnClick();
             }
+        }
+
+        public void GetProgressionData()
+        {
+            Debug.Log("---------------Requesting latest player data.");
+            SkillzCrossPlatform.GetProgressionUserData(ProgressionNamespace.DEFAULT_PLAYER_DATA, defaultPlayerDataKeys, OnReceivedData, OnReceivedDataFail);
+        }
+
+        public void TrySubmitScore()
+        {
+            CancelRoutine("scoreResubmit");
+
+            SkillzCrossPlatform.SubmitScore(Instance.Points, OnSkillzScoreReported, OnSkillzScoreReportedError);
+        }
+
+#if UNITY_EDITOR
+        public void Test()
+        {
+            PlayerData_CashGamesPlayed++;
+            PlayerData_GamesPlayed++;
+
+            OnDefaultPlayerDataUpdated?.Invoke();
+        }
+#endif
+
+        private void OnReceivedData(Dictionary<string, ProgressionValue> values)
+        {
+            LatestDefaultPlayerData = values;
+
+            string logs = "---------------Player default data received: ";
+            foreach (var pair in values)
+            {
+                logs += $"\n{pair.Key} : {pair.Value.Value}";
+            }
+            Debug.Log(logs);
+
+            OnDefaultPlayerDataReceived?.Invoke();
+        }
+
+        private void OnReceivedDataFail(string error)
+        {
+
         }
 
         public void FinishGame(bool state, params PointsEntry[] points)
@@ -277,6 +352,59 @@ namespace Fourzy._Updates.Managers
             catch (Exception) { }
 
             return result;
+        }
+
+        private void OnSkillzScoreReported()
+        {
+            Debug.Log("---------------Skillz Score submited. All good.");
+
+/*            //Update last player data.
+            if (LastMatch.IsCash ?? false)
+            {
+                PlayerData_CashGamesPlayed++;
+            }
+            else
+            {
+                PlayerData_GamesPlayed++;
+            }
+
+            OnDefaultPlayerDataUpdated?.Invoke();*/
+
+            GetProgressionData();
+        }
+
+        private void OnSkillzScoreReportedError(string error)
+        {
+            Debug.Log($"Failed to report Skillz score: {error}");
+
+            StartRoutine("scoreResubmit", SkillzScoreReportHelper());
+        }
+
+        /// <summary>
+        /// When failed to report score
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator SkillzScoreReportHelper()
+        {
+            if (SubmitRetries > 0)
+            {
+                //wait for 3 seconds for the next try
+                yield return new WaitForSeconds(3f);
+
+                SubmitRetries--;
+                TrySubmitScore();
+            }
+            else
+            {
+                Debug.Log("Failed to report score");
+                Debug.Log("Last effort, using DisplayTournamentResultsWithScore");
+
+                if (!ReturnToSkillzCalled)
+                {
+                    ReturnToSkillzCalled = true;
+                    SkillzCrossPlatform.DisplayTournamentResultsWithScore(Points);
+                }
+            }
         }
     }
 

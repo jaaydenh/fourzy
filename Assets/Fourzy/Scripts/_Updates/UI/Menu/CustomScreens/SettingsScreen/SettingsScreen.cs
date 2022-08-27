@@ -2,18 +2,12 @@
 
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Managers;
-using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class SettingsScreen : MenuScreen
     {
-        public ButtonExtended puzzlesResetButton;
-        public ButtonExtended fullscreenButton;
-        public ButtonExtended realtimeMagic;
-        public ButtonExtended realtimeTimer;
-
         public void ChangeName()
         {
             menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
@@ -77,23 +71,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OpenSkillzRules()
         {
             menuController.GetOrAddScreen<SkillzRulesScreen>()._OpenScreen();
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-#if !UNITY_STANDALONE
-            if (fullscreenButton)
-            {
-                fullscreenButton.SetActive(false);
-            }
-#endif
-            if (!Debug.isDebugBuild)
-            {
-                realtimeMagic.SetActive(false);
-                realtimeTimer.SetActive(false);
-            }
         }
     }
 }

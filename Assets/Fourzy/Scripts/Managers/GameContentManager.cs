@@ -10,7 +10,6 @@ using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -33,6 +32,7 @@ namespace Fourzy
         public TokensDataHolder tokensDataHolder;
         public AreasDataHolder areasDataHolder;
         public MiscGameContentHolder miscGameDataHolder;
+        public SkillzMissonRewardsDataHolder skillzMissionRewardsDataHolder;
         [ListDrawerSettings(ListElementLabelName = "type", NumberOfItemsPerPage = 6)]
         public List<PrefabTypePair> typedPrefabs;
         [ListDrawerSettings(NumberOfItemsPerPage = 10)]
@@ -118,6 +118,13 @@ namespace Fourzy
             {
                 LoadPassAndPlayBoards();
             }
+        }
+
+        public IEnumerable<GamePieceData> SkillzMissionRewardsGamePieces()
+        {
+            return skillzMissionRewardsDataHolder.Groups
+                .SelectMany(group => group.pieces)
+                .Select(gamePieceId => piecesDataHolder.GetGamePieceData(gamePieceId));
         }
 
         public void GetItemsCataloge()

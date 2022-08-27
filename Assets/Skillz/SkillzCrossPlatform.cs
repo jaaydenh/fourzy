@@ -19,14 +19,18 @@ public static class SkillzCrossPlatform
 		{
 			if (bridgedAPI == null)
 			{
-				bridgedAPI = Application.isEditor
-					? (IBridgedAPI)new SkillzSDK.Internal.API.UnityEditor.BridgedAPI()
-					: new NonEditorBasedBridgedAPI(new SkillzSDK.Internal.API.Dummy.BridgedAPI());
+#if UNITY_EDITOR
+				bridgedAPI = new SkillzSDK.Internal.API.UnityEditor.BridgedAPI();
 
-#if UNITY_ANDROID
+/*				bridgedAPI = Application.isEditor
+					? (IBridgedAPI)new SkillzSDK.Internal.API.UnityEditor.BridgedAPI()
+					: new NonEditorBasedBridgedAPI(new SkillzSDK.Internal.API.Dummy.BridgedAPI());*/
+#elif UNITY_ANDROID
 				bridgedAPI = new NonEditorBasedBridgedAPI(new SkillzSDK.Internal.API.Android.BridgedAPI());
 #elif UNITY_IOS
 				bridgedAPI = new NonEditorBasedBridgedAPI(new SkillzSDK.Internal.API.iOS.BridgedAPI());
+#else
+
 #endif
 			}
 
@@ -488,7 +492,7 @@ public static class SkillzCrossPlatform
 	/// <param name="failureCallback">The callback that will be invoked with an error message if the request cannot be completed.</param>
 	public static void GetProgressionUserData(string progressionNamespace, List<string> userDataKeys, Action<Dictionary<string, ProgressionValue>> successCallback, Action<string> failureCallback)
 	{
-		bridgedAPI.GetProgressionUserData(progressionNamespace, userDataKeys, successCallback, failureCallback);
+		BridgedAPI.GetProgressionUserData(progressionNamespace, userDataKeys, successCallback, failureCallback);
 	}
 
 	/// <summary>
@@ -503,7 +507,7 @@ public static class SkillzCrossPlatform
 	/// <param name="failureCallback">The callback that will be invoked with an error message if the update cannot be completed.</param>
 	public static void UpdateProgressionUserData(string progressionNamespace, Dictionary<string, object> userDataUpdates, Action successCallback, Action<string> failureCallback)
 	{
-		bridgedAPI.UpdateProgressionUserData(progressionNamespace, userDataUpdates, successCallback, failureCallback);
+		BridgedAPI.UpdateProgressionUserData(progressionNamespace, userDataUpdates, successCallback, failureCallback);
 	}
 
 	/// <summary>
@@ -516,7 +520,7 @@ public static class SkillzCrossPlatform
 	/// <param name="failureCallback">A callback to be invoked with an error message if the attempt to fetch the current season fails.</param>
 	public static void GetCurrentSeason(Action<Season> successCallback, Action<string> failureCallback)
 	{
-		bridgedAPI.GetCurrentSeason(successCallback, failureCallback);
+		BridgedAPI.GetCurrentSeason(successCallback, failureCallback);
 	}
 
 	/// <summary>
@@ -530,7 +534,7 @@ public static class SkillzCrossPlatform
 	/// <param name="failureCallback">A callback to be invoked with an error message if the attempt to fetch the current season fails.</param>
 	public static void GetPreviousSeasons(int count, Action<List<Season>> successCallback, Action<string> failureCallback)
 	{
-		bridgedAPI.GetPreviousSeasons(count, successCallback, failureCallback);
+		BridgedAPI.GetPreviousSeasons(count, successCallback, failureCallback);
 	}
 
 	/// <summary>
@@ -544,7 +548,7 @@ public static class SkillzCrossPlatform
 	/// <param name="failureCallback">A callback to be invoked with an error message if the attempt to fetch the current season fails.</param>
 	public static void GetNextSeasons(int count, Action<List<Season>> successCallback, Action<string> failureCallback)
 	{
-		bridgedAPI.GetNextSeasons(count, successCallback, failureCallback);
+		BridgedAPI.GetNextSeasons(count, successCallback, failureCallback);
 	}
 
 #endregion // Progression API
@@ -553,37 +557,37 @@ public static class SkillzCrossPlatform
 
 	public static void SendData(byte[] data)
 	{
-		bridgedAPI.SendData(data);
+		BridgedAPI.SendData(data);
 	}
 
 	public static bool IsMatchCompleted()
 	{
-		return bridgedAPI.IsMatchCompleted;
+		return BridgedAPI.IsMatchCompleted;
 	}
 
 	public static int GetConnectedPlayerCount()
 	{
-		return bridgedAPI.GetConnectedPlayerCount();
+		return BridgedAPI.GetConnectedPlayerCount();
 	}
 
 	public static ulong GetCurrentPlayerId()
 	{
-		return bridgedAPI.GetCurrentPlayerId();
+		return BridgedAPI.GetCurrentPlayerId();
 	}
 
 	public static ulong GetCurrentOpponentPlayerId()
 	{
-		return bridgedAPI.GetCurrentOpponentPlayerId();
+		return BridgedAPI.GetCurrentOpponentPlayerId();
 	}
 
 	public static double GetServerTime()
 	{
-		return bridgedAPI.GetServerTime();
+		return BridgedAPI.GetServerTime();
 	}
 
 	public static long GetTimeLeftForReconnection(ulong playerId)
 	{
-		return bridgedAPI.GetTimeLeftForReconnection(playerId);
+		return BridgedAPI.GetTimeLeftForReconnection(playerId);
 	}
 
 #endregion // Sync API

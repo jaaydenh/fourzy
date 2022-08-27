@@ -9,7 +9,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class SkillzMainMenuScreen : MenuScreen
     {
+        [SerializeField]
+        private GameObject missionRewardsButton;
+
         private int counter = 0;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            if (SkillzGameController.Instance.LatestDefaultPlayerData == null)
+            {
+                SkillzGameController.Instance.OnDefaultPlayerDataReceived += OnPlayerDataReceived;
+            }
+        }
 
         private void Update()
         {
@@ -42,6 +55,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameManager.Instance.CloseApp();
         }
 
+        public override void Open()
+        {
+            base.Open();
+
+            if (SkillzGameController.Instance.LatestDefaultPlayerData != null)
+            {
+                OnPlayerDataReceived();
+            }
+        }
+
         public void StartSkillz()
         {
             SkillzMainMenuController.Instance.StartSkillzUI();
@@ -61,6 +84,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             SkillzCrossPlatform.InitializeSimulatedMatch(matchJson);
             SkillzState.NotifyMatchWillBegin(matchJson);
+        }
+
+        public void GetProgressionData()
+        {
+            SkillzGameController.Instance.GetProgressionData();
+        }
+
+        private void OnPlayerDataReceived()
+        {
+            if (!missionRewardsButton.activeInHierarchy)
+            {
+                missionRewardsButton.SetActive(true);
+            }
         }
     }
 }

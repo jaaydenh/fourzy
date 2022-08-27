@@ -55,8 +55,6 @@ MonoBehaviour:
   botGameType: 0
   buildIntent: 2
   customUserId: 
-  fallbackLatitude: 37.7833
-  fallbackLongitude: 122.4167
   excludeInstructionsFor: 01000000
 --- !u!1 &1299830835221054
 GameObject:
@@ -300,6 +298,8 @@ MonoBehaviour:
   tokensDataHolder: {fileID: 11400000, guid: 81d92e211f16cf74eb57eaf3cf637ecb, type: 2}
   areasDataHolder: {fileID: 11400000, guid: a7bbdce1503d5d14c893c6261d179c4c, type: 2}
   miscGameDataHolder: {fileID: 11400000, guid: 723c3267438074b4f980f63958882dfb, type: 2}
+  skillzMissionRewardsDataHolder: {fileID: 11400000, guid: 0bef782e00d6d7b438eb39c2920245e9,
+    type: 2}
   typedPrefabs:
   - type: REWARDS_XP
     prefab: {fileID: 2179086365048087834, guid: 5d3321b1899bff44f903a69b179c22e5,
@@ -337,8 +337,6 @@ MonoBehaviour:
     prefab: {fileID: 1489538643966412, guid: a3c24ed961027314abdb0cbec1278049, type: 3}
   - type: GAME_PIECE_SMALL
     prefab: {fileID: 1576871843195750, guid: de95eca9ce249a54280efd878a486b52, type: 3}
-  - type: GAME_PIECE_MEDIUM
-    prefab: {fileID: 1719389088718380, guid: 93719fda88a629a41a705180ba1fb335, type: 3}
   - type: TOKEN_SMALL
     prefab: {fileID: 1374114750642054, guid: e5c5c7b2f5b04014c8045bc68175a630, type: 3}
   - type: GAME_PIECE_LANDSCAPE

@@ -41,7 +41,7 @@ namespace Fourzy._Updates.UI.Widgets
             gamePieceWidget.SetData(data);
             starsSlider.value = 0f;
 
-            return gamePieceWidget.gamePiece;
+            return gamePieceWidget.GamePiece;
         }
 
         public override void _Update()

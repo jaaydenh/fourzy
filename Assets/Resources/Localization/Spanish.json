@@ -837,6 +837,14 @@
       "value": "Bono de gran ganancia"
     },
     {
+      "key": "skillz_draw_points_key",
+      "value": "Draw"
+    },
+    {
+      "key": "skillz_loss_moves_played_key",
+      "value": "Movimientos jugados"
+    },
+    {
       "key": "skillz_moves_left_points_key",
       "value": "Mueve a la izquierda"
     },
@@ -849,16 +857,20 @@
       "value": "Tiempo tomado"
     },
     {
-      "key": "skillz_loss_moves_played_key",
-      "value": "Movimientos jugados"
+      "key": "skillz_played_20_practice",
+      "value": "Completa 20 juegos de práctica"
+    },
+    {
+      "key": "skillz_played_20_cash",
+      "value": "Completa 20 juegos en efectivo"
+    },
+    {
+      "key": "skillz_played_5_cash",
+      "value": "Completa 5 juegos de efectivo"
     },
     {
       "key": "skillz_win_points_key",
       "value": "Victoria"
-    },
-    {
-      "key": "skillz_draw_points_key",
-      "value": "Draw"
     },
     {
       "key": "sound_effects",

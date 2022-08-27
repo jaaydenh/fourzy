@@ -110,13 +110,17 @@ namespace Fourzy._Updates.UI.Menu
             {
                 menuController.SetCurrentScreen(this);
                 menuController.screensStack.Push(this);
-
                 isOpened = true;
             }
 
             initialized = true;
 
             OnInitialized();
+
+            if (@default)
+            {
+                Open();
+            }
         }
 
         /// <summary>

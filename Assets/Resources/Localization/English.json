@@ -817,6 +817,14 @@
       "value": "Big Win Bonus"
     },
     {
+      "key": "skillz_draw_points_key",
+      "value": "Draw"
+    },
+    {
+      "key": "skillz_loss_moves_played_key",
+      "value": "Moves played"
+    },
+    {
       "key": "skillz_moves_left_points_key",
       "value": "Moves left"
     },
@@ -829,16 +837,20 @@
       "value": "Time elapsed"
     },
     {
-      "key": "skillz_loss_moves_played_key",
-      "value": "Moves played"
+      "key": "skillz_played_20_practice",
+      "value": "Complete 20 Practice Games"
+    },
+    {
+      "key": "skillz_played_20_cash",
+      "value": "Complete 20 Cash Games"
+    },
+    {
+      "key": "skillz_played_5_cash",
+      "value": "Complete 5 Cash Games"
     },
     {
       "key": "skillz_win_points_key",
       "value": "Victory"
-    },
-    {
-      "key": "skillz_draw_points_key",
-      "value": "Draw"
     },
     {
       "key": "sound_effects",

@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.UI.Menu.Screens;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,29 +8,22 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class GamePieceWidgetMedium : GamePieceWidgetSmall
     {
-        public Image borderImage;
-        public GameObject infoFrame;
-        public GameObject notFound;
-        public RectTransform selectedFrame;
-        public TMP_Text pieceName;
-        public TMP_Text numberOfChampions;
-        public Slider starsSlider;
-        public Material greyscaleMaterial;
+        [SerializeField]
+        private Image borderImage;
+        [SerializeField]
+        private GameObject infoFrame;
+        [SerializeField]
+        private TMP_Text pieceName;
+        [SerializeField]
+        private TMP_Text numberOfChampions;
+        [SerializeField]
+        private Slider starsSlider;
 
         public override WidgetBase SetData(GamePieceData data)
         {
             base.SetData(data);
 
-            notFound.SetActive(data.State == GamePieceState.NotFound);
-
-            if (data.State == GamePieceState.NotFound)
-            {
-                gamePiece.SetMaterial(greyscaleMaterial);
-            }
-            else
-            {
-                gamePiece.SetMaterial(null);
-            }
+            SetAsHidden(data.State == GamePieceState.NotFound);
 
             switch (data.State)
             {
@@ -41,7 +33,7 @@ namespace Fourzy._Updates.UI.Widgets
                     layoutElement.preferredHeight = 180;
 
                     //gamePiece.colorTween.SetColor(Color.grey);
-                    gamePiece.Sleep();
+                    GamePiece.Sleep();
 
                     break;
 
@@ -50,7 +42,7 @@ namespace Fourzy._Updates.UI.Widgets
                     layoutElement.preferredHeight = 330;
                     
                     //gamePiece.colorTween.SetColor(Color.white);
-                    gamePiece.WakeUp();
+                    GamePiece.WakeUp();
 
                     //set data
                     pieceName.text = data.name;
@@ -64,9 +56,5 @@ namespace Fourzy._Updates.UI.Widgets
 
             return this;
         }
-
-        public void SetSelectedState(bool state) => selectedFrame.gameObject.SetActive(state);
-
-        public void OnTap() => menuScreen.menuController.GetOrAddScreen<UpgradeGamePiecePromptScreen>().Prompt(data);
     }
 }

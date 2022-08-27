@@ -48,7 +48,14 @@ namespace SkillzSDK
 
         public Player(JSONDict playerJSON)
         {
-#if UNITY_IOS
+#if UNITY_EDITOR
+            ID = playerJSON.SafeGetUintValue("userId");
+            DisplayName = playerJSON.SafeGetStringValue("userName");
+            AvatarURL = playerJSON.SafeGetStringValue("avatarUrl");
+            FlagURL = playerJSON.SafeGetStringValue("flagUrl");
+            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer") ?? false;
+            TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
+#elif UNITY_IOS
             ID = playerJSON.SafeGetUintValue("id");
             DisplayName = playerJSON.SafeGetStringValue("displayName");
             AvatarURL = playerJSON.SafeGetStringValue("avatarURL");
@@ -61,13 +68,6 @@ namespace SkillzSDK
             AvatarURL = playerJSON.SafeGetStringValue("avatarUrl");
             FlagURL = playerJSON.SafeGetStringValue("flagUrl");
             IsCurrentPlayer = (bool)playerJSON.SafeGetBoolValue("isCurrentPlayer");
-            TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
-#else
-            ID = playerJSON.SafeGetUintValue("userId");
-            DisplayName = playerJSON.SafeGetStringValue("userName");
-            AvatarURL = playerJSON.SafeGetStringValue("avatarUrl");
-            FlagURL = playerJSON.SafeGetStringValue("flagUrl");
-            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer") ?? false;
             TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
 #endif
         }

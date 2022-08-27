@@ -936,30 +936,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169b100b31fa1a74c82f666b67a78029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    name: 
-    player1Prefab: {fileID: 0}
-    player2Prefab: {fileID: 0}
-    Id: 
-    enabled: 0
-    startingMagic: 100
-    piecesToUnlock: 30
-    pieces: 0
-    profilePicture: {fileID: 0}
-    profilePictureOffset: {x: 0, y: 0}
-    outlineColor: {r: 0, g: 0, b: 1, a: 1}
-    borderColor: {r: 0, g: 1, b: 0, a: 1}
+  selectedFrame: {fileID: 224462632837207538}
   gamePieceParent: {fileID: 224278983151313340}
   progressBar: {fileID: 114244611216992890}
   piecesCount: {fileID: 114524336668811282}
+  greyscaleMaterial: {fileID: 2100000, guid: b6c21f90b858aa04ab6fc2eb7ee34944, type: 2}
+  notFound: {fileID: 1657440484360286}
   borderImage: {fileID: 114267470340975522}
   infoFrame: {fileID: 1636735846865358}
-  notFound: {fileID: 1657440484360286}
-  selectedFrame: {fileID: 224462632837207538}
   pieceName: {fileID: 114021651462127156}
   numberOfChampions: {fileID: 114422315204782328}
   starsSlider: {fileID: 114133423386668336}
-  greyscaleMaterial: {fileID: 2100000, guid: b6c21f90b858aa04ab6fc2eb7ee34944, type: 2}
 --- !u!114 &269402489526194782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,7 +959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continious: 0
+  configureAtStart: 1
   orientation: 1
   onIphone:
     inspectorListHeight: 128
@@ -1259,7 +1246,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 37
+          selectedMember: 28
           isDynamic: 0
         target: {fileID: 114312443042991520}
         memberName: OnTap

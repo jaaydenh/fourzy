@@ -3,13 +3,16 @@
 
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class UpgradeGamePiecePromptScreen : PromptScreen
     {
-        public ButtonExtended selectButton;
-        public ButtonExtended upgradeButton;
+        [SerializeField]
+        private ButtonExtended selectButton;
+        [SerializeField]
+        private Transform gamepieceParent;
 
         private GamePieceData data;
         private GamePieceWidgetSmall gamePieceWidget;
@@ -18,7 +21,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Awake();
 
-            gamePieceWidget = GetComponentInChildren<GamePieceWidgetSmall>();
+            gamePieceWidget = GameContentManager.InstantiatePrefab<GamePieceWidgetSmall>(
+                "GAME_PIECE_SMALL",
+                gamepieceParent);
+            gamePieceWidget.SetAnchors(Vector2.one * .5f);
+            gamePieceWidget.SetLocalPosition(Vector3.zero);
         }
 
         public override void Open()
