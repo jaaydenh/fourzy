@@ -40,6 +40,14 @@ public static class SkillzCrossPlatform
 
 	private static IBridgedAPI bridgedAPI;
 
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+	public static void SetEditorBridgeAPI()
+	{
+		bridgedAPI = new SkillzSDK.Internal.API.UnityEditor.BridgedAPI();
+	}
+
+#endif
+
 	#region Standard API
 	/// <summary>
 	/// Starts up the Skillz UI. Should be used as soon as the player clicks your game's "Multiplayer" button.
