@@ -99,24 +99,6 @@ namespace Fourzy._Updates.Managers
             private set => LatestDefaultPlayerData["cash_games_played"] = new ProgressionValue(value + "", "int", "", "Cash Games Played", null);
         }
 
-        public static void StartEditorSkillzUI()
-        {
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            if (SettingsManager.Get(SettingsManager.KEY_AUDIO) == true)
-            {
-                SkillzCrossPlatform.setSkillzBackgroundMusic("MenuMusic.mp3");
-                SkillzCrossPlatform.setSkillzMusicVolume(1f);
-            }
-            else
-            {
-                SkillzCrossPlatform.setSkillzMusicVolume(0);
-            }
-
-            SkillzState.SetAsyncDelegate(Instance);
-            SkillzCrossPlatform.SetEditorBridgeAPI();
-#endif
-        }
-
         public void InitializeMatchData()
         {
             random = UnityEngine.Random.Range(10000, 99999);
