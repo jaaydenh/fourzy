@@ -48,14 +48,7 @@ namespace SkillzSDK
 
         public Player(JSONDict playerJSON)
         {
-#if UNITY_EDITOR
-            ID = playerJSON.SafeGetUintValue("userId");
-            DisplayName = playerJSON.SafeGetStringValue("userName");
-            AvatarURL = playerJSON.SafeGetStringValue("avatarUrl");
-            FlagURL = playerJSON.SafeGetStringValue("flagUrl");
-            IsCurrentPlayer = playerJSON.SafeGetBoolValue("isCurrentPlayer") ?? false;
-            TournamentPlayerID = playerJSON.SafeGetUintValue("playerMatchId");
-#elif UNITY_IOS
+#if UNITY_IOS
             ID = playerJSON.SafeGetUintValue("id");
             DisplayName = playerJSON.SafeGetStringValue("displayName");
             AvatarURL = playerJSON.SafeGetStringValue("avatarURL");
@@ -201,8 +194,8 @@ namespace SkillzSDK
             Name = jsonData.SafeGetStringValue("name");
             IsCash = jsonData.SafeGetBoolValue("isCash");
             IsSynchronous = (bool)jsonData.SafeGetBoolValue("isSynchronous");
-            IsTieBreaker = jsonData.SafeGetBoolValue("isTieBreaker") ?? false;
-            IsBracket = jsonData.SafeGetBoolValue("isBracket") ?? false;
+            IsTieBreaker = (bool)jsonData.SafeGetBoolValue("isTieBreaker");
+            IsBracket = (bool)jsonData.SafeGetBoolValue("isBracket");
             BracketRound = jsonData.SafeGetIntValue("bracketRound");
             IsVideoAdEntry = jsonData.SafeGetBoolValue("isVideoAdEntry");
 
