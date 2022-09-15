@@ -46,6 +46,8 @@ namespace FourzyGameModel.Model
 
                 case AIProfile.StrongBlockAI:
                     return new StrongBlockAI(State);
+                case AIProfile.LesserBlockAI:
+                    return new LesserBlockAI(State);
 
                 //The following AIs have a preference on direction.
 

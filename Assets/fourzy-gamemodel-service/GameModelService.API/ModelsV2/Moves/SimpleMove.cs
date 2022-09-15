@@ -35,5 +35,18 @@ namespace FourzyGameModel.Model
             this.Direction = Direction;
             this.Location = Location;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is SimpleMove))
+            {
+                return false;
+            }
+
+            SimpleMove other = (SimpleMove)obj;
+            return this.Direction == other.Direction && this.Location == other.Location
+              && this.Piece.PlayerId == other.Piece.PlayerId;
+        }
+
     }
 }
