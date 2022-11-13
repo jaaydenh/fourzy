@@ -2,10 +2,7 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Managers;
-using SkillzSDK;
 using System.Collections;
-using UnityEngine;
-using System;
 #if UNITY_IOS
 using Unity.Advertisement.IosSupport;
 #endif

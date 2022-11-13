@@ -12,6 +12,8 @@
 				+ "\"name\": \"Warmup!\""
 				+ "\"isCash\": false, "
 				+ "\"isSynchronous\": false, "
+				+ "\"isTieBreaker\": false, "
+				+ "\"isBracket\": false, "
 				+ "\"players\": [{}], "
 				+ "}";
 		}

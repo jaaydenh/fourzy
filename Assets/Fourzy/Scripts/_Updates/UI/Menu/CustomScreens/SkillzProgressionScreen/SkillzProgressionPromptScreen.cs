@@ -5,7 +5,6 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -37,9 +36,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private List<SkillzProgressionScreenPointsEntry> pointsEntries = new List<SkillzProgressionScreenPointsEntry>();
         private bool openFinalScreen = false;
 
+        public override void Open()
+        {
+            base.Open();
+
+            SkillzGameController.OnDefaultPlayerDataReceived += OnSkillzPlayerDataReceived;
+        }
+
         public override void Close(bool animate = true)
         {
             base.Close(animate);
+
+            SkillzGameController.OnDefaultPlayerDataReceived -= OnSkillzPlayerDataReceived;
 
             declineButton.GetBadge("timer").badge.SetState(false);
             CancelRoutine("timer");
@@ -127,7 +135,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             pointsParent.gameObject.SetActive(pointsEntries.Count > 0);
 
             //open screen
-            Prompt(titleText, null, null, buttonText);
+            Prompt(titleText, null, SkillzGameController.Instance.LatestDefaultPlayerData == null ? null : LocalizationManager.Value("rewards"), buttonText);
         }
 
         public override void Decline(bool force = false)
@@ -140,6 +148,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 GamePlayManager.Instance.StartNextGame();
             }
+        }
+
+        public override void Accept(bool force = false)
+        {
+            menuController
+                .GetOrAddScreen<SkillzMissionRewardsScreen>()
+                .Prompt();
         }
 
         private VSGamePromptProgressionWidget AddProgressionWidget()
@@ -181,6 +196,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AddPointsWidget(LocalizationManager.Value("total"), SkillzGameController.Instance.Points)
                 .SetSize(48)
                 .SetColor(Color.green);
+        }
+
+        private void OnSkillzPlayerDataReceived()
+        {
+            UpdateAcceptButton(LocalizationManager.Value("rewards"));
         }
 
         private IEnumerator TimerRoutine(int time)

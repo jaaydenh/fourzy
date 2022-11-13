@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
-    public class SkillzMissionRewardsScreen : MenuScreen
+    public class SkillzMissionRewardsScreen : PromptScreen
     {
         [SerializeField]
         private SkillzMissionRewardsFoldout foldoutPrefab;
@@ -43,9 +43,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        protected override void OnInitialized()
+        public override void ExecuteMenuEvent(MenuEvents menuEvent)
         {
-            base.OnInitialized();
+            if (SkillzGameController.Instance.LatestDefaultPlayerData == null)
+            {
+                return;
+            }
+
+            if (menuEvent.data.ContainsKey("open_skillz_rewards"))
+            {
+                menuController.OpenScreen(this);
+            }
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
 
             CreateGamePieces();
             CreateFoldouts();
@@ -102,7 +115,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                 }
 
-                int value = foldoutInfo.Key.cashGames ? SkillzGameController.Instance.PlayerData_CashGamesPlayed : SkillzGameController.Instance.PlayerData_GamesPlayed;
+                int value = foldoutInfo.Key.cashGames ?
+                    SkillzGameController.Instance.PlayerData_CashGamesPlayed :
+                    SkillzGameController.Instance.PlayerData_GamesPlayed;
 
                 foldoutInfo.Value.foldout.SetLabelText($"{LocalizationManager.Value(foldoutInfo.Key.categoryId)}({value}/{foldoutInfo.Key.gameCount})");
             }

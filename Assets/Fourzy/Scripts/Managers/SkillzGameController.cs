@@ -2,6 +2,8 @@
 
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Menu;
+using Fourzy._Updates.UI.Menu.Screens;
 using Newtonsoft.Json;
 using SkillzSDK;
 using System;
@@ -9,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Fourzy._Updates.Managers
 {
@@ -89,14 +92,14 @@ namespace Fourzy._Updates.Managers
 
         internal int PlayerData_GamesPlayed
         {
-            get => int.Parse(LatestDefaultPlayerData["games_played"].Value);
-            private set => LatestDefaultPlayerData["games_played"] = new ProgressionValue(value + "", "int", "", "Games Played", null);
+            get => PlayerPrefs.GetInt("skillz_games_played", 0);
+            private set => PlayerPrefs.SetInt("skillz_games_played", value);
         }
 
         internal int PlayerData_CashGamesPlayed
         {
-            get => int.Parse(LatestDefaultPlayerData["cash_games_played"].Value);
-            private set => LatestDefaultPlayerData["cash_games_played"] = new ProgressionValue(value + "", "int", "", "Cash Games Played", null);
+            get => PlayerPrefs.GetInt("skillz_cash_games_played", 0);
+            private set => PlayerPrefs.SetInt("skillz_cash_games_played", value);
         }
 
         public void InitializeMatchData()
@@ -186,7 +189,15 @@ namespace Fourzy._Updates.Managers
 
         public void OnProgressionRoomEnter()
         {
-
+            if (SceneManager.GetActiveScene().name == GameManager.Instance.MainMenuSceneName)
+            {
+                MenuController.GetMenu(Constants.MAIN_MENU_CANVAS_NAME).OpenScreen<SkillzMissionRewardsScreen>();
+            }
+            else
+            {
+                GamePlayManager.Instance.BackButtonOnClick();
+                MenuController.AddMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, new KeyValuePair<string, object>("open_skillz_rewards", null));
+            }
         }
 
         public void OnSkillzWillExit()
@@ -232,6 +243,16 @@ namespace Fourzy._Updates.Managers
                 logs += $"\n{pair.Key} : {pair.Value.Value}";
             }
             Debug.Log(logs);
+
+            if (LatestDefaultPlayerData.ContainsKey("games_played") && int.TryParse(LatestDefaultPlayerData["games_played"].Value, out int games))
+            {
+                PlayerData_GamesPlayed = games;
+            }
+
+            if (LatestDefaultPlayerData.ContainsKey("cash_games_played") && int.TryParse(LatestDefaultPlayerData["cash_games_played"].Value, out int cashGames))
+            {
+                PlayerData_CashGamesPlayed = cashGames;
+            }
 
             OnDefaultPlayerDataReceived?.Invoke();
         }
@@ -340,7 +361,7 @@ namespace Fourzy._Updates.Managers
         {
             Debug.Log("---------------Skillz Score submited. All good.");
 
-/*            //Update last player data.
+            //Update last player data.
             if (LastMatch.IsCash ?? false)
             {
                 PlayerData_CashGamesPlayed++;
@@ -350,7 +371,7 @@ namespace Fourzy._Updates.Managers
                 PlayerData_GamesPlayed++;
             }
 
-            OnDefaultPlayerDataUpdated?.Invoke();*/
+            OnDefaultPlayerDataUpdated?.Invoke();
 
             GetProgressionData();
         }

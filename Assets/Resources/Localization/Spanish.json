@@ -657,6 +657,10 @@
       "value": "Restablecer progreso"
     },
     {
+      "key": "rewards",
+      "value": "Recompensas"
+    },
+    {
       "key": "room_code",
       "value": "Código de juego"
     },

@@ -37629,11 +37629,9 @@ MonoBehaviour:
   menuController: {fileID: 2049771981}
   winningParticleGenerator: {fileID: 278685328}
   bgParent: {fileID: 2068058696}
-  noNetworkOverlay: {fileID: 7418769054685816303}
   hintBlocksParent: {fileID: 1256455895}
   gameCameraManager: {fileID: 1722187674}
   backButton: {fileID: 1633794817}
-  rematchRequested: 0
 --- !u!4 &1899509753
 Transform:
   m_ObjectHideFlags: 0
@@ -40070,12 +40068,6 @@ PrefabInstance:
 --- !u!224 &6392147300521717329 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6392147300521717329, guid: 4afd7bba92165a24ca1a6746afd983c0,
-    type: 3}
-  m_PrefabInstance: {fileID: 195632050603851330}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7418769054685816303 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7418769054685816303, guid: 4afd7bba92165a24ca1a6746afd983c0,
     type: 3}
   m_PrefabInstance: {fileID: 195632050603851330}
   m_PrefabAsset: {fileID: 0}

@@ -436,8 +436,6 @@ namespace Fourzy._Updates.UI.Menu
 
     public class MenuEvents
     {
-        public string @event;
-
         public Dictionary<string, object> data = new Dictionary<string, object>();
 
         public object this[string idx]
